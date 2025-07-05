@@ -39,6 +39,12 @@ const Index = () => {
     { key: 'chatgpt', name: 'ChatGPT', defaultUrl: 'https://chat.openai.com', category: 'ai' },
     { key: 'mail', name: 'Gmail', defaultUrl: 'https://mail.google.com', category: 'tools' },
     { key: 'spotify', name: 'Spotify', defaultUrl: 'https://www.spotify.com', category: 'streaming' },
+    { key: 'instagram', name: 'Instagram', defaultUrl: 'https://www.instagram.com', category: 'social' },
+    { key: 'twitter', name: 'Twitter', defaultUrl: 'https://www.twitter.com', category: 'social' },
+    { key: 'linkedin', name: 'LinkedIn', defaultUrl: 'https://www.linkedin.com', category: 'social' },
+    { key: 'github', name: 'GitHub', defaultUrl: 'https://www.github.com', category: 'tools' },
+    { key: 'stackoverflow', name: 'Stack Overflow', defaultUrl: 'https://stackoverflow.com', category: 'tools' },
+    { key: 'discord', name: 'Discord', defaultUrl: 'https://discord.com', category: 'social' },
   ]);
 
   const categoryLabels = {
@@ -181,16 +187,16 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Header */}
       <div className="sticky top-0 z-50 bg-black/20 backdrop-blur-xl border-b border-white/10">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-center md:text-left">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
                 Link Router Pro
               </h1>
-              <p className="text-slate-300 mt-1">Your personal link management hub</p>
+              <p className="text-slate-300 text-sm">Your personal link management hub</p>
             </div>
             
-            <div className="flex items-center gap-4 w-full md:w-auto">
+            <div className="flex items-center gap-3 w-full md:w-auto">
               <div className="relative flex-1 md:w-80">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
                 <Input
@@ -204,10 +210,11 @@ const Index = () => {
               
               <Button
                 onClick={() => openModal()}
+                size="sm"
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Link
+                <Plus className="w-4 h-4 mr-1" />
+                Add
               </Button>
             </div>
           </div>
@@ -215,49 +222,68 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6">
         {Object.entries(groupedLinks).map(([category, links]) => (
-          <div key={category} className="mb-12">
+          <div key={category} className="mb-8">
             {/* Category Header */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className={`h-1 w-16 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full`}></div>
-              <h2 className="text-2xl font-bold text-white">
+            <div className="flex items-center gap-3 mb-4">
+              <div className={`h-1 w-12 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full`}></div>
+              <h2 className="text-xl font-bold text-white">
                 {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
               </h2>
-              <Badge variant="secondary" className="bg-white/10 text-white border-white/20">
+              <Badge variant="secondary" className="bg-white/10 text-white border-white/20 text-xs">
                 {links.length}
               </Badge>
             </div>
 
-            {/* Links Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {/* Improved Links Grid - More compact and organized */}
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
               {links.map((link) => (
                 <Card 
                   key={link.key} 
-                  className="group bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl backdrop-blur-sm"
+                  className="group bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20 transition-all duration-200 hover:scale-105 backdrop-blur-sm"
                 >
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3 flex-1">
+                  <CardContent className="p-3">
+                    <div className="flex flex-col items-center text-center space-y-2">
+                      {/* Favicon */}
+                      <div className="w-8 h-8 rounded-lg bg-white/10 p-1 flex items-center justify-center">
                         <img
                           src={getFaviconUrl(link.url || link.defaultUrl || '')}
                           alt=""
-                          className="w-8 h-8 rounded-lg bg-white/10 p-1"
+                          className="w-6 h-6 rounded"
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.display = 'none';
                           }}
                         />
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-white truncate group-hover:text-purple-200 transition-colors">
-                            {link.name}
-                          </h3>
-                          <p className="text-xs text-slate-400 truncate">
-                            {(link.url || link.defaultUrl || '').replace(/^https?:\/\//, '')}
-                          </p>
-                        </div>
                       </div>
                       
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {/* Link Name */}
+                      <div className="w-full">
+                        <h3 className="font-medium text-white text-xs truncate group-hover:text-purple-200 transition-colors">
+                          {link.name}
+                        </h3>
+                      </div>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex items-center gap-1 w-full">
+                        <Button
+                          variant="ghost"
+                          asChild
+                          size="sm"
+                          className="flex-1 h-7 px-2 hover:bg-white/10 text-xs"
+                        >
+                          <a
+                            href={link.url || link.defaultUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center"
+                          >
+                            <span className="text-slate-300 group-hover:text-white transition-colors">
+                              Open
+                            </span>
+                          </a>
+                        </Button>
+                        
                         <Button
                           size="sm"
                           variant="ghost"
@@ -265,30 +291,12 @@ const Index = () => {
                             e.stopPropagation();
                             openModal(link);
                           }}
-                          className="h-8 w-8 p-0 hover:bg-white/10 text-slate-400 hover:text-white"
+                          className="h-7 w-7 p-0 hover:bg-white/10 text-slate-400 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           <Edit className="w-3 h-3" />
                         </Button>
                       </div>
                     </div>
-                    
-                    <Button
-                      variant="ghost"
-                      asChild
-                      className="w-full h-auto p-2 hover:bg-white/10 group/btn"
-                    >
-                      <a
-                        href={link.url || link.defaultUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-between text-left"
-                      >
-                        <span className="text-slate-300 group-hover/btn:text-white transition-colors">
-                          Open Link
-                        </span>
-                        <ExternalLink className="w-4 h-4 text-slate-400 group-hover/btn:text-purple-400 transition-colors" />
-                      </a>
-                    </Button>
                   </CardContent>
                 </Card>
               ))}
@@ -298,7 +306,7 @@ const Index = () => {
 
         {Object.keys(groupedLinks).length === 0 && (
           <div className="text-center py-16">
-            <div className="text-6xl mb-4">🔗</div>
+            <div className="text-4xl mb-4">🔗</div>
             <h3 className="text-xl font-semibold text-white mb-2">No links found</h3>
             <p className="text-slate-400 mb-6">
               {searchTerm ? 'Try adjusting your search terms' : 'Add your first link to get started'}
