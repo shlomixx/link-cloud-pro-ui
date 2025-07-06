@@ -75,31 +75,30 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                   onMouseLeave={onMouseLeave}
                   onClick={onLinkClick}
                   className={`
-                    group relative flex flex-col items-center gap-1 p-2 rounded-md cursor-pointer
-                    transition-all duration-200 hover:scale-105
+                    group relative flex flex-col items-center gap-1 p-1 rounded cursor-pointer
+                    transition-all duration-200 hover:scale-110
                     ${isDarkMode 
-                      ? 'hover:bg-white/5 active:bg-white/10' 
-                      : 'hover:bg-black/5 active:bg-black/10'
+                      ? 'hover:bg-white/10' 
+                      : 'hover:bg-black/10'
                     }
                     ${isClicked ? 'scale-95' : ''}
-                    ${link.isFavorite ? 'ring-1 ring-yellow-400/30' : ''}
                   `}
                 >
                   <img
                     src={getFaviconUrl(link.url || link.defaultUrl || '')}
                     alt=""
-                    className="w-6 h-6 rounded"
+                    className="w-5 h-5 rounded"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
                     }}
                   />
-                  <span className={`text-xs font-medium text-center max-w-[60px] leading-tight ${
+                  <span className={`text-xs font-medium text-center max-w-[50px] leading-tight truncate ${
                     isDarkMode ? 'text-white' : 'text-slate-800'
                   }`}>
                     {link.name}
                   </span>
                   {link.isFavorite && (
-                    <Star className="w-2 h-2 fill-yellow-400 text-yellow-400 absolute -top-1 -right-1" />
+                    <Star className="w-2 h-2 fill-yellow-400 text-yellow-400 absolute -top-0.5 -right-0.5" />
                   )}
                 </div>
               </ContextMenuTrigger>
@@ -132,7 +131,6 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             <div className="text-xs">
               <div className="font-medium">{link.name}</div>
               <div className="text-muted-foreground">{link.url || link.defaultUrl}</div>
-              {link.clicks && <div className="text-muted-foreground">{link.clicks} clicks</div>}
             </div>
           </TooltipContent>
         </Tooltip>
@@ -152,28 +150,26 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             onMouseLeave={onMouseLeave}
             onClick={onLinkClick}
             className={`
-              group relative flex flex-col items-center gap-2 p-3 rounded-lg cursor-pointer min-w-[80px] max-w-[100px]
-              transition-all duration-200
+              group relative flex flex-col items-center gap-1 p-2 rounded cursor-pointer min-w-[60px] max-w-[80px]
+              transition-all duration-200 hover:scale-110
               ${isDarkMode 
-                ? 'hover:bg-white/5 active:bg-white/10' 
-                : 'hover:bg-black/5 active:bg-black/10'
+                ? 'hover:bg-white/10' 
+                : 'hover:bg-black/10'
               }
-              ${isHovered ? 'scale-105' : ''}
               ${isClicked ? 'scale-95' : ''}
-              ${link.isFavorite ? 'ring-1 ring-yellow-400/20' : ''}
             `}
           >
             <div className="relative">
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
-                className="w-8 h-8 rounded"
+                className="w-6 h-6 rounded"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
                 }}
               />
               {link.isFavorite && (
-                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 absolute -top-1 -right-1" />
+                <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400 absolute -top-1 -right-1" />
               )}
             </div>
             
@@ -223,22 +219,20 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             onMouseLeave={onMouseLeave}
             onClick={onLinkClick}
             className={`
-              group relative flex flex-col items-center gap-3 p-4 rounded-lg cursor-pointer
-              transition-all duration-200
+              group relative flex flex-col items-center gap-2 p-3 rounded cursor-pointer
+              transition-all duration-200 hover:scale-110
               ${isDarkMode 
-                ? 'hover:bg-white/5 active:bg-white/10' 
-                : 'hover:bg-black/5 active:bg-black/10'
+                ? 'hover:bg-white/10' 
+                : 'hover:bg-black/10'
               }
-              ${isHovered ? 'scale-105' : ''}
               ${isClicked ? 'scale-95' : ''}
-              ${link.isFavorite ? 'ring-1 ring-yellow-400/20' : ''}
             `}
           >
             <Button
               size="sm"
               variant="ghost"
               onClick={onToggleFavorite}
-              className={`absolute top-2 right-2 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 ${
+              className={`absolute top-1 right-1 w-5 h-5 p-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 ${
                 link.isFavorite ? 'opacity-100' : ''
               }`}
             >
@@ -253,7 +247,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
-                className="w-10 h-10 rounded transition-all duration-300 group-hover:scale-110"
+                className="w-8 h-8 rounded transition-all duration-300 group-hover:scale-110"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
                 }}
@@ -308,43 +302,36 @@ export const LinkCard: React.FC<LinkCardProps> = ({
           onMouseLeave={onMouseLeave}
           onClick={onLinkClick}
           className={`
-            group flex items-center gap-4 p-3 rounded-lg cursor-pointer w-full
-            transition-all duration-200
+            group flex items-center gap-3 p-2 rounded cursor-pointer w-full
+            transition-all duration-200 hover:scale-[1.02]
             ${isDarkMode 
-              ? 'hover:bg-white/5 active:bg-white/10' 
-              : 'hover:bg-black/5 active:bg-black/10'
+              ? 'hover:bg-white/10' 
+              : 'hover:bg-black/10'
             }
-            ${isHovered ? 'scale-[1.02]' : ''}
             ${isClicked ? 'scale-[0.98]' : ''}
-            ${link.isFavorite ? 'ring-1 ring-yellow-400/20' : ''}
           `}
         >
           <div className="flex items-center gap-3 flex-1">
             <img
               src={getFaviconUrl(link.url || link.defaultUrl || '')}
               alt=""
-              className="w-8 h-8 rounded"
+              className="w-6 h-6 rounded"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
               }}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h3 className={`font-medium ${
+                <h3 className={`font-medium text-sm ${
                   isDarkMode ? 'text-white' : 'text-slate-800'
                 }`}>
                   {link.name}
                 </h3>
                 {link.isFavorite && (
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                 )}
                 {link.isPrivate && <span className="text-yellow-500">🔒</span>}
               </div>
-              <p className={`text-sm ${
-                isDarkMode ? 'text-slate-400' : 'text-slate-500'
-              }`}>
-                {link.url || link.defaultUrl}
-              </p>
             </div>
           </div>
           
