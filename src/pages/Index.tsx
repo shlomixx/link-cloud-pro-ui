@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Plus, Edit, Trash2, Download, Upload, Grid, List, Moon, Sun, SortAsc, Filter, Settings, Copy, Eye, EyeOff, Heart, ExternalLink, Star, Clock, TrendingUp } from 'lucide-react';
+import { Search, Plus, Edit, Trash2, Download, Upload, Grid, List, Moon, Sun, SortAsc, Filter, Settings, Copy, Eye, EyeOff, Heart, ExternalLink, Star, Clock, TrendingUp, Maximize2, Minimize2, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -30,7 +30,7 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<LinkData | null>(null);
   const [isNewLink, setIsNewLink] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'compact'>('compact');
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [sortBy, setSortBy] = useState<'name' | 'clicks' | 'recent' | 'favorites'>('name');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -39,6 +39,7 @@ const Index = () => {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [clickedLink, setClickedLink] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCompactHeader, setIsCompactHeader] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   
@@ -56,16 +57,19 @@ const Index = () => {
     { key: 'amazon', name: 'Amazon', defaultUrl: 'https://www.amazon.com', category: 'shopping', clicks: 19, createdAt: '2024-01-04', isFavorite: true },
     { key: 'netflix', name: 'Netflix', defaultUrl: 'https://www.netflix.com', category: 'streaming', clicks: 41, createdAt: '2024-01-05' },
     { key: 'wikipedia', name: 'Wikipedia', defaultUrl: 'https://www.wikipedia.org', category: 'education', clicks: 15, createdAt: '2024-01-06' },
-    { key: 'ynet', name: 'Ynet', defaultUrl: 'https://www.ynet.co.il', category: 'news', clicks: 23, createdAt: '2024-01-07' },
-    { key: 'chatgpt', name: 'ChatGPT', defaultUrl: 'https://chat.openai.com', category: 'ai', clicks: 67, createdAt: '2024-01-08', isFavorite: true },
-    { key: 'mail', name: 'Gmail', defaultUrl: 'https://mail.google.com', category: 'tools', clicks: 89, createdAt: '2024-01-09' },
-    { key: 'spotify', name: 'Spotify', defaultUrl: 'https://www.spotify.com', category: 'streaming', clicks: 36, createdAt: '2024-01-10' },
-    { key: 'instagram', name: 'Instagram', defaultUrl: 'https://www.instagram.com', category: 'social', clicks: 52, createdAt: '2024-01-11' },
-    { key: 'twitter', name: 'Twitter', defaultUrl: 'https://www.twitter.com', category: 'social', clicks: 38, createdAt: '2024-01-12' },
-    { key: 'linkedin', name: 'LinkedIn', defaultUrl: 'https://www.linkedin.com', category: 'social', clicks: 24, createdAt: '2024-01-13' },
-    { key: 'github', name: 'GitHub', defaultUrl: 'https://www.github.com', category: 'tools', clicks: 61, createdAt: '2024-01-14', isFavorite: true },
-    { key: 'stackoverflow', name: 'Stack Overflow', defaultUrl: 'https://stackoverflow.com', category: 'tools', clicks: 34, createdAt: '2024-01-15' },
-    { key: 'discord', name: 'Discord', defaultUrl: 'https://discord.com', category: 'social', clicks: 29, createdAt: '2024-01-16' },
+    { key: 'ynet', name: 'Ynet News', defaultUrl: 'https://www.ynet.co.il', category: 'news', clicks: 23, createdAt: '2024-01-07' },
+    { key: 'walla', name: 'Walla News', defaultUrl: 'https://www.walla.co.il', category: 'news', clicks: 18, createdAt: '2024-01-08' },
+    { key: 'mako', name: 'Mako', defaultUrl: 'https://www.mako.co.il', category: 'news', clicks: 12, createdAt: '2024-01-09' },
+    { key: 'haaretz', name: 'Haaretz', defaultUrl: 'https://www.haaretz.co.il', category: 'news', clicks: 8, createdAt: '2024-01-10' },
+    { key: 'chatgpt', name: 'ChatGPT', defaultUrl: 'https://chat.openai.com', category: 'ai', clicks: 67, createdAt: '2024-01-11', isFavorite: true },
+    { key: 'mail', name: 'Gmail', defaultUrl: 'https://mail.google.com', category: 'tools', clicks: 89, createdAt: '2024-01-12' },
+    { key: 'spotify', name: 'Spotify', defaultUrl: 'https://www.spotify.com', category: 'streaming', clicks: 36, createdAt: '2024-01-13' },
+    { key: 'instagram', name: 'Instagram', defaultUrl: 'https://www.instagram.com', category: 'social', clicks: 52, createdAt: '2024-01-14' },
+    { key: 'twitter', name: 'Twitter', defaultUrl: 'https://www.twitter.com', category: 'social', clicks: 38, createdAt: '2024-01-15' },
+    { key: 'linkedin', name: 'LinkedIn', defaultUrl: 'https://www.linkedin.com', category: 'social', clicks: 24, createdAt: '2024-01-16' },
+    { key: 'github', name: 'GitHub', defaultUrl: 'https://www.github.com', category: 'tools', clicks: 61, createdAt: '2024-01-17', isFavorite: true },
+    { key: 'stackoverflow', name: 'Stack Overflow', defaultUrl: 'https://stackoverflow.com', category: 'tools', clicks: 34, createdAt: '2024-01-18' },
+    { key: 'discord', name: 'Discord', defaultUrl: 'https://discord.com', category: 'social', clicks: 29, createdAt: '2024-01-19' },
   ]);
 
   const categoryLabels = {
@@ -100,13 +104,11 @@ const Index = () => {
     custom: 'from-slate-600 to-gray-700'
   };
 
-  // Load from localStorage on mount with loading state
   useEffect(() => {
     setIsLoading(true);
     const saved = localStorage.getItem('linkRouterData');
     const savedSettings = localStorage.getItem('linkRouterSettings');
     
-    // Simulate loading delay for better UX
     setTimeout(() => {
       if (saved) {
         try {
@@ -121,9 +123,10 @@ const Index = () => {
         try {
           const settings = JSON.parse(savedSettings);
           setIsDarkMode(settings.isDarkMode ?? true);
-          setViewMode(settings.viewMode ?? 'grid');
+          setViewMode(settings.viewMode ?? 'compact');
           setSortBy(settings.sortBy ?? 'name');
           setShowPrivateLinks(settings.showPrivateLinks ?? true);
+          setIsCompactHeader(settings.isCompactHeader ?? false);
         } catch (error) {
           console.error('Error loading settings:', error);
         }
@@ -132,25 +135,22 @@ const Index = () => {
     }, 300);
   }, []);
 
-  // Save to localStorage whenever data or settings change
   useEffect(() => {
     localStorage.setItem('linkRouterData', JSON.stringify(linksData));
   }, [linksData]);
 
   useEffect(() => {
-    const settings = { isDarkMode, viewMode, sortBy, showPrivateLinks };
+    const settings = { isDarkMode, viewMode, sortBy, showPrivateLinks, isCompactHeader };
     localStorage.setItem('linkRouterSettings', JSON.stringify(settings));
     
-    // Apply theme to document with smooth transition
     document.documentElement.style.transition = 'background-color 0.3s ease, color 0.3s ease';
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [isDarkMode, viewMode, sortBy, showPrivateLinks]);
+  }, [isDarkMode, viewMode, sortBy, showPrivateLinks, isCompactHeader]);
 
-  // Enhanced keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey) {
@@ -166,17 +166,21 @@ const Index = () => {
             break;
           case 'g':
             e.preventDefault();
-            setViewMode(viewMode === 'grid' ? 'list' : 'grid');
-            toast.success(`Switched to ${viewMode === 'grid' ? 'list' : 'grid'} view`);
+            const modes = ['compact', 'grid', 'list'];
+            const currentIndex = modes.indexOf(viewMode);
+            const nextMode = modes[(currentIndex + 1) % modes.length] as 'compact' | 'grid' | 'list';
+            setViewMode(nextMode);
+            toast.success(`Switched to ${nextMode} view`);
             break;
           case 'd':
             e.preventDefault();
             setIsDarkMode(!isDarkMode);
             toast.success(`Switched to ${isDarkMode ? 'light' : 'dark'} mode`);
             break;
-          case '/':
+          case 'h':
             e.preventDefault();
-            searchInputRef.current?.focus();
+            setIsCompactHeader(!isCompactHeader);
+            toast.success(`Header ${isCompactHeader ? 'expanded' : 'compact'}`);
             break;
         }
       }
@@ -192,7 +196,7 @@ const Index = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [viewMode, isDarkMode, isModalOpen, searchTerm]);
+  }, [viewMode, isDarkMode, isModalOpen, searchTerm, isCompactHeader]);
 
   const getFaviconUrl = (url: string) => {
     try {
@@ -206,7 +210,6 @@ const Index = () => {
   const handleLinkClick = (link: LinkData) => {
     setClickedLink(link.key);
     
-    // Update click count and last clicked time
     setLinksData(prev => prev.map(l => 
       l.key === link.key ? { 
         ...l, 
@@ -215,10 +218,8 @@ const Index = () => {
       } : l
     ));
 
-    // Visual feedback
     setTimeout(() => setClickedLink(null), 200);
     
-    // Success toast with link name
     toast.success(`Opening ${link.name}...`, {
       duration: 2000,
       action: {
@@ -283,7 +284,6 @@ const Index = () => {
     return acc;
   }, {} as Record<string, LinkData[]>);
 
-  // Sort links within each category
   Object.keys(groupedLinks).forEach(category => {
     groupedLinks[category] = sortLinks(groupedLinks[category]);
   });
@@ -326,7 +326,6 @@ const Index = () => {
 
     setIsLoading(true);
 
-    // Simulate API delay for better UX
     await new Promise(resolve => setTimeout(resolve, 500));
 
     let url = formData.url.trim();
@@ -369,7 +368,6 @@ const Index = () => {
     if (editingLink) {
       setIsLoading(true);
       
-      // Confirm deletion
       const confirmed = window.confirm(`Are you sure you want to delete "${editingLink.name}"?`);
       if (!confirmed) {
         setIsLoading(false);
@@ -473,47 +471,51 @@ const Index = () => {
         ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' 
         : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
     }`}>
-      {/* Enhanced Header with stats */}
+      {/* Compact Header */}
       <div className={`sticky top-0 z-50 backdrop-blur-xl border-b transition-all duration-300 ${
         isDarkMode 
           ? 'bg-black/30 border-white/10' 
           : 'bg-white/30 border-black/10'
       }`}>
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
-            <div className="text-center lg:text-left">
-              <h1 className={`text-3xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-colors duration-300 ${
-                isDarkMode 
-                  ? 'from-white to-purple-200' 
-                  : 'from-slate-800 to-purple-600'
-              }`}>
-                Link Router Pro
-              </h1>
-              <div className="flex items-center gap-4 text-sm mt-1">
-                <span className={`transition-colors duration-300 ${
-                  isDarkMode ? 'text-slate-300' : 'text-slate-600'
+        <div className="container mx-auto px-4 py-2">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className={`${isCompactHeader ? 'hidden lg:block' : ''}`}>
+                <h1 className={`text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-colors duration-300 ${
+                  isDarkMode 
+                    ? 'from-white to-purple-200' 
+                    : 'from-slate-800 to-purple-600'
                 }`}>
-                  {linksData.length} links
-                </span>
-                <span className={`transition-colors duration-300 ${
-                  isDarkMode ? 'text-slate-300' : 'text-slate-600'
-                }`}>
-                  {totalClicks} total clicks
-                </span>
-                {favoriteLinks.length > 0 && (
-                  <span className={`flex items-center gap-1 transition-colors duration-300 ${
-                    isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
-                  }`}>
-                    <Star className="w-3 h-3 fill-current" />
-                    {favoriteLinks.length} favorites
-                  </span>
+                  Link Router Pro
+                </h1>
+                {!isCompactHeader && (
+                  <div className="flex items-center gap-4 text-sm mt-1">
+                    <span className={`transition-colors duration-300 ${
+                      isDarkMode ? 'text-slate-300' : 'text-slate-600'
+                    }`}>
+                      {linksData.length} links
+                    </span>
+                    <span className={`transition-colors duration-300 ${
+                      isDarkMode ? 'text-slate-300' : 'text-slate-600'
+                    }`}>
+                      {totalClicks} clicks
+                    </span>
+                    {favoriteLinks.length > 0 && (
+                      <span className={`flex items-center gap-1 transition-colors duration-300 ${
+                        isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
+                      }`}>
+                        <Star className="w-3 h-3 fill-current" />
+                        {favoriteLinks.length}
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
             
-            <div className="flex items-center gap-3 w-full lg:w-auto">
+            <div className="flex items-center gap-2 flex-1 max-w-2xl">
               {/* Enhanced Search */}
-              <div className="relative flex-1 lg:w-80">
+              <div className="relative flex-1">
                 <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 transition-colors duration-300 ${
                   isDarkMode ? 'text-slate-400' : 'text-slate-500'
                 }`} />
@@ -523,7 +525,7 @@ const Index = () => {
                   placeholder="Search links... (Ctrl+K)"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className={`pl-10 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
+                  className={`pl-10 h-9 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
                     isDarkMode 
                       ? 'bg-white/10 border-white/20 text-white placeholder:text-slate-400 focus:bg-white/20' 
                       : 'bg-black/5 border-black/20 text-slate-800 placeholder:text-slate-500 focus:bg-black/10'
@@ -534,161 +536,159 @@ const Index = () => {
                     size="sm"
                     variant="ghost"
                     onClick={() => setSearchTerm('')}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 p-0"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-5 h-5 p-0"
                   >
                     ×
                   </Button>
                 )}
               </div>
               
-              {/* Enhanced Filters */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size="sm" variant="outline" className={`transition-all duration-300 hover:scale-105 ${
-                    isDarkMode 
-                      ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                      : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+              {/* Quick Actions */}
+              <div className="flex items-center gap-1">
+                {/* View Mode Switcher */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="sm" variant="outline" className={`h-9 transition-all duration-300 hover:scale-105 ${
+                      isDarkMode 
+                        ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                        : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                    }`}>
+                      {viewMode === 'compact' && <Zap className="w-4 h-4" />}
+                      {viewMode === 'grid' && <Grid className="w-4 h-4" />}
+                      {viewMode === 'list' && <List className="w-4 h-4" />}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className={`z-50 ${
+                    isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
                   }`}>
-                    <Filter className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className={`z-50 ${
-                  isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
-                }`}>
-                  <DropdownMenuItem onClick={() => setSelectedCategory('all')}>
-                    All Categories
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  {categories.map(category => (
-                    <DropdownMenuItem key={category} onClick={() => setSelectedCategory(category)}>
-                      {categoryLabels[category as keyof typeof categoryLabels]}
+                    <DropdownMenuItem onClick={() => setViewMode('compact')}>
+                      <Zap className="w-4 h-4 mr-2" />
+                      Compact
                     </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              
-              {/* Enhanced Sort */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size="sm" variant="outline" className={`transition-all duration-300 hover:scale-105 ${
+                    <DropdownMenuItem onClick={() => setViewMode('grid')}>
+                      <Grid className="w-4 h-4 mr-2" />
+                      Grid
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setViewMode('list')}>
+                      <List className="w-4 h-4 mr-2" />
+                      List
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                {/* Filter & Sort */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="sm" variant="outline" className={`h-9 transition-all duration-300 hover:scale-105 ${
+                      isDarkMode 
+                        ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                        : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                    }`}>
+                      <Filter className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className={`z-50 ${
+                    isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
+                  }`}>
+                    <DropdownMenuItem onClick={() => setSelectedCategory('all')}>
+                      All Categories
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    {categories.map(category => (
+                      <DropdownMenuItem key={category} onClick={() => setSelectedCategory(category)}>
+                        {categoryLabels[category as keyof typeof categoryLabels]}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                {/* Header Toggle */}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsCompactHeader(!isCompactHeader)}
+                  className={`h-9 transition-all duration-300 hover:scale-105 ${
                     isDarkMode 
                       ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
                       : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                  }`}>
-                    {sortBy === 'clicks' && <TrendingUp className="w-4 h-4" />}
-                    {sortBy === 'recent' && <Clock className="w-4 h-4" />}
-                    {sortBy === 'favorites' && <Star className="w-4 h-4" />}
-                    {sortBy === 'name' && <SortAsc className="w-4 h-4" />}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className={`z-50 ${
-                  isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
-                }`}>
-                  <DropdownMenuItem onClick={() => setSortBy('name')}>
-                    <SortAsc className="w-4 h-4 mr-2" />
-                    Name
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setSortBy('clicks')}>
-                    <TrendingUp className="w-4 h-4 mr-2" />
-                    Most Clicked
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setSortBy('recent')}>
-                    <Clock className="w-4 h-4 mr-2" />
-                    Recently Added
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setSortBy('favorites')}>
-                    <Star className="w-4 h-4 mr-2" />
-                    Favorites First
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  }`}
+                >
+                  {isCompactHeader ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
+                </Button>
 
-              {/* View Mode */}
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-                className={`transition-all duration-300 hover:scale-105 ${
-                  isDarkMode 
-                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                    : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                }`}
-              >
-                {viewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
-              </Button>
-
-              {/* Theme Toggle */}
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className={`transition-all duration-300 hover:scale-105 ${
-                  isDarkMode 
-                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                    : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                }`}
-              >
-                {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </Button>
-              
-              {/* Settings */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size="sm" variant="outline" className={`transition-all duration-300 hover:scale-105 ${
+                {/* Theme Toggle */}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsDarkMode(!isDarkMode)}
+                  className={`h-9 transition-all duration-300 hover:scale-105 ${
                     isDarkMode 
                       ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
                       : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                  }`}
+                >
+                  {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </Button>
+                
+                {/* Settings */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="sm" variant="outline" className={`h-9 transition-all duration-300 hover:scale-105 ${
+                      isDarkMode 
+                        ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                        : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                    }`}>
+                      <Settings className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className={`z-50 ${
+                    isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
                   }`}>
-                    <Settings className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className={`z-50 ${
-                  isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
-                }`}>
-                  <DropdownMenuItem onClick={exportData}>
-                    <Download className="w-4 h-4 mr-2" />
-                    Export Data
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Import Data
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => setShowPrivateLinks(!showPrivateLinks)}>
-                    {showPrivateLinks ? <Eye className="w-4 h-4 mr-2" /> : <EyeOff className="w-4 h-4 mr-2" />}
-                    {showPrivateLinks ? 'Hide' : 'Show'} Private Links
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              
-              <Button
-                onClick={() => openModal()}
-                size="sm"
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 transition-all duration-300 hover:scale-105 hover:shadow-lg"
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                Add
-              </Button>
+                    <DropdownMenuItem onClick={exportData}>
+                      <Download className="w-4 h-4 mr-2" />
+                      Export Data
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
+                      <Upload className="w-4 h-4 mr-2" />
+                      Import Data
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => setShowPrivateLinks(!showPrivateLinks)}>
+                      {showPrivateLinks ? <Eye className="w-4 h-4 mr-2" /> : <EyeOff className="w-4 h-4 mr-2" />}
+                      {showPrivateLinks ? 'Hide' : 'Show'} Private Links
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                
+                <Button
+                  onClick={() => openModal()}
+                  size="sm"
+                  className="h-9 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  Add
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Enhanced Main Content */}
-      <div className="container mx-auto px-4 py-6">
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-4">
         {Object.entries(groupedLinks).map(([category, links]) => (
           <div 
             key={category} 
-            className={`mb-8 animate-fade-in transition-all duration-300 ${
+            className={`mb-6 animate-fade-in transition-all duration-300 ${
               draggedItem ? 'ring-2 ring-purple-500/30 rounded-lg p-2' : ''
             }`}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, category)}
           >
-            {/* Enhanced Category Header */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className={`h-1 w-12 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full transition-all duration-300 hover:w-16`}></div>
-              <h2 className={`text-xl font-bold transition-colors duration-300 ${
+            {/* Compact Category Header */}
+            <div className="flex items-center gap-3 mb-3">
+              <div className={`h-1 w-8 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full transition-all duration-300 hover:w-12`}></div>
+              <h2 className={`text-lg font-bold transition-colors duration-300 ${
                 isDarkMode ? 'text-white' : 'text-slate-800'
               }`}>
                 {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
@@ -702,10 +702,12 @@ const Index = () => {
               </Badge>
             </div>
 
-            {/* Enhanced Links Grid/List */}
+            {/* Optimized Links Layout */}
             <div className={`${
-              viewMode === 'grid' 
-                ? 'grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10 gap-3' 
+              viewMode === 'compact' 
+                ? 'flex flex-wrap gap-2' 
+                : viewMode === 'grid'
+                ? 'grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-2' 
                 : 'flex flex-col gap-2'
             }`}>
               {links.map((link) => (
@@ -715,42 +717,125 @@ const Index = () => {
                   onDragStart={() => handleDragStart(link.key)}
                   onMouseEnter={() => setHoveredLink(link.key)}
                   onMouseLeave={() => setHoveredLink(null)}
-                  className={`group transition-all duration-300 backdrop-blur-sm cursor-move animate-scale-in relative overflow-hidden ${
+                  className={`group transition-all duration-200 backdrop-blur-sm cursor-move animate-scale-in relative overflow-hidden ${
                     isDarkMode 
                       ? 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20' 
                       : 'bg-black/5 hover:bg-black/10 border-black/10 hover:border-black/20'
-                  } ${viewMode === 'list' ? 'flex-row' : ''} ${
+                  } ${
+                    viewMode === 'compact' 
+                      ? 'min-w-[120px] max-w-[140px]' 
+                      : viewMode === 'list' 
+                      ? 'flex-row' 
+                      : ''
+                  } ${
                     link.isPrivate ? 'ring-1 ring-yellow-500/30' : ''
                   } ${
-                    hoveredLink === link.key ? 'scale-105 shadow-xl' : ''
+                    hoveredLink === link.key ? (viewMode === 'compact' ? 'scale-102' : 'scale-105') + ' shadow-lg' : ''
                   } ${
                     clickedLink === link.key ? 'scale-95' : ''
                   } ${
                     link.isFavorite ? 'ring-1 ring-yellow-400/20' : ''
                   }`}
                 >
-                  <CardContent className={`${viewMode === 'grid' ? 'p-3' : 'p-4 flex items-center gap-4 w-full'} relative`}>
-                    {/* Favorite Star */}
-                    {viewMode === 'grid' && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={(e) => toggleFavorite(link.key, e)}
-                        className={`absolute top-1 right-1 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 ${
-                          link.isFavorite ? 'opacity-100' : ''
-                        }`}
-                      >
-                        <Star className={`w-3 h-3 transition-all duration-300 ${
-                          link.isFavorite 
-                            ? 'fill-yellow-400 text-yellow-400' 
-                            : isDarkMode ? 'text-slate-400 hover:text-yellow-400' : 'text-slate-500 hover:text-yellow-500'
-                        }`} />
-                      </Button>
+                  <CardContent className={`${
+                    viewMode === 'compact' 
+                      ? 'p-2' 
+                      : viewMode === 'grid' 
+                      ? 'p-3' 
+                      : 'p-3 flex items-center gap-3 w-full'
+                  } relative`}>
+                    {/* Compact View */}
+                    {viewMode === 'compact' && (
+                      <div className="flex flex-col items-center text-center space-y-1">
+                        <div className="flex items-center justify-between w-full">
+                          <img
+                            src={getFaviconUrl(link.url || link.defaultUrl || '')}
+                            alt=""
+                            className="w-4 h-4 rounded transition-all duration-300"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                            }}
+                          />
+                          {link.isFavorite && (
+                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                          )}
+                        </div>
+                        
+                        <a
+                          href={link.url || link.defaultUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => handleLinkClick(link)}
+                          className={`font-medium text-xs truncate w-full transition-colors duration-300 hover:underline ${
+                            isDarkMode 
+                              ? 'text-white group-hover:text-purple-200' 
+                              : 'text-slate-800 group-hover:text-purple-600'
+                          }`}
+                        >
+                          {link.name}
+                        </a>
+                        
+                        {link.clicks && (
+                          <p className={`text-xs transition-colors duration-300 ${
+                            isDarkMode ? 'text-slate-400' : 'text-slate-500'
+                          }`}>
+                            {link.clicks}
+                          </p>
+                        )}
+                        
+                        {/* Quick Actions */}
+                        <div className="flex items-center gap-1 w-full opacity-0 group-hover:opacity-100 transition-all duration-300">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              toggleFavorite(link.key, e);
+                            }}
+                            className="h-5 w-5 p-0"
+                          >
+                            <Heart className={`w-3 h-3 transition-all duration-300 ${
+                              link.isFavorite 
+                                ? 'fill-red-400 text-red-400' 
+                                : isDarkMode ? 'text-slate-400 hover:text-red-400' : 'text-slate-500 hover:text-red-500'
+                            }`} />
+                          </Button>
+                          
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              openModal(link);
+                            }}
+                            className="h-5 w-5 p-0"
+                          >
+                            <Edit className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </div>
                     )}
 
-                    {viewMode === 'grid' ? (
+                    {/* Grid View */}
+                    {viewMode === 'grid' && (
                       <div className="flex flex-col items-center text-center space-y-2">
-                        {/* Enhanced Favicon */}
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={(e) => toggleFavorite(link.key, e)}
+                          className={`absolute top-1 right-1 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 ${
+                            link.isFavorite ? 'opacity-100' : ''
+                          }`}
+                        >
+                          <Star className={`w-3 h-3 transition-all duration-300 ${
+                            link.isFavorite 
+                              ? 'fill-yellow-400 text-yellow-400' 
+                              : isDarkMode ? 'text-slate-400 hover:text-yellow-400' : 'text-slate-500 hover:text-yellow-500'
+                          }`} />
+                        </Button>
+
                         <div className={`w-10 h-10 rounded-xl p-2 flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${
                           isDarkMode ? 'bg-white/10 group-hover:bg-white/20' : 'bg-black/10 group-hover:bg-black/20'
                         }`}>
@@ -764,7 +849,6 @@ const Index = () => {
                           />
                         </div>
                         
-                        {/* Enhanced Link Info */}
                         <div className="w-full">
                           <h3 className={`font-medium text-xs truncate transition-colors duration-300 ${
                             isDarkMode 
@@ -788,7 +872,6 @@ const Index = () => {
                           </div>
                         </div>
                         
-                        {/* Enhanced Action Buttons */}
                         <div className="flex items-center gap-1 w-full opacity-0 group-hover:opacity-100 transition-all duration-300">
                           <Button
                             variant="ghost"
@@ -849,7 +932,10 @@ const Index = () => {
                           </DropdownMenu>
                         </div>
                       </div>
-                    ) : (
+                    )}
+
+                    {/* List View */}
+                    {viewMode === 'list' && (
                       <div className="flex items-center gap-4 w-full">
                         <div className="flex items-center gap-3">
                           <img
@@ -965,12 +1051,12 @@ const Index = () => {
         )}
       </div>
 
-      {/* Enhanced Floating Action Button */}
+      {/* Floating Action Button */}
       <Button
         onClick={() => openModal()}
-        className="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 z-50 group"
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 z-50 group"
       >
-        <Plus className="w-6 h-6 transition-transform duration-300 group-hover:rotate-90" />
+        <Plus className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
       </Button>
 
       {/* Hidden file input for import */}
@@ -982,7 +1068,7 @@ const Index = () => {
         className="hidden"
       />
 
-      {/* Enhanced Modal */}
+      {/* Modal */}
       <Dialog open={isModalOpen} onOpenChange={closeModal}>
         <DialogContent className={`max-w-md transition-all duration-300 ${
           isDarkMode 
