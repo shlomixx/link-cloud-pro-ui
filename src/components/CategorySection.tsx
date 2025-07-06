@@ -21,7 +21,7 @@ interface CategorySectionProps {
   links: LinkData[];
   categoryLabels: Record<string, string>;
   categoryColors: Record<string, string>;
-  viewMode: 'grid' | 'list' | 'compact';
+  viewMode: 'grid' | 'list' | 'compact' | 'dense';
   isDarkMode: boolean;
   draggedItem: string | null;
   hoveredLink: string | null;
@@ -57,18 +57,33 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onMouseLeave,
   onDragStart
 }) => {
+  const getGridClasses = () => {
+    switch (viewMode) {
+      case 'dense':
+        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 xl:grid-cols-16 2xl:grid-cols-20 gap-1';
+      case 'compact':
+        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-2';
+      case 'grid':
+        return 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10 gap-3';
+      case 'list':
+        return 'flex flex-col gap-2';
+      default:
+        return 'grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-2';
+    }
+  };
+
   return (
     <div 
-      className={`mb-6 animate-fade-in transition-all duration-300 ${
+      className={`mb-4 animate-fade-in transition-all duration-300 ${
         draggedItem ? 'ring-2 ring-purple-500/30 rounded-lg p-2' : ''
       }`}
       onDragOver={onDragOver}
       onDrop={(e) => onDrop(e, category)}
     >
-      {/* Category Header */}
-      <div className="flex items-center gap-3 mb-3">
-        <div className={`h-1 w-8 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full transition-all duration-300 hover:w-12`}></div>
-        <h2 className={`text-lg font-bold transition-colors duration-300 ${
+      {/* Category Header - More compact */}
+      <div className={`flex items-center gap-2 ${viewMode === 'dense' ? 'mb-2' : 'mb-3'}`}>
+        <div className={`h-1 w-6 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full transition-all duration-300 hover:w-8`}></div>
+        <h2 className={`${viewMode === 'dense' ? 'text-sm' : 'text-lg'} font-bold transition-colors duration-300 ${
           isDarkMode ? 'text-white' : 'text-slate-800'
         }`}>
           {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
@@ -83,13 +98,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       </div>
 
       {/* Links Layout */}
-      <div className={`${
-        viewMode === 'compact' 
-          ? 'flex flex-wrap gap-2' 
-          : viewMode === 'grid'
-          ? 'grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-2' 
-          : 'flex flex-col gap-2'
-      }`}>
+      <div className={getGridClasses()}>
         {links.map((link) => (
           <LinkCard
             key={link.key}

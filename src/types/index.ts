@@ -19,5 +19,5 @@ export interface FormData {
   isPrivate: boolean;
 }
 
-export type ViewMode = 'grid' | 'list' | 'compact';
+export type ViewMode = 'grid' | 'list' | 'compact' | 'dense';
 export type SortBy = 'name' | 'clicks' | 'recent' | 'favorites';
