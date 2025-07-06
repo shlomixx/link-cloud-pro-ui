@@ -1,38 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Plus, Edit, Trash2, Download, Upload, Grid, List, Moon, Sun, SortAsc, Filter, Settings, Copy, Eye, EyeOff, Heart, ExternalLink, Star, Clock, TrendingUp, Maximize2, Minimize2, Zap } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
-
-interface LinkData {
-  key: string;
-  name: string;
-  url?: string;
-  defaultUrl?: string;
-  category: string;
-  isPrivate?: boolean;
-  clicks?: number;
-  createdAt?: string;
-  isFavorite?: boolean;
-  lastClicked?: string;
-}
+import { AppHeader } from '@/components/AppHeader';
+import { CategorySection } from '@/components/CategorySection';
+import { LinkModal } from '@/components/LinkModal';
+import { LinkData, FormData, ViewMode, SortBy } from '@/types';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<LinkData | null>(null);
   const [isNewLink, setIsNewLink] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'compact'>('compact');
+  const [viewMode, setViewMode] = useState<ViewMode>('compact');
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [sortBy, setSortBy] = useState<'name' | 'clicks' | 'recent' | 'favorites'>('name');
+  const [sortBy, setSortBy] = useState<SortBy>('name');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showPrivateLinks, setShowPrivateLinks] = useState(true);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
@@ -43,7 +25,7 @@ const Index = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     url: '',
     category: 'custom',
@@ -168,7 +150,7 @@ const Index = () => {
             e.preventDefault();
             const modes = ['compact', 'grid', 'list'];
             const currentIndex = modes.indexOf(viewMode);
-            const nextMode = modes[(currentIndex + 1) % modes.length] as 'compact' | 'grid' | 'list';
+            const nextMode = modes[(currentIndex + 1) % modes.length] as ViewMode;
             setViewMode(nextMode);
             toast.success(`Switched to ${nextMode} view`);
             break;
@@ -197,15 +179,6 @@ const Index = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [viewMode, isDarkMode, isModalOpen, searchTerm, isCompactHeader]);
-
-  const getFaviconUrl = (url: string) => {
-    try {
-      const domain = new URL(url).hostname;
-      return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-    } catch {
-      return '';
-    }
-  };
 
   const handleLinkClick = (link: LinkData) => {
     setClickedLink(link.key);
@@ -471,556 +444,55 @@ const Index = () => {
         ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' 
         : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
     }`}>
-      {/* Compact Header */}
-      <div className={`sticky top-0 z-50 backdrop-blur-xl border-b transition-all duration-300 ${
-        isDarkMode 
-          ? 'bg-black/30 border-white/10' 
-          : 'bg-white/30 border-black/10'
-      }`}>
-        <div className="container mx-auto px-4 py-2">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className={`${isCompactHeader ? 'hidden lg:block' : ''}`}>
-                <h1 className={`text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-colors duration-300 ${
-                  isDarkMode 
-                    ? 'from-white to-purple-200' 
-                    : 'from-slate-800 to-purple-600'
-                }`}>
-                  Link Router Pro
-                </h1>
-                {!isCompactHeader && (
-                  <div className="flex items-center gap-4 text-sm mt-1">
-                    <span className={`transition-colors duration-300 ${
-                      isDarkMode ? 'text-slate-300' : 'text-slate-600'
-                    }`}>
-                      {linksData.length} links
-                    </span>
-                    <span className={`transition-colors duration-300 ${
-                      isDarkMode ? 'text-slate-300' : 'text-slate-600'
-                    }`}>
-                      {totalClicks} clicks
-                    </span>
-                    {favoriteLinks.length > 0 && (
-                      <span className={`flex items-center gap-1 transition-colors duration-300 ${
-                        isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
-                      }`}>
-                        <Star className="w-3 h-3 fill-current" />
-                        {favoriteLinks.length}
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2 flex-1 max-w-2xl">
-              {/* Enhanced Search */}
-              <div className="relative flex-1">
-                <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 transition-colors duration-300 ${
-                  isDarkMode ? 'text-slate-400' : 'text-slate-500'
-                }`} />
-                <Input
-                  ref={searchInputRef}
-                  type="text"
-                  placeholder="Search links... (Ctrl+K)"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className={`pl-10 h-9 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                    isDarkMode 
-                      ? 'bg-white/10 border-white/20 text-white placeholder:text-slate-400 focus:bg-white/20' 
-                      : 'bg-black/5 border-black/20 text-slate-800 placeholder:text-slate-500 focus:bg-black/10'
-                  }`}
-                />
-                {searchTerm && (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setSearchTerm('')}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-5 h-5 p-0"
-                  >
-                    ×
-                  </Button>
-                )}
-              </div>
-              
-              {/* Quick Actions */}
-              <div className="flex items-center gap-1">
-                {/* View Mode Switcher */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button size="sm" variant="outline" className={`h-9 transition-all duration-300 hover:scale-105 ${
-                      isDarkMode 
-                        ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                        : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                    }`}>
-                      {viewMode === 'compact' && <Zap className="w-4 h-4" />}
-                      {viewMode === 'grid' && <Grid className="w-4 h-4" />}
-                      {viewMode === 'list' && <List className="w-4 h-4" />}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className={`z-50 ${
-                    isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
-                  }`}>
-                    <DropdownMenuItem onClick={() => setViewMode('compact')}>
-                      <Zap className="w-4 h-4 mr-2" />
-                      Compact
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setViewMode('grid')}>
-                      <Grid className="w-4 h-4 mr-2" />
-                      Grid
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setViewMode('list')}>
-                      <List className="w-4 h-4 mr-2" />
-                      List
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                {/* Filter & Sort */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button size="sm" variant="outline" className={`h-9 transition-all duration-300 hover:scale-105 ${
-                      isDarkMode 
-                        ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                        : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                    }`}>
-                      <Filter className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className={`z-50 ${
-                    isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
-                  }`}>
-                    <DropdownMenuItem onClick={() => setSelectedCategory('all')}>
-                      All Categories
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    {categories.map(category => (
-                      <DropdownMenuItem key={category} onClick={() => setSelectedCategory(category)}>
-                        {categoryLabels[category as keyof typeof categoryLabels]}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                {/* Header Toggle */}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setIsCompactHeader(!isCompactHeader)}
-                  className={`h-9 transition-all duration-300 hover:scale-105 ${
-                    isDarkMode 
-                      ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                      : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                  }`}
-                >
-                  {isCompactHeader ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
-                </Button>
-
-                {/* Theme Toggle */}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setIsDarkMode(!isDarkMode)}
-                  className={`h-9 transition-all duration-300 hover:scale-105 ${
-                    isDarkMode 
-                      ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                      : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                  }`}
-                >
-                  {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                </Button>
-                
-                {/* Settings */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button size="sm" variant="outline" className={`h-9 transition-all duration-300 hover:scale-105 ${
-                      isDarkMode 
-                        ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                        : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                    }`}>
-                      <Settings className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className={`z-50 ${
-                    isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
-                  }`}>
-                    <DropdownMenuItem onClick={exportData}>
-                      <Download className="w-4 h-4 mr-2" />
-                      Export Data
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
-                      <Upload className="w-4 h-4 mr-2" />
-                      Import Data
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => setShowPrivateLinks(!showPrivateLinks)}>
-                      {showPrivateLinks ? <Eye className="w-4 h-4 mr-2" /> : <EyeOff className="w-4 h-4 mr-2" />}
-                      {showPrivateLinks ? 'Hide' : 'Show'} Private Links
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                
-                <Button
-                  onClick={() => openModal()}
-                  size="sm"
-                  className="h-9 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                >
-                  <Plus className="w-4 h-4 mr-1" />
-                  Add
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AppHeader
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchInputRef={searchInputRef}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
+        isCompactHeader={isCompactHeader}
+        onToggleCompactHeader={() => setIsCompactHeader(!isCompactHeader)}
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+        categories={categories}
+        categoryLabels={categoryLabels}
+        showPrivateLinks={showPrivateLinks}
+        onTogglePrivateLinks={() => setShowPrivateLinks(!showPrivateLinks)}
+        onExportData={exportData}
+        onImportData={() => fileInputRef.current?.click()}
+        onAddLink={() => openModal()}
+        linksCount={linksData.length}
+        totalClicks={totalClicks}
+        favoriteCount={favoriteLinks.length}
+        fileInputRef={fileInputRef}
+      />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-4">
         {Object.entries(groupedLinks).map(([category, links]) => (
-          <div 
-            key={category} 
-            className={`mb-6 animate-fade-in transition-all duration-300 ${
-              draggedItem ? 'ring-2 ring-purple-500/30 rounded-lg p-2' : ''
-            }`}
+          <CategorySection
+            key={category}
+            category={category}
+            links={links}
+            categoryLabels={categoryLabels}
+            categoryColors={categoryColors}
+            viewMode={viewMode}
+            isDarkMode={isDarkMode}
+            draggedItem={draggedItem}
+            hoveredLink={hoveredLink}
+            clickedLink={clickedLink}
             onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, category)}
-          >
-            {/* Compact Category Header */}
-            <div className="flex items-center gap-3 mb-3">
-              <div className={`h-1 w-8 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full transition-all duration-300 hover:w-12`}></div>
-              <h2 className={`text-lg font-bold transition-colors duration-300 ${
-                isDarkMode ? 'text-white' : 'text-slate-800'
-              }`}>
-                {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
-              </h2>
-              <Badge variant="secondary" className={`text-xs transition-all duration-300 hover:scale-110 ${
-                isDarkMode 
-                  ? 'bg-white/10 text-white border-white/20' 
-                  : 'bg-black/10 text-slate-800 border-black/20'
-              }`}>
-                {links.length}
-              </Badge>
-            </div>
-
-            {/* Optimized Links Layout */}
-            <div className={`${
-              viewMode === 'compact' 
-                ? 'flex flex-wrap gap-2' 
-                : viewMode === 'grid'
-                ? 'grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-2' 
-                : 'flex flex-col gap-2'
-            }`}>
-              {links.map((link) => (
-                <Card 
-                  key={link.key} 
-                  draggable
-                  onDragStart={() => handleDragStart(link.key)}
-                  onMouseEnter={() => setHoveredLink(link.key)}
-                  onMouseLeave={() => setHoveredLink(null)}
-                  className={`group transition-all duration-200 backdrop-blur-sm cursor-move animate-scale-in relative overflow-hidden ${
-                    isDarkMode 
-                      ? 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20' 
-                      : 'bg-black/5 hover:bg-black/10 border-black/10 hover:border-black/20'
-                  } ${
-                    viewMode === 'compact' 
-                      ? 'min-w-[120px] max-w-[140px]' 
-                      : viewMode === 'list' 
-                      ? 'flex-row' 
-                      : ''
-                  } ${
-                    link.isPrivate ? 'ring-1 ring-yellow-500/30' : ''
-                  } ${
-                    hoveredLink === link.key ? (viewMode === 'compact' ? 'scale-102' : 'scale-105') + ' shadow-lg' : ''
-                  } ${
-                    clickedLink === link.key ? 'scale-95' : ''
-                  } ${
-                    link.isFavorite ? 'ring-1 ring-yellow-400/20' : ''
-                  }`}
-                >
-                  <CardContent className={`${
-                    viewMode === 'compact' 
-                      ? 'p-2' 
-                      : viewMode === 'grid' 
-                      ? 'p-3' 
-                      : 'p-3 flex items-center gap-3 w-full'
-                  } relative`}>
-                    {/* Compact View */}
-                    {viewMode === 'compact' && (
-                      <div className="flex flex-col items-center text-center space-y-1">
-                        <div className="flex items-center justify-between w-full">
-                          <img
-                            src={getFaviconUrl(link.url || link.defaultUrl || '')}
-                            alt=""
-                            className="w-4 h-4 rounded transition-all duration-300"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).style.display = 'none';
-                            }}
-                          />
-                          {link.isFavorite && (
-                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                          )}
-                        </div>
-                        
-                        <a
-                          href={link.url || link.defaultUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => handleLinkClick(link)}
-                          className={`font-medium text-xs truncate w-full transition-colors duration-300 hover:underline ${
-                            isDarkMode 
-                              ? 'text-white group-hover:text-purple-200' 
-                              : 'text-slate-800 group-hover:text-purple-600'
-                          }`}
-                        >
-                          {link.name}
-                        </a>
-                        
-                        {link.clicks && (
-                          <p className={`text-xs transition-colors duration-300 ${
-                            isDarkMode ? 'text-slate-400' : 'text-slate-500'
-                          }`}>
-                            {link.clicks}
-                          </p>
-                        )}
-                        
-                        {/* Quick Actions */}
-                        <div className="flex items-center gap-1 w-full opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              toggleFavorite(link.key, e);
-                            }}
-                            className="h-5 w-5 p-0"
-                          >
-                            <Heart className={`w-3 h-3 transition-all duration-300 ${
-                              link.isFavorite 
-                                ? 'fill-red-400 text-red-400' 
-                                : isDarkMode ? 'text-slate-400 hover:text-red-400' : 'text-slate-500 hover:text-red-500'
-                            }`} />
-                          </Button>
-                          
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              openModal(link);
-                            }}
-                            className="h-5 w-5 p-0"
-                          >
-                            <Edit className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Grid View */}
-                    {viewMode === 'grid' && (
-                      <div className="flex flex-col items-center text-center space-y-2">
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={(e) => toggleFavorite(link.key, e)}
-                          className={`absolute top-1 right-1 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 ${
-                            link.isFavorite ? 'opacity-100' : ''
-                          }`}
-                        >
-                          <Star className={`w-3 h-3 transition-all duration-300 ${
-                            link.isFavorite 
-                              ? 'fill-yellow-400 text-yellow-400' 
-                              : isDarkMode ? 'text-slate-400 hover:text-yellow-400' : 'text-slate-500 hover:text-yellow-500'
-                          }`} />
-                        </Button>
-
-                        <div className={`w-10 h-10 rounded-xl p-2 flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${
-                          isDarkMode ? 'bg-white/10 group-hover:bg-white/20' : 'bg-black/10 group-hover:bg-black/20'
-                        }`}>
-                          <img
-                            src={getFaviconUrl(link.url || link.defaultUrl || '')}
-                            alt=""
-                            className="w-6 h-6 rounded transition-all duration-300"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).style.display = 'none';
-                            }}
-                          />
-                        </div>
-                        
-                        <div className="w-full">
-                          <h3 className={`font-medium text-xs truncate transition-colors duration-300 ${
-                            isDarkMode 
-                              ? 'text-white group-hover:text-purple-200' 
-                              : 'text-slate-800 group-hover:text-purple-600'
-                          }`}>
-                            {link.name}
-                            {link.isPrivate && <span className="ml-1 text-yellow-500">🔒</span>}
-                          </h3>
-                          <div className="flex items-center justify-center gap-2 mt-1">
-                            {link.clicks && (
-                              <p className={`text-xs transition-colors duration-300 ${
-                                isDarkMode ? 'text-slate-400' : 'text-slate-500'
-                              }`}>
-                                {link.clicks} clicks
-                              </p>
-                            )}
-                            {link.isFavorite && (
-                              <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-1 w-full opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          <Button
-                            variant="ghost"
-                            asChild
-                            size="sm"
-                            className={`flex-1 h-7 px-2 text-xs transition-all duration-300 hover:scale-105 ${
-                              isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/10'
-                            }`}
-                          >
-                            <a
-                              href={link.url || link.defaultUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={() => handleLinkClick(link)}
-                              className="flex items-center justify-center gap-1"
-                            >
-                              <ExternalLink className="w-3 h-3" />
-                              <span className={`transition-colors duration-300 ${
-                                isDarkMode 
-                                  ? 'text-slate-300 group-hover:text-white' 
-                                  : 'text-slate-600 group-hover:text-slate-800'
-                              }`}>
-                                Open
-                              </span>
-                            </a>
-                          </Button>
-                          
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className={`h-7 w-7 p-0 transition-all duration-300 hover:scale-110 ${
-                                  isDarkMode 
-                                    ? 'hover:bg-white/10 text-slate-400 hover:text-white' 
-                                    : 'hover:bg-black/10 text-slate-500 hover:text-slate-800'
-                                }`}
-                              >
-                                <Edit className="w-3 h-3" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className={`z-50 ${
-                              isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
-                            }`}>
-                              <DropdownMenuItem onClick={() => openModal(link)}>
-                                <Edit className="w-4 h-4 mr-2" />
-                                Edit
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => copyLinkUrl(link.url || link.defaultUrl || '', link.name)}>
-                                <Copy className="w-4 h-4 mr-2" />
-                                Copy URL
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={(e) => toggleFavorite(link.key, e)}>
-                                <Heart className="w-4 h-4 mr-2" />
-                                {link.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* List View */}
-                    {viewMode === 'list' && (
-                      <div className="flex items-center gap-4 w-full">
-                        <div className="flex items-center gap-3">
-                          <img
-                            src={getFaviconUrl(link.url || link.defaultUrl || '')}
-                            alt=""
-                            className="w-8 h-8 rounded transition-all duration-300"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).style.display = 'none';
-                            }}
-                          />
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <h3 className={`font-medium transition-colors duration-300 ${
-                                isDarkMode ? 'text-white' : 'text-slate-800'
-                              }`}>
-                                {link.name}
-                              </h3>
-                              {link.isFavorite && (
-                                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                              )}
-                              {link.isPrivate && <span className="text-yellow-500">🔒</span>}
-                            </div>
-                            <p className={`text-sm transition-colors duration-300 ${
-                              isDarkMode ? 'text-slate-400' : 'text-slate-500'
-                            }`}>
-                              {link.url || link.defaultUrl}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {link.clicks && (
-                            <Badge variant="outline" className={`${
-                              isDarkMode ? 'border-white/20 text-white' : 'border-black/20 text-slate-800'
-                            }`}>
-                              {link.clicks} clicks
-                            </Badge>
-                          )}
-                          <Button
-                            size="sm"
-                            asChild
-                            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105"
-                          >
-                            <a
-                              href={link.url || link.defaultUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={() => handleLinkClick(link)}
-                              className="flex items-center gap-1"
-                            >
-                              <ExternalLink className="w-4 h-4" />
-                              Open
-                            </a>
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => openModal(link)}
-                            className={`transition-all duration-300 hover:scale-105 ${
-                              isDarkMode 
-                                ? 'border-white/20 text-white hover:bg-white/10' 
-                                : 'border-black/20 text-slate-800 hover:bg-black/10'
-                            }`}
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={(e) => toggleFavorite(link.key, e)}
-                            className="transition-all duration-300 hover:scale-105"
-                          >
-                            <Star className={`w-4 h-4 transition-all duration-300 ${
-                              link.isFavorite 
-                                ? 'fill-yellow-400 text-yellow-400' 
-                                : isDarkMode ? 'text-slate-400 hover:text-yellow-400' : 'text-slate-500 hover:text-yellow-500'
-                            }`} />
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
+            onDrop={handleDrop}
+            onLinkClick={handleLinkClick}
+            onToggleFavorite={toggleFavorite}
+            onEditLink={openModal}
+            onCopyUrl={copyLinkUrl}
+            onMouseEnter={setHoveredLink}
+            onMouseLeave={() => setHoveredLink(null)}
+            onDragStart={handleDragStart}
+          />
         ))}
 
         {/* Enhanced Empty State */}
@@ -1068,161 +540,18 @@ const Index = () => {
         className="hidden"
       />
 
-      {/* Modal */}
-      <Dialog open={isModalOpen} onOpenChange={closeModal}>
-        <DialogContent className={`max-w-md transition-all duration-300 ${
-          isDarkMode 
-            ? 'bg-slate-900/95 border-slate-700 text-white backdrop-blur-sm' 
-            : 'bg-white/95 border-slate-200 text-slate-800 backdrop-blur-sm'
-        }`}>
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold">
-              {isNewLink ? 'Add New Link' : 'Edit Link'}
-            </DialogTitle>
-            <DialogDescription className={`${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-              {isNewLink 
-                ? 'Create a new link for your collection'
-                : 'Update your link details'
-              }
-            </DialogDescription>
-          </DialogHeader>
-          
-          <Tabs defaultValue="basic" className="w-full">
-            <TabsList className={`grid w-full grid-cols-2 ${
-              isDarkMode ? 'bg-slate-800/50' : 'bg-slate-100/50'
-            }`}>
-              <TabsTrigger value="basic" className="transition-all duration-300">Basic Info</TabsTrigger>
-              <TabsTrigger value="advanced" className="transition-all duration-300">Advanced</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="basic" className="space-y-4 mt-4">
-              <div>
-                <Label htmlFor="name" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                  Link Name
-                </Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="e.g., Google"
-                  className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                    isDarkMode 
-                      ? 'bg-slate-800/50 border-slate-600 text-white focus:border-purple-500' 
-                      : 'bg-slate-50/50 border-slate-300 text-slate-800 focus:border-purple-500'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor="url" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                  URL
-                </Label>
-                <Input
-                  id="url"
-                  value={formData.url}
-                  onChange={(e) => setFormData(prev => ({ ...prev, url: e.target.value }))}
-                  placeholder="https://example.com"
-                  className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                    isDarkMode 
-                      ? 'bg-slate-800/50 border-slate-600 text-white focus:border-purple-500' 
-                      : 'bg-slate-50/50 border-slate-300 text-slate-800 focus:border-purple-500'
-                  }`}
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor="category" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                  Category
-                </Label>
-                <Select
-                  value={formData.category}
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
-                >
-                  <SelectTrigger className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                    isDarkMode 
-                      ? 'bg-slate-800/50 border-slate-600 text-white focus:border-purple-500' 
-                      : 'bg-slate-50/50 border-slate-300 text-slate-800 focus:border-purple-500'
-                  }`}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className={`z-50 ${
-                    isDarkMode ? 'bg-slate-800/95 border-slate-600 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
-                  }`}>
-                    {Object.entries(categoryLabels).map(([key, label]) => (
-                      <SelectItem key={key} value={key} className={`transition-all duration-300 ${
-                        isDarkMode ? 'text-white focus:bg-slate-700/50' : 'text-slate-800 focus:bg-slate-100/50'
-                      }`}>
-                        {label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="advanced" className="space-y-4 mt-4">
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="private"
-                  checked={formData.isPrivate}
-                  onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isPrivate: checked }))}
-                />
-                <Label htmlFor="private" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                  Private Link
-                </Label>
-              </div>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                Private links are only visible when "Show Private Links" is enabled.
-              </p>
-            </TabsContent>
-          </Tabs>
-          
-          <div className="flex justify-between pt-4">
-            <div>
-              {!isNewLink && (
-                <Button
-                  variant="destructive"
-                  onClick={handleDelete}
-                  disabled={isLoading}
-                  className="bg-red-600 hover:bg-red-700 transition-all duration-300 hover:scale-105"
-                >
-                  {isLoading ? (
-                    <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                  ) : (
-                    <Trash2 className="w-4 h-4 mr-2" />
-                  )}
-                  Delete
-                </Button>
-              )}
-            </div>
-            
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                onClick={closeModal} 
-                disabled={isLoading}
-                className={`transition-all duration-300 hover:scale-105 ${
-                  isDarkMode 
-                    ? 'border-slate-600 text-white hover:bg-slate-800/50' 
-                    : 'border-slate-300 text-slate-800 hover:bg-slate-100/50'
-                }`}
-              >
-                Cancel
-              </Button>
-              <Button 
-                onClick={handleSave} 
-                disabled={isLoading}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105"
-              >
-                {isLoading ? (
-                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                ) : null}
-                {isNewLink ? 'Add Link' : 'Save Changes'}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <LinkModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        isNewLink={isNewLink}
+        formData={formData}
+        onFormDataChange={setFormData}
+        onSave={handleSave}
+        onDelete={handleDelete}
+        isLoading={isLoading}
+        isDarkMode={isDarkMode}
+        categoryLabels={categoryLabels}
+      />
     </div>
   );
 };
