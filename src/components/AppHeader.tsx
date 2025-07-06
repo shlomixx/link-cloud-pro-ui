@@ -1,10 +1,10 @@
-
 import React from 'react';
-import { Search, Plus, Grid, List, Moon, Sun, Maximize2, Minimize2, Zap, Filter, Settings, Download, Upload, Eye, EyeOff } from 'lucide-react';
+import { Search, Plus, Grid, List, Moon, Sun, Maximize2, Minimize2, Zap, Filter, Settings, Download, Upload, Eye, EyeOff, Keyboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Star } from 'lucide-react';
+import { StatsOverview } from './StatsOverview';
 
 interface AppHeaderProps {
   searchTerm: string;
@@ -25,9 +25,11 @@ interface AppHeaderProps {
   onExportData: () => void;
   onImportData: () => void;
   onAddLink: () => void;
+  onShowShortcuts: () => void;
   linksCount: number;
   totalClicks: number;
   favoriteCount: number;
+  categoriesCount: number;
   fileInputRef: React.RefObject<HTMLInputElement>;
 }
 
@@ -50,9 +52,11 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   onExportData,
   onImportData,
   onAddLink,
+  onShowShortcuts,
   linksCount,
   totalClicks,
   favoriteCount,
+  categoriesCount,
   fileInputRef
 }) => {
   return (
@@ -73,26 +77,14 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                 Link Router Pro
               </h1>
               {!isCompactHeader && (
-                <div className="flex items-center gap-4 text-sm mt-1">
-                  <span className={`transition-colors duration-300 ${
-                    isDarkMode ? 'text-slate-300' : 'text-slate-600'
-                  }`}>
-                    {linksCount} links
-                  </span>
-                  <span className={`transition-colors duration-300 ${
-                    isDarkMode ? 'text-slate-300' : 'text-slate-600'
-                  }`}>
-                    {totalClicks} clicks
-                  </span>
-                  {favoriteCount > 0 && (
-                    <span className={`flex items-center gap-1 transition-colors duration-300 ${
-                      isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
-                    }`}>
-                      <Star className="w-3 h-3 fill-current" />
-                      {favoriteCount}
-                    </span>
-                  )}
-                </div>
+                <StatsOverview
+                  isDarkMode={isDarkMode}
+                  totalLinks={linksCount}
+                  totalClicks={totalClicks}
+                  favoriteCount={favoriteCount}
+                  categoriesCount={categoriesCount}
+                  isCompact={true}
+                />
               )}
             </div>
           </div>
@@ -240,6 +232,11 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                   <DropdownMenuItem onClick={onTogglePrivateLinks}>
                     {showPrivateLinks ? <Eye className="w-4 h-4 mr-2" /> : <EyeOff className="w-4 h-4 mr-2" />}
                     {showPrivateLinks ? 'Hide' : 'Show'} Private Links
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={onShowShortcuts}>
+                    <Keyboard className="w-4 h-4 mr-2" />
+                    Keyboard Shortcuts
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

@@ -5,6 +5,9 @@ import { toast } from 'sonner';
 import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
 import { LinkModal } from '@/components/LinkModal';
+import { QuickActions } from '@/components/QuickActions';
+import { StatsOverview } from '@/components/StatsOverview';
+import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 import { LinkData, FormData, ViewMode, SortBy } from '@/types';
 
 const Index = () => {
@@ -22,6 +25,8 @@ const Index = () => {
   const [clickedLink, setClickedLink] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isCompactHeader, setIsCompactHeader] = useState(false);
+  const [showShortcuts, setShowShortcuts] = useState(false);
+  const [quickFilter, setQuickFilter] = useState<string>('all');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   
@@ -166,9 +171,34 @@ const Index = () => {
             break;
         }
       }
+      
+      if (e.altKey) {
+        switch (e.key) {
+          case 'f':
+            e.preventDefault();
+            handleQuickAction('favorites');
+            break;
+          case 'r':
+            e.preventDefault();
+            handleQuickAction('recent');
+            break;
+          case 'p':
+            e.preventDefault();
+            handleQuickAction('popular');
+            break;
+        }
+      }
+      
+      if (e.key === '?') {
+        e.preventDefault();
+        setShowShortcuts(true);
+      }
+      
       if (e.key === 'Escape') {
         if (isModalOpen) {
           closeModal();
+        } else if (showShortcuts) {
+          setShowShortcuts(false);
         } else if (searchTerm) {
           setSearchTerm('');
           searchInputRef.current?.blur();
@@ -178,7 +208,28 @@ const Index = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [viewMode, isDarkMode, isModalOpen, searchTerm, isCompactHeader]);
+  }, [viewMode, isDarkMode, isModalOpen, searchTerm, isCompactHeader, showShortcuts]);
+
+  const handleQuickAction = (action: string) => {
+    setQuickFilter(action);
+    switch (action) {
+      case 'favorites':
+        setSortBy('favorites');
+        toast.success('Showing favorite links');
+        break;
+      case 'recent':
+        setSortBy('recent');
+        toast.success('Showing recent links');
+        break;
+      case 'popular':
+        setSortBy('clicks');
+        toast.success('Showing popular links');
+        break;
+      default:
+        setSortBy('name');
+        setQuickFilter('all');
+    }
+  };
 
   const handleLinkClick = (link: LinkData) => {
     setClickedLink(link.key);
@@ -241,6 +292,15 @@ const Index = () => {
   const filteredLinks = linksData.filter(link => {
     if (!showPrivateLinks && link.isPrivate) return false;
     if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
+    
+    // Apply quick filter
+    if (quickFilter === 'favorites' && !link.isFavorite) return false;
+    if (quickFilter === 'recent') {
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      if (new Date(link.createdAt || '') < weekAgo) return false;
+    }
+    if (quickFilter === 'popular' && (link.clicks || 0) < 20) return false;
     
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -420,6 +480,12 @@ const Index = () => {
   const categories = Array.from(new Set(linksData.map(link => link.category)));
   const totalClicks = linksData.reduce((sum, link) => sum + (link.clicks || 0), 0);
   const favoriteLinks = linksData.filter(link => link.isFavorite);
+  const recentLinks = linksData.filter(link => {
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    return new Date(link.createdAt || '') > weekAgo;
+  });
+  const popularLinks = linksData.filter(link => (link.clicks || 0) > 20);
 
   if (isLoading) {
     return (
@@ -439,7 +505,7 @@ const Index = () => {
   }
 
   const getCompatibleViewMode = (mode: ViewMode): "grid" | "list" | "compact" => {
-    if (mode === 'dense') return 'compact'; // Fallback dense to compact for AppHeader
+    if (mode === 'dense') return 'compact';
     return mode as "grid" | "list" | "compact";
   };
 
@@ -468,14 +534,36 @@ const Index = () => {
         onExportData={exportData}
         onImportData={() => fileInputRef.current?.click()}
         onAddLink={() => openModal()}
+        onShowShortcuts={() => setShowShortcuts(true)}
         linksCount={linksData.length}
         totalClicks={totalClicks}
         favoriteCount={favoriteLinks.length}
+        categoriesCount={categories.length}
         fileInputRef={fileInputRef}
       />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-4">
+        {/* Stats Overview - Only show when not compact header */}
+        {!isCompactHeader && (
+          <StatsOverview
+            isDarkMode={isDarkMode}
+            totalLinks={linksData.length}
+            totalClicks={totalClicks}
+            favoriteCount={favoriteLinks.length}
+            categoriesCount={categories.length}
+          />
+        )}
+
+        {/* Quick Actions */}
+        <QuickActions
+          isDarkMode={isDarkMode}
+          onQuickAction={handleQuickAction}
+          favoriteCount={favoriteLinks.length}
+          recentCount={recentLinks.length}
+          popularCount={popularLinks.length}
+        />
+
         {Object.entries(groupedLinks).map(([category, links]) => (
           <CategorySection
             key={category}
@@ -507,23 +595,44 @@ const Index = () => {
             <h3 className={`text-2xl font-bold mb-3 transition-colors duration-300 ${
               isDarkMode ? 'text-white' : 'text-slate-800'
             }`}>
-              {searchTerm ? 'No links found' : 'Your link collection awaits'}
+              {searchTerm || quickFilter !== 'all' ? 'No links found' : 'Your link collection awaits'}
             </h3>
             <p className={`mb-8 text-lg transition-colors duration-300 ${
               isDarkMode ? 'text-slate-400' : 'text-slate-500'
             }`}>
               {searchTerm 
                 ? `No links match "${searchTerm}". Try adjusting your search terms.`
+                : quickFilter !== 'all'
+                ? `No ${quickFilter} links found. Try a different filter.`
                 : 'Add your first link to start building your personal link hub'
               }
             </p>
-            <Button 
-              onClick={() => openModal()} 
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
-            >
-              <Plus className="w-5 h-5 mr-2" />
-              {searchTerm ? 'Add New Link' : 'Add Your First Link'}
-            </Button>
+            <div className="flex gap-3 justify-center">
+              <Button 
+                onClick={() => openModal()} 
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                {searchTerm || quickFilter !== 'all' ? 'Add New Link' : 'Add Your First Link'}
+              </Button>
+              {(searchTerm || quickFilter !== 'all') && (
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setSearchTerm('');
+                    setQuickFilter('all');
+                    setSortBy('name');
+                  }}
+                  className={`px-6 py-3 text-lg transition-all duration-300 hover:scale-105 ${
+                    isDarkMode 
+                      ? 'border-white/20 text-white hover:bg-white/10' 
+                      : 'border-black/20 text-slate-800 hover:bg-black/10'
+                  }`}
+                >
+                  Clear Filters
+                </Button>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -556,6 +665,12 @@ const Index = () => {
         isLoading={isLoading}
         isDarkMode={isDarkMode}
         categoryLabels={categoryLabels}
+      />
+
+      <KeyboardShortcuts
+        isOpen={showShortcuts}
+        onClose={() => setShowShortcuts(false)}
+        isDarkMode={isDarkMode}
       />
     </div>
   );

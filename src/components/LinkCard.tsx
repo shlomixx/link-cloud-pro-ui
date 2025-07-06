@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Edit, Heart, ExternalLink, Star, Copy, Trash2 } from 'lucide-react';
+import { Edit, Heart, ExternalLink, Star, Copy, Trash2, Clock, MousePointer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger, ContextMenuSeparator } from '@/components/ui/context-menu';
@@ -42,6 +41,17 @@ const getFaviconUrl = (url: string) => {
   } catch {
     return '';
   }
+};
+
+const formatTimeAgo = (dateString: string) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+  
+  if (diffInHours < 1) return 'Just now';
+  if (diffInHours < 24) return `${diffInHours}h ago`;
+  if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}d ago`;
+  return `${Math.floor(diffInHours / 168)}w ago`;
 };
 
 export const LinkCard: React.FC<LinkCardProps> = ({
@@ -135,6 +145,9 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               <div className="font-medium">{link.name}</div>
               <div className="text-muted-foreground">{link.url || link.defaultUrl}</div>
               {link.clicks && <div className="text-muted-foreground">{link.clicks} clicks</div>}
+              {link.lastClicked && (
+                <div className="text-muted-foreground">Last: {formatTimeAgo(link.lastClicked)}</div>
+              )}
             </div>
           </TooltipContent>
         </Tooltip>
@@ -154,7 +167,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             onMouseLeave={onMouseLeave}
             onClick={onLinkClick}
             className={`
-              group relative p-2 rounded-lg cursor-pointer min-w-[100px] max-w-[120px]
+              group relative p-3 rounded-lg cursor-pointer min-w-[100px] max-w-[140px]
               transition-all duration-200 backdrop-blur-sm
               ${isDarkMode 
                 ? 'bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20' 
@@ -165,12 +178,12 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               ${link.isFavorite ? 'ring-1 ring-yellow-400/20' : ''}
             `}
           >
-            <div className="flex flex-col items-center text-center space-y-1">
+            <div className="flex flex-col items-center text-center space-y-2">
               <div className="flex items-center justify-between w-full">
                 <img
                   src={getFaviconUrl(link.url || link.defaultUrl || '')}
                   alt=""
-                  className="w-4 h-4 rounded"
+                  className="w-5 h-5 rounded"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none';
                   }}
@@ -186,13 +199,24 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                 {link.name}
               </span>
               
-              {link.clicks && (
-                <span className={`text-xs ${
-                  isDarkMode ? 'text-slate-400' : 'text-slate-500'
-                }`}>
-                  {link.clicks}
-                </span>
-              )}
+              <div className="flex items-center gap-2 text-xs">
+                {link.clicks && (
+                  <div className={`flex items-center gap-1 ${
+                    isDarkMode ? 'text-slate-400' : 'text-slate-500'
+                  }`}>
+                    <MousePointer className="w-3 h-3" />
+                    {link.clicks}
+                  </div>
+                )}
+                {link.lastClicked && (
+                  <div className={`flex items-center gap-1 ${
+                    isDarkMode ? 'text-slate-400' : 'text-slate-500'
+                  }`}>
+                    <Clock className="w-3 h-3" />
+                    {formatTimeAgo(link.lastClicked)}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </ContextMenuTrigger>
@@ -235,7 +259,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             onMouseLeave={onMouseLeave}
             onClick={onLinkClick}
             className={`
-              group relative p-3 rounded-lg cursor-pointer
+              group relative p-4 rounded-lg cursor-pointer
               transition-all duration-200 backdrop-blur-sm
               ${isDarkMode 
                 ? 'bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20' 
@@ -246,12 +270,12 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               ${link.isFavorite ? 'ring-1 ring-yellow-400/20' : ''}
             `}
           >
-            <div className="flex flex-col items-center text-center space-y-2">
+            <div className="flex flex-col items-center text-center space-y-3">
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={onToggleFavorite}
-                className={`absolute top-1 right-1 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 ${
+                className={`absolute top-2 right-2 w-6 h-6 p-0 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 ${
                   link.isFavorite ? 'opacity-100' : ''
                 }`}
               >
@@ -262,7 +286,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                 }`} />
               </Button>
 
-              <div className={`w-10 h-10 rounded-xl p-2 flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${
+              <div className={`w-12 h-12 rounded-xl p-3 flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${
                 isDarkMode ? 'bg-white/10 group-hover:bg-white/20' : 'bg-black/10 group-hover:bg-black/20'
               }`}>
                 <img
@@ -276,19 +300,30 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               </div>
               
               <div className="w-full">
-                <h3 className={`font-medium text-xs truncate ${
+                <h3 className={`font-medium text-sm truncate ${
                   isDarkMode ? 'text-white' : 'text-slate-800'
                 }`}>
                   {link.name}
                   {link.isPrivate && <span className="ml-1 text-yellow-500">🔒</span>}
                 </h3>
-                {link.clicks && (
-                  <p className={`text-xs mt-1 ${
-                    isDarkMode ? 'text-slate-400' : 'text-slate-500'
-                  }`}>
-                    {link.clicks} clicks
-                  </p>
-                )}
+                <div className="flex items-center justify-center gap-3 mt-2 text-xs">
+                  {link.clicks && (
+                    <div className={`flex items-center gap-1 ${
+                      isDarkMode ? 'text-slate-400' : 'text-slate-500'
+                    }`}>
+                      <MousePointer className="w-3 h-3" />
+                      {link.clicks}
+                    </div>
+                  )}
+                  {link.lastClicked && (
+                    <div className={`flex items-center gap-1 ${
+                      isDarkMode ? 'text-slate-400' : 'text-slate-500'
+                    }`}>
+                      <Clock className="w-3 h-3" />
+                      {formatTimeAgo(link.lastClicked)}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -331,7 +366,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
           onMouseLeave={onMouseLeave}
           onClick={onLinkClick}
           className={`
-            group flex items-center gap-4 p-3 rounded-lg cursor-pointer w-full
+            group flex items-center gap-4 p-4 rounded-lg cursor-pointer w-full
             transition-all duration-200 backdrop-blur-sm
             ${isDarkMode 
               ? 'bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20' 
@@ -371,14 +406,29 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             </div>
           </div>
           
-          <div className="flex items-center gap-2">
-            {link.clicks && (
-              <Badge variant="outline" className={`${
-                isDarkMode ? 'border-white/20 text-white' : 'border-black/20 text-slate-800'
-              }`}>
-                {link.clicks} clicks
-              </Badge>
-            )}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4 text-sm">
+              {link.clicks && (
+                <div className={`flex items-center gap-1 ${
+                  isDarkMode ? 'text-slate-400' : 'text-slate-500'
+                }`}>
+                  <MousePointer className="w-4 h-4" />
+                  <Badge variant="outline" className={`${
+                    isDarkMode ? 'border-white/20 text-white' : 'border-black/20 text-slate-800'
+                  }`}>
+                    {link.clicks} clicks
+                  </Badge>
+                </div>
+              )}
+              {link.lastClicked && (
+                <div className={`flex items-center gap-1 ${
+                  isDarkMode ? 'text-slate-400' : 'text-slate-500'
+                }`}>
+                  <Clock className="w-4 h-4" />
+                  <span>{formatTimeAgo(link.lastClicked)}</span>
+                </div>
+              )}
+            </div>
             <Button
               size="sm"
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105"
