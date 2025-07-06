@@ -438,6 +438,11 @@ const Index = () => {
     );
   }
 
+  const getCompatibleViewMode = (mode: ViewMode): "grid" | "list" | "compact" => {
+    if (mode === 'dense') return 'compact'; // Fallback dense to compact for AppHeader
+    return mode as "grid" | "list" | "compact";
+  };
+
   return (
     <div className={`min-h-screen transition-all duration-500 ${
       isDarkMode 
@@ -448,8 +453,8 @@ const Index = () => {
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         searchInputRef={searchInputRef}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
+        viewMode={getCompatibleViewMode(viewMode)}
+        onViewModeChange={(mode) => setViewMode(mode as ViewMode)}
         isDarkMode={isDarkMode}
         onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
         isCompactHeader={isCompactHeader}
