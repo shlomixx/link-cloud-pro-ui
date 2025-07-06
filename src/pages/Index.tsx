@@ -148,9 +148,9 @@ const Index = () => {
             break;
           case 'g':
             e.preventDefault();
-            const modes = ['compact', 'grid', 'list'];
+            const modes: ViewMode[] = ['compact', 'grid', 'list', 'dense'];
             const currentIndex = modes.indexOf(viewMode);
-            const nextMode = modes[(currentIndex + 1) % modes.length] as ViewMode;
+            const nextMode = modes[(currentIndex + 1) % modes.length];
             setViewMode(nextMode);
             toast.success(`Switched to ${nextMode} view`);
             break;
