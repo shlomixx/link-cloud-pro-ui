@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Star } from 'lucide-react';
-import { StatsOverview } from './StatsOverview';
 
 interface AppHeaderProps {
   searchTerm: string;
@@ -76,16 +75,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               }`}>
                 Link Router Pro
               </h1>
-              {!isCompactHeader && (
-                <StatsOverview
-                  isDarkMode={isDarkMode}
-                  totalLinks={linksCount}
-                  totalClicks={totalClicks}
-                  favoriteCount={favoriteCount}
-                  categoriesCount={categoriesCount}
-                  isCompact={true}
-                />
-              )}
             </div>
           </div>
           

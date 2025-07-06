@@ -6,7 +6,6 @@ import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
 import { LinkModal } from '@/components/LinkModal';
 import { QuickActions } from '@/components/QuickActions';
-import { StatsOverview } from '@/components/StatsOverview';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 import { LinkData, FormData, ViewMode, SortBy } from '@/types';
 
@@ -544,17 +543,6 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-4">
-        {/* Stats Overview - Only show when not compact header */}
-        {!isCompactHeader && (
-          <StatsOverview
-            isDarkMode={isDarkMode}
-            totalLinks={linksData.length}
-            totalClicks={totalClicks}
-            favoriteCount={favoriteLinks.length}
-            categoriesCount={categories.length}
-          />
-        )}
-
         {/* Quick Actions */}
         <QuickActions
           isDarkMode={isDarkMode}

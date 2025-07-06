@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard, Zap, Heart, Clock, TrendingUp } from 'lucide-react';
+import { Heart, Clock, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -48,13 +48,6 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
 
   return (
     <div className="mb-6">
-      <div className="flex items-center gap-2 mb-3">
-        <Zap className={`w-4 h-4 ${isDarkMode ? 'text-yellow-400' : 'text-yellow-600'}`} />
-        <h2 className={`text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
-          Quick Actions
-        </h2>
-      </div>
-      
       <div className="flex gap-2 flex-wrap">
         {quickActions.map((action) => (
           <TooltipProvider key={action.id}>
@@ -87,10 +80,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
               <TooltipContent>
                 <div className="flex items-center gap-2">
                   <span>Show {action.label}</span>
-                  <div className="flex items-center gap-1">
-                    <Keyboard className="w-3 h-3" />
-                    <span className="text-xs">Alt+{action.shortcut}</span>
-                  </div>
+                  <span className="text-xs opacity-70">Alt+{action.shortcut}</span>
                 </div>
               </TooltipContent>
             </Tooltip>
