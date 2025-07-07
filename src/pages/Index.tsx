@@ -7,7 +7,6 @@ import { CategorySection } from '@/components/CategorySection';
 import { LinkModal } from '@/components/LinkModal';
 import { QuickActions } from '@/components/QuickActions';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
-import { CategoriesGrid } from '@/components/CategoriesGrid';
 import { LinkData, FormData, ViewMode, SortBy } from '@/types';
 
 const Index = () => {
@@ -759,18 +758,6 @@ const Index = () => {
           recentCount={recentLinks.length}
           popularCount={popularLinks.length}
         />
-
-        {/* Categories Grid - Show when no search term and showing all categories */}
-        {!searchTerm && selectedCategory === 'all' && quickFilter === 'all' && (
-          <CategoriesGrid
-            categories={categories}
-            categoryLabels={categoryLabels}
-            categoryColors={categoryColors}
-            isDarkMode={isDarkMode}
-            onCategorySelect={setSelectedCategory}
-            selectedCategory={selectedCategory}
-          />
-        )}
 
         {Object.entries(groupedLinks).map(([category, links]) => (
           <CategorySection
