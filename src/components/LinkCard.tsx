@@ -87,18 +87,18 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                   <img
                     src={getFaviconUrl(link.url || link.defaultUrl || '')}
                     alt=""
-                    className="w-6 h-6 rounded"
+                    className="w-7 h-7 rounded"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
                     }}
                   />
-                  <span className={`text-xs font-medium text-center max-w-[60px] leading-tight truncate ${
+                  <span className={`text-sm font-medium text-center max-w-[70px] leading-tight truncate ${
                     isDarkMode ? 'text-white' : 'text-slate-800'
                   }`}>
                     {link.name}
                   </span>
                   {link.isFavorite && (
-                    <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400 absolute -top-0.5 -right-0.5" />
+                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 absolute -top-0.5 -right-0.5" />
                   )}
                 </div>
               </ContextMenuTrigger>
@@ -150,7 +150,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             onMouseLeave={onMouseLeave}
             onClick={onLinkClick}
             className={`
-              group relative flex flex-col items-center gap-1.5 p-2.5 rounded cursor-pointer min-w-[70px] max-w-[90px]
+              group relative flex flex-col items-center gap-2 p-3 rounded cursor-pointer min-w-[80px] max-w-[100px]
               transition-all duration-200 hover:scale-110
               ${isDarkMode 
                 ? 'hover:bg-white/10' 
@@ -163,17 +163,17 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
-                className="w-7 h-7 rounded"
+                className="w-8 h-8 rounded"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
                 }}
               />
               {link.isFavorite && (
-                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 absolute -top-1 -right-1" />
+                <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 absolute -top-1 -right-1" />
               )}
             </div>
             
-            <span className={`font-medium text-xs text-center truncate w-full leading-tight ${
+            <span className={`font-medium text-sm text-center truncate w-full leading-tight ${
               isDarkMode ? 'text-white' : 'text-slate-800'
             }`}>
               {link.name}
@@ -219,7 +219,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             onMouseLeave={onMouseLeave}
             onClick={onLinkClick}
             className={`
-              group relative flex flex-col items-center gap-2.5 p-4 rounded cursor-pointer
+              group relative flex flex-col items-center gap-3 p-5 rounded cursor-pointer
               transition-all duration-200 hover:scale-110
               ${isDarkMode 
                 ? 'hover:bg-white/10' 
@@ -247,7 +247,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
-                className="w-10 h-10 rounded transition-all duration-300 group-hover:scale-110"
+                className="w-12 h-12 rounded transition-all duration-300 group-hover:scale-110"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
                 }}
@@ -255,7 +255,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             </div>
             
             <div className="w-full text-center">
-              <h3 className={`font-medium text-sm truncate ${
+              <h3 className={`font-medium text-base truncate ${
                 isDarkMode ? 'text-white' : 'text-slate-800'
               }`}>
                 {link.name}
@@ -302,7 +302,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
           onMouseLeave={onMouseLeave}
           onClick={onLinkClick}
           className={`
-            group flex items-center gap-4 p-3 rounded cursor-pointer w-full
+            group flex items-center gap-5 p-4 rounded cursor-pointer w-full
             transition-all duration-200 hover:scale-[1.02]
             ${isDarkMode 
               ? 'hover:bg-white/10' 
@@ -311,24 +311,24 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             ${isClicked ? 'scale-[0.98]' : ''}
           `}
         >
-          <div className="flex items-center gap-4 flex-1">
+          <div className="flex items-center gap-5 flex-1">
             <img
               src={getFaviconUrl(link.url || link.defaultUrl || '')}
               alt=""
-              className="w-8 h-8 rounded"
+              className="w-10 h-10 rounded"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
               }}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h3 className={`font-medium text-base ${
+                <h3 className={`font-medium text-lg ${
                   isDarkMode ? 'text-white' : 'text-slate-800'
                 }`}>
                   {link.name}
                 </h3>
                 {link.isFavorite && (
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                 )}
                 {link.isPrivate && <span className="text-yellow-500">🔒</span>}
               </div>
@@ -338,9 +338,9 @@ export const LinkCard: React.FC<LinkCardProps> = ({
           <div className="flex items-center gap-2">
             <Button
               size="sm"
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105 px-4 py-2"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105 px-5 py-3"
             >
-              <ExternalLink className="w-5 h-5" />
+              <ExternalLink className="w-6 h-6" />
             </Button>
           </div>
         </div>
