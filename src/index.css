@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -39,20 +40,21 @@ All colors MUST be HSL.
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Global gradient variables using #24A1DE */
+    --gradient-primary: linear-gradient(135deg, #24A1DE 0%, #1e90ff 100%);
+    --gradient-secondary: linear-gradient(135deg, #24A1DE 0%, #87ceeb 100%);
+    --gradient-accent: linear-gradient(45deg, #24A1DE 0%, #00bfff 50%, #87cefa 100%);
+    --gradient-background: linear-gradient(180deg, rgba(36, 161, 222, 0.05) 0%, rgba(36, 161, 222, 0.02) 100%);
+    --gradient-card: linear-gradient(135deg, rgba(36, 161, 222, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+    --gradient-hover: linear-gradient(135deg, #24A1DE 0%, #1976d2 100%);
   }
 
   .dark {
@@ -91,6 +93,14 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, #24A1DE 0%, #1976d2 100%);
+    --gradient-secondary: linear-gradient(135deg, #24A1DE 0%, #4682b4 100%);
+    --gradient-accent: linear-gradient(45deg, #24A1DE 0%, #1e90ff 50%, #4169e1 100%);
+    --gradient-background: linear-gradient(180deg, rgba(36, 161, 222, 0.1) 0%, rgba(36, 161, 222, 0.05) 100%);
+    --gradient-card: linear-gradient(135deg, rgba(36, 161, 222, 0.15) 0%, rgba(34, 42, 69, 0.9) 100%);
+    --gradient-hover: linear-gradient(135deg, #24A1DE 0%, #1565c0 100%);
   }
 }
 
@@ -101,5 +111,85 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: var(--gradient-background);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* Global gradient utilities */
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+  
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+  
+  .gradient-card {
+    background: var(--gradient-card);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .gradient-hover {
+    background: var(--gradient-hover);
+  }
+  
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Enhanced button styles with gradients */
+  .btn-gradient {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-gradient:hover {
+    background: var(--gradient-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(36, 161, 222, 0.3);
+  }
+
+  /* Card enhancements */
+  .card-gradient {
+    background: var(--gradient-card);
+    border: 1px solid rgba(36, 161, 222, 0.2);
+    box-shadow: 0 4px 15px rgba(36, 161, 222, 0.1);
+  }
+  
+  .card-gradient:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(36, 161, 222, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  /* Header gradient */
+  .header-gradient {
+    background: var(--gradient-primary);
+    box-shadow: 0 4px 20px rgba(36, 161, 222, 0.3);
+  }
+}
+
+@layer utilities {
+  .animate-gradient {
+    background-size: 400% 400%;
+    animation: gradient-shift 4s ease infinite;
+  }
+  
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 }
