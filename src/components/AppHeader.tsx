@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Search, Plus, Grid, List, Moon, Sun, Maximize2, Minimize2, Zap, Filter, Settings, Download, Upload, Eye, EyeOff, Keyboard } from 'lucide-react';
+import { Search, Plus, Grid, List, Moon, Sun, Maximize2, Minimize2, Zap, Filter, Settings, Download, Upload, Eye, EyeOff, Keyboard, Heart, Clock, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
@@ -30,6 +31,9 @@ interface AppHeaderProps {
   favoriteCount: number;
   categoriesCount: number;
   fileInputRef: React.RefObject<HTMLInputElement>;
+  onQuickAction: (action: string) => void;
+  recentCount: number;
+  popularCount: number;
 }
 
 export const AppHeader: React.FC<AppHeaderProps> = ({
@@ -56,7 +60,10 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   totalClicks,
   favoriteCount,
   categoriesCount,
-  fileInputRef
+  fileInputRef,
+  onQuickAction,
+  recentCount,
+  popularCount
 }) => {
   return (
     <div className={`sticky top-0 z-50 backdrop-blur-xl border-b transition-all duration-300 ${
@@ -110,6 +117,49 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             
             {/* Quick Actions */}
             <div className="flex items-center gap-1">
+              {/* Quick Filter Actions */}
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onQuickAction('favorites')}
+                className={`h-9 transition-all duration-300 hover:scale-105 ${
+                  isDarkMode 
+                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                    : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                }`}
+              >
+                <Heart className="w-4 h-4 mr-1" />
+                {favoriteCount}
+              </Button>
+
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onQuickAction('recent')}
+                className={`h-9 transition-all duration-300 hover:scale-105 ${
+                  isDarkMode 
+                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                    : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                }`}
+              >
+                <Clock className="w-4 h-4 mr-1" />
+                {recentCount}
+              </Button>
+
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onQuickAction('popular')}
+                className={`h-9 transition-all duration-300 hover:scale-105 ${
+                  isDarkMode 
+                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                    : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                }`}
+              >
+                <TrendingUp className="w-4 h-4 mr-1" />
+                {popularCount}
+              </Button>
+
               {/* View Mode Switcher */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

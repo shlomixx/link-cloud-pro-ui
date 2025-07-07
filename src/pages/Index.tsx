@@ -5,7 +5,6 @@ import { toast } from 'sonner';
 import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
 import { LinkModal } from '@/components/LinkModal';
-import { QuickActions } from '@/components/QuickActions';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 import { LinkData, FormData, ViewMode, SortBy } from '@/types';
 
@@ -746,19 +745,13 @@ const Index = () => {
         favoriteCount={favoriteLinks.length}
         categoriesCount={categories.length}
         fileInputRef={fileInputRef}
+        onQuickAction={handleQuickAction}
+        recentCount={recentLinks.length}
+        popularCount={popularLinks.length}
       />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-4">
-        {/* Quick Actions */}
-        <QuickActions
-          isDarkMode={isDarkMode}
-          onQuickAction={handleQuickAction}
-          favoriteCount={favoriteLinks.length}
-          recentCount={recentLinks.length}
-          popularCount={popularLinks.length}
-        />
-
         {Object.entries(groupedLinks).map(([category, links]) => (
           <CategorySection
             key={category}
