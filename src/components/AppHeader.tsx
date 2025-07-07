@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Search, Plus, Grid, List, Moon, Sun, Maximize2, Minimize2, Zap, Filter, Settings, Download, Upload, Eye, EyeOff, Keyboard, Heart, Clock, TrendingUp, Menu, X } from 'lucide-react';
+import { Search, Plus, Grid, List, Moon, Sun, Maximize2, Minimize2, Zap, Filter, Settings, Download, Upload, Eye, EyeOff, Keyboard, Heart, Clock, TrendingUp, Menu, X, ArrowUpDown, Trash2, Copy, RotateCcw, Share2, BookmarkPlus, Shuffle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
@@ -69,6 +68,32 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // New handler functions for additional controls
+  const handleSortAction = (sortType: string) => {
+    console.log(`Sorting by ${sortType}`);
+    // This would be implemented in the parent component
+  };
+
+  const handleBulkAction = (action: string) => {
+    console.log(`Bulk action: ${action}`);
+    // This would be implemented in the parent component
+  };
+
+  const handleRandomLink = () => {
+    console.log('Opening random link');
+    // This would be implemented in the parent component
+  };
+
+  const handleShareCollection = () => {
+    console.log('Sharing collection');
+    // This would be implemented in the parent component
+  };
+
+  const handleBackup = () => {
+    console.log('Creating backup');
+    // This would be implemented in the parent component
   };
 
   return (
@@ -167,6 +192,79 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                 {popularCount}
               </Button>
 
+              {/* Random Link Button */}
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleRandomLink}
+                title="Random Link"
+                className={`h-9 transition-all duration-300 hover:scale-105 ${
+                  isDarkMode 
+                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                    : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                }`}
+              >
+                <Shuffle className="w-4 h-4" />
+              </Button>
+
+              {/* Sort & Filter Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="sm" variant="outline" className={`h-9 transition-all duration-300 hover:scale-105 ${
+                    isDarkMode 
+                      ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                      : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                  }`}>
+                    <ArrowUpDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className={`z-50 ${
+                  isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
+                }`}>
+                  <DropdownMenuItem onClick={() => handleSortAction('name')}>
+                    Sort by Name
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSortAction('date')}>
+                    Sort by Date Added
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSortAction('clicks')}>
+                    Sort by Clicks
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSortAction('category')}>
+                    Sort by Category
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Bulk Actions */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="sm" variant="outline" className={`h-9 transition-all duration-300 hover:scale-105 ${
+                    isDarkMode 
+                      ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                      : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                  }`}>
+                    <Copy className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className={`z-50 ${
+                  isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
+                }`}>
+                  <DropdownMenuItem onClick={() => handleBulkAction('copy')}>
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy Selected
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleBulkAction('favorite')}>
+                    <BookmarkPlus className="w-4 h-4 mr-2" />
+                    Favorite Selected
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleBulkAction('delete')}>
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete Selected
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {/* View Mode Switcher */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -198,7 +296,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Filter & Sort */}
+              {/* Filter & Category */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="sm" variant="outline" className={`h-9 transition-all duration-300 hover:scale-105 ${
@@ -223,6 +321,21 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              {/* Share Collection */}
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleShareCollection}
+                title="Share Collection"
+                className={`h-9 transition-all duration-300 hover:scale-105 ${
+                  isDarkMode 
+                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                    : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                }`}
+              >
+                <Share2 className="w-4 h-4" />
+              </Button>
 
               {/* Header Toggle */}
               <Button
@@ -266,6 +379,11 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                 <DropdownMenuContent className={`z-50 ${
                   isDarkMode ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
                 }`}>
+                  <DropdownMenuItem onClick={handleBackup}>
+                    <RotateCcw className="w-4 h-4 mr-2" />
+                    Create Backup
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={onExportData}>
                     <Download className="w-4 h-4 mr-2" />
                     Export Data
@@ -314,6 +432,20 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
           {/* Mobile Actions */}
           <div className="flex items-center gap-2">
+            {/* Random Link Button */}
+            <Button
+              onClick={handleRandomLink}
+              size="sm"
+              variant="outline"
+              className={`h-9 ${
+                isDarkMode 
+                  ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                  : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+              }`}
+            >
+              <Shuffle className="w-4 h-4" />
+            </Button>
+
             {/* Add Button */}
             <Button
               onClick={onAddLink}
@@ -450,6 +582,47 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               </div>
             </div>
 
+            {/* Additional Tools */}
+            <div className="mb-4">
+              <h3 className={`text-sm font-medium mb-2 ${
+                isDarkMode ? 'text-slate-300' : 'text-slate-600'
+              }`}>Tools</h3>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    handleRandomLink();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`h-10 flex items-center justify-center gap-2 ${
+                    isDarkMode 
+                      ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                      : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                  }`}
+                >
+                  <Shuffle className="w-4 h-4" />
+                  <span className="text-xs">Random</span>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    handleShareCollection();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`h-10 flex items-center justify-center gap-2 ${
+                    isDarkMode 
+                      ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
+                      : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
+                  }`}
+                >
+                  <Share2 className="w-4 h-4" />
+                  <span className="text-xs">Share</span>
+                </Button>
+              </div>
+            </div>
+
             {/* View Mode */}
             <div className="mb-4">
               <h3 className={`text-sm font-medium mb-2 ${
@@ -558,6 +731,18 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                 >
                   {showPrivateLinks ? <Eye className="w-4 h-4 mr-2" /> : <EyeOff className="w-4 h-4 mr-2" />}
                   {showPrivateLinks ? 'Hide' : 'Show'} Private Links
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    handleBackup();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full justify-start h-8"
+                >
+                  <RotateCcw className="w-4 h-4 mr-2" />
+                  Create Backup
                 </Button>
                 <Button
                   size="sm"
