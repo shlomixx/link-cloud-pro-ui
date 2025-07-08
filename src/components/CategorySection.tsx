@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
 import { Button } from '@/components/ui/button';
@@ -37,7 +37,6 @@ interface CategorySectionProps {
   onDragStart: (linkKey: string) => void;
   onAddLink: (category: string) => void;
   onDropUrl: (url: string, category: string) => void;
-  onCategoryInView?: (category: string) => void;
 }
 
 export const CategorySection: React.FC<CategorySectionProps> = ({
@@ -60,10 +59,8 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onMouseLeave,
   onDragStart,
   onAddLink,
-  onDropUrl,
-  onCategoryInView
+  onDropUrl
 }) => {
-  const mobileRef = useRef<HTMLDivElement>(null);
   const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
   const [isDragOverCategory, setIsDragOverCategory] = React.useState(false);
 
@@ -85,37 +82,17 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getMobileGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-6 gap-0.5 px-2';
+        return 'grid grid-cols-6 gap-1 px-4 py-0';
       case 'compact':
-        return 'grid grid-cols-4 gap-1 px-2';
+        return 'grid grid-cols-4 gap-2 px-4 py-0';
       case 'grid':
-        return 'grid grid-cols-3 gap-1 px-2';
+        return 'grid grid-cols-3 gap-2 px-4 py-0';
       case 'list':
-        return 'flex flex-col gap-0.5 px-2';
+        return 'flex flex-col gap-1 px-4 py-0';
       default:
-        return 'grid grid-cols-4 gap-1 px-2';
+        return 'grid grid-cols-4 gap-2 px-4 py-0';
     }
   };
-
-  // Intersection Observer for mobile scroll detection
-  useEffect(() => {
-    if (!onCategoryInView || !mobileRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-            onCategoryInView(category);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    observer.observe(mobileRef.current);
-
-    return () => observer.disconnect();
-  }, [category, onCategoryInView]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -249,14 +226,31 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         </div>
       </div>
 
-      {/* Mobile Layout - No Headers */}
+      {/* Mobile Layout */}
       <div 
-        ref={mobileRef}
-        className="md:hidden mb-1"
+        className="md:hidden mb-4 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
+        {/* Enhanced Mobile Category Header */}
+        <div 
+          className="group cursor-pointer mb-4 relative active:scale-95 transition-all duration-200"
+          onClick={() => onAddLink(category)}
+        >
+          <div className="text-center relative p-3 rounded-2xl transition-all duration-300 group-active:bg-white/5">
+            <div className="flex items-center justify-center gap-4 mb-3">
+              <div className="relative">
+                <div className={`w-4 h-4 rounded-full ${getCategoryColor()} shadow-2xl group-hover:scale-125 group-active:scale-110 transition-all duration-300`}></div>
+                <div className={`absolute inset-0 w-4 h-4 rounded-full ${getCategoryColor()} opacity-20 group-hover:scale-[2] group-hover:opacity-10 transition-all duration-500`}></div>
+              </div>
+              <div className="text-white text-xl font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-105 group-active:scale-102">
+                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className={`${getMobileGridClasses()}`}>
           {links.map((link) => (
             <LinkCard
