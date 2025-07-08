@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { LinkCard } from './LinkCard';
 
@@ -132,27 +133,42 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:block mb-8 animate-fade-in"
+        className="hidden md:block mb-12 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Clean Category Header for Desktop */}
+        {/* Enhanced Category Header for Desktop */}
         <div 
-          className="flex justify-center mb-6 cursor-pointer group"
+          className="flex justify-center mb-8 cursor-pointer group relative"
           onMouseEnter={() => setIsHoveringCategory(true)}
           onMouseLeave={() => setIsHoveringCategory(false)}
           onClick={() => onAddLink(category)}
         >
-          <div className="flex items-center transition-all duration-300 hover:scale-105">
-            {/* Category Title with Gradient Color */}
-            <h2 className={`text-2xl font-bold tracking-wide transition-all duration-300 bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent hover:scale-105`}>
-              {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
+          <div className="relative flex items-center transition-all duration-500 hover:scale-110">
+            {/* Decorative Background Glow */}
+            <div className={`absolute -inset-8 bg-gradient-to-r ${getGradientTextClass()} opacity-0 group-hover:opacity-10 rounded-3xl blur-2xl transition-all duration-700`}></div>
+            
+            {/* Subtle accent lines */}
+            <div className="absolute -left-16 top-1/2 transform -translate-y-1/2 transition-all duration-500 opacity-0 group-hover:opacity-100">
+              <div className={`h-px w-12 bg-gradient-to-r ${getGradientTextClass()}`}></div>
+            </div>
+            <div className="absolute -right-16 top-1/2 transform -translate-y-1/2 transition-all duration-500 opacity-0 group-hover:opacity-100">
+              <div className={`h-px w-12 bg-gradient-to-l ${getGradientTextClass()}`}></div>
+            </div>
+            
+            {/* Enhanced Category Title */}
+            <h2 className={`text-3xl font-bold tracking-wide transition-all duration-500 bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent relative z-10`}>
+              <span className="relative">
+                {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
+                {/* Subtle underline effect */}
+                <div className={`absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-to-r ${getGradientTextClass()} scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
+              </span>
             </h2>
           </div>
         </div>
 
-        {/* Links Grid - Full Width */}
+        {/* Links Grid - Enhanced spacing */}
         <div className={`${getGridClasses()}`}>
           {links.map((link) => (
             <LinkCard
@@ -176,20 +192,27 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-8 animate-fade-in"
+        className="md:hidden mb-10 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Clean Mobile Category Header */}
+        {/* Enhanced Mobile Category Header */}
         <div 
-          className="mb-5 cursor-pointer group"
+          className="mb-6 cursor-pointer group relative"
           onClick={() => onAddLink(category)}
         >
-          <div className="flex items-center justify-center transition-all duration-300 group-hover:scale-105">
-            {/* Category Title with Gradient Color */}
-            <h2 className={`text-xl font-bold tracking-wide transition-all duration-300 bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent hover:scale-105`}>
-              {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
+          <div className="relative flex items-center justify-center transition-all duration-500 group-hover:scale-105">
+            {/* Mobile Background Glow */}
+            <div className={`absolute -inset-6 bg-gradient-to-r ${getGradientTextClass()} opacity-0 group-hover:opacity-15 rounded-2xl blur-xl transition-all duration-700`}></div>
+            
+            {/* Enhanced Mobile Category Title */}
+            <h2 className={`text-2xl font-bold tracking-wide transition-all duration-500 bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent relative z-10`}>
+              <span className="relative">
+                {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
+                {/* Mobile underline effect */}
+                <div className={`absolute -bottom-1.5 left-0 right-0 h-0.5 bg-gradient-to-r ${getGradientTextClass()} scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
+              </span>
             </h2>
           </div>
         </div>
