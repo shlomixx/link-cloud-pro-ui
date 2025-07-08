@@ -146,22 +146,11 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           >
             <div className={`h-1 w-4 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full transition-all duration-300`}></div>
             
-            {isHoveringCategory || isDragOverCategory ? (
-              <div className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all duration-300 ${
-                isDarkMode 
-                  ? 'bg-white/10 text-white hover:bg-white/20' 
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              } ${isDragOverCategory ? 'bg-purple-200/50 dark:bg-purple-800/50' : ''}`}>
-                <Plus className="w-3 h-3" />
-                <span className="text-xs font-medium">{isDragOverCategory ? 'Drop here' : 'Add'}</span>
-              </div>
-            ) : (
-              <h2 className={`text-sm font-medium transition-colors duration-300 ${
-                isDarkMode ? 'text-slate-300' : 'text-slate-600'
-              }`}>
-                {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
-              </h2>
-            )}
+            <h2 className={`text-sm font-medium transition-colors duration-300 ${
+              isDarkMode ? 'text-slate-300' : 'text-slate-600'
+            }`}>
+              {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </h2>
           </div>
         </div>
 
@@ -187,37 +176,54 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         </div>
       </div>
 
-      {/* Minimalist Mobile Layout */}
+      {/* Enhanced Mobile Layout */}
       <div 
-        className="md:hidden mb-4 animate-fade-in"
+        className="md:hidden mb-6 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Minimalist Mobile Category Header */}
+        {/* Enhanced Mobile Category Header */}
         <div 
-          className="flex items-center justify-between mb-3 px-1 py-2 cursor-pointer"
+          className={`relative mb-4 cursor-pointer group ${
+            isDragOverCategory ? 'scale-[1.02]' : ''
+          } transition-transform duration-200`}
           onClick={() => onAddLink(category)}
         >
-          <div className="flex items-center gap-3">
-            <div className={`h-0.5 w-6 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full`}></div>
-            <h2 className={`text-base font-medium ${
-              isDarkMode ? 'text-slate-200' : 'text-slate-700'
-            }`}>
-              {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
-            </h2>
-          </div>
-          
-          <div className={`p-1.5 rounded-md transition-all duration-200 ${
+          {/* Category Background */}
+          <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
             isDarkMode 
-              ? 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-300' 
-              : 'text-slate-500 hover:bg-slate-100/60 hover:text-slate-600'
-          }`}>
-            <Plus className="w-4 h-4" />
+              ? 'bg-gradient-to-r from-slate-800/40 to-slate-700/30 group-hover:from-slate-800/60 group-hover:to-slate-700/50' 
+              : 'bg-gradient-to-r from-slate-50/80 to-white/60 group-hover:from-slate-100/90 group-hover:to-white/80'
+          } ${isDragOverCategory ? 'from-purple-100/80 to-purple-50/60 dark:from-purple-900/40 dark:to-purple-800/30' : ''}`}></div>
+          
+          {/* Content */}
+          <div className="relative px-5 py-4">
+            <div className="flex items-center gap-4">
+              {/* Enhanced Color Indicator */}
+              <div className={`relative flex-shrink-0`}>
+                <div className={`h-3 w-8 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full shadow-sm`}></div>
+                <div className={`absolute -inset-1 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full opacity-20 blur-sm`}></div>
+              </div>
+              
+              {/* Category Title */}
+              <div className="flex-1">
+                <h2 className={`text-lg font-semibold tracking-tight transition-colors duration-300 ${
+                  isDarkMode ? 'text-slate-100' : 'text-slate-800'
+                }`}>
+                  {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
+                </h2>
+                <div className={`text-xs font-medium mt-0.5 transition-colors duration-300 ${
+                  isDarkMode ? 'text-slate-400' : 'text-slate-500'
+                }`}>
+                  Tap to add new link
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Minimalist Mobile Links Grid */}
+        {/* Mobile Links Grid */}
         <div className={`${getMobileGridClasses()}`}>
           {links.map((link) => (
             <LinkCard
