@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -46,29 +46,14 @@ export const LinkModal: React.FC<LinkModalProps> = ({
   isOpen,
   onClose,
   isNewLink,
-  formData: initialFormData,
+  formData,
   onFormDataChange,
-  onSave: onSaveCallback,
+  onSave,
   onDelete,
   isLoading,
   isDarkMode,
   categoryLabels
 }) => {
-  const [formData, setFormData] = useState<FormData>(initialFormData);
-
-  useEffect(() => {
-    setFormData(initialFormData);
-  }, [initialFormData]);
-
-  const handleFormChange = (newData: FormData) => {
-    setFormData(newData);
-    onFormDataChange(newData);
-  };
-
-  const handleSave = () => {
-    onSaveCallback();
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className={`max-w-md transition-all duration-300 ${
@@ -104,7 +89,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => handleFormChange({ ...formData, name: e.target.value })}
+                onChange={(e) => onFormDataChange({ ...formData, name: e.target.value })}
                 placeholder="e.g., Google"
                 className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
                   isDarkMode 
@@ -121,7 +106,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
               <Input
                 id="url"
                 value={formData.url}
-                onChange={(e) => handleFormChange({ ...formData, url: e.target.value })}
+                onChange={(e) => onFormDataChange({ ...formData, url: e.target.value })}
                 placeholder="https://example.com"
                 className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
                   isDarkMode 
@@ -137,7 +122,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
               </Label>
               <Select
                 value={formData.category}
-                onValueChange={(value) => handleFormChange({ ...formData, category: value })}
+                onValueChange={(value) => onFormDataChange({ ...formData, category: value })}
               >
                 <SelectTrigger className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
                   isDarkMode 
@@ -166,7 +151,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
               <Switch
                 id="private"
                 checked={formData.isPrivate}
-                onCheckedChange={(checked) => handleFormChange({ ...formData, isPrivate: checked })}
+                onCheckedChange={(checked) => onFormDataChange({ ...formData, isPrivate: checked })}
               />
               <Label htmlFor="private" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
                 Private Link
@@ -211,7 +196,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
               Cancel
             </Button>
             <Button 
-              onClick={handleSave} 
+              onClick={onSave} 
               disabled={isLoading}
               className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105"
             >
