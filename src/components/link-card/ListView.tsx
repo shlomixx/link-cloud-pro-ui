@@ -38,6 +38,8 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
             draggable: "true",
             onDragStart: (e: React.DragEvent) => {
               e.stopPropagation();
+              e.dataTransfer.setData('application/json', JSON.stringify({ type: 'link', key: link.key }));
+              e.dataTransfer.effectAllowed = 'move';
               onDragStart?.();
             }
           } : {})}
@@ -50,6 +52,7 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
             }
             backdrop-blur-sm
             ${isClicked ? 'scale-[0.98]' : ''}
+            ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
           `}
         >
           <div className="flex items-center gap-6 flex-1">

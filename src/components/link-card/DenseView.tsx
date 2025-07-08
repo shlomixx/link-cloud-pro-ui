@@ -41,6 +41,8 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
                   draggable: "true",
                   onDragStart: (e: React.DragEvent) => {
                     e.stopPropagation();
+                    e.dataTransfer.setData('application/json', JSON.stringify({ type: 'link', key: link.key }));
+                    e.dataTransfer.effectAllowed = 'move';
                     onDragStart?.();
                   }
                 } : {})}
@@ -52,6 +54,7 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
                     : 'hover:bg-black/10'
                   }
                   ${isClicked ? 'scale-95' : ''}
+                  ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
                 `}
               >
                 <img

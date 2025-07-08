@@ -637,6 +637,26 @@ const Index = () => {
 
   const handleDrop = (e: React.DragEvent, targetCategory: string) => {
     e.preventDefault();
+    
+    // Try to get internal drag data first
+    try {
+      const dragData = e.dataTransfer.getData('application/json');
+      if (dragData) {
+        const parsed = JSON.parse(dragData);
+        if (parsed.type === 'link' && parsed.key) {
+          setLinksData(prev => prev.map(link => 
+            link.key === parsed.key ? { ...link, category: targetCategory } : link
+          ));
+          setDraggedItem(null);
+          toast.success('Link moved to new category!');
+          return;
+        }
+      }
+    } catch (error) {
+      // Fall back to the old method if JSON parsing fails
+    }
+    
+    // Fallback for the draggedItem state method
     if (draggedItem) {
       setLinksData(prev => prev.map(link => 
         link.key === draggedItem ? { ...link, category: targetCategory } : link

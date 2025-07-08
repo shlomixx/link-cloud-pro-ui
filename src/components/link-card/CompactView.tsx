@@ -37,6 +37,8 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             draggable: "true",
             onDragStart: (e: React.DragEvent) => {
               e.stopPropagation();
+              e.dataTransfer.setData('application/json', JSON.stringify({ type: 'link', key: link.key }));
+              e.dataTransfer.effectAllowed = 'move';
               onDragStart?.();
             }
           } : {})}
@@ -44,6 +46,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             group relative flex flex-col items-center gap-2 p-3 cursor-pointer min-w-[60px] max-w-[60px]
             transition-all duration-300 hover:scale-105 hover:translate-y-[-2px]
             ${isClicked ? 'scale-95' : ''}
+            ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
           `}
         >
           <div className="relative">
