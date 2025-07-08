@@ -122,32 +122,41 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     }
   };
 
-  const getCategoryGradient = () => {
-    const gradientMap: Record<string, string> = {
-      work: 'bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-600 shadow-[0_0_40px_rgba(59,130,246,0.3)]',
-      social: 'bg-gradient-to-br from-pink-400 via-rose-500 to-red-600 shadow-[0_0_40px_rgba(236,72,153,0.3)]',
-      entertainment: 'bg-gradient-to-br from-purple-400 via-violet-500 to-purple-600 shadow-[0_0_40px_rgba(147,51,234,0.3)]',
-      tools: 'bg-gradient-to-br from-orange-400 via-amber-500 to-yellow-600 shadow-[0_0_40px_rgba(249,115,22,0.3)]',
-      news: 'bg-gradient-to-br from-gray-400 via-slate-500 to-gray-600 shadow-[0_0_40px_rgba(107,114,128,0.3)]',
-      shopping: 'bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 shadow-[0_0_40px_rgba(34,197,94,0.3)]',
-      education: 'bg-gradient-to-br from-indigo-400 via-blue-500 to-cyan-600 shadow-[0_0_40px_rgba(99,102,241,0.3)]',
-      finance: 'bg-gradient-to-br from-emerald-400 via-green-500 to-lime-600 shadow-[0_0_40px_rgba(16,185,129,0.3)]',
-      health: 'bg-gradient-to-br from-red-400 via-pink-500 to-rose-600 shadow-[0_0_40px_rgba(239,68,68,0.3)]',
-      travel: 'bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 shadow-[0_0_40px_rgba(14,165,233,0.3)]',
-      food: 'bg-gradient-to-br from-yellow-400 via-orange-500 to-red-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]',
-      sports: 'bg-gradient-to-br from-amber-400 via-yellow-500 to-orange-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]',
-      gaming: 'bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-600 shadow-[0_0_40px_rgba(139,92,246,0.3)]',
-      music: 'bg-gradient-to-br from-fuchsia-400 via-pink-500 to-rose-600 shadow-[0_0_40px_rgba(217,70,239,0.3)]',
-      photography: 'bg-gradient-to-br from-slate-400 via-gray-500 to-zinc-600 shadow-[0_0_40px_rgba(100,116,139,0.3)]',
-      design: 'bg-gradient-to-br from-rose-400 via-pink-500 to-fuchsia-600 shadow-[0_0_40px_rgba(244,63,94,0.3)]',
-      development: 'bg-gradient-to-br from-green-400 via-teal-500 to-cyan-600 shadow-[0_0_40px_rgba(20,184,166,0.3)]',
-      business: 'bg-gradient-to-br from-blue-400 via-indigo-500 to-violet-600 shadow-[0_0_40px_rgba(59,130,246,0.3)]',
-      personal: 'bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-600 shadow-[0_0_40px_rgba(6,182,212,0.3)]',
-      other: 'bg-gradient-to-br from-neutral-400 via-stone-500 to-gray-600 shadow-[0_0_40px_rgba(115,115,115,0.3)]',
-      custom: 'bg-gradient-to-br from-purple-400 via-pink-500 to-rose-600 shadow-[0_0_40px_rgba(147,51,234,0.3)]'
+  const getCategoryColor = () => {
+    const colorMap: Record<string, string> = {
+      tools: 'bg-orange-400',
+      streaming: 'bg-green-400',
+      social: 'bg-pink-400',
+      shopping: 'bg-yellow-400',
+      education: 'bg-blue-400',
+      news: 'bg-red-400',
+      ai: 'bg-purple-400',
+      languages: 'bg-indigo-400',
+      learning: 'bg-cyan-400',
+      technology: 'bg-teal-400',
+      design: 'bg-rose-400',
+      business: 'bg-violet-400',
+      finance: 'bg-emerald-400',
+      entertainment: 'bg-fuchsia-400',
+      communication: 'bg-sky-400',
+      productivity: 'bg-amber-400',
+      health: 'bg-red-500',
+      music: 'bg-pink-500',
+      photography: 'bg-slate-400',
+      art: 'bg-purple-500',
+      books: 'bg-indigo-500',
+      sports: 'bg-orange-500',
+      gaming: 'bg-violet-500',
+      investing: 'bg-green-500',
+      cryptocurrency: 'bg-yellow-500',
+      freelance: 'bg-blue-500',
+      meditation: 'bg-cyan-500',
+      dating: 'bg-rose-500',
+      parenting: 'bg-emerald-500',
+      custom: 'bg-purple-400'
     };
     
-    return gradientMap[category] || 'bg-gradient-to-br from-gray-400 via-slate-500 to-gray-600 shadow-[0_0_40px_rgba(107,114,128,0.3)]';
+    return colorMap[category] || 'bg-gray-400';
   };
 
   const renderAddButton = () => {
@@ -235,37 +244,21 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:block mb-20 animate-fade-in flex flex-col items-center"
+        className="hidden md:block mb-16 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Category Header for Desktop */}
-        <div 
-          className="group cursor-pointer mb-8 relative"
-          onClick={() => onAddLink(category)}
-        >
-          <div className="text-center relative">
-            <div className={`
-              text-white text-3xl font-bold tracking-wide drop-shadow-2xl 
-              transition-all duration-300 group-hover:scale-110 text-center
-              bg-gradient-to-r from-white via-white/90 to-white bg-clip-text text-transparent
-            `}>
-              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-            </div>
-            
-            <div className="mt-4">
-              <div className={`
-                mt-2 w-32 h-1.5 mx-auto rounded-full
-                bg-gradient-to-r from-transparent via-white/60 to-transparent
-                shadow-lg transition-all duration-300 group-hover:via-white/80 group-hover:w-40
-              `}></div>
-            </div>
-          </div>
+        {/* Minimalist Category Header for Desktop */}
+        <div className="flex items-center gap-4 mb-8">
+          <div className={`w-2 h-2 rounded-full ${getCategoryColor()}`}></div>
+          <h2 className="text-white text-lg font-medium tracking-wide">
+            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+          </h2>
         </div>
 
-        {/* Enhanced Links Grid */}
-        <div className={`${getGridClasses()} justify-items-center`}>
+        {/* Clean Links Grid */}
+        <div className="flex flex-wrap gap-8 mb-8">
           {links.map((link) => (
             <LinkCard
               key={link.key}
@@ -282,7 +275,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
             />
           ))}
-          {renderAddButton()}
         </div>
       </div>
 
