@@ -188,13 +188,33 @@ const Index = () => {
 
       <div className="relative z-10">
         <AppHeader 
-          isDarkMode={isDarkMode}
-          onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
-          onOpenLinkModal={() => setIsModalOpen(true)}
+          searchInputRef={React.createRef()}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
+          isCompactHeader={false}
+          onToggleCompactHeader={() => {}}
+          selectedCategory="all"
+          onCategoryChange={() => {}}
+          categories={categories}
+          categoryLabels={categories.reduce((acc, cat) => ({ ...acc, [cat]: cat }), {})}
+          showPrivateLinks={false}
+          onTogglePrivateLinks={() => {}}
+          onExportData={() => {}}
+          onImportData={() => {}}
+          onAddLink={() => setIsModalOpen(true)}
+          onShowShortcuts={() => setIsKeyboardShortcutsOpen(true)}
+          linksCount={Object.keys(links).length}
+          totalClicks={0}
+          favoriteCount={Object.values(links).filter(link => link.isFavorite).length}
+          categoriesCount={categories.length}
+          fileInputRef={React.createRef()}
+          onQuickAction={() => {}}
+          recentCount={0}
+          popularCount={0}
         />
 
         {/* Enhanced main content with improved spacing for desktop */}
@@ -299,7 +319,6 @@ const Index = () => {
           isOpen={isKeyboardShortcutsOpen}
           onClose={() => setIsKeyboardShortcutsOpen(false)}
           isDarkMode={isDarkMode}
-          onOpenLinkModal={() => setIsModalOpen(true)}
         />
 
         {/* Enhanced modal */}
@@ -309,10 +328,27 @@ const Index = () => {
             setIsModalOpen(false);
             setEditingLink(null);
           }}
-          onSubmit={editingLink ? handleUpdateLink : handleAddLink}
-          categories={categories}
-          editingLink={editingLink}
+          isNewLink={!editingLink}
+          formData={{
+            name: editingLink?.name || '',
+            url: editingLink?.url || editingLink?.defaultUrl || '',
+            category: editingLink?.category || categories[0] || '',
+            isPrivate: editingLink?.isPrivate || false,
+          }}
+          onFormDataChange={() => {}}
+          onSave={() => {
+            // This will be handled by the modal internally
+          }}
+          onDelete={() => {
+            if (editingLink) {
+              handleDeleteLink(editingLink.key);
+              setIsModalOpen(false);
+              setEditingLink(null);
+            }
+          }}
+          isLoading={false}
           isDarkMode={isDarkMode}
+          categoryLabels={categories.reduce((acc, cat) => ({ ...acc, [cat]: cat }), {})}
         />
       </div>
     </div>
