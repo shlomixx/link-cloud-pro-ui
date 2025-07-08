@@ -235,7 +235,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:block mb-20 animate-fade-in"
+        className="hidden md:block mb-20 animate-fade-in flex flex-col items-center"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
