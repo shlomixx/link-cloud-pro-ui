@@ -111,6 +111,8 @@ All colors MUST be HSL.
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 2rem;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
   }
 
   body {
@@ -125,16 +127,41 @@ All colors MUST be HSL.
     overflow-x: hidden;
   }
 
-  /* Smooth scrolling optimizations */
+  /* Super smooth scrolling optimizations */
   * {
     scroll-behavior: smooth;
+    scroll-timeline: none;
   }
 
-  /* Improve scroll performance */
-  .scroll-container {
+  /* Enhanced scroll performance */
+  .scroll-container, body, html {
     will-change: scroll-position;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+    scroll-snap-type: y proximity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Custom scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--border) / 0.8);
   }
 }
 
