@@ -165,23 +165,17 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         <Button
           onClick={() => onAddLink(category)}
           variant="ghost"
-          className={`
-            group flex items-center gap-6 p-6 rounded-2xl cursor-pointer w-full
-            transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl
-            bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/15
-            border border-white/20 hover:border-white/40
-            backdrop-blur-lg hover-lift
-          `}
+          className="group flex items-center gap-4 p-4 rounded-lg cursor-pointer w-full transition-all duration-200 hover:bg-white/10"
         >
-          <div className="flex items-center gap-6 flex-1">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-sm group-hover:scale-110 transition-all duration-300 shadow-xl">
-              <Plus className="w-10 h-10 text-white/70 transition-all duration-300 group-hover:text-white group-hover:rotate-90" />
+          <div className="flex items-center gap-4 flex-1">
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-white/10 group-hover:bg-white/20 transition-all duration-200">
+              <Plus className="w-6 h-6 text-white/70 group-hover:text-white transition-colors duration-200" />
             </div>
             <div className="flex-1">
-              <h3 className="font-bold text-xl text-white/70 transition-all duration-300 group-hover:text-white group-hover:gradient-text-primary">
+              <h3 className="font-medium text-white/80 group-hover:text-white transition-colors duration-200">
                 Add New Link
               </h3>
-              <p className="text-sm text-white/40 group-hover:text-white/60 transition-all duration-300">
+              <p className="text-sm text-white/50">
                 Click to create a new link
               </p>
             </div>
@@ -190,35 +184,26 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       );
     }
 
-    // Enhanced styling for grid, compact, and dense views
-    const containerClasses = {
-      dense: 'flex flex-col items-center justify-center gap-2 p-3 rounded-xl min-w-[80px] h-full transition-all duration-300 hover:scale-110 bg-gradient-to-br from-white/10 to-white/5 hover:from-white/20 hover:to-white/15 border border-white/20 hover:border-white/40 backdrop-blur-lg hover-lift',
-      compact: 'flex flex-col items-center justify-center gap-3 p-4 rounded-xl min-w-[90px] max-w-[110px] h-full transition-all duration-300 hover:scale-110 bg-gradient-to-br from-white/10 to-white/5 hover:from-white/20 hover:to-white/15 border border-white/20 hover:border-white/40 backdrop-blur-lg hover-lift',
-      grid: 'flex flex-col items-center justify-center gap-4 p-8 rounded-2xl h-full transition-all duration-500 hover:scale-[1.08] bg-gradient-to-br from-white/15 to-white/5 hover:from-white/25 hover:to-white/15 border border-white/30 hover:border-white/50 backdrop-blur-lg hover-lift shadow-2xl hover:shadow-[0_25px_50px_-12px_rgba(255,255,255,0.25)]'
-    };
-
     return (
       <Button
         onClick={() => onAddLink(category)}
         variant="ghost"
-        className={`group relative cursor-pointer ${containerClasses[viewMode]}`}
+        className="group flex flex-col items-center justify-center gap-2 p-4 rounded-lg h-full cursor-pointer transition-all duration-200 hover:bg-white/10"
       >
         <div className={`
-          ${viewMode === 'grid' ? 'w-20 h-20 rounded-3xl' : viewMode === 'compact' ? 'w-12 h-12 rounded-2xl' : 'w-10 h-10 rounded-xl'} 
-          flex items-center justify-center
-          bg-gradient-to-br from-white/20 to-white/10 group-hover:from-white/30 group-hover:to-white/20
-          backdrop-blur-sm transition-all duration-300 group-hover:scale-110 shadow-lg group-hover:shadow-xl
+          ${viewMode === 'grid' ? 'w-16 h-16 rounded-lg' : viewMode === 'compact' ? 'w-12 h-12 rounded-lg' : 'w-10 h-10 rounded-lg'} 
+          flex items-center justify-center bg-white/10 group-hover:bg-white/20 transition-all duration-200
         `}>
           <Plus className={`
-            ${viewMode === 'dense' ? 'w-6 h-6' : viewMode === 'compact' ? 'w-8 h-8' : 'w-12 h-12'}
-            text-white/60 transition-all duration-300 group-hover:text-white group-hover:rotate-90
+            ${viewMode === 'dense' ? 'w-5 h-5' : viewMode === 'compact' ? 'w-6 h-6' : 'w-8 h-8'}
+            text-white/70 group-hover:text-white transition-colors duration-200
           `} />
         </div>
         
         <span className={`
-          font-semibold text-center truncate w-full leading-tight
-          ${viewMode === 'dense' ? 'text-xs max-w-[80px]' : 'text-sm'}
-          text-white/60 transition-all duration-300 group-hover:text-white
+          font-medium text-center truncate w-full
+          ${viewMode === 'dense' ? 'text-xs' : 'text-sm'}
+          text-white/70 group-hover:text-white transition-colors duration-200
         `}>
           Add Link
         </span>
