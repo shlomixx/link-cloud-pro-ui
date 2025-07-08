@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Edit, Heart, ExternalLink, Star, Copy, Trash2 } from 'lucide-react';
+import { Edit, Heart, ExternalLink, Star, Copy, Trash2, GripVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger, ContextMenuSeparator } from '@/components/ui/context-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -57,9 +58,61 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   onCopyUrl,
   onDelete
 }) => {
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [dragStarted, setDragStarted] = React.useState(false);
+  const longPressTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const dragPreviewRef = React.useRef<HTMLDivElement | null>(null);
+
   const isHovered = hoveredLink === link.key;
   const isClicked = clickedLink === link.key;
-  
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    longPressTimerRef.current = setTimeout(() => {
+      setDragStarted(true);
+      // Add haptic feedback if available
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+    }, 500); // 500ms for long press
+  };
+
+  const handleTouchEnd = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+    }
+    setDragStarted(false);
+    setIsDragging(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (dragStarted) {
+      setIsDragging(true);
+      onDragStart();
+    }
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    longPressTimerRef.current = setTimeout(() => {
+      setDragStarted(true);
+    }, 500);
+  };
+
+  const handleMouseUp = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+    }
+    setDragStarted(false);
+    setIsDragging(false);
+  };
+
+  React.useEffect(() => {
+    return () => {
+      if (longPressTimerRef.current) {
+        clearTimeout(longPressTimerRef.current);
+      }
+    };
+  }, []);
+
   // Dense view - ultra minimal
   if (viewMode === 'dense') {
     return (
@@ -69,11 +122,16 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             <ContextMenu>
               <ContextMenuTrigger asChild>
                 <div
-                  draggable
+                  draggable={dragStarted}
                   onDragStart={onDragStart}
                   onMouseEnter={onMouseEnter}
                   onMouseLeave={onMouseLeave}
-                  onClick={onLinkClick}
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+                  onTouchMovie={handleTouchMove}
+                  onMouseDown={handleMouseDown}
+                  onMouseUp={handleMouseUp}
+                  onClick={!dragStarted ? onLinkClick : undefined}
                   className={`
                     group relative flex flex-col items-center gap-1 p-1 rounded cursor-pointer
                     transition-all duration-200 hover:scale-110
@@ -82,8 +140,14 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                       : 'hover:bg-black/10'
                     }
                     ${isClicked ? 'scale-95' : ''}
+                    ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-white/30' : ''}
                   `}
                 >
+                  {dragStarted && (
+                    <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1">
+                      <GripVertical className="w-3 h-3 text-white" />
+                    </div>
+                  )}
                   <img
                     src={getFaviconUrl(link.url || link.defaultUrl || '')}
                     alt=""
@@ -144,11 +208,16 @@ export const LinkCard: React.FC<LinkCardProps> = ({
       <ContextMenu>
         <ContextMenuTrigger asChild>
           <div
-            draggable
+            draggable={dragStarted}
             onDragStart={onDragStart}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            onClick={onLinkClick}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onTouchMove={handleTouchMove}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onClick={!dragStarted ? onLinkClick : undefined}
             className={`
               group relative flex flex-col items-center gap-2 p-3 rounded cursor-pointer min-w-[80px] max-w-[100px]
               transition-all duration-200 hover:scale-110
@@ -157,8 +226,14 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                 : 'hover:bg-black/10'
               }
               ${isClicked ? 'scale-95' : ''}
+              ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-white/30' : ''}
             `}
           >
+            {dragStarted && (
+              <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1">
+                <GripVertical className="w-3 h-3 text-white" />
+              </div>
+            )}
             <div className="relative">
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
@@ -213,11 +288,16 @@ export const LinkCard: React.FC<LinkCardProps> = ({
       <ContextMenu>
         <ContextMenuTrigger asChild>
           <div
-            draggable
+            draggable={dragStarted}
             onDragStart={onDragStart}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            onClick={onLinkClick}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onTouchMove={handleTouchMove}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onClick={!dragStarted ? onLinkClick : undefined}
             className={`
               group relative flex flex-col items-center gap-3 p-5 rounded cursor-pointer
               transition-all duration-200 hover:scale-110
@@ -226,8 +306,15 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                 : 'hover:bg-black/10'
               }
               ${isClicked ? 'scale-95' : ''}
+              ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-white/30' : ''}
             `}
           >
+            {dragStarted && (
+              <div className="absolute -top-2 -right-2 bg-blue-500 rounded-full p-1.5">
+                <GripVertical className="w-4 h-4 text-white" />
+              </div>
+            )}
+
             <Button
               size="sm"
               variant="ghost"
@@ -296,11 +383,16 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <div
-          draggable
+          draggable={dragStarted}
           onDragStart={onDragStart}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
-          onClick={onLinkClick}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onTouchMove={handleTouchMove}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onClick={!dragStarted ? onLinkClick : undefined}
           className={`
             group flex items-center gap-5 p-4 rounded cursor-pointer w-full
             transition-all duration-200 hover:scale-[1.02]
@@ -309,8 +401,14 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               : 'hover:bg-black/10'
             }
             ${isClicked ? 'scale-[0.98]' : ''}
+            ${dragStarted ? 'scale-[1.05] shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-white/30' : ''}
           `}
         >
+          {dragStarted && (
+            <div className="absolute left-2 bg-blue-500 rounded-full p-1.5">
+              <GripVertical className="w-4 h-4 text-white" />
+            </div>
+          )}
           <div className="flex items-center gap-5 flex-1">
             <img
               src={getFaviconUrl(link.url || link.defaultUrl || '')}
