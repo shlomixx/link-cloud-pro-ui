@@ -1,6 +1,6 @@
+
 import React from 'react';
 import { LinkCard } from './LinkCard';
-import { Plus } from 'lucide-react';
 
 interface LinkData {
   key: string;
@@ -127,9 +127,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className={`hidden md:flex gap-4 mb-3 animate-fade-in transition-all duration-300 ${
-          draggedItem || isDragOverCategory ? 'ring-2 ring-purple-500/30 rounded-lg p-2' : ''
-        } ${isDragOverCategory ? 'bg-purple-50/50 dark:bg-purple-900/20' : ''}`}
+        className="hidden md:flex gap-4 mb-3 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -137,9 +135,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         {/* Category Label - Left Side */}
         <div className="flex-shrink-0 w-24 flex items-start">
           <div 
-            className={`flex items-center gap-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
-              isDragOverCategory ? 'scale-105' : ''
-            }`}
+            className="flex items-center gap-2 cursor-pointer transition-all duration-300 hover:scale-105"
             onMouseEnter={() => setIsHoveringCategory(true)}
             onMouseLeave={() => setIsHoveringCategory(false)}
             onClick={() => onAddLink(category)}
@@ -176,50 +172,28 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         </div>
       </div>
 
-      {/* Enhanced Mobile Layout */}
+      {/* Mobile Layout */}
       <div 
         className="md:hidden mb-6 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Mobile Category Header */}
+        {/* Mobile Category Header */}
         <div 
-          className={`relative mb-4 cursor-pointer group ${
-            isDragOverCategory ? 'scale-[1.02]' : ''
-          } transition-transform duration-200`}
+          className="mb-4 cursor-pointer group"
           onClick={() => onAddLink(category)}
         >
-          {/* Category Background */}
-          <div className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
-            isDarkMode 
-              ? 'bg-gradient-to-r from-slate-800/40 to-slate-700/30 group-hover:from-slate-800/60 group-hover:to-slate-700/50' 
-              : 'bg-gradient-to-r from-slate-50/80 to-white/60 group-hover:from-slate-100/90 group-hover:to-white/80'
-          } ${isDragOverCategory ? 'from-purple-100/80 to-purple-50/60 dark:from-purple-900/40 dark:to-purple-800/30' : ''}`}></div>
-          
-          {/* Content */}
-          <div className="relative px-5 py-4">
-            <div className="flex items-center gap-4">
-              {/* Enhanced Color Indicator */}
-              <div className={`relative flex-shrink-0`}>
-                <div className={`h-3 w-8 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full shadow-sm`}></div>
-                <div className={`absolute -inset-1 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full opacity-20 blur-sm`}></div>
-              </div>
-              
-              {/* Category Title */}
-              <div className="flex-1">
-                <h2 className={`text-lg font-semibold tracking-tight transition-colors duration-300 ${
-                  isDarkMode ? 'text-slate-100' : 'text-slate-800'
-                }`}>
-                  {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
-                </h2>
-                <div className={`text-xs font-medium mt-0.5 transition-colors duration-300 ${
-                  isDarkMode ? 'text-slate-400' : 'text-slate-500'
-                }`}>
-                  Tap to add new link
-                </div>
-              </div>
-            </div>
+          <div className="flex items-center gap-3">
+            {/* Color Indicator */}
+            <div className={`h-1 w-6 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full`}></div>
+            
+            {/* Category Title */}
+            <h2 className={`text-base font-medium transition-colors duration-300 ${
+              isDarkMode ? 'text-slate-200' : 'text-slate-700'
+            }`}>
+              {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </h2>
           </div>
         </div>
 
