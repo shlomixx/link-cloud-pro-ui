@@ -176,25 +176,24 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:block mb-7 animate-slide-up"
+        className="hidden md:flex items-start gap-8 mb-7 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Modern Enhanced Category Header for Desktop */}
-        <div className="flex items-center gap-6 mb-5 group cursor-pointer hover:translate-x-2 transition-all duration-500 ease-out">
+        {/* Category Header - Left Side */}
+        <div className="flex flex-col items-center gap-3 min-w-[120px] pt-2">
           <div className="relative">
             <div className={`w-4 h-4 rounded-full ${getCategoryColor()} shadow-2xl group-hover:scale-150 transition-all duration-500 ease-out`}></div>
             <div className={`absolute inset-0 w-4 h-4 rounded-full ${getCategoryColor()} opacity-30 group-hover:scale-[2] group-hover:opacity-10 transition-all duration-700 ease-out`}></div>
           </div>
-          <h2 className="text-white text-2xl font-bold tracking-tight group-hover:gradient-text-primary transition-all duration-300 drop-shadow-lg">
+          <h2 className="text-white text-lg font-bold tracking-tight transition-all duration-300 drop-shadow-lg text-center leading-tight">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
-          <div className="flex-1 h-px bg-gradient-to-r from-white/30 via-white/10 to-transparent group-hover:from-white/50 group-hover:via-white/20 transition-all duration-500"></div>
         </div>
 
-        {/* Enhanced Clean Links Grid */}
-        <div className={`${getGridClasses()}`}>
+        {/* Links Grid - Right Side */}
+        <div className={`flex-1 ${getGridClasses()}`}>
           {links.map((link) => (
             <LinkCard
               key={link.key}
