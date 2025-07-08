@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Edit, Heart, ExternalLink, Star, Copy, Trash2, GripVertical } from 'lucide-react';
+import { Edit, Heart, ExternalLink, Star, Copy, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger, ContextMenuSeparator } from '@/components/ui/context-menu';
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger, ContextMenuSeparator, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent } from '@/components/ui/context-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface LinkData {
@@ -24,14 +24,15 @@ interface LinkCardProps {
   isDarkMode: boolean;
   hoveredLink: string | null;
   clickedLink: string | null;
+  categories?: string[];
   onMouseEnter: () => void;
   onMouseLeave: () => void;
-  onDragStart: () => void;
   onLinkClick: () => void;
   onToggleFavorite: (e: React.MouseEvent) => void;
   onEdit: () => void;
   onCopyUrl: () => void;
   onDelete?: () => void;
+  onChangeCategory?: (newCategory: string) => void;
 }
 
 const getFaviconUrl = (url: string) => {
@@ -49,18 +50,17 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   isDarkMode,
   hoveredLink,
   clickedLink,
+  categories = [],
   onMouseEnter,
   onMouseLeave,
-  onDragStart,
   onLinkClick,
   onToggleFavorite,
   onEdit,
   onCopyUrl,
-  onDelete
+  onDelete,
+  onChangeCategory
 }) => {
-  const [isDragging, setIsDragging] = React.useState(false);
-  const [dragStarted, setDragStarted] = React.useState(false);
-  const [isDragOver, setIsDragOver] = React.useState(false);
+  const [showContextMenu, setShowContextMenu] = React.useState(false);
   const longPressTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const isHovered = hoveredLink === link.key;
@@ -68,7 +68,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 
   const handleTouchStart = (e: React.TouchEvent) => {
     longPressTimerRef.current = setTimeout(() => {
-      setDragStarted(true);
+      setShowContextMenu(true);
       // Add haptic feedback if available
       if (navigator.vibrate) {
         navigator.vibrate(50);
@@ -80,20 +80,11 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     if (longPressTimerRef.current) {
       clearTimeout(longPressTimerRef.current);
     }
-    setDragStarted(false);
-    setIsDragging(false);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (dragStarted) {
-      setIsDragging(true);
-      onDragStart();
-    }
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     longPressTimerRef.current = setTimeout(() => {
-      setDragStarted(true);
+      setShowContextMenu(true);
     }, 500);
   };
 
@@ -101,57 +92,12 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     if (longPressTimerRef.current) {
       clearTimeout(longPressTimerRef.current);
     }
-    setDragStarted(false);
-    setIsDragging(false);
-  };
-
-  const handleDragStart = (e: React.DragEvent) => {
-    e.dataTransfer.setData('text/plain', link.key);
-    e.dataTransfer.setData('application/json', JSON.stringify(link));
-    e.dataTransfer.effectAllowed = 'move';
-    setIsDragging(true);
-    onDragStart();
-  };
-
-  const handleDragEnd = () => {
-    setIsDragging(false);
-    setDragStarted(false);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    setIsDragOver(true);
-  };
-
-  const handleDragLeave = () => {
-    setIsDragOver(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOver(false);
-    
-    const draggedLinkKey = e.dataTransfer.getData('text/plain');
-    
-    // Only allow drop if it's a different link
-    if (draggedLinkKey && draggedLinkKey !== link.key) {
-      // Emit a custom event that the parent can listen to
-      const dropEvent = new CustomEvent('linkDrop', {
-        detail: {
-          draggedLinkKey,
-          targetLinkKey: link.key,
-          targetCategory: link.category
-        }
-      });
-      window.dispatchEvent(dropEvent);
-    }
   };
 
   const handleContextMenuClick = (action: () => void) => {
     return () => {
       action();
+      setShowContextMenu(false);
     };
   };
 
@@ -163,13 +109,6 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     };
   }, []);
 
-  const getDropTargetStyles = () => {
-    if (isDragOver) {
-      return 'ring-2 ring-blue-400 ring-offset-2 bg-blue-50/20';
-    }
-    return '';
-  };
-
   // Dense view - ultra minimal
   if (viewMode === 'dense') {
     return (
@@ -179,20 +118,13 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             <ContextMenu>
               <ContextMenuTrigger asChild>
                 <div
-                  draggable={dragStarted}
-                  onDragStart={handleDragStart}
-                  onDragEnd={handleDragEnd}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
                   onMouseEnter={onMouseEnter}
                   onMouseLeave={onMouseLeave}
                   onTouchStart={handleTouchStart}
                   onTouchEnd={handleTouchEnd}
-                  onTouchMove={handleTouchMove}
                   onMouseDown={handleMouseDown}
                   onMouseUp={handleMouseUp}
-                  onClick={!dragStarted ? onLinkClick : undefined}
+                  onClick={onLinkClick}
                   className={`
                     group relative flex flex-col items-center gap-1 p-1 rounded cursor-pointer
                     transition-all duration-200 hover:scale-110
@@ -201,21 +133,8 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                       : 'hover:bg-black/10'
                     }
                     ${isClicked ? 'scale-95' : ''}
-                    ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-4px]' : ''}
-                    ${getDropTargetStyles()}
                   `}
                 >
-                  {dragStarted && (
-                    <>
-                      <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1 animate-pulse">
-                        <GripVertical className="w-3 h-3 text-white" />
-                      </div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-white bg-black/70 px-2 py-1 rounded pointer-events-none">
-                        גרור או לחץ לתפריט
-                      </div>
-                    </>
-                  )}
                   <img
                     src={getFaviconUrl(link.url || link.defaultUrl || '')}
                     alt=""
@@ -247,6 +166,24 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                   <Heart className="w-4 h-4 mr-2" />
                   {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
                 </ContextMenuItem>
+                {categories.length > 0 && onChangeCategory && (
+                  <ContextMenuSub>
+                    <ContextMenuSubTrigger>
+                      <Edit className="w-4 h-4 mr-2" />
+                      שנה קטגוריה
+                    </ContextMenuSubTrigger>
+                    <ContextMenuSubContent>
+                      {categories.filter(cat => cat !== link.category).map((category) => (
+                        <ContextMenuItem 
+                          key={category} 
+                          onClick={handleContextMenuClick(() => onChangeCategory(category))}
+                        >
+                          {category}
+                        </ContextMenuItem>
+                      ))}
+                    </ContextMenuSubContent>
+                  </ContextMenuSub>
+                )}
                 <ContextMenuSeparator />
                 <ContextMenuItem onClick={handleContextMenuClick(onDelete || (() => {}))} className="text-red-600">
                   <Trash2 className="w-4 h-4 mr-2" />
@@ -272,20 +209,13 @@ export const LinkCard: React.FC<LinkCardProps> = ({
       <ContextMenu>
         <ContextMenuTrigger asChild>
           <div
-            draggable={dragStarted}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            onTouchMove={handleTouchMove}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
-            onClick={!dragStarted ? onLinkClick : undefined}
+            onClick={onLinkClick}
             className={`
               group relative flex flex-col items-center gap-2 p-3 rounded cursor-pointer min-w-[80px] max-w-[100px]
               transition-all duration-200 hover:scale-110
@@ -294,21 +224,8 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                 : 'hover:bg-black/10'
               }
               ${isClicked ? 'scale-95' : ''}
-              ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-6px]' : ''}
-              ${getDropTargetStyles()}
             `}
           >
-            {dragStarted && (
-              <>
-                <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1 animate-pulse">
-                  <GripVertical className="w-3 h-3 text-white" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-white bg-black/70 px-2 py-1 rounded pointer-events-none">
-                  גרור או לחץ לתפריט
-                </div>
-              </>
-            )}
             <div className="relative">
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
@@ -343,6 +260,24 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             <Heart className="w-4 h-4 mr-2" />
             {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
           </ContextMenuItem>
+          {categories.length > 0 && onChangeCategory && (
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>
+                <Edit className="w-4 h-4 mr-2" />
+                שנה קטגוריה
+              </ContextMenuSubTrigger>
+              <ContextMenuSubContent>
+                {categories.filter(cat => cat !== link.category).map((category) => (
+                  <ContextMenuItem 
+                    key={category} 
+                    onClick={handleContextMenuClick(() => onChangeCategory(category))}
+                  >
+                    {category}
+                  </ContextMenuItem>
+                ))}
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+          )}
           <ContextMenuSeparator />
           <ContextMenuItem onClick={handleContextMenuClick(onDelete || (() => {}))} className="text-red-600">
             <Trash2 className="w-4 h-4 mr-2" />
@@ -359,20 +294,13 @@ export const LinkCard: React.FC<LinkCardProps> = ({
       <ContextMenu>
         <ContextMenuTrigger asChild>
           <div
-            draggable={dragStarted}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            onTouchMove={handleTouchMove}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
-            onClick={!dragStarted ? onLinkClick : undefined}
+            onClick={onLinkClick}
             className={`
               group relative flex flex-col items-center gap-3 p-5 rounded cursor-pointer
               transition-all duration-200 hover:scale-110
@@ -381,22 +309,8 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                 : 'hover:bg-black/10'
               }
               ${isClicked ? 'scale-95' : ''}
-              ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-8px]' : ''}
-              ${getDropTargetStyles()}
             `}
           >
-            {dragStarted && (
-              <>
-                <div className="absolute -top-2 -right-2 bg-blue-500 rounded-full p-1.5 animate-pulse">
-                  <GripVertical className="w-4 h-4 text-white" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-white bg-black/70 px-2 py-1 rounded pointer-events-none">
-                  גרור או לחץ לתפריט
-                </div>
-              </>
-            )}
-
             <Button
               size="sm"
               variant="ghost"
@@ -446,6 +360,24 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             <Heart className="w-4 h-4 mr-2" />
             {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
           </ContextMenuItem>
+          {categories.length > 0 && onChangeCategory && (
+            <ContextMenuSub>
+              <ContextMenuSubTrigger>
+                <Edit className="w-4 h-4 mr-2" />
+                שנה קטגוריה
+              </ContextMenuSubTrigger>
+              <ContextMenuSubContent>
+                {categories.filter(cat => cat !== link.category).map((category) => (
+                  <ContextMenuItem 
+                    key={category} 
+                    onClick={handleContextMenuClick(() => onChangeCategory(category))}
+                  >
+                    {category}
+                  </ContextMenuItem>
+                ))}
+              </ContextMenuSubContent>
+            </ContextMenuSub>
+          )}
           <ContextMenuSeparator />
           <ContextMenuItem onClick={handleContextMenuClick(onDelete || (() => {}))} className="text-red-600">
             <Trash2 className="w-4 h-4 mr-2" />
@@ -461,20 +393,13 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <div
-          draggable={dragStarted}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          onTouchMove={handleTouchMove}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
-          onClick={!dragStarted ? onLinkClick : undefined}
+          onClick={onLinkClick}
           className={`
             group flex items-center gap-5 p-4 rounded cursor-pointer w-full
             transition-all duration-200 hover:scale-[1.02]
@@ -483,21 +408,8 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               : 'hover:bg-black/10'
             }
             ${isClicked ? 'scale-[0.98]' : ''}
-            ${dragStarted ? 'scale-[1.05] shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-6px]' : ''}
-            ${getDropTargetStyles()}
           `}
         >
-          {dragStarted && (
-            <>
-              <div className="absolute left-2 bg-blue-500 rounded-full p-1.5 animate-pulse">
-                <GripVertical className="w-4 h-4 text-white" />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-white bg-black/70 px-2 py-1 rounded pointer-events-none">
-                גרור או לחץ לתפריט
-              </div>
-            </>
-          )}
           <div className="flex items-center gap-5 flex-1">
             <img
               src={getFaviconUrl(link.url || link.defaultUrl || '')}
@@ -545,6 +457,24 @@ export const LinkCard: React.FC<LinkCardProps> = ({
           <Heart className="w-4 h-4 mr-2" />
           {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
         </ContextMenuItem>
+        {categories.length > 0 && onChangeCategory && (
+          <ContextMenuSub>
+            <ContextMenuSubTrigger>
+              <Edit className="w-4 h-4 mr-2" />
+              שנה קטגוריה
+            </ContextMenuSubTrigger>
+            <ContextMenuSubContent>
+              {categories.filter(cat => cat !== link.category).map((category) => (
+                <ContextMenuItem 
+                  key={category} 
+                  onClick={handleContextMenuClick(() => onChangeCategory(category))}
+                >
+                  {category}
+                </ContextMenuItem>
+              ))}
+            </ContextMenuSubContent>
+          </ContextMenuSub>
+        )}
         <ContextMenuSeparator />
         <ContextMenuItem onClick={handleContextMenuClick(onDelete || (() => {}))} className="text-red-600">
           <Trash2 className="w-4 h-4 mr-2" />
