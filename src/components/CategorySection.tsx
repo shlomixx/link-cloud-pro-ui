@@ -36,6 +36,7 @@ interface CategorySectionProps {
   onMouseLeave: () => void;
   onDragStart: (linkKey: string) => void;
   onAddLink: (category: string) => void;
+  onDropUrl: (url: string, category: string) => void;
 }
 
 export const CategorySection: React.FC<CategorySectionProps> = ({
@@ -57,9 +58,11 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onMouseEnter,
   onMouseLeave,
   onDragStart,
-  onAddLink
+  onAddLink,
+  onDropUrl
 }) => {
   const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
+  const [isDragOverCategory, setIsDragOverCategory] = React.useState(false);
 
   const getGridClasses = () => {
     switch (viewMode) {
@@ -76,32 +79,65 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     }
   };
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOverCategory(true);
+    onDragOver(e);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOverCategory(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOverCategory(false);
+    
+    // Check if it's an external URL being dropped
+    const url = e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain');
+    
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      // Handle URL drop
+      onDropUrl(url, category);
+    } else {
+      // Handle internal link reordering
+      onDrop(e, category);
+    }
+  };
+
   return (
     <div 
       className={`flex gap-4 mb-3 animate-fade-in transition-all duration-300 ${
-        draggedItem ? 'ring-2 ring-purple-500/30 rounded-lg p-2' : ''
-      }`}
-      onDragOver={onDragOver}
-      onDrop={(e) => onDrop(e, category)}
+        draggedItem || isDragOverCategory ? 'ring-2 ring-purple-500/30 rounded-lg p-2' : ''
+      } ${isDragOverCategory ? 'bg-purple-50/50 dark:bg-purple-900/20' : ''}`}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
       {/* Category Label - Left Side */}
       <div className="flex-shrink-0 w-24 pt-1">
         <div 
-          className="flex items-center gap-2 cursor-pointer transition-all duration-300 hover:scale-105"
+          className={`flex items-center gap-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
+            isDragOverCategory ? 'scale-105' : ''
+          }`}
           onMouseEnter={() => setIsHoveringCategory(true)}
           onMouseLeave={() => setIsHoveringCategory(false)}
           onClick={() => onAddLink(category)}
         >
           <div className={`h-1 w-4 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full transition-all duration-300`}></div>
           
-          {isHoveringCategory ? (
+          {isHoveringCategory || isDragOverCategory ? (
             <div className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all duration-300 ${
               isDarkMode 
                 ? 'bg-white/10 text-white hover:bg-white/20' 
                 : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-            }`}>
+            } ${isDragOverCategory ? 'bg-purple-200/50 dark:bg-purple-800/50' : ''}`}>
               <Plus className="w-3 h-3" />
-              <span className="text-xs font-medium">Add</span>
+              <span className="text-xs font-medium">{isDragOverCategory ? 'Drop here' : 'Add'}</span>
             </div>
           ) : (
             <h2 className={`text-sm font-medium transition-colors duration-300 ${

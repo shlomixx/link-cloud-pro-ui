@@ -654,6 +654,36 @@ const Index = () => {
     }
   };
 
+  const handleDropUrl = async (url: string, targetCategory: string) => {
+    try {
+      // Extract domain name for the link title
+      const urlObj = new URL(url);
+      const domain = urlObj.hostname.replace('www.', '');
+      const name = domain.charAt(0).toUpperCase() + domain.slice(1);
+
+      const newLink: LinkData = {
+        key: `dropped_${Date.now()}`,
+        name: name,
+        url: url,
+        category: targetCategory,
+        isPrivate: false,
+        clicks: 0,
+        createdAt: new Date().toISOString()
+      };
+
+      setLinksData(prev => [...prev, newLink]);
+      toast.success(`${name} added to ${categoryLabels[targetCategory as keyof typeof categoryLabels] || targetCategory}!`, {
+        description: 'Link created from dropped URL',
+        action: {
+          label: 'View',
+          onClick: () => window.open(url, '_blank')
+        }
+      });
+    } catch (error) {
+      toast.error('Invalid URL dropped');
+    }
+  };
+
   const exportData = () => {
     const dataStr = JSON.stringify(linksData, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -780,6 +810,7 @@ const Index = () => {
             onMouseLeave={() => setHoveredLink(null)}
             onDragStart={handleDragStart}
             onAddLink={(category) => openModal(undefined, category)}
+            onDropUrl={handleDropUrl}
           />
         ))}
 
