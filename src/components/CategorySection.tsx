@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
@@ -83,15 +82,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getMobileGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-6 gap-4 px-4 py-6';
+        return 'grid grid-cols-6 gap-3 px-4 py-3';
       case 'compact':
-        return 'grid grid-cols-4 gap-5 px-4 py-6';
+        return 'grid grid-cols-4 gap-4 px-4 py-3';
       case 'grid':
-        return 'grid grid-cols-3 gap-6 px-4 py-6';
+        return 'grid grid-cols-3 gap-4 px-4 py-3';
       case 'list':
-        return 'flex flex-col gap-5 px-4 py-6';
+        return 'flex flex-col gap-3 px-4 py-3';
       default:
-        return 'grid grid-cols-4 gap-5 px-4 py-6';
+        return 'grid grid-cols-4 gap-4 px-4 py-3';
     }
   };
 
@@ -229,18 +228,18 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-7 animate-fade-in"
+        className="md:hidden mb-4 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {/* Enhanced Mobile Category Header */}
         <div 
-          className="group cursor-pointer mb-8 relative active:scale-95 transition-all duration-200"
+          className="group cursor-pointer mb-4 relative active:scale-95 transition-all duration-200"
           onClick={() => onAddLink(category)}
         >
-          <div className="text-center relative p-4 rounded-2xl transition-all duration-300 group-active:bg-white/5">
-            <div className="flex items-center justify-center gap-4 mb-4">
+          <div className="text-center relative p-3 rounded-2xl transition-all duration-300 group-active:bg-white/5">
+            <div className="flex items-center justify-center gap-4 mb-3">
               <div className="relative">
                 <div className={`w-4 h-4 rounded-full ${getCategoryColor()} shadow-2xl group-hover:scale-125 group-active:scale-110 transition-all duration-300`}></div>
                 <div className={`absolute inset-0 w-4 h-4 rounded-full ${getCategoryColor()} opacity-20 group-hover:scale-[2] group-hover:opacity-10 transition-all duration-500`}></div>
@@ -250,7 +249,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               </div>
             </div>
             
-            <div className="mt-4">
+            <div className="mt-3">
               <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto rounded-full group-hover:via-white/80 group-hover:w-32 transition-all duration-300"></div>
             </div>
           </div>
