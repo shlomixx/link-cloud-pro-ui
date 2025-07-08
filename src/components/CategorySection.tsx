@@ -82,15 +82,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getMobileGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-6 gap-2 px-4 py-1';
+        return 'grid grid-cols-6 gap-1 px-4 py-0';
       case 'compact':
-        return 'grid grid-cols-4 gap-3 px-4 py-1';
+        return 'grid grid-cols-4 gap-2 px-4 py-0';
       case 'grid':
-        return 'grid grid-cols-3 gap-3 px-4 py-1';
+        return 'grid grid-cols-3 gap-2 px-4 py-0';
       case 'list':
-        return 'flex flex-col gap-2 px-4 py-1';
+        return 'flex flex-col gap-1 px-4 py-0';
       default:
-        return 'grid grid-cols-4 gap-3 px-4 py-1';
+        return 'grid grid-cols-4 gap-2 px-4 py-0';
     }
   };
 
@@ -247,10 +247,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               <div className="text-white text-xl font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-105 group-active:scale-102">
                 {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
               </div>
-            </div>
-            
-            <div className="mt-3">
-              <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto rounded-full group-hover:via-white/80 group-hover:w-32 transition-all duration-300"></div>
             </div>
           </div>
         </div>
