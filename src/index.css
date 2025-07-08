@@ -111,6 +111,8 @@ All colors MUST be HSL.
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 2rem;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   body {
@@ -123,18 +125,21 @@ All colors MUST be HSL.
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-  }
-
-  /* Smooth scrolling optimizations */
-  * {
-    scroll-behavior: smooth;
-  }
-
-  /* Improve scroll performance */
-  .scroll-container {
-    will-change: scroll-position;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+  }
+
+  /* Mobile-style smooth scrolling for all elements */
+  * {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Enhanced scroll performance with mobile-like behavior */
+  .scroll-container, body, html {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
   }
 
   /* Custom scrollbar styling */
