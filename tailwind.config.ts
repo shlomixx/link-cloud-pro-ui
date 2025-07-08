@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -21,6 +22,10 @@ export default {
 			fontFamily: {
 				sans: ['Inter', 'sans-serif'],
 			},
+			screens: {
+				'xs': '475px',
+				'3xl': '1600px',
+			},
 			gridTemplateColumns: {
 				'13': 'repeat(13, minmax(0, 1fr))',
 				'14': 'repeat(14, minmax(0, 1fr))',
@@ -34,6 +39,11 @@ export default {
 				'22': 'repeat(22, minmax(0, 1fr))',
 				'23': 'repeat(23, minmax(0, 1fr))',
 				'24': 'repeat(24, minmax(0, 1fr))',
+			},
+			spacing: {
+				'18': '4.5rem',
+				'88': '22rem',
+				'128': '32rem',
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -121,19 +131,49 @@ export default {
 						transform: "scale(1)",
 						opacity: "1"
 					}
+				},
+				'slide-up': {
+					"0%": {
+						transform: "translateY(100%)",
+						opacity: "0"
+					},
+					"100%": {
+						transform: "translateY(0)",
+						opacity: "1"
+					}
+				},
+				'bounce-in': {
+					"0%": {
+						transform: "scale(0.8)",
+						opacity: "0"
+					},
+					"50%": {
+						transform: "scale(1.05)",
+						opacity: "1"
+					},
+					"100%": {
+						transform: "scale(1)",
+						opacity: "1"
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.3s ease-out',
-				'scale-in': 'scale-in 0.2s ease-out'
+				'scale-in': 'scale-in 0.2s ease-out',
+				'slide-up': 'slide-up 0.3s ease-out',
+				'bounce-in': 'bounce-in 0.4s ease-out'
 			},
 			backdropBlur: {
 				xs: '2px',
 			},
 			scale: {
 				'102': '1.02',
+			},
+			transitionProperty: {
+				'height': 'height',
+				'spacing': 'margin, padding',
 			}
 		}
 	},
