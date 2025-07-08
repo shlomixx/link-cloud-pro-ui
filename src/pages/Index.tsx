@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
@@ -60,6 +61,7 @@ const Index = () => {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [clickedLink, setClickedLink] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isKeyboardShortcutsOpen, setIsKeyboardShortcutsOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<LinkData | null>(null);
   const { toast } = useToast();
 
@@ -295,8 +297,9 @@ const Index = () => {
 
         {/* Enhanced keyboard shortcuts with better styling */}
         <KeyboardShortcuts 
+          isOpen={isKeyboardShortcutsOpen}
+          onClose={() => setIsKeyboardShortcutsOpen(false)}
           isDarkMode={isDarkMode}
-          onOpenLinkModal={() => setIsModalOpen(true)}
         />
 
         {/* Enhanced modal */}
@@ -306,10 +309,27 @@ const Index = () => {
             setIsModalOpen(false);
             setEditingLink(null);
           }}
-          onSubmit={editingLink ? handleUpdateLink : handleAddLink}
-          categories={categories}
-          editingLink={editingLink}
+          isNewLink={!editingLink}
+          formData={{
+            name: editingLink?.name || '',
+            url: editingLink?.url || editingLink?.defaultUrl || '',
+            category: editingLink?.category || categories[0] || '',
+            isPrivate: editingLink?.isPrivate || false,
+          }}
+          onFormDataChange={() => {}} // This will be handled by the modal internally
+          onSave={() => {
+            // This will be handled by the modal internally
+          }}
+          onDelete={() => {
+            if (editingLink) {
+              handleDeleteLink(editingLink.key);
+              setIsModalOpen(false);
+              setEditingLink(null);
+            }
+          }}
+          isLoading={false}
           isDarkMode={isDarkMode}
+          categoryLabels={categories.reduce((acc, cat) => ({ ...acc, [cat]: cat }), {})}
         />
       </div>
     </div>
