@@ -145,30 +145,86 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
   const getCategoryGradient = () => {
     const gradientMap: Record<string, string> = {
-      work: 'gradient-text',
-      social: 'gradient-text-secondary',
-      entertainment: 'gradient-text-accent',
-      tools: 'gradient-text',
-      news: 'gradient-text-secondary',
-      shopping: 'gradient-text-accent',
-      education: 'gradient-text',
-      finance: 'gradient-text-secondary',
-      health: 'gradient-text-accent',
-      travel: 'gradient-text',
-      food: 'gradient-text-secondary',
-      sports: 'gradient-text-accent',
-      gaming: 'gradient-text',
-      music: 'gradient-text-secondary',
-      photography: 'gradient-text-accent',
-      design: 'gradient-text',
-      development: 'gradient-text-secondary',
-      business: 'gradient-text-accent',
-      personal: 'gradient-text',
-      other: 'gradient-text-secondary',
-      custom: 'gradient-text-accent'
+      work: 'bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700',
+      social: 'bg-gradient-to-br from-pink-500 via-rose-600 to-red-700',
+      entertainment: 'bg-gradient-to-br from-purple-500 via-violet-600 to-purple-700',
+      tools: 'bg-gradient-to-br from-orange-500 via-amber-600 to-yellow-700',
+      news: 'bg-gradient-to-br from-gray-500 via-slate-600 to-gray-700',
+      shopping: 'bg-gradient-to-br from-green-500 via-emerald-600 to-teal-700',
+      education: 'bg-gradient-to-br from-indigo-500 via-blue-600 to-cyan-700',
+      finance: 'bg-gradient-to-br from-emerald-500 via-green-600 to-lime-700',
+      health: 'bg-gradient-to-br from-red-500 via-pink-600 to-rose-700',
+      travel: 'bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700',
+      food: 'bg-gradient-to-br from-yellow-500 via-orange-600 to-red-700',
+      sports: 'bg-gradient-to-br from-amber-500 via-yellow-600 to-orange-700',
+      gaming: 'bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700',
+      music: 'bg-gradient-to-br from-fuchsia-500 via-pink-600 to-rose-700',
+      photography: 'bg-gradient-to-br from-slate-500 via-gray-600 to-zinc-700',
+      design: 'bg-gradient-to-br from-rose-500 via-pink-600 to-fuchsia-700',
+      development: 'bg-gradient-to-br from-green-500 via-teal-600 to-cyan-700',
+      business: 'bg-gradient-to-br from-blue-500 via-indigo-600 to-violet-700',
+      personal: 'bg-gradient-to-br from-teal-500 via-cyan-600 to-blue-700',
+      other: 'bg-gradient-to-br from-neutral-500 via-stone-600 to-gray-700',
+      custom: 'bg-gradient-to-br from-rainbow-500 via-rainbow-600 to-rainbow-700'
     };
     
-    return gradientMap[category] || 'gradient-text';
+    return gradientMap[category] || 'bg-gradient-to-br from-gray-500 via-slate-600 to-gray-700';
+  };
+
+  const getCategoryTextColor = () => {
+    const textMap: Record<string, string> = {
+      work: 'text-blue-400',
+      social: 'text-pink-400',
+      entertainment: 'text-purple-400',
+      tools: 'text-orange-400',
+      news: 'text-gray-400',
+      shopping: 'text-green-400',
+      education: 'text-indigo-400',
+      finance: 'text-emerald-400',
+      health: 'text-red-400',
+      travel: 'text-sky-400',
+      food: 'text-yellow-400',
+      sports: 'text-amber-400',
+      gaming: 'text-violet-400',
+      music: 'text-fuchsia-400',
+      photography: 'text-slate-400',
+      design: 'text-rose-400',
+      development: 'text-green-400',
+      business: 'text-blue-400',
+      personal: 'text-teal-400',
+      other: 'text-neutral-400',
+      custom: 'text-purple-400'
+    };
+    
+    return textMap[category] || 'text-gray-400';
+  };
+
+  const getCategoryGlow = () => {
+    const glowMap: Record<string, string> = {
+      work: 'group-hover:drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]',
+      social: 'group-hover:drop-shadow-[0_0_20px_rgba(236,72,153,0.6)]',
+      entertainment: 'group-hover:drop-shadow-[0_0_20px_rgba(147,51,234,0.6)]',
+      tools: 'group-hover:drop-shadow-[0_0_20px_rgba(249,115,22,0.6)]',
+      news: 'group-hover:drop-shadow-[0_0_20px_rgba(107,114,128,0.6)]',
+      shopping: 'group-hover:drop-shadow-[0_0_20px_rgba(34,197,94,0.6)]',
+      education: 'group-hover:drop-shadow-[0_0_20px_rgba(99,102,241,0.6)]',
+      finance: 'group-hover:drop-shadow-[0_0_20px_rgba(16,185,129,0.6)]',
+      health: 'group-hover:drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]',
+      travel: 'group-hover:drop-shadow-[0_0_20px_rgba(14,165,233,0.6)]',
+      food: 'group-hover:drop-shadow-[0_0_20px_rgba(245,158,11,0.6)]',
+      sports: 'group-hover:drop-shadow-[0_0_20px_rgba(245,158,11,0.6)]',
+      gaming: 'group-hover:drop-shadow-[0_0_20px_rgba(139,92,246,0.6)]',
+      music: 'group-hover:drop-shadow-[0_0_20px_rgba(217,70,239,0.6)]',
+      photography: 'group-hover:drop-shadow-[0_0_20px_rgba(100,116,139,0.6)]',
+      design: 'group-hover:drop-shadow-[0_0_20px_rgba(244,63,94,0.6)]',
+      development: 'group-hover:drop-shadow-[0_0_20px_rgba(20,184,166,0.6)]',
+      business: 'group-hover:drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]',
+      personal: 'group-hover:drop-shadow-[0_0_20px_rgba(6,182,212,0.6)]',
+      other: 'group-hover:drop-shadow-[0_0_20px_rgba(115,115,115,0.6)]',
+      custom: 'group-hover:drop-shadow-[0_0_20px_rgba(147,51,234,0.6)]'
+    };
+    
+    return glowMap[category] || 'group-hover:drop-shadow-[0_0_20px_rgba(107,114,128,0.6)]';
   };
 
   const getCategoryIcon = () => {
@@ -218,10 +274,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           onClick={() => onAddLink(category)}
         >
           <div className="text-center">
-            <CategoryIcon 
-              size={120} 
-              className={`mx-auto ${getCategoryGradient()} animate-gradient transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_20px_currentColor]`}
-            />
+            <div className={`inline-flex items-center justify-center w-32 h-32 rounded-full ${getCategoryGradient()} transition-all duration-500 group-hover:scale-110 ${getCategoryGlow()} shadow-2xl`}>
+              <CategoryIcon 
+                size={60} 
+                className="text-white drop-shadow-lg"
+              />
+            </div>
           </div>
         </div>
 
@@ -260,10 +318,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           onClick={() => onAddLink(category)}
         >
           <div className="text-center">
-            <CategoryIcon 
-              size={80} 
-              className={`mx-auto ${getCategoryGradient()} animate-gradient transition-all duration-500 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_currentColor]`}
-            />
+            <div className={`inline-flex items-center justify-center w-24 h-24 rounded-full ${getCategoryGradient()} transition-all duration-500 group-hover:scale-105 ${getCategoryGlow()} shadow-2xl`}>
+              <CategoryIcon 
+                size={40} 
+                className="text-white drop-shadow-lg"
+              />
+            </div>
           </div>
         </div>
 
