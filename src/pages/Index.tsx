@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
@@ -56,7 +55,7 @@ const Index = () => {
   const [links, setLinks] = useState<{ [key: string]: LinkData }>(initialLinks);
   const [categories, setCategories] = useState<string[]>(initialCategories);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'compact' | 'dense'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'compact'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [clickedLink, setClickedLink] = useState<string | null>(null);
@@ -300,6 +299,7 @@ const Index = () => {
           isOpen={isKeyboardShortcutsOpen}
           onClose={() => setIsKeyboardShortcutsOpen(false)}
           isDarkMode={isDarkMode}
+          onOpenLinkModal={() => setIsModalOpen(true)}
         />
 
         {/* Enhanced modal */}
@@ -309,27 +309,10 @@ const Index = () => {
             setIsModalOpen(false);
             setEditingLink(null);
           }}
-          isNewLink={!editingLink}
-          formData={{
-            name: editingLink?.name || '',
-            url: editingLink?.url || editingLink?.defaultUrl || '',
-            category: editingLink?.category || categories[0] || '',
-            isPrivate: editingLink?.isPrivate || false,
-          }}
-          onFormDataChange={() => {}} // This will be handled by the modal internally
-          onSave={() => {
-            // This will be handled by the modal internally
-          }}
-          onDelete={() => {
-            if (editingLink) {
-              handleDeleteLink(editingLink.key);
-              setIsModalOpen(false);
-              setEditingLink(null);
-            }
-          }}
-          isLoading={false}
+          onSubmit={editingLink ? handleUpdateLink : handleAddLink}
+          categories={categories}
+          editingLink={editingLink}
           isDarkMode={isDarkMode}
-          categoryLabels={categories.reduce((acc, cat) => ({ ...acc, [cat]: cat }), {})}
         />
       </div>
     </div>
