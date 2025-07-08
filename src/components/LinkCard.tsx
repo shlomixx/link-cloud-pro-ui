@@ -128,7 +128,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                   onMouseLeave={onMouseLeave}
                   onTouchStart={handleTouchStart}
                   onTouchEnd={handleTouchEnd}
-                  onTouchMovie={handleTouchMove}
+                  onTouchMove={handleTouchMove}
                   onMouseDown={handleMouseDown}
                   onMouseUp={handleMouseUp}
                   onClick={!dragStarted ? onLinkClick : undefined}
@@ -140,13 +140,16 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                       : 'hover:bg-black/10'
                     }
                     ${isClicked ? 'scale-95' : ''}
-                    ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-white/30' : ''}
+                    ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-4px]' : ''}
                   `}
                 >
                   {dragStarted && (
-                    <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1">
-                      <GripVertical className="w-3 h-3 text-white" />
-                    </div>
+                    <>
+                      <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1 animate-pulse">
+                        <GripVertical className="w-3 h-3 text-white" />
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
+                    </>
                   )}
                   <img
                     src={getFaviconUrl(link.url || link.defaultUrl || '')}
@@ -226,13 +229,16 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                 : 'hover:bg-black/10'
               }
               ${isClicked ? 'scale-95' : ''}
-              ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-white/30' : ''}
+              ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-6px]' : ''}
             `}
           >
             {dragStarted && (
-              <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1">
-                <GripVertical className="w-3 h-3 text-white" />
-              </div>
+              <>
+                <div className="absolute -top-1 -right-1 bg-blue-500 rounded-full p-1 animate-pulse">
+                  <GripVertical className="w-3 h-3 text-white" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
+              </>
             )}
             <div className="relative">
               <img
@@ -306,13 +312,16 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                 : 'hover:bg-black/10'
               }
               ${isClicked ? 'scale-95' : ''}
-              ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-white/30' : ''}
+              ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-8px]' : ''}
             `}
           >
             {dragStarted && (
-              <div className="absolute -top-2 -right-2 bg-blue-500 rounded-full p-1.5">
-                <GripVertical className="w-4 h-4 text-white" />
-              </div>
+              <>
+                <div className="absolute -top-2 -right-2 bg-blue-500 rounded-full p-1.5 animate-pulse">
+                  <GripVertical className="w-4 h-4 text-white" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
+              </>
             )}
 
             <Button
@@ -401,13 +410,16 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               : 'hover:bg-black/10'
             }
             ${isClicked ? 'scale-[0.98]' : ''}
-            ${dragStarted ? 'scale-[1.05] shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-white/30' : ''}
+            ${dragStarted ? 'scale-[1.05] shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-6px]' : ''}
           `}
         >
           {dragStarted && (
-            <div className="absolute left-2 bg-blue-500 rounded-full p-1.5">
-              <GripVertical className="w-4 h-4 text-white" />
-            </div>
+            <>
+              <div className="absolute left-2 bg-blue-500 rounded-full p-1.5 animate-pulse">
+                <GripVertical className="w-4 h-4 text-white" />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
+            </>
           )}
           <div className="flex items-center gap-5 flex-1">
             <img
