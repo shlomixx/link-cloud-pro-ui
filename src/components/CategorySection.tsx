@@ -242,7 +242,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       >
         {/* Enhanced Category Header for Desktop */}
         <div 
-          className="group cursor-pointer mb-16 relative"
+          className="group cursor-pointer mb-8 relative"
           onClick={() => onAddLink(category)}
         >
           <div className="text-center relative">
@@ -254,9 +254,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </div>
             
-            <div className="mt-8">
+            <div className="mt-4">
               <div className={`
-                mt-3 w-32 h-1.5 mx-auto rounded-full
+                mt-2 w-32 h-1.5 mx-auto rounded-full
                 bg-gradient-to-r from-transparent via-white/60 to-transparent
                 shadow-lg transition-all duration-300 group-hover:via-white/80 group-hover:w-40
               `}></div>
@@ -265,7 +265,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         </div>
 
         {/* Enhanced Links Grid */}
-        <div className={`${getGridClasses()}`}>
+        <div className={`${getGridClasses()} justify-center items-center`}>
           {links.map((link) => (
             <LinkCard
               key={link.key}
