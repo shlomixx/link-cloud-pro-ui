@@ -1,6 +1,29 @@
 
 import React from 'react';
 import { LinkCard } from './LinkCard';
+import { 
+  Briefcase, 
+  Users, 
+  Play, 
+  Wrench, 
+  Newspaper, 
+  ShoppingBag, 
+  GraduationCap, 
+  DollarSign, 
+  Heart, 
+  Plane, 
+  UtensilsCrossed, 
+  Trophy, 
+  Gamepad2, 
+  Music, 
+  Camera, 
+  Palette, 
+  Code, 
+  Building, 
+  User, 
+  MoreHorizontal,
+  Sparkles
+} from 'lucide-react';
 
 interface LinkData {
   key: string;
@@ -148,7 +171,35 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     return gradientMap[category] || 'gradient-text';
   };
 
-  const categoryName = categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1);
+  const getCategoryIcon = () => {
+    const iconMap: Record<string, React.ComponentType<any>> = {
+      work: Briefcase,
+      social: Users,
+      entertainment: Play,
+      tools: Wrench,
+      news: Newspaper,
+      shopping: ShoppingBag,
+      education: GraduationCap,
+      finance: DollarSign,
+      health: Heart,
+      travel: Plane,
+      food: UtensilsCrossed,
+      sports: Trophy,
+      gaming: Gamepad2,
+      music: Music,
+      photography: Camera,
+      design: Palette,
+      development: Code,
+      business: Building,
+      personal: User,
+      other: MoreHorizontal,
+      custom: Sparkles
+    };
+    
+    return iconMap[category] || MoreHorizontal;
+  };
+
+  const CategoryIcon = getCategoryIcon();
 
   return (
     <>
@@ -167,9 +218,10 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           onClick={() => onAddLink(category)}
         >
           <div className="text-center">
-            <h2 className={`text-5xl md:text-6xl lg:text-7xl ${getCategoryGradient()} text-category animate-gradient transition-all duration-500 group-hover:scale-110 group-hover:text-glow`}>
-              {categoryName}
-            </h2>
+            <CategoryIcon 
+              size={120} 
+              className={`mx-auto ${getCategoryGradient()} animate-gradient transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_20px_currentColor]`}
+            />
           </div>
         </div>
 
@@ -208,9 +260,10 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           onClick={() => onAddLink(category)}
         >
           <div className="text-center">
-            <h2 className={`text-4xl sm:text-5xl ${getCategoryGradient()} text-category animate-gradient transition-all duration-500 group-hover:scale-105 group-hover:text-glow`}>
-              {categoryName}
-            </h2>
+            <CategoryIcon 
+              size={80} 
+              className={`mx-auto ${getCategoryGradient()} animate-gradient transition-all duration-500 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_currentColor]`}
+            />
           </div>
         </div>
 
