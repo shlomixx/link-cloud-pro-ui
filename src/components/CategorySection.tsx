@@ -113,6 +113,21 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     e.stopPropagation();
     setIsDragOverCategory(false);
     
+    // First check for internal link drag data
+    try {
+      const internalData = e.dataTransfer.getData('application/json');
+      if (internalData) {
+        const parsed = JSON.parse(internalData);
+        if (parsed.type === 'link' && parsed.key) {
+          onDrop(e, category);
+          return;
+        }
+      }
+    } catch (error) {
+      // Not internal drag data, continue with URL check
+    }
+    
+    // Then check for external URL drops
     const url = e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain');
     
     if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
