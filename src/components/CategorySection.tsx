@@ -2,7 +2,6 @@
 import React from 'react';
 import { LinkCard } from './LinkCard';
 import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface LinkData {
   key: string;
@@ -60,7 +59,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onDragStart,
   onAddLink
 }) => {
-  const [isHoveringEmptySpace, setIsHoveringEmptySpace] = React.useState(false);
+  const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
 
   const getGridClasses = () => {
     switch (viewMode) {
@@ -87,22 +86,35 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     >
       {/* Category Label - Left Side */}
       <div className="flex-shrink-0 w-24 pt-1">
-        <div className="flex items-center gap-2">
+        <div 
+          className="flex items-center gap-2 cursor-pointer transition-all duration-300 hover:scale-105"
+          onMouseEnter={() => setIsHoveringCategory(true)}
+          onMouseLeave={() => setIsHoveringCategory(false)}
+          onClick={() => onAddLink(category)}
+        >
           <div className={`h-1 w-4 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full transition-all duration-300`}></div>
-          <h2 className={`text-sm font-medium transition-colors duration-300 ${
-            isDarkMode ? 'text-slate-300' : 'text-slate-600'
-          }`}>
-            {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
-          </h2>
+          
+          {isHoveringCategory ? (
+            <div className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all duration-300 ${
+              isDarkMode 
+                ? 'bg-white/10 text-white hover:bg-white/20' 
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            }`}>
+              <Plus className="w-3 h-3" />
+              <span className="text-xs font-medium">Add</span>
+            </div>
+          ) : (
+            <h2 className={`text-sm font-medium transition-colors duration-300 ${
+              isDarkMode ? 'text-slate-300' : 'text-slate-600'
+            }`}>
+              {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </h2>
+          )}
         </div>
       </div>
 
       {/* Links Grid - Right Side */}
-      <div 
-        className={`flex-1 ${getGridClasses()} relative`}
-        onMouseEnter={() => setIsHoveringEmptySpace(true)}
-        onMouseLeave={() => setIsHoveringEmptySpace(false)}
-      >
+      <div className={`flex-1 ${getGridClasses()}`}>
         {links.map((link) => (
           <LinkCard
             key={link.key}
@@ -120,24 +132,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
             onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
           />
         ))}
-        
-        {/* Hover Add Button */}
-        {isHoveringEmptySpace && viewMode !== 'list' && (
-          <div className="flex items-center justify-center">
-            <Button
-              onClick={() => onAddLink(category)}
-              size="sm"
-              variant="outline"
-              className={`opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-105 border-dashed ${
-                isDarkMode 
-                  ? 'border-white/30 text-white/70 hover:border-white/50 hover:text-white hover:bg-white/10' 
-                  : 'border-slate-400/50 text-slate-500 hover:border-slate-600 hover:text-slate-700 hover:bg-slate-100'
-              }`}
-            >
-              <Plus className="w-4 h-4" />
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
