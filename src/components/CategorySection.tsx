@@ -182,20 +182,18 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDrop={handleDrop}
       >
         {/* Enhanced Category Sidebar - Left Side */}
-        <div className="flex flex-col items-center gap-6 min-w-[160px] pt-4 sticky top-4">
+        <div className="flex flex-col items-center gap-8 min-w-[180px] pt-6">
           <div className="relative group cursor-pointer">
-            <div className={`w-6 h-6 rounded-full ${getCategoryColor()} shadow-2xl group-hover:scale-125 transition-all duration-500 ease-out`}></div>
-            <div className={`absolute inset-0 w-6 h-6 rounded-full ${getCategoryColor()} opacity-20 group-hover:scale-[2] group-hover:opacity-5 transition-all duration-700 ease-out`}></div>
+            <div className={`w-8 h-8 rounded-2xl ${getCategoryColor()} shadow-2xl group-hover:scale-110 transition-all duration-500 ease-out backdrop-blur-sm`}></div>
+            <div className={`absolute inset-0 w-8 h-8 rounded-2xl ${getCategoryColor()} opacity-20 group-hover:scale-150 group-hover:opacity-10 transition-all duration-700 ease-out`}></div>
+            <div className={`absolute -inset-2 rounded-3xl ${getCategoryColor()} opacity-5 group-hover:opacity-15 transition-all duration-500 blur-xl`}></div>
           </div>
           
-          <div className="text-center space-y-3">
-            <h2 className="text-white text-xl font-bold tracking-tight transition-all duration-300 drop-shadow-lg leading-tight">
+          <div className="text-center space-y-4">
+            <h2 className="text-white text-2xl font-bold tracking-tight transition-all duration-300 drop-shadow-lg leading-tight gradient-text">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </h2>
-            <div className="w-16 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto"></div>
-            <p className="text-white/60 text-sm font-medium">
-              {links.length} {links.length === 1 ? 'link' : 'links'}
-            </p>
+            <div className="w-20 h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto rounded-full"></div>
           </div>
         </div>
 
