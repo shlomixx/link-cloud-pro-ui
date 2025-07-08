@@ -250,7 +250,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDrop={handleDrop}
       >
         {/* Enhanced Minimalist Category Header for Desktop */}
-        <div className="flex items-center gap-4 mb-8 group cursor-pointer hover:translate-x-1 transition-bounce">
+        <div className="flex items-center gap-4 mb-4 group cursor-pointer hover:translate-x-1 transition-bounce">
           <div className={`w-3 h-3 rounded-full ${getCategoryColor()} shadow-lg group-hover:scale-125 transition-bounce hover-glow`}></div>
           <h2 className="text-white text-xl font-semibold tracking-wide group-hover:text-white/90 transition-smooth">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
@@ -289,7 +289,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       >
         {/* Simplified Mobile Category Header */}
         <div 
-          className="group cursor-pointer mb-10 relative"
+          className="group cursor-pointer mb-6 relative"
           onClick={() => onAddLink(category)}
         >
           <div className="text-center relative">
