@@ -31,8 +31,12 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           onMouseLeave={onMouseLeave}
           onClick={onLinkClick}
           className={`
-            group relative flex flex-col items-center gap-2 p-2 rounded-lg cursor-pointer min-w-[70px] max-w-[90px]
-            transition-all duration-200 hover:bg-white/5
+            group relative flex flex-col items-center gap-2 p-3 rounded cursor-pointer min-w-[80px] max-w-[100px]
+            transition-all duration-200 hover:scale-110
+            ${isDarkMode 
+              ? 'hover:bg-white/10' 
+              : 'hover:bg-black/10'
+            }
             ${isClicked ? 'scale-95' : ''}
           `}
         >
@@ -40,15 +44,17 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             <img
               src={getFaviconUrl(link.url || link.defaultUrl || '')}
               alt=""
-              className="w-7 h-7 rounded-md"
+              className="w-8 h-8 rounded"
               onError={handleFaviconError}
             />
             {link.isFavorite && (
-              <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 absolute -top-1 -right-1" />
+              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 absolute -top-1 -right-1" />
             )}
           </div>
           
-          <span className="font-medium text-xs text-white/80 text-center truncate w-full leading-tight">
+          <span className={`font-medium text-sm text-center truncate w-full leading-tight ${
+            isDarkMode ? 'text-white' : 'text-slate-800'
+          }`}>
             {link.name}
           </span>
         </div>

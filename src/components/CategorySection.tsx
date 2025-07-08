@@ -156,14 +156,26 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         <Button
           onClick={() => onAddLink(category)}
           variant="ghost"
-          className="card-minimal group flex items-center gap-6 p-4 rounded-xl cursor-pointer w-full transition-all duration-200 hover:scale-[1.01]"
+          className={`
+            group flex items-center gap-6 p-5 rounded-xl cursor-pointer w-full
+            transition-all duration-300 hover:scale-[1.02] hover:shadow-xl
+            ${isDarkMode 
+              ? 'bg-slate-800/20 hover:bg-slate-700/30 border border-slate-700/50 hover:border-slate-600/70' 
+              : 'bg-white/20 hover:bg-white/30 border border-white/20 hover:border-white/40'
+            }
+            backdrop-blur-sm
+          `}
         >
           <div className="flex items-center gap-6 flex-1">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white/5 backdrop-blur-sm group-hover:bg-white/10 transition-all duration-200">
-              <Plus className="w-6 h-6 text-white/50 group-hover:text-white/70" />
+            <div className={`
+              w-14 h-14 rounded-2xl flex items-center justify-center
+              ${isDarkMode ? 'bg-slate-700/50' : 'bg-white/50'}
+              backdrop-blur-sm
+            `}>
+              <Plus className="w-8 h-8 text-white/60 transition-colors duration-200 group-hover:text-white/80" />
             </div>
             <div className="flex-1">
-              <h3 className="font-medium text-base text-white/50 group-hover:text-white/70 transition-colors duration-200">
+              <h3 className="font-semibold text-lg text-white/60 transition-colors duration-200 group-hover:text-white/80">
                 Add New Link
               </h3>
             </div>
@@ -174,9 +186,17 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
     // For grid, compact, and dense views
     const containerClasses = {
-      dense: 'flex flex-col items-center justify-center gap-1 p-1.5 rounded-lg min-w-[60px] h-full',
-      compact: 'flex flex-col items-center justify-center gap-2 p-2 rounded-lg min-w-[70px] max-w-[90px] h-full',
-      grid: 'card-minimal flex flex-col items-center justify-center gap-3 p-4 rounded-xl h-full transition-all duration-200 hover:scale-[1.02]'
+      dense: 'flex flex-col items-center justify-center gap-1 p-2 rounded min-w-[70px] h-full',
+      compact: 'flex flex-col items-center justify-center gap-2 p-3 rounded min-w-[80px] max-w-[100px] h-full',
+      grid: `
+        flex flex-col items-center justify-center gap-3 p-6 rounded-xl h-full
+        transition-all duration-300 hover:scale-[1.05] hover:shadow-2xl
+        ${isDarkMode 
+          ? 'bg-slate-800/20 hover:bg-slate-700/30 border border-slate-700/50 hover:border-slate-600/70' 
+          : 'bg-white/20 hover:bg-white/30 border border-white/20 hover:border-white/40'
+        }
+        backdrop-blur-sm
+      `
     };
 
     return (
@@ -189,19 +209,20 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         `}
       >
         <div className={`
-          ${viewMode === 'grid' ? 'w-12 h-12 rounded-xl bg-white/5 backdrop-blur-sm group-hover:bg-white/10' : ''} 
+          ${viewMode === 'grid' ? 'w-16 h-16 rounded-2xl' : ''} 
           flex items-center justify-center
-          ${viewMode === 'grid' ? 'transition-all duration-200' : ''}
+          ${viewMode === 'grid' ? (isDarkMode ? 'bg-slate-700/50' : 'bg-white/50') : ''}
+          ${viewMode === 'grid' ? 'backdrop-blur-sm transition-all duration-300 group-hover:scale-110' : ''}
         `}>
           <Plus className={`
-            ${viewMode === 'dense' ? 'w-4 h-4' : viewMode === 'compact' ? 'w-5 h-5' : 'w-6 h-6'}
+            ${viewMode === 'dense' ? 'w-5 h-5' : viewMode === 'compact' ? 'w-6 h-6' : 'w-10 h-10'}
             text-white/50 transition-colors duration-200 group-hover:text-white/70
           `} />
         </div>
         
         <span className={`
           font-medium text-center truncate w-full leading-tight
-          ${viewMode === 'dense' ? 'text-xs max-w-[60px]' : 'text-xs'}
+          ${viewMode === 'dense' ? 'text-xs max-w-[70px]' : 'text-sm'}
           text-white/50 transition-colors duration-200 group-hover:text-white/70
         `}>
           Add Link
@@ -219,24 +240,32 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Minimalist Category Header for Desktop */}
+        {/* Enhanced Category Header for Desktop */}
         <div 
-          className="group cursor-pointer mb-6 relative"
+          className="group cursor-pointer mb-8 relative"
           onClick={() => onAddLink(category)}
         >
           <div className="text-center relative">
-            <h2 className="category-minimal text-2xl font-medium transition-all duration-200 group-hover:text-white/100">
+            <div className={`
+              text-white text-3xl font-bold tracking-wide drop-shadow-2xl 
+              transition-all duration-300 group-hover:scale-110 text-center
+              bg-gradient-to-r from-white via-white/90 to-white bg-clip-text text-transparent
+            `}>
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-            </h2>
+            </div>
             
-            <div className="mt-3">
-              <div className="w-16 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto transition-all duration-200 group-hover:via-white/60 group-hover:w-20"></div>
+            <div className="mt-4">
+              <div className={`
+                mt-2 w-32 h-1.5 mx-auto rounded-full
+                bg-gradient-to-r from-transparent via-white/60 to-transparent
+                shadow-lg transition-all duration-300 group-hover:via-white/80 group-hover:w-40
+              `}></div>
             </div>
           </div>
         </div>
 
-        {/* Minimalist Links Grid */}
-        <div className={`${getGridClasses()} justify-items-center gap-3`}>
+        {/* Enhanced Links Grid */}
+        <div className={`${getGridClasses()} justify-items-center`}>
           {links.map((link) => (
             <LinkCard
               key={link.key}
