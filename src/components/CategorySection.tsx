@@ -197,8 +197,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       >
         {/* Minimalistic Category Sidebar - Left Side */}
         <div className="flex items-center gap-3 min-w-[120px] pt-4">
-          <div className={`w-3 h-3 rounded-full ${getCategoryColor()}`}></div>
-          <h2 className="text-white text-lg font-medium">
+          <h2 className={`text-lg font-medium ${getCategoryColor().replace('bg-', 'text-')}`}>
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
         </div>
@@ -240,11 +239,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         >
           <div className="text-center relative p-3 rounded-2xl transition-all duration-300 group-active:bg-white/5">
             <div className="flex items-center justify-center gap-4 mb-3">
-              <div className="relative">
-                <div className={`w-4 h-4 rounded-full ${getCategoryColor()} shadow-2xl group-hover:scale-125 group-active:scale-110 transition-all duration-300`}></div>
-                <div className={`absolute inset-0 w-4 h-4 rounded-full ${getCategoryColor()} opacity-20 group-hover:scale-[2] group-hover:opacity-10 transition-all duration-500`}></div>
-              </div>
-              <div className="text-white text-base font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-105 group-active:scale-102">
+              <div className={`text-base font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-105 group-active:scale-102 ${getCategoryColor().replace('bg-', 'text-')}`}>
                 {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
               </div>
             </div>
