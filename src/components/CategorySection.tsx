@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LinkCard } from './LinkCard';
 import { Plus } from 'lucide-react';
@@ -82,15 +81,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getMobileGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-5 gap-1';
+        return 'grid grid-cols-6 gap-2';
       case 'compact':
-        return 'grid grid-cols-4 gap-1';
+        return 'grid grid-cols-4 gap-3';
       case 'grid':
-        return 'grid grid-cols-3 gap-2';
+        return 'grid grid-cols-3 gap-4';
       case 'list':
-        return 'flex flex-col gap-1';
+        return 'flex flex-col gap-3';
       default:
-        return 'grid grid-cols-4 gap-1';
+        return 'grid grid-cols-4 gap-3';
     }
   };
 
@@ -188,54 +187,60 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         </div>
       </div>
 
-      {/* Mobile Layout */}
+      {/* Enhanced Mobile Layout */}
       <div 
-        className={`md:hidden mb-4 animate-fade-in transition-all duration-300 ${
-          draggedItem || isDragOverCategory ? 'ring-2 ring-purple-500/30 rounded-lg p-2' : ''
+        className={`md:hidden mb-6 animate-fade-in transition-all duration-300 ${
+          draggedItem || isDragOverCategory ? 'ring-2 ring-purple-500/30 rounded-xl p-3' : ''
         } ${isDragOverCategory ? 'bg-purple-50/50 dark:bg-purple-900/20' : ''}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Mobile Category Header */}
+        {/* Enhanced Mobile Category Header */}
         <div 
-          className={`flex items-center justify-between mb-3 px-2 py-2 rounded-lg cursor-pointer transition-all duration-300 ${
+          className={`flex items-center justify-between mb-4 px-4 py-4 rounded-xl cursor-pointer transition-all duration-300 shadow-sm border ${
             isDarkMode 
-              ? 'bg-slate-800/50 hover:bg-slate-800/70' 
-              : 'bg-white/50 hover:bg-white/80'
-          } ${isDragOverCategory ? 'bg-purple-200/50 dark:bg-purple-800/50' : ''}`}
+              ? 'bg-slate-800/60 hover:bg-slate-800/80 border-slate-700/50 backdrop-blur-sm' 
+              : 'bg-white/80 hover:bg-white/95 border-slate-200/60 backdrop-blur-sm'
+          } ${isDragOverCategory ? 'bg-purple-100/70 dark:bg-purple-900/40 border-purple-300/50 dark:border-purple-600/50 shadow-purple-200/20 dark:shadow-purple-900/20' : ''} active:scale-98 hover:shadow-md`}
           onTouchStart={() => setIsHoveringCategory(true)}
-          onTouchEnd={() => setIsHoveringCategory(false)}
+          onTouchEnd={() => {
+            setTimeout(() => setIsHoveringCategory(false), 150);
+          }}
           onClick={() => onAddLink(category)}
         >
-          <div className="flex items-center gap-3">
-            <div className={`h-3 w-3 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full`}></div>
-            <h2 className={`text-base font-semibold transition-colors duration-300 ${
-              isDarkMode ? 'text-slate-200' : 'text-slate-700'
-            }`}>
-              {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
-            </h2>
-            <span className={`text-xs px-2 py-1 rounded-full ${
-              isDarkMode 
-                ? 'bg-slate-700 text-slate-300' 
-                : 'bg-slate-200 text-slate-600'
-            }`}>
-              {links.length}
-            </span>
+          <div className="flex items-center gap-4">
+            <div className={`h-4 w-4 bg-gradient-to-br ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full shadow-sm`}></div>
+            <div className="flex flex-col gap-1">
+              <h2 className={`text-lg font-semibold transition-colors duration-300 ${
+                isDarkMode ? 'text-slate-100' : 'text-slate-800'
+              }`}>
+                {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
+              </h2>
+              <div className="flex items-center gap-2">
+                <span className={`text-sm px-3 py-1 rounded-full font-medium ${
+                  isDarkMode 
+                    ? 'bg-slate-700/80 text-slate-300' 
+                    : 'bg-slate-100 text-slate-600'
+                }`}>
+                  {links.length} {links.length === 1 ? 'link' : 'links'}
+                </span>
+              </div>
+            </div>
           </div>
           
-          <div className={`flex items-center gap-1 px-2 py-1 rounded-md transition-all duration-300 ${
+          <div className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-300 shadow-sm ${
             isDarkMode 
-              ? 'bg-white/10 text-white hover:bg-white/20' 
-              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-          } ${isDragOverCategory ? 'bg-purple-200/50 dark:bg-purple-800/50' : ''}`}>
-            <Plus className="w-4 h-4" />
-            <span className="text-xs font-medium">{isDragOverCategory ? 'Drop' : 'Add'}</span>
+              ? 'bg-white/10 text-white hover:bg-white/15 active:bg-white/20' 
+              : 'bg-slate-50 text-slate-700 hover:bg-slate-100 active:bg-slate-200'
+          } ${isDragOverCategory ? 'bg-purple-200/60 dark:bg-purple-800/60 text-purple-700 dark:text-purple-200' : ''}`}>
+            <Plus className="w-5 h-5" />
+            <span className="text-sm font-semibold">{isDragOverCategory ? 'Drop' : 'Add'}</span>
           </div>
         </div>
 
-        {/* Mobile Links Grid */}
-        <div className={`${getMobileGridClasses()}`}>
+        {/* Enhanced Mobile Links Grid */}
+        <div className={`${getMobileGridClasses()} px-2`}>
           {links.map((link) => (
             <LinkCard
               key={link.key}
