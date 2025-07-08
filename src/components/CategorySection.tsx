@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LinkCard } from './LinkCard';
 
@@ -148,14 +147,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     return gradientMap[category] || 'bg-gradient-to-br from-gray-400 via-slate-500 to-gray-600 shadow-[0_0_40px_rgba(107,114,128,0.3)]';
   };
 
-  const getCategoryHoverEffect = () => {
-    return 'hover:scale-110 hover:rotate-3 hover:shadow-[0_0_60px_rgba(255,255,255,0.2)] transition-all duration-500 ease-out';
-  };
-
-  const getCategoryPulse = () => {
-    return isHoveringCategory ? 'animate-pulse' : '';
-  };
-
   return (
     <>
       {/* Desktop Layout */}
@@ -174,15 +165,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         >
           <div className="text-center relative">
             {/* Animated background glow */}
-            <div className={`absolute inset-0 rounded-full ${getCategoryGradient()} opacity-20 blur-3xl transform scale-150 transition-all duration-700 ${isHoveringCategory ? 'opacity-40 scale-175' : ''}`}></div>
+            <div className={`absolute inset-0 rounded-2xl ${getCategoryGradient()} opacity-20 blur-3xl transform scale-150 transition-all duration-700 ${isHoveringCategory ? 'opacity-40 scale-175' : ''}`}></div>
             
             {/* Main category container */}
-            <div className={`relative inline-flex items-center justify-center w-40 h-40 rounded-full ${getCategoryGradient()} ${getCategoryHoverEffect()} ${getCategoryPulse()} border-4 border-white/20 backdrop-blur-sm`}>
+            <div className={`relative inline-flex items-center justify-center px-8 py-6 rounded-2xl ${getCategoryGradient()} hover:scale-110 hover:rotate-1 transition-all duration-500 ease-out backdrop-blur-sm ${isHoveringCategory ? 'animate-pulse' : ''}`}>
               {/* Inner glow effect */}
-              <div className="absolute inset-2 rounded-full bg-white/10 backdrop-blur-sm"></div>
+              <div className="absolute inset-2 rounded-xl bg-white/10 backdrop-blur-sm"></div>
               
               {/* Category text label */}
-              <div className="text-white text-xl font-bold tracking-wide drop-shadow-2xl relative z-10 transition-all duration-300 group-hover:scale-110 text-center px-4">
+              <div className="text-white text-2xl font-bold tracking-wide drop-shadow-2xl relative z-10 transition-all duration-300 group-hover:scale-110 text-center">
                 {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
               </div>
               
@@ -239,14 +230,14 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         >
           <div className="text-center relative">
             {/* Mobile background glow */}
-            <div className={`absolute inset-0 rounded-full ${getCategoryGradient()} opacity-20 blur-2xl transform scale-150 transition-all duration-500`}></div>
+            <div className={`absolute inset-0 rounded-xl ${getCategoryGradient()} opacity-20 blur-2xl transform scale-150 transition-all duration-500`}></div>
             
             {/* Mobile category container */}
-            <div className={`relative inline-flex items-center justify-center w-32 h-32 rounded-full ${getCategoryGradient()} hover:scale-105 transition-all duration-500 border-3 border-white/20 backdrop-blur-sm shadow-2xl`}>
-              <div className="absolute inset-2 rounded-full bg-white/10 backdrop-blur-sm"></div>
+            <div className={`relative inline-flex items-center justify-center px-6 py-4 rounded-xl ${getCategoryGradient()} hover:scale-105 transition-all duration-500 backdrop-blur-sm shadow-2xl`}>
+              <div className="absolute inset-2 rounded-lg bg-white/10 backdrop-blur-sm"></div>
               
               {/* Mobile Category text label */}
-              <div className="text-white text-lg font-bold tracking-wide drop-shadow-2xl relative z-10 text-center px-3">
+              <div className="text-white text-xl font-bold tracking-wide drop-shadow-2xl relative z-10 text-center">
                 {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
               </div>
             </div>
