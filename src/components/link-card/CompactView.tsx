@@ -31,15 +31,13 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           onMouseLeave={onMouseLeave}
           onClick={onLinkClick}
           className={`
-            group relative flex flex-col items-center gap-3 p-4 cursor-pointer min-w-[80px] max-w-[80px]
-            transition-all duration-300 hover:scale-105 hover:translate-y-[-4px]
+            group relative flex flex-col items-center gap-2 p-3 cursor-pointer min-w-[60px] max-w-[60px]
+            transition-all duration-300 hover:scale-105 hover:translate-y-[-2px]
             ${isClicked ? 'scale-95' : ''}
-            bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10
-            hover:bg-white/10 hover:border-white/20 hover:shadow-2xl hover:shadow-white/20
           `}
         >
           <div className="relative">
-            <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center transition-all duration-300 group-hover:bg-white/20">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300">
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
@@ -48,11 +46,11 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
               />
             </div>
             {link.isFavorite && (
-              <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 absolute -top-1 -right-1 drop-shadow-lg" />
+              <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400 absolute -top-1 -right-1 drop-shadow-lg" />
             )}
           </div>
           
-          <span className="text-white/90 text-sm text-center truncate w-full font-medium group-hover:text-white transition-all duration-200">
+          <span className="text-white/90 text-xs text-center truncate w-full font-medium group-hover:text-white transition-all duration-200">
             {link.name}
           </span>
         </div>
