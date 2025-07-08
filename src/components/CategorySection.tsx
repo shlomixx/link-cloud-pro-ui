@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { LinkCard } from './LinkCard';
 
@@ -127,31 +128,40 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:flex gap-4 mb-3 animate-fade-in"
+        className="hidden md:block mb-6 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Category Label - Left Side */}
-        <div className="flex-shrink-0 w-24 flex items-start">
-          <div 
-            className="flex items-center gap-2 cursor-pointer transition-all duration-300 hover:scale-105"
-            onMouseEnter={() => setIsHoveringCategory(true)}
-            onMouseLeave={() => setIsHoveringCategory(false)}
-            onClick={() => onAddLink(category)}
-          >
-            <div className={`h-1 w-4 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full transition-all duration-300`}></div>
+        {/* Centered Category Header for Desktop */}
+        <div 
+          className="flex justify-center mb-4 cursor-pointer group"
+          onMouseEnter={() => setIsHoveringCategory(true)}
+          onMouseLeave={() => setIsHoveringCategory(false)}
+          onClick={() => onAddLink(category)}
+        >
+          <div className={`flex items-center gap-3 px-6 py-3 rounded-2xl transition-all duration-300 hover:scale-105 ${
+            isDarkMode 
+              ? 'bg-gradient-to-r from-slate-800/50 to-slate-700/40 hover:from-slate-800/70 hover:to-slate-700/60 border border-slate-600/30' 
+              : 'bg-gradient-to-r from-white/80 to-slate-50/60 hover:from-white/90 hover:to-slate-50/80 border border-slate-200/50 shadow-sm hover:shadow-md'
+          }`}>
+            {/* Enhanced Color Indicator */}
+            <div className="relative">
+              <div className={`h-2 w-8 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full`}></div>
+              <div className={`absolute -inset-1 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full opacity-20 blur-sm`}></div>
+            </div>
             
-            <h2 className={`text-sm font-medium transition-colors duration-300 ${
-              isDarkMode ? 'text-slate-300' : 'text-slate-600'
+            {/* Category Title */}
+            <h2 className={`text-lg font-semibold tracking-tight transition-colors duration-300 ${
+              isDarkMode ? 'text-slate-100' : 'text-slate-800'
             }`}>
               {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
             </h2>
           </div>
         </div>
 
-        {/* Links Grid - Right Side */}
-        <div className={`flex-1 ${getGridClasses()}`}>
+        {/* Links Grid - Full Width */}
+        <div className={`${getGridClasses()}`}>
           {links.map((link) => (
             <LinkCard
               key={link.key}
@@ -179,21 +189,30 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Mobile Category Header */}
+        {/* Enhanced Mobile Category Header */}
         <div 
           className="mb-4 cursor-pointer group"
           onClick={() => onAddLink(category)}
         >
-          <div className="flex items-center gap-3">
-            {/* Color Indicator */}
-            <div className={`h-1 w-6 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full`}></div>
-            
-            {/* Category Title */}
-            <h2 className={`text-base font-medium transition-colors duration-300 ${
-              isDarkMode ? 'text-slate-200' : 'text-slate-700'
-            }`}>
-              {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
-            </h2>
+          <div className={`relative px-4 py-3 rounded-xl transition-all duration-300 group-hover:scale-[1.02] ${
+            isDarkMode 
+              ? 'bg-gradient-to-r from-slate-800/40 to-slate-700/30 group-hover:from-slate-800/60 group-hover:to-slate-700/50' 
+              : 'bg-gradient-to-r from-slate-50/80 to-white/60 group-hover:from-slate-100/90 group-hover:to-white/80'
+          }`}>
+            <div className="flex items-center justify-center gap-3">
+              {/* Enhanced Color Indicator */}
+              <div className="relative">
+                <div className={`h-2 w-6 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full`}></div>
+                <div className={`absolute -inset-0.5 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full opacity-20 blur-sm`}></div>
+              </div>
+              
+              {/* Category Title */}
+              <h2 className={`text-base font-semibold tracking-tight transition-colors duration-300 ${
+                isDarkMode ? 'text-slate-100' : 'text-slate-800'
+              }`}>
+                {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
+              </h2>
+            </div>
           </div>
         </div>
 
@@ -221,3 +240,4 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     </>
   );
 };
+
