@@ -235,39 +235,35 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:block mb-20 animate-fade-in"
+        className="hidden md:block mb-12 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Category Header for Desktop */}
+        {/* Compact Category Header for Desktop */}
         <div 
-          className="group cursor-pointer mb-20 relative"
+          className="group cursor-pointer mb-8 relative"
           onClick={() => onAddLink(category)}
         >
           <div className="text-center relative">
             {/* Main Category Title */}
             <div className="relative">
               <div className={`
-                text-white text-4xl font-bold tracking-wide drop-shadow-2xl 
+                text-white text-2xl font-bold tracking-wide drop-shadow-2xl 
                 transition-all duration-300 group-hover:scale-110 text-center
                 bg-gradient-to-r from-white via-white/90 to-white bg-clip-text text-transparent
-                mb-4
+                mb-3
               `}>
                 {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
               </div>
-              
-              {/* Decorative Elements */}
-              <div className="absolute -top-2 -left-2 w-8 h-8 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 blur-xl"></div>
-              <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 blur-lg"></div>
             </div>
             
-            {/* Enhanced Underline */}
-            <div className="mt-8">
+            {/* Compact Underline */}
+            <div className="mt-4">
               <div className={`
-                mt-3 w-40 h-2 mx-auto rounded-full
+                mt-2 w-20 h-1 mx-auto rounded-full
                 bg-gradient-to-r from-transparent via-white/60 to-transparent
-                shadow-lg transition-all duration-300 group-hover:via-white/80 group-hover:w-48
+                shadow-lg transition-all duration-300 group-hover:via-white/80 group-hover:w-24
                 relative
               `}>
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 via-pink-500/30 to-blue-500/30 rounded-full blur-sm"></div>
@@ -275,9 +271,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
             </div>
             
             {/* Category Badge */}
-            <div className="mt-6">
+            <div className="mt-3">
               <div className={`
-                inline-flex items-center px-4 py-2 rounded-full text-sm font-medium
+                inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
                 bg-white/10 text-white/80 border border-white/20 backdrop-blur-sm
                 transition-all duration-300 group-hover:bg-white/20 group-hover:scale-105
               `}>
@@ -287,25 +283,27 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           </div>
         </div>
 
-        {/* Enhanced Links Grid */}
-        <div className={`${getGridClasses()}`}>
-          {links.map((link) => (
-            <LinkCard
-              key={link.key}
-              link={link}
-              viewMode={viewMode}
-              isDarkMode={isDarkMode}
-              hoveredLink={hoveredLink}
-              clickedLink={clickedLink}
-              onMouseEnter={() => onMouseEnter(link.key)}
-              onMouseLeave={onMouseLeave}
-              onLinkClick={() => onLinkClick(link)}
-              onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
-              onEdit={() => onEditLink(link)}
-              onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
-            />
-          ))}
-          {renderAddButton()}
+        {/* Links Grid - Centered */}
+        <div className="flex justify-center">
+          <div className={`${getGridClasses()} max-w-full`}>
+            {links.map((link) => (
+              <LinkCard
+                key={link.key}
+                link={link}
+                viewMode={viewMode}
+                isDarkMode={isDarkMode}
+                hoveredLink={hoveredLink}
+                clickedLink={clickedLink}
+                onMouseEnter={() => onMouseEnter(link.key)}
+                onMouseLeave={onMouseLeave}
+                onLinkClick={() => onLinkClick(link)}
+                onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
+                onEdit={() => onEditLink(link)}
+                onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+              />
+            ))}
+            {renderAddButton()}
+          </div>
         </div>
       </div>
 

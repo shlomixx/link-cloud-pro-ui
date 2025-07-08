@@ -789,31 +789,70 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-4">
-        {Object.entries(groupedLinks).map(([category, links]) => (
-          <CategorySection
-            key={category}
-            category={category}
-            links={links}
-            categoryLabels={categoryLabels}
-            categoryColors={categoryColors}
-            viewMode={viewMode}
-            isDarkMode={isDarkMode}
-            draggedItem={draggedItem}
-            hoveredLink={hoveredLink}
-            clickedLink={clickedLink}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            onLinkClick={handleLinkClick}
-            onToggleFavorite={toggleFavorite}
-            onEditLink={openModal}
-            onCopyUrl={copyLinkUrl}
-            onMouseEnter={setHoveredLink}
-            onMouseLeave={() => setHoveredLink(null)}
-            onDragStart={handleDragStart}
-            onAddLink={(category) => openModal(undefined, category)}
-            onDropUrl={handleDropUrl}
-          />
-        ))}
+        {/* Desktop: 5 categories per row */}
+        <div className="hidden md:block">
+          {Array.from({ length: Math.ceil(Object.entries(groupedLinks).length / 5) }, (_, rowIndex) => (
+            <div key={rowIndex} className="grid grid-cols-5 gap-8 mb-20">
+              {Object.entries(groupedLinks)
+                .slice(rowIndex * 5, (rowIndex + 1) * 5)
+                .map(([category, links]) => (
+                  <div key={category} className="flex flex-col">
+                    <CategorySection
+                      category={category}
+                      links={links}
+                      categoryLabels={categoryLabels}
+                      categoryColors={categoryColors}
+                      viewMode={viewMode}
+                      isDarkMode={isDarkMode}
+                      draggedItem={draggedItem}
+                      hoveredLink={hoveredLink}
+                      clickedLink={clickedLink}
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                      onLinkClick={handleLinkClick}
+                      onToggleFavorite={toggleFavorite}
+                      onEditLink={openModal}
+                      onCopyUrl={copyLinkUrl}
+                      onMouseEnter={setHoveredLink}
+                      onMouseLeave={() => setHoveredLink(null)}
+                      onDragStart={handleDragStart}
+                      onAddLink={(category) => openModal(undefined, category)}
+                      onDropUrl={handleDropUrl}
+                    />
+                  </div>
+                ))}
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile: Original single column layout */}
+        <div className="md:hidden">
+          {Object.entries(groupedLinks).map(([category, links]) => (
+            <CategorySection
+              key={category}
+              category={category}
+              links={links}
+              categoryLabels={categoryLabels}
+              categoryColors={categoryColors}
+              viewMode={viewMode}
+              isDarkMode={isDarkMode}
+              draggedItem={draggedItem}
+              hoveredLink={hoveredLink}
+              clickedLink={clickedLink}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onLinkClick={handleLinkClick}
+              onToggleFavorite={toggleFavorite}
+              onEditLink={openModal}
+              onCopyUrl={copyLinkUrl}
+              onMouseEnter={setHoveredLink}
+              onMouseLeave={() => setHoveredLink(null)}
+              onDragStart={handleDragStart}
+              onAddLink={(category) => openModal(undefined, category)}
+              onDropUrl={handleDropUrl}
+            />
+          ))}
+        </div>
 
         {/* Enhanced Empty State */}
         {Object.keys(groupedLinks).length === 0 && (
