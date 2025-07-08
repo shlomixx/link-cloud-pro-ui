@@ -265,7 +265,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         </div>
 
         {/* Enhanced Links Grid */}
-        <div className={`${getGridClasses()} justify-center items-center`}>
+        <div className={`${getGridClasses()} justify-items-center`}>
           {links.map((link) => (
             <LinkCard
               key={link.key}
