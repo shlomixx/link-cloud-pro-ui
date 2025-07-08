@@ -68,15 +68,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 lg:grid-cols-16 xl:grid-cols-20 2xl:grid-cols-24 gap-2';
+        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16 gap-4';
       case 'compact':
-        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-16 2xl:grid-cols-20 gap-3';
+        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-5';
       case 'grid':
-        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-16 gap-4';
+        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-6';
       case 'list':
-        return 'flex flex-col gap-3';
+        return 'flex flex-col gap-4';
       default:
-        return 'grid grid-cols-6 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-16 2xl:grid-cols-20 gap-3';
+        return 'grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-5';
     }
   };
 
@@ -176,23 +176,30 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:flex items-start gap-8 mb-7 animate-slide-up"
+        className="hidden md:flex items-start gap-12 mb-10 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Category Header - Left Side */}
-        <div className="flex flex-col items-center gap-3 min-w-[120px] pt-2">
-          <div className="relative">
-            <div className={`w-4 h-4 rounded-full ${getCategoryColor()} shadow-2xl group-hover:scale-150 transition-all duration-500 ease-out`}></div>
-            <div className={`absolute inset-0 w-4 h-4 rounded-full ${getCategoryColor()} opacity-30 group-hover:scale-[2] group-hover:opacity-10 transition-all duration-700 ease-out`}></div>
+        {/* Enhanced Category Sidebar - Left Side */}
+        <div className="flex flex-col items-center gap-6 min-w-[160px] pt-4 sticky top-4">
+          <div className="relative group cursor-pointer">
+            <div className={`w-6 h-6 rounded-full ${getCategoryColor()} shadow-2xl group-hover:scale-125 transition-all duration-500 ease-out`}></div>
+            <div className={`absolute inset-0 w-6 h-6 rounded-full ${getCategoryColor()} opacity-20 group-hover:scale-[2] group-hover:opacity-5 transition-all duration-700 ease-out`}></div>
           </div>
-          <h2 className="text-white text-lg font-bold tracking-tight transition-all duration-300 drop-shadow-lg text-center leading-tight">
-            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-          </h2>
+          
+          <div className="text-center space-y-3">
+            <h2 className="text-white text-xl font-bold tracking-tight transition-all duration-300 drop-shadow-lg leading-tight">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </h2>
+            <div className="w-16 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto"></div>
+            <p className="text-white/60 text-sm font-medium">
+              {links.length} {links.length === 1 ? 'link' : 'links'}
+            </p>
+          </div>
         </div>
 
-        {/* Links Grid - Right Side */}
+        {/* Enhanced Links Grid - Right Side */}
         <div className={`flex-1 ${getGridClasses()}`}>
           {links.map((link) => (
             <LinkCard
