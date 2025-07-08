@@ -3,7 +3,6 @@ import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
 import { Button } from '@/components/ui/button';
-import { useResponsive } from '@/hooks/use-responsive';
 
 interface LinkData {
   key: string;
@@ -36,6 +35,7 @@ interface CategorySectionProps {
   onCopyUrl: (url: string, name: string) => void;
   onMouseEnter: (linkKey: string) => void;
   onMouseLeave: () => void;
+  onDragStart: (linkKey: string) => void;
   onAddLink: (category: string) => void;
   onDropUrl: (url: string, category: string) => void;
 }
@@ -58,44 +58,14 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onCopyUrl,
   onMouseEnter,
   onMouseLeave,
+  onDragStart,
   onAddLink,
   onDropUrl
 }) => {
-  const { isMobile, isTablet, isDesktop } = useResponsive();
+  const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
   const [isDragOverCategory, setIsDragOverCategory] = React.useState(false);
 
   const getGridClasses = () => {
-    if (isMobile) {
-      switch (viewMode) {
-        case 'dense':
-          return 'grid grid-cols-4 gap-2';
-        case 'compact':
-          return 'grid grid-cols-3 gap-3';
-        case 'grid':
-          return 'grid grid-cols-2 gap-4';
-        case 'list':
-          return 'flex flex-col gap-3';
-        default:
-          return 'grid grid-cols-3 gap-3';
-      }
-    }
-    
-    if (isTablet) {
-      switch (viewMode) {
-        case 'dense':
-          return 'grid grid-cols-6 gap-2';
-        case 'compact':
-          return 'grid grid-cols-4 gap-3';
-        case 'grid':
-          return 'grid grid-cols-3 gap-4';
-        case 'list':
-          return 'flex flex-col gap-2';
-        default:
-          return 'grid grid-cols-4 gap-3';
-      }
-    }
-
-    // Desktop
     switch (viewMode) {
       case 'dense':
         return 'grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 lg:grid-cols-16 xl:grid-cols-20 2xl:grid-cols-24 gap-1';
@@ -107,6 +77,21 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         return 'flex flex-col gap-1';
       default:
         return 'grid grid-cols-6 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-16 2xl:grid-cols-20 gap-1';
+    }
+  };
+
+  const getMobileGridClasses = () => {
+    switch (viewMode) {
+      case 'dense':
+        return 'grid grid-cols-6 gap-2';
+      case 'compact':
+        return 'grid grid-cols-4 gap-3';
+      case 'grid':
+        return 'grid grid-cols-3 gap-4';
+      case 'list':
+        return 'flex flex-col gap-3';
+      default:
+        return 'grid grid-cols-4 gap-3';
     }
   };
 
@@ -135,6 +120,34 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     } else {
       onDrop(e, category);
     }
+  };
+
+  const getCategoryGradient = () => {
+    const gradientMap: Record<string, string> = {
+      work: 'bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-600 shadow-[0_0_40px_rgba(59,130,246,0.3)]',
+      social: 'bg-gradient-to-br from-pink-400 via-rose-500 to-red-600 shadow-[0_0_40px_rgba(236,72,153,0.3)]',
+      entertainment: 'bg-gradient-to-br from-purple-400 via-violet-500 to-purple-600 shadow-[0_0_40px_rgba(147,51,234,0.3)]',
+      tools: 'bg-gradient-to-br from-orange-400 via-amber-500 to-yellow-600 shadow-[0_0_40px_rgba(249,115,22,0.3)]',
+      news: 'bg-gradient-to-br from-gray-400 via-slate-500 to-gray-600 shadow-[0_0_40px_rgba(107,114,128,0.3)]',
+      shopping: 'bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 shadow-[0_0_40px_rgba(34,197,94,0.3)]',
+      education: 'bg-gradient-to-br from-indigo-400 via-blue-500 to-cyan-600 shadow-[0_0_40px_rgba(99,102,241,0.3)]',
+      finance: 'bg-gradient-to-br from-emerald-400 via-green-500 to-lime-600 shadow-[0_0_40px_rgba(16,185,129,0.3)]',
+      health: 'bg-gradient-to-br from-red-400 via-pink-500 to-rose-600 shadow-[0_0_40px_rgba(239,68,68,0.3)]',
+      travel: 'bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 shadow-[0_0_40px_rgba(14,165,233,0.3)]',
+      food: 'bg-gradient-to-br from-yellow-400 via-orange-500 to-red-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]',
+      sports: 'bg-gradient-to-br from-amber-400 via-yellow-500 to-orange-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]',
+      gaming: 'bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-600 shadow-[0_0_40px_rgba(139,92,246,0.3)]',
+      music: 'bg-gradient-to-br from-fuchsia-400 via-pink-500 to-rose-600 shadow-[0_0_40px_rgba(217,70,239,0.3)]',
+      photography: 'bg-gradient-to-br from-slate-400 via-gray-500 to-zinc-600 shadow-[0_0_40px_rgba(100,116,139,0.3)]',
+      design: 'bg-gradient-to-br from-rose-400 via-pink-500 to-fuchsia-600 shadow-[0_0_40px_rgba(244,63,94,0.3)]',
+      development: 'bg-gradient-to-br from-green-400 via-teal-500 to-cyan-600 shadow-[0_0_40px_rgba(20,184,166,0.3)]',
+      business: 'bg-gradient-to-br from-blue-400 via-indigo-500 to-violet-600 shadow-[0_0_40px_rgba(59,130,246,0.3)]',
+      personal: 'bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-600 shadow-[0_0_40px_rgba(6,182,212,0.3)]',
+      other: 'bg-gradient-to-br from-neutral-400 via-stone-500 to-gray-600 shadow-[0_0_40px_rgba(115,115,115,0.3)]',
+      custom: 'bg-gradient-to-br from-purple-400 via-pink-500 to-rose-600 shadow-[0_0_40px_rgba(147,51,234,0.3)]'
+    };
+    
+    return gradientMap[category] || 'bg-gradient-to-br from-gray-400 via-slate-500 to-gray-600 shadow-[0_0_40px_rgba(107,114,128,0.3)]';
   };
 
   const renderAddButton = () => {
@@ -189,67 +202,105 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     );
   };
 
-  const renderCategoryHeader = () => {
-    const headerSize = isMobile ? 'text-xl' : 'text-2xl';
-    const marginBottom = isMobile ? 'mb-10' : 'mb-16';
-    const lineWidth = isMobile ? 'w-16' : 'w-24';
-    const lineHeight = isMobile ? 'h-0.5' : 'h-1';
-    const marginTop = isMobile ? 'mt-4' : 'mt-6';
-
-    return (
+  return (
+    <>
+      {/* Desktop Layout */}
       <div 
-        className={`group cursor-pointer ${marginBottom} relative`}
-        onClick={() => onAddLink(category)}
+        className="hidden md:block mb-20 animate-fade-in"
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
       >
-        <div className="text-center relative">
-          <div className={`text-white ${headerSize} font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-110 text-center`}>
-            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-          </div>
-          
-          <div className={marginTop}>
-            <div className={`mt-2 ${lineWidth} ${lineHeight} bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto rounded-full`}></div>
+        {/* Simplified Category Header */}
+        <div 
+          className="group cursor-pointer mb-16 relative"
+          onClick={() => onAddLink(category)}
+        >
+          <div className="text-center relative">
+            {/* Category text label only */}
+            <div className="text-white text-2xl font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-110 text-center">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </div>
+            
+            {/* Only the line under the category name */}
+            <div className="mt-6">
+              <div className="mt-2 w-24 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto rounded-full"></div>
+            </div>
           </div>
         </div>
-      </div>
-    );
-  };
 
-  return (
-    <div 
-      className={`${isMobile ? 'mb-16' : 'mb-20'} animate-fade-in`}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-    >
-      {renderCategoryHeader()}
-
-      {/* Links Grid with Add Button */}
-      <div className={`${getGridClasses()}`}>
-        {links.map((link) => (
-          <LinkCard
-            key={link.key}
-            link={link}
-            viewMode={viewMode}
-            isDarkMode={isDarkMode}
-            hoveredLink={hoveredLink}
-            clickedLink={clickedLink}
-            onMouseEnter={() => onMouseEnter(link.key)}
-            onMouseLeave={onMouseLeave}
-            onLinkClick={() => onLinkClick(link)}
-            onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
-            onEdit={() => onEditLink(link)}
-            onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
-            categories={Object.keys(categoryLabels)}
-            onChangeCategory={(newCategory) => onDrop({ 
-              currentTarget: {}, 
-              dataTransfer: { getData: () => link.key } 
-            } as unknown as React.DragEvent, newCategory)}
-            onDelete={() => {}}
-          />
-        ))}
-        {/* Add Button */}
-        {renderAddButton()}
+        {/* Links Grid with Add Button */}
+        <div className={`${getGridClasses()}`}>
+          {links.map((link) => (
+            <LinkCard
+              key={link.key}
+              link={link}
+              viewMode={viewMode}
+              isDarkMode={isDarkMode}
+              hoveredLink={hoveredLink}
+              clickedLink={clickedLink}
+              onMouseEnter={() => onMouseEnter(link.key)}
+              onMouseLeave={onMouseLeave}
+              onDragStart={() => onDragStart(link.key)}
+              onLinkClick={() => onLinkClick(link)}
+              onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
+              onEdit={() => onEditLink(link)}
+              onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+            />
+          ))}
+          {/* Add Button */}
+          {renderAddButton()}
+        </div>
       </div>
-    </div>
+
+      {/* Mobile Layout */}
+      <div 
+        className="md:hidden mb-16 animate-fade-in"
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        {/* Simplified Mobile Category Header */}
+        <div 
+          className="group cursor-pointer mb-10 relative"
+          onClick={() => onAddLink(category)}
+        >
+          <div className="text-center relative">
+            {/* Mobile Category text label only */}
+            <div className="text-white text-xl font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-105 text-center">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </div>
+            
+            {/* Mobile line under category name */}
+            <div className="mt-4">
+              <div className="mt-2 w-16 h-0.5 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto rounded-full"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Links Grid with Add Button */}
+        <div className={`${getMobileGridClasses()}`}>
+          {links.map((link) => (
+            <LinkCard
+              key={link.key}
+              link={link}
+              viewMode={viewMode}
+              isDarkMode={isDarkMode}
+              hoveredLink={hoveredLink}
+              clickedLink={clickedLink}
+              onMouseEnter={() => onMouseEnter(link.key)}
+              onMouseLeave={onMouseLeave}
+              onDragStart={() => onDragStart(link.key)}
+              onLinkClick={() => onLinkClick(link)}
+              onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
+              onEdit={() => onEditLink(link)}
+              onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+            />
+          ))}
+          {/* Add Button */}
+          {renderAddButton()}
+        </div>
+      </div>
+    </>
   );
 };
