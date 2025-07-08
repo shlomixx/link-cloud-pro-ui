@@ -6,7 +6,6 @@ import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
 import { LinkModal } from '@/components/LinkModal';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
-import { PersonalizedDashboard } from '@/components/PersonalizedDashboard';
 import { LinkData, FormData, ViewMode, SortBy } from '@/types';
 
 const Index = () => {
@@ -789,13 +788,6 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-4">
-        {/* Desktop Personalized Dashboard */}
-        <PersonalizedDashboard
-          links={linksData}
-          isDarkMode={isDarkMode}
-          onLinkClick={handleLinkClick}
-        />
-        
         {Object.entries(groupedLinks).map(([category, links]) => (
           <CategorySection
             key={category}
