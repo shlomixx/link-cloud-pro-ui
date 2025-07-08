@@ -131,58 +131,53 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:block mb-20 animate-fade-in"
+        className="hidden md:block mb-24 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Category Header for Desktop */}
+        {/* Modern Category Card */}
         <div 
-          className="flex justify-center mb-16 cursor-pointer group relative"
+          className="relative group cursor-pointer mb-12"
           onMouseEnter={() => setIsHoveringCategory(true)}
           onMouseLeave={() => setIsHoveringCategory(false)}
           onClick={() => onAddLink(category)}
         >
-          <div className="relative flex items-center justify-center transition-all duration-700 group-hover:scale-105">
-            {/* Always Visible Background for Better Text Visibility */}
-            <div className={`absolute -inset-16 bg-gradient-to-br ${getGradientTextClass()} opacity-5 rounded-3xl blur-2xl`}></div>
-            <div className={`absolute -inset-8 bg-gradient-to-r ${getGradientTextClass()} opacity-8 rounded-2xl blur-xl`}></div>
+          {/* Card Background with Glass Effect */}
+          <div className="relative bg-card/40 backdrop-blur-xl border border-border/50 rounded-3xl p-8 shadow-2xl transition-all duration-700 group-hover:shadow-3xl group-hover:bg-card/60 group-hover:border-border/80 overflow-hidden">
+            {/* Gradient Overlay */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${getGradientTextClass()} opacity-5 group-hover:opacity-10 transition-all duration-700 rounded-3xl`}></div>
             
-            {/* Enhanced Hover Effects */}
-            <div className={`absolute -inset-24 bg-gradient-radial ${getGradientTextClass()} opacity-0 group-hover:opacity-15 rounded-full blur-3xl transition-all duration-1500`}></div>
-            <div className={`absolute -inset-16 bg-gradient-to-br ${getGradientTextClass()} opacity-0 group-hover:opacity-20 rounded-3xl blur-2xl transition-all duration-1000`}></div>
+            {/* Animated Border Glow */}
+            <div className={`absolute -inset-0.5 bg-gradient-to-r ${getGradientTextClass()} opacity-0 group-hover:opacity-30 blur-sm transition-all duration-700 rounded-3xl`}></div>
             
-            {/* Category Title with Enhanced Visibility */}
-            <div className="relative z-10 text-center">
-              <h2 className={`text-7xl font-black tracking-widest transition-all duration-700 bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent relative font-inter drop-shadow-2xl`}>
-                <span className="relative inline-block">
-                  {/* Text Shadow for Better Visibility */}
-                  <span className={`absolute inset-0 text-7xl font-black tracking-widest bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent blur-sm opacity-30`}>
-                    {categoryName}
-                  </span>
-                  
-                  {/* Main Text */}
-                  <span className="relative z-10">
-                    {categoryName}
-                  </span>
-                  
-                  {/* Enhanced Underline Effects */}
-                  <div className={`absolute -bottom-6 left-0 right-0 h-2 bg-gradient-to-r ${getGradientTextClass()} scale-x-100 group-hover:scale-x-110 transition-all duration-700 rounded-full shadow-lg opacity-60 group-hover:opacity-100`}></div>
-                  <div className={`absolute -bottom-8 left-1/6 right-1/6 h-1 bg-gradient-to-r ${getGradientTextClass()} scale-x-100 group-hover:scale-x-110 transition-all duration-500 delay-200 rounded-full opacity-40 group-hover:opacity-70`}></div>
-                  
-                  {/* Accent Elements */}
-                  <div className={`absolute -top-4 -left-4 w-3 h-3 bg-gradient-to-r ${getGradientTextClass()} rounded-full opacity-70 group-hover:opacity-100 transition-all duration-700 delay-300 animate-pulse shadow-lg`}></div>
-                  <div className={`absolute -top-4 -right-4 w-3 h-3 bg-gradient-to-r ${getGradientTextClass()} rounded-full opacity-70 group-hover:opacity-100 transition-all duration-700 delay-500 animate-pulse shadow-lg`}></div>
-                </span>
-              </h2>
+            {/* Content Container */}
+            <div className="relative z-10 flex flex-col items-center justify-center text-center">
+              {/* Category Title */}
+              <div className="mb-4">
+                <h2 className={`text-5xl font-black tracking-wide bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent transition-all duration-500 group-hover:scale-105 drop-shadow-lg font-sans`}>
+                  {categoryName}
+                </h2>
+                
+                {/* Decorative Underline */}
+                <div className={`mt-3 h-1 w-24 mx-auto bg-gradient-to-r ${getGradientTextClass()} rounded-full transition-all duration-500 group-hover:w-32 group-hover:h-1.5 shadow-lg`}></div>
+              </div>
               
-              {/* Always Visible Subtitle */}
-              <div className="mt-6 opacity-80 group-hover:opacity-100 transition-all duration-500">
-                <p className={`text-lg font-bold tracking-wide bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent`}>
-                  {links.length} {links.length === 1 ? 'קישור' : 'קישורים'}
-                </p>
+              {/* Stats Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-sm font-medium text-muted-foreground transition-all duration-300 group-hover:bg-background/90 group-hover:text-foreground">
+                <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${getGradientTextClass()}`}></div>
+                <span>{links.length} {links.length === 1 ? 'קישור' : 'קישורים'}</span>
+              </div>
+              
+              {/* Hover Indicator */}
+              <div className="mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 text-xs text-muted-foreground">
+                לחץ להוספת קישור חדש
               </div>
             </div>
+            
+            {/* Floating Decorative Elements */}
+            <div className={`absolute top-4 right-4 w-3 h-3 bg-gradient-to-r ${getGradientTextClass()} rounded-full opacity-50 group-hover:opacity-100 transition-all duration-700 animate-pulse`}></div>
+            <div className={`absolute bottom-4 left-4 w-2 h-2 bg-gradient-to-r ${getGradientTextClass()} rounded-full opacity-30 group-hover:opacity-80 transition-all duration-500 delay-200 animate-pulse`}></div>
           </div>
         </div>
 
@@ -210,51 +205,42 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-16 animate-fade-in"
+        className="md:hidden mb-20 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Mobile Category Header */}
+        {/* Mobile Category Card */}
         <div 
-          className="mb-12 cursor-pointer group relative"
+          className="relative group cursor-pointer mb-8"
           onClick={() => onAddLink(category)}
         >
-          <div className="relative flex items-center justify-center transition-all duration-700 group-hover:scale-105">
-            {/* Always Visible Mobile Background */}
-            <div className={`absolute -inset-12 bg-gradient-to-br ${getGradientTextClass()} opacity-8 rounded-3xl blur-2xl`}></div>
-            <div className={`absolute -inset-6 bg-gradient-to-r ${getGradientTextClass()} opacity-12 rounded-2xl blur-xl`}></div>
+          {/* Mobile Card Background */}
+          <div className="relative bg-card/40 backdrop-blur-xl border border-border/50 rounded-2xl p-6 shadow-xl transition-all duration-500 group-hover:shadow-2xl group-hover:bg-card/60 group-hover:border-border/80 overflow-hidden">
+            {/* Mobile Gradient Overlay */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${getGradientTextClass()} opacity-5 group-hover:opacity-10 transition-all duration-500 rounded-2xl`}></div>
             
-            {/* Mobile Title with Enhanced Visibility */}
-            <div className="relative z-10 text-center">
-              <h2 className={`text-5xl font-black tracking-wide transition-all duration-700 bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent relative font-inter drop-shadow-xl`}>
-                <span className="relative inline-block">
-                  {/* Mobile Text Shadow */}
-                  <span className={`absolute inset-0 text-5xl font-black tracking-wide bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent blur-sm opacity-25`}>
-                    {categoryName}
-                  </span>
-                  
-                  {/* Main Mobile Text */}
-                  <span className="relative z-10">
-                    {categoryName}
-                  </span>
-                  
-                  {/* Mobile Underline */}
-                  <div className={`absolute -bottom-3 left-0 right-0 h-1.5 bg-gradient-to-r ${getGradientTextClass()} scale-x-100 group-hover:scale-x-110 transition-all duration-700 rounded-full shadow-md opacity-60 group-hover:opacity-100`}></div>
-                  
-                  {/* Mobile Accent Dots */}
-                  <div className={`absolute -top-2 -left-2 w-2 h-2 bg-gradient-to-r ${getGradientTextClass()} rounded-full opacity-70 group-hover:opacity-100 transition-all duration-500 delay-300 animate-pulse`}></div>
-                  <div className={`absolute -top-2 -right-2 w-2 h-2 bg-gradient-to-r ${getGradientTextClass()} rounded-full opacity-70 group-hover:opacity-100 transition-all duration-500 delay-500 animate-pulse`}></div>
-                </span>
-              </h2>
+            {/* Mobile Content */}
+            <div className="relative z-10 flex flex-col items-center justify-center text-center">
+              {/* Mobile Title */}
+              <div className="mb-3">
+                <h2 className={`text-3xl font-black tracking-wide bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105 drop-shadow-md font-sans`}>
+                  {categoryName}
+                </h2>
+                
+                {/* Mobile Decorative Line */}
+                <div className={`mt-2 h-0.5 w-16 mx-auto bg-gradient-to-r ${getGradientTextClass()} rounded-full transition-all duration-300 group-hover:w-20`}></div>
+              </div>
               
-              {/* Always Visible Mobile Subtitle */}
-              <div className="mt-4 opacity-80 group-hover:opacity-100 transition-all duration-400">
-                <p className={`text-sm font-bold tracking-wide bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent`}>
-                  {links.length} {links.length === 1 ? 'קישור' : 'קישורים'}
-                </p>
+              {/* Mobile Stats */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-background/80 backdrop-blur-sm border border-border/50 rounded-full text-xs font-medium text-muted-foreground transition-all duration-300 group-hover:bg-background/90">
+                <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${getGradientTextClass()}`}></div>
+                <span>{links.length} {links.length === 1 ? 'קישור' : 'קישורים'}</span>
               </div>
             </div>
+            
+            {/* Mobile Decorative Elements */}
+            <div className={`absolute top-3 right-3 w-2 h-2 bg-gradient-to-r ${getGradientTextClass()} rounded-full opacity-50 group-hover:opacity-100 transition-all duration-500 animate-pulse`}></div>
           </div>
         </div>
 
