@@ -156,38 +156,18 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Category Header with Modern UI */}
+        {/* Simplified Category Header */}
         <div 
           className="group cursor-pointer mb-16 relative"
-          onMouseEnter={() => setIsHoveringCategory(true)}
-          onMouseLeave={() => setIsHoveringCategory(false)}
           onClick={() => onAddLink(category)}
         >
           <div className="text-center relative">
-            {/* Animated background glow */}
-            <div className={`absolute inset-0 rounded-2xl ${getCategoryGradient()} opacity-20 blur-3xl transform scale-150 transition-all duration-700 ${isHoveringCategory ? 'opacity-40 scale-175' : ''}`}></div>
-            
-            {/* Main category container */}
-            <div className={`relative inline-flex items-center justify-center px-8 py-6 rounded-2xl ${getCategoryGradient()} hover:scale-110 hover:rotate-1 transition-all duration-500 ease-out backdrop-blur-sm ${isHoveringCategory ? 'animate-pulse' : ''}`}>
-              {/* Inner glow effect */}
-              <div className="absolute inset-2 rounded-xl bg-white/10 backdrop-blur-sm"></div>
-              
-              {/* Category text label */}
-              <div className="text-white text-2xl font-bold tracking-wide drop-shadow-2xl relative z-10 transition-all duration-300 group-hover:scale-110 text-center">
-                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-              </div>
-              
-              {/* Floating particles effect */}
-              {isHoveringCategory && (
-                <>
-                  <div className="absolute -top-2 -right-2 w-3 h-3 bg-white/80 rounded-full animate-bounce"></div>
-                  <div className="absolute -bottom-2 -left-2 w-2 h-2 bg-white/60 rounded-full animate-bounce animation-delay-200"></div>
-                  <div className="absolute top-1/2 -left-4 w-1.5 h-1.5 bg-white/40 rounded-full animate-bounce animation-delay-400"></div>
-                </>
-              )}
+            {/* Category text label only */}
+            <div className="text-white text-2xl font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-110 text-center">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </div>
             
-            {/* Enhanced category subtitle */}
+            {/* Only the line under the category name */}
             <div className="mt-6">
               <div className="mt-2 w-24 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto rounded-full"></div>
             </div>
@@ -223,26 +203,18 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Mobile Category Header */}
+        {/* Simplified Mobile Category Header */}
         <div 
           className="group cursor-pointer mb-10 relative"
           onClick={() => onAddLink(category)}
         >
           <div className="text-center relative">
-            {/* Mobile background glow */}
-            <div className={`absolute inset-0 rounded-xl ${getCategoryGradient()} opacity-20 blur-2xl transform scale-150 transition-all duration-500`}></div>
-            
-            {/* Mobile category container */}
-            <div className={`relative inline-flex items-center justify-center px-6 py-4 rounded-xl ${getCategoryGradient()} hover:scale-105 transition-all duration-500 backdrop-blur-sm shadow-2xl`}>
-              <div className="absolute inset-2 rounded-lg bg-white/10 backdrop-blur-sm"></div>
-              
-              {/* Mobile Category text label */}
-              <div className="text-white text-xl font-bold tracking-wide drop-shadow-2xl relative z-10 text-center">
-                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-              </div>
+            {/* Mobile Category text label only */}
+            <div className="text-white text-xl font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-105 text-center">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </div>
             
-            {/* Mobile category subtitle */}
+            {/* Mobile line under category name */}
             <div className="mt-4">
               <div className="mt-2 w-16 h-0.5 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto rounded-full"></div>
             </div>
