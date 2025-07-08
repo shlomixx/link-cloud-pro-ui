@@ -276,6 +276,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
             />
           ))}
+          {renderAddButton()}
         </div>
       </div>
 
