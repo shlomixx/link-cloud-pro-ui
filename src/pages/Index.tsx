@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
+import { ScrollCategoryIndicator } from '@/components/ScrollCategoryIndicator';
 import { LinkModal } from '@/components/LinkModal';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 import { LinkData, FormData, ViewMode, SortBy } from '@/types';
@@ -25,6 +26,7 @@ const Index = () => {
   const [isCompactHeader, setIsCompactHeader] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [quickFilter, setQuickFilter] = useState<string>('all');
+  const [currentMobileCategory, setCurrentMobileCategory] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   
@@ -696,6 +698,43 @@ const Index = () => {
     }
   };
 
+  const getCategoryColor = (category: string) => {
+    const colorMap: Record<string, string> = {
+      tools: 'bg-orange-400',
+      streaming: 'bg-green-400',
+      social: 'bg-pink-400',
+      shopping: 'bg-yellow-400',
+      education: 'bg-blue-400',
+      news: 'bg-red-400',
+      ai: 'bg-purple-400',
+      languages: 'bg-indigo-400',
+      learning: 'bg-cyan-400',
+      technology: 'bg-teal-400',
+      design: 'bg-rose-400',
+      business: 'bg-violet-400',
+      finance: 'bg-emerald-400',
+      entertainment: 'bg-fuchsia-400',
+      communication: 'bg-sky-400',
+      productivity: 'bg-amber-400',
+      health: 'bg-red-500',
+      music: 'bg-pink-500',
+      photography: 'bg-slate-400',
+      art: 'bg-purple-500',
+      books: 'bg-indigo-500',
+      sports: 'bg-orange-500',
+      gaming: 'bg-violet-500',
+      investing: 'bg-green-500',
+      cryptocurrency: 'bg-yellow-500',
+      freelance: 'bg-blue-500',
+      meditation: 'bg-cyan-500',
+      dating: 'bg-rose-500',
+      parenting: 'bg-emerald-500',
+      custom: 'bg-purple-400'
+    };
+    
+    return colorMap[category] || 'bg-gray-400';
+  };
+
   const exportData = () => {
     const dataStr = JSON.stringify(linksData, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -798,6 +837,13 @@ const Index = () => {
         popularCount={popularLinks.length}
       />
 
+      {/* Scroll Category Indicator for Mobile */}
+      <ScrollCategoryIndicator
+        currentCategory={currentMobileCategory}
+        categoryLabels={categoryLabels}
+        getCategoryColor={() => getCategoryColor(currentMobileCategory)}
+      />
+
       {/* Main Content */}
       <div className="container mx-auto px-4 py-4">
         {/* Desktop: Show only first 8 categories */}
@@ -854,6 +900,7 @@ const Index = () => {
               onDragStart={handleDragStart}
               onAddLink={(category) => openModal(undefined, category)}
               onDropUrl={handleDropUrl}
+              onCategoryInView={setCurrentMobileCategory}
             />
           ))}
         </div>
