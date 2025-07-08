@@ -182,9 +182,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDrop={handleDrop}
       >
         {/* Minimalistic Category Sidebar - Left Side */}
-        <div className="flex flex-col items-center gap-4 min-w-[120px] pt-4">
+        <div className="flex items-center gap-3 min-w-[120px] pt-4">
           <div className={`w-3 h-3 rounded-full ${getCategoryColor()}`}></div>
-          <h2 className="text-white text-lg font-medium text-center leading-tight">
+          <h2 className="text-white text-lg font-medium">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
         </div>
