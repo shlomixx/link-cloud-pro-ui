@@ -60,6 +60,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 }) => {
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStarted, setDragStarted] = React.useState(false);
+  const [isDragOver, setIsDragOver] = React.useState(false);
   const longPressTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const isHovered = hoveredLink === link.key;
@@ -104,6 +105,50 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     setIsDragging(false);
   };
 
+  const handleDragStart = (e: React.DragEvent) => {
+    e.dataTransfer.setData('text/plain', link.key);
+    e.dataTransfer.setData('application/json', JSON.stringify(link));
+    e.dataTransfer.effectAllowed = 'move';
+    setIsDragging(true);
+    onDragStart();
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    setDragStarted(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+    
+    const draggedLinkKey = e.dataTransfer.getData('text/plain');
+    
+    // Only allow drop if it's a different link
+    if (draggedLinkKey && draggedLinkKey !== link.key) {
+      // Emit a custom event that the parent can listen to
+      const dropEvent = new CustomEvent('linkDrop', {
+        detail: {
+          draggedLinkKey,
+          targetLinkKey: link.key,
+          targetCategory: link.category
+        }
+      });
+      window.dispatchEvent(dropEvent);
+    }
+  };
+
   const handleContextMenuClick = (action: () => void) => {
     return () => {
       action();
@@ -118,6 +163,13 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     };
   }, []);
 
+  const getDropTargetStyles = () => {
+    if (isDragOver) {
+      return 'ring-2 ring-blue-400 ring-offset-2 bg-blue-50/20';
+    }
+    return '';
+  };
+
   // Dense view - ultra minimal
   if (viewMode === 'dense') {
     return (
@@ -128,7 +180,11 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               <ContextMenuTrigger asChild>
                 <div
                   draggable={dragStarted}
-                  onDragStart={onDragStart}
+                  onDragStart={handleDragStart}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
                   onMouseEnter={onMouseEnter}
                   onMouseLeave={onMouseLeave}
                   onTouchStart={handleTouchStart}
@@ -146,6 +202,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                     }
                     ${isClicked ? 'scale-95' : ''}
                     ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-4px]' : ''}
+                    ${getDropTargetStyles()}
                   `}
                 >
                   {dragStarted && (
@@ -216,7 +273,11 @@ export const LinkCard: React.FC<LinkCardProps> = ({
         <ContextMenuTrigger asChild>
           <div
             draggable={dragStarted}
-            onDragStart={onDragStart}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onTouchStart={handleTouchStart}
@@ -234,6 +295,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               }
               ${isClicked ? 'scale-95' : ''}
               ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-6px]' : ''}
+              ${getDropTargetStyles()}
             `}
           >
             {dragStarted && (
@@ -298,7 +360,11 @@ export const LinkCard: React.FC<LinkCardProps> = ({
         <ContextMenuTrigger asChild>
           <div
             draggable={dragStarted}
-            onDragStart={onDragStart}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onTouchStart={handleTouchStart}
@@ -316,6 +382,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
               }
               ${isClicked ? 'scale-95' : ''}
               ${dragStarted ? 'scale-110 shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-8px]' : ''}
+              ${getDropTargetStyles()}
             `}
           >
             {dragStarted && (
@@ -395,7 +462,11 @@ export const LinkCard: React.FC<LinkCardProps> = ({
       <ContextMenuTrigger asChild>
         <div
           draggable={dragStarted}
-          onDragStart={onDragStart}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           onTouchStart={handleTouchStart}
@@ -413,6 +484,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             }
             ${isClicked ? 'scale-[0.98]' : ''}
             ${dragStarted ? 'scale-[1.05] shadow-2xl z-50 bg-white/20 backdrop-blur-sm border-2 border-blue-400/50 transform translate-y-[-6px]' : ''}
+            ${getDropTargetStyles()}
           `}
         >
           {dragStarted && (
