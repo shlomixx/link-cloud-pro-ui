@@ -1,5 +1,8 @@
+
 import React from 'react';
 import { LinkCard } from './LinkCard';
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface LinkData {
   key: string;
@@ -33,6 +36,7 @@ interface CategorySectionProps {
   onMouseEnter: (linkKey: string) => void;
   onMouseLeave: () => void;
   onDragStart: (linkKey: string) => void;
+  onAddLink: (category: string) => void;
 }
 
 export const CategorySection: React.FC<CategorySectionProps> = ({
@@ -53,8 +57,11 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onCopyUrl,
   onMouseEnter,
   onMouseLeave,
-  onDragStart
+  onDragStart,
+  onAddLink
 }) => {
+  const [isHoveringEmptySpace, setIsHoveringEmptySpace] = React.useState(false);
+
   const getGridClasses = () => {
     switch (viewMode) {
       case 'dense':
@@ -91,7 +98,11 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       </div>
 
       {/* Links Grid - Right Side */}
-      <div className={`flex-1 ${getGridClasses()}`}>
+      <div 
+        className={`flex-1 ${getGridClasses()} relative`}
+        onMouseEnter={() => setIsHoveringEmptySpace(true)}
+        onMouseLeave={() => setIsHoveringEmptySpace(false)}
+      >
         {links.map((link) => (
           <LinkCard
             key={link.key}
@@ -109,6 +120,24 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
             onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
           />
         ))}
+        
+        {/* Hover Add Button */}
+        {isHoveringEmptySpace && viewMode !== 'list' && (
+          <div className="flex items-center justify-center">
+            <Button
+              onClick={() => onAddLink(category)}
+              size="sm"
+              variant="outline"
+              className={`opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-105 border-dashed ${
+                isDarkMode 
+                  ? 'border-white/30 text-white/70 hover:border-white/50 hover:text-white hover:bg-white/10' 
+                  : 'border-slate-400/50 text-slate-500 hover:border-slate-600 hover:text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <Plus className="w-4 h-4" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

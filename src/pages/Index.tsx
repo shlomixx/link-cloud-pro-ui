@@ -449,6 +449,12 @@ const Index = () => {
 
     setTimeout(() => setClickedLink(null), 200);
     
+    // Actually open the link in a new tab
+    const url = link.url || link.defaultUrl;
+    if (url) {
+      window.open(url, '_blank');
+    }
+    
     toast.success(`Opening ${link.name}...`, {
       duration: 2000,
       action: {
@@ -526,7 +532,7 @@ const Index = () => {
     groupedLinks[category] = sortLinks(groupedLinks[category]);
   });
 
-  const openModal = (link?: LinkData) => {
+  const openModal = (link?: LinkData, presetCategory?: string) => {
     if (link) {
       setEditingLink(link);
       setIsNewLink(false);
@@ -542,7 +548,7 @@ const Index = () => {
       setFormData({
         name: '',
         url: '',
-        category: 'custom',
+        category: presetCategory || 'custom',
         isPrivate: false
       });
     }
@@ -773,6 +779,7 @@ const Index = () => {
             onMouseEnter={setHoveredLink}
             onMouseLeave={() => setHoveredLink(null)}
             onDragStart={handleDragStart}
+            onAddLink={(category) => openModal(undefined, category)}
           />
         ))}
 
