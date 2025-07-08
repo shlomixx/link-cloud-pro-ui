@@ -120,9 +120,32 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     }
   };
 
-  const getGradientTextClass = () => {
-    const colorClass = categoryColors[category as keyof typeof categoryColors] || categoryColors.custom;
-    return colorClass.replace('from-', 'from-').replace('to-', 'to-');
+  const getCategoryGradient = () => {
+    const gradientMap: Record<string, string> = {
+      work: 'gradient-text',
+      social: 'gradient-text-secondary',
+      entertainment: 'gradient-text-accent',
+      tools: 'gradient-text',
+      news: 'gradient-text-secondary',
+      shopping: 'gradient-text-accent',
+      education: 'gradient-text',
+      finance: 'gradient-text-secondary',
+      health: 'gradient-text-accent',
+      travel: 'gradient-text',
+      food: 'gradient-text-secondary',
+      sports: 'gradient-text-accent',
+      gaming: 'gradient-text',
+      music: 'gradient-text-secondary',
+      photography: 'gradient-text-accent',
+      design: 'gradient-text',
+      development: 'gradient-text-secondary',
+      business: 'gradient-text-accent',
+      personal: 'gradient-text',
+      other: 'gradient-text-secondary',
+      custom: 'gradient-text-accent'
+    };
+    
+    return gradientMap[category] || 'gradient-text';
   };
 
   const categoryName = categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1);
@@ -131,21 +154,20 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:block mb-16 animate-fade-in"
+        className="hidden md:block mb-20 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Simple Category Header */}
+        {/* Enhanced Category Header */}
         <div 
-          className="group cursor-pointer mb-8"
+          className="group cursor-pointer mb-12"
           onMouseEnter={() => setIsHoveringCategory(true)}
           onMouseLeave={() => setIsHoveringCategory(false)}
           onClick={() => onAddLink(category)}
         >
           <div className="text-center">
-            {/* Category Title Only */}
-            <h2 className={`text-4xl font-bold tracking-wide bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105 font-sans`}>
+            <h2 className={`text-5xl md:text-6xl lg:text-7xl ${getCategoryGradient()} text-category animate-gradient transition-all duration-500 group-hover:scale-110 group-hover:text-glow`}>
               {categoryName}
             </h2>
           </div>
@@ -175,19 +197,18 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-12 animate-fade-in"
+        className="md:hidden mb-16 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {/* Mobile Category Header */}
         <div 
-          className="group cursor-pointer mb-6"
+          className="group cursor-pointer mb-8"
           onClick={() => onAddLink(category)}
         >
           <div className="text-center">
-            {/* Mobile Category Title Only */}
-            <h2 className={`text-3xl font-bold tracking-wide bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105 font-sans`}>
+            <h2 className={`text-4xl sm:text-5xl ${getCategoryGradient()} text-category animate-gradient transition-all duration-500 group-hover:scale-105 group-hover:text-glow`}>
               {categoryName}
             </h2>
           </div>
