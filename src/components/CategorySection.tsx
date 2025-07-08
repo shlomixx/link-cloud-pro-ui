@@ -155,25 +155,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         <Button
           onClick={() => onAddLink(category)}
           variant="ghost"
-          className={`
-            group flex items-center gap-5 p-4 rounded cursor-pointer w-full
-            transition-all duration-200 hover:scale-[1.02]
-            ${isDarkMode 
-              ? 'hover:bg-white/10 border-dashed border-2 border-white/20 hover:border-white/40' 
-              : 'hover:bg-black/10 border-dashed border-2 border-black/20 hover:border-black/40'
-            }
-          `}
+          className="group flex items-center gap-5 p-4 rounded cursor-pointer w-full transition-all duration-200 hover:scale-[1.02]"
         >
           <div className="flex items-center gap-5 flex-1">
-            <div className={`w-10 h-10 rounded flex items-center justify-center ${
-              isDarkMode ? 'bg-white/10' : 'bg-black/10'
-            }`}>
-              <Plus className={`w-5 h-5 ${isDarkMode ? 'text-white/70' : 'text-black/70'}`} />
-            </div>
+            <Plus className="w-5 h-5 text-white/50 transition-colors duration-200 group-hover:text-white/70" />
             <div className="flex-1">
-              <h3 className={`font-medium text-lg ${
-                isDarkMode ? 'text-white/70' : 'text-slate-600'
-              }`}>
+              <h3 className="font-medium text-lg text-white/50 transition-colors duration-200 group-hover:text-white/70">
                 Add New Link
               </h3>
             </div>
@@ -183,12 +170,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     }
 
     // For grid, compact, and dense views
-    const sizeClasses = {
-      dense: 'p-1 w-7 h-7',
-      compact: 'p-3 w-8 h-8',
-      grid: 'p-5 w-12 h-12'
-    };
-
     const containerClasses = {
       dense: 'flex flex-col items-center gap-1 p-1 rounded min-w-[70px]',
       compact: 'flex flex-col items-center gap-2 p-3 rounded min-w-[80px] max-w-[100px]',
@@ -202,27 +183,17 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         className={`
           group relative ${containerClasses[viewMode]}
           transition-all duration-200 hover:scale-110 cursor-pointer
-          ${isDarkMode 
-            ? 'hover:bg-white/10 border-dashed border-2 border-white/20 hover:border-white/40' 
-            : 'hover:bg-black/10 border-dashed border-2 border-black/20 hover:border-black/40'
-          }
         `}
       >
-        <div className={`
-          rounded flex items-center justify-center transition-all duration-300 group-hover:scale-110
-          ${isDarkMode ? 'bg-white/10' : 'bg-black/10'}
-          ${sizeClasses[viewMode]}
-        `}>
-          <Plus className={`
-            ${viewMode === 'dense' ? 'w-4 h-4' : viewMode === 'compact' ? 'w-5 h-5' : 'w-6 h-6'}
-            ${isDarkMode ? 'text-white/70' : 'text-black/70'}
-          `} />
-        </div>
+        <Plus className={`
+          ${viewMode === 'dense' ? 'w-4 h-4' : viewMode === 'compact' ? 'w-5 h-5' : 'w-6 h-6'}
+          text-white/50 transition-colors duration-200 group-hover:text-white/70
+        `} />
         
         <span className={`
           font-medium text-center truncate w-full leading-tight
           ${viewMode === 'dense' ? 'text-sm max-w-[70px]' : 'text-sm'}
-          ${isDarkMode ? 'text-white/70' : 'text-slate-600'}
+          text-white/50 transition-colors duration-200 group-hover:text-white/70
         `}>
           Add Link
         </span>
