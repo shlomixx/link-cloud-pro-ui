@@ -103,206 +103,8 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         : 'bg-white/30 border-black/10'
     }`}>
       <div className="container mx-auto px-4 py-2">
-        {/* Desktop Header */}
-        <div className="hidden md:flex items-center justify-between gap-6 py-4">
-          {/* Logo & Stats */}
-          <div className="flex items-center gap-8">
-            <div className="flex-shrink-0">
-              <h1 className={`text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-colors duration-300 ${
-                isDarkMode 
-                  ? 'from-white via-purple-200 to-blue-200' 
-                  : 'from-slate-800 via-purple-600 to-blue-600'
-              }`}>
-                Link Router Pro
-              </h1>
-            </div>
-            
-            {/* Desktop Stats */}
-            <div className="flex items-center gap-4">
-              <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                isDarkMode 
-                  ? 'bg-white/10 text-white/70 border border-white/20' 
-                  : 'bg-black/10 text-slate-600 border border-black/20'
-              }`}>
-                {linksCount} links
-              </div>
-              <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                isDarkMode 
-                  ? 'bg-white/10 text-white/70 border border-white/20' 
-                  : 'bg-black/10 text-slate-600 border border-black/20'
-              }`}>
-                {totalClicks} clicks
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop Search */}
-          <div className="flex-1 max-w-md">
-            <div className="relative">
-              <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${
-                isDarkMode ? 'text-slate-400' : 'text-slate-500'
-              }`} />
-              <Input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Search links..."
-                value={searchTerm}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className={`pl-10 h-12 text-base transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                  isDarkMode 
-                    ? 'bg-white/10 border-white/20 text-white placeholder:text-slate-400 focus:bg-white/20' 
-                    : 'bg-black/5 border-black/20 text-slate-800 placeholder:text-slate-500 focus:bg-black/10'
-                }`}
-              />
-              {searchTerm && (
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => onSearchChange('')}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 p-0 hover:bg-white/20"
-                >
-                  ×
-                </Button>
-              )}
-            </div>
-          </div>
-
-          {/* Desktop Controls */}
-          <div className="flex items-center gap-3">
-            {/* Quick Actions */}
-            <div className="flex items-center gap-2">
-              <Button
-                onClick={() => onQuickAction('favorites')}
-                size="sm"
-                variant="outline"
-                className={`h-10 px-4 transition-all duration-300 hover:scale-105 ${
-                  isDarkMode 
-                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                    : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                }`}
-              >
-                <Heart className="w-4 h-4 mr-2" />
-                {favoriteCount}
-              </Button>
-              
-              <Button
-                onClick={() => onQuickAction('popular')}
-                size="sm"
-                variant="outline"
-                className={`h-10 px-4 transition-all duration-300 hover:scale-105 ${
-                  isDarkMode 
-                    ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                    : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                }`}
-              >
-                <TrendingUp className="w-4 h-4 mr-2" />
-                {popularCount}
-              </Button>
-            </div>
-
-            {/* View Mode Toggle */}
-            <div className="flex items-center bg-white/10 rounded-lg p-1 gap-1">
-              <Button
-                onClick={() => onViewModeChange('compact')}
-                size="sm"
-                variant={viewMode === 'compact' ? 'default' : 'ghost'}
-                className={`h-8 px-3 transition-all duration-200 ${
-                  viewMode === 'compact' 
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg' 
-                    : 'hover:bg-white/20 text-white/70'
-                }`}
-              >
-                <Zap className="w-4 h-4" />
-              </Button>
-              <Button
-                onClick={() => onViewModeChange('grid')}
-                size="sm"
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                className={`h-8 px-3 transition-all duration-200 ${
-                  viewMode === 'grid' 
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg' 
-                    : 'hover:bg-white/20 text-white/70'
-                }`}
-              >
-                <Grid className="w-4 h-4" />
-              </Button>
-              <Button
-                onClick={() => onViewModeChange('list')}
-                size="sm"
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                className={`h-8 px-3 transition-all duration-200 ${
-                  viewMode === 'list' 
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg' 
-                    : 'hover:bg-white/20 text-white/70'
-                }`}
-              >
-                <List className="w-4 h-4" />
-              </Button>
-            </div>
-
-            {/* Action Buttons */}
-            <Button
-              onClick={onAddLink}
-              size="sm"
-              className="h-10 px-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 transition-all duration-300 hover:scale-105 shadow-lg"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Link
-            </Button>
-
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={onToggleDarkMode}
-              className={`h-10 px-4 transition-all duration-300 hover:scale-105 ${
-                isDarkMode 
-                  ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                  : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-              }`}
-            >
-              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </Button>
-
-            {/* Settings Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className={`h-10 px-4 transition-all duration-300 hover:scale-105 ${
-                    isDarkMode 
-                      ? 'bg-white/10 border-white/20 text-white hover:bg-white/20' 
-                      : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                  }`}
-                >
-                  <Settings className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={onShowShortcuts}>
-                  <Keyboard className="w-4 h-4 mr-2" />
-                  Shortcuts
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={onExportData}>
-                  <Download className="w-4 h-4 mr-2" />
-                  Export Data
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
-                  <Upload className="w-4 h-4 mr-2" />
-                  Import Data
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={onTogglePrivateLinks}>
-                  {showPrivateLinks ? <Eye className="w-4 h-4 mr-2" /> : <EyeOff className="w-4 h-4 mr-2" />}
-                  {showPrivateLinks ? 'Hide' : 'Show'} Private
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-
         {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2">
           {/* Logo */}
           <div className="flex-shrink-0">
             <h1 className={`text-lg font-bold bg-gradient-to-r bg-clip-text text-transparent transition-colors duration-300 ${
@@ -370,7 +172,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         </div>
 
         {/* Mobile Search (always visible on mobile) */}
-        <div className="md:hidden mt-3">
+        <div className="mt-3">
           <div className="relative">
             <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 transition-colors duration-300 ${
               isDarkMode ? 'text-slate-400' : 'text-slate-500'
@@ -402,7 +204,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className={`md:hidden mt-3 p-4 rounded-lg border transition-all duration-300 ${
+          <div className={`mt-3 p-4 rounded-lg border transition-all duration-300 ${
             isDarkMode 
               ? 'bg-slate-900/95 border-slate-700 backdrop-blur-sm' 
               : 'bg-white/95 border-slate-200 backdrop-blur-sm'
