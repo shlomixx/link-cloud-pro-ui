@@ -249,16 +249,17 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Minimalist Category Header for Desktop */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className={`w-2 h-2 rounded-full ${getCategoryColor()}`}></div>
-          <h2 className="text-white text-lg font-medium tracking-wide">
+        {/* Enhanced Minimalist Category Header for Desktop */}
+        <div className="flex items-center gap-4 mb-8 group cursor-pointer hover:translate-x-1 transition-all duration-200">
+          <div className={`w-3 h-3 rounded-full ${getCategoryColor()} shadow-lg group-hover:scale-125 transition-all duration-200`}></div>
+          <h2 className="text-white text-xl font-semibold tracking-wide group-hover:text-white/90 transition-all duration-200">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
+          <div className="flex-1 h-px bg-gradient-to-r from-white/20 via-white/5 to-transparent"></div>
         </div>
 
-        {/* Clean Links Grid */}
-        <div className="flex flex-wrap gap-8 mb-8">
+        {/* Enhanced Clean Links Grid */}
+        <div className="flex flex-wrap gap-6 mb-8">
           {links.map((link) => (
             <LinkCard
               key={link.key}
