@@ -6,6 +6,7 @@ import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
 import { getFaviconUrl, handleFaviconError } from './utils';
 import { LinkCardContextMenu } from './ContextMenuContent';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 export const ListView: React.FC<BaseLinkCardProps> = ({
   link,
@@ -20,9 +21,11 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
   onEdit,
   onCopyUrl,
   onDelete,
-  onChangeCategory
+  onChangeCategory,
+  onDragStart
 }) => {
   const isClicked = clickedLink === link.key;
+  const isDesktop = useIsDesktop();
 
   return (
     <ContextMenu>
@@ -31,6 +34,13 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           onClick={onLinkClick}
+          {...(isDesktop ? { 
+            draggable: "true",
+            onDragStart: (e: React.DragEvent) => {
+              e.stopPropagation();
+              onDragStart?.();
+            }
+          } : {})}
           className={`
             group flex items-center gap-6 p-5 rounded-xl cursor-pointer w-full
             transition-all duration-300 hover:scale-[1.02] hover:shadow-xl

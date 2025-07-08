@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { BaseLinkCardProps } from './types';
 import { getFaviconUrl, handleFaviconError } from './utils';
 import { LinkCardContextMenu } from './ContextMenuContent';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 export const DenseView: React.FC<BaseLinkCardProps> = ({
   link,
@@ -20,9 +21,11 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
   onEdit,
   onCopyUrl,
   onDelete,
-  onChangeCategory
+  onChangeCategory,
+  onDragStart
 }) => {
   const isClicked = clickedLink === link.key;
+  const isDesktop = useIsDesktop();
 
   return (
     <TooltipProvider>
@@ -34,6 +37,13 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 onClick={onLinkClick}
+                {...(isDesktop ? { 
+                  draggable: "true",
+                  onDragStart: (e: React.DragEvent) => {
+                    e.stopPropagation();
+                    onDragStart?.();
+                  }
+                } : {})}
                 className={`
                   group relative flex flex-col items-center gap-1 p-1 rounded cursor-pointer
                   transition-all duration-200 hover:scale-110

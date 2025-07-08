@@ -27,4 +27,5 @@ export interface BaseLinkCardProps {
   onCopyUrl: () => void;
   onDelete?: () => void;
   onChangeCategory?: (newCategory: string) => void;
+  onDragStart?: () => void;
 }

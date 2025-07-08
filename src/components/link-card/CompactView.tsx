@@ -5,6 +5,7 @@ import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
 import { getFaviconUrl, handleFaviconError } from './utils';
 import { LinkCardContextMenu } from './ContextMenuContent';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 export const CompactView: React.FC<BaseLinkCardProps> = ({
   link,
@@ -19,9 +20,11 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
   onEdit,
   onCopyUrl,
   onDelete,
-  onChangeCategory
+  onChangeCategory,
+  onDragStart
 }) => {
   const isClicked = clickedLink === link.key;
+  const isDesktop = useIsDesktop();
 
   return (
     <ContextMenu>
@@ -30,6 +33,13 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           onClick={onLinkClick}
+          {...(isDesktop ? { 
+            draggable: "true",
+            onDragStart: (e: React.DragEvent) => {
+              e.stopPropagation();
+              onDragStart?.();
+            }
+          } : {})}
           className={`
             group relative flex flex-col items-center gap-2 p-3 cursor-pointer min-w-[60px] max-w-[60px]
             transition-all duration-300 hover:scale-105 hover:translate-y-[-2px]

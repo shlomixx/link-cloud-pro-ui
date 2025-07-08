@@ -205,6 +205,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
               onEdit={() => onEditLink(link)}
               onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+              onDragStart={() => onDragStart(link.key)}
             />
           ))}
           {renderAddButton()}
@@ -255,6 +256,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
               onEdit={() => onEditLink(link)}
               onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+              onDragStart={() => onDragStart(link.key)}
             />
           ))}
           {renderAddButton()}
