@@ -63,6 +63,32 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 }) => {
   const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
   const [isDragOverCategory, setIsDragOverCategory] = React.useState(false);
+  const [isScrolling, setIsScrolling] = React.useState(false);
+  const [scrollTimeout, setScrollTimeout] = React.useState<NodeJS.Timeout | null>(null);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolling(true);
+      
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+      
+      const timeout = setTimeout(() => {
+        setIsScrolling(false);
+      }, 1000);
+      
+      setScrollTimeout(timeout);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+    };
+  }, [scrollTimeout]);
 
   const getGridClasses = () => {
     switch (viewMode) {
@@ -196,7 +222,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDrop={handleDrop}
       >
         {/* Minimalistic Category Sidebar - Left Side */}
-        <div className="flex items-center gap-3 min-w-[120px] pt-4">
+        <div className={`flex items-center gap-3 min-w-[120px] pt-4 transition-opacity duration-300 ${isScrolling ? 'opacity-100' : 'opacity-0'}`}>
           <div className={`w-3 h-3 rounded-full ${getCategoryColor()}`}></div>
           <h2 className="text-white text-lg font-medium">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
@@ -233,9 +259,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Mobile Category Header */}
+        {/* Enhanced Mobile Category Header - Only visible when scrolling */}
         <div 
-          className="group cursor-pointer mb-4 relative active:scale-95 transition-all duration-200"
+          className={`group cursor-pointer mb-4 relative active:scale-95 transition-all duration-300 ${isScrolling ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}
           onClick={() => onAddLink(category)}
         >
           <div className="text-center relative p-3 rounded-2xl transition-all duration-300 group-active:bg-white/5">
