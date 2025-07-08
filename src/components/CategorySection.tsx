@@ -189,18 +189,14 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Minimalist Mobile Layout */}
       <div 
-        className={`md:hidden mb-4 animate-fade-in transition-all duration-300 ${
-          draggedItem || isDragOverCategory ? 'ring-1 ring-purple-400/40 rounded-lg p-2' : ''
-        } ${isDragOverCategory ? 'bg-purple-50/30 dark:bg-purple-900/10' : ''}`}
+        className="md:hidden mb-4 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {/* Minimalist Mobile Category Header */}
         <div 
-          className={`flex items-center justify-between mb-3 px-1 py-2 cursor-pointer transition-all duration-200 ${
-            isDragOverCategory ? 'bg-purple-50/50 dark:bg-purple-900/20 rounded-md' : ''
-          }`}
+          className="flex items-center justify-between mb-3 px-1 py-2 cursor-pointer"
           onClick={() => onAddLink(category)}
         >
           <div className="flex items-center gap-3">
@@ -210,20 +206,13 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
             }`}>
               {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
             </h2>
-            <span className={`text-xs px-2 py-0.5 rounded-full ${
-              isDarkMode 
-                ? 'bg-slate-800/60 text-slate-400' 
-                : 'bg-slate-100/80 text-slate-500'
-            }`}>
-              {links.length}
-            </span>
           </div>
           
           <div className={`p-1.5 rounded-md transition-all duration-200 ${
             isDarkMode 
               ? 'text-slate-400 hover:bg-slate-800/40 hover:text-slate-300' 
               : 'text-slate-500 hover:bg-slate-100/60 hover:text-slate-600'
-          } ${isDragOverCategory ? 'bg-purple-100/70 dark:bg-purple-800/40 text-purple-600 dark:text-purple-300' : ''}`}>
+          }`}>
             <Plus className="w-4 h-4" />
           </div>
         </div>
