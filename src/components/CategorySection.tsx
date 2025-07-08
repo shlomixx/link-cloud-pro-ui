@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
@@ -158,7 +159,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           className="group flex items-center gap-5 p-4 rounded cursor-pointer w-full transition-all duration-200 hover:scale-[1.02]"
         >
           <div className="flex items-center gap-5 flex-1">
-            <Plus className="w-5 h-5 text-white/50 transition-colors duration-200 group-hover:text-white/70" />
+            <Plus className="w-6 h-6 text-white/50 transition-colors duration-200 group-hover:text-white/70" />
             <div className="flex-1">
               <h3 className="font-medium text-lg text-white/50 transition-colors duration-200 group-hover:text-white/70">
                 Add New Link
@@ -171,9 +172,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
     // For grid, compact, and dense views
     const containerClasses = {
-      dense: 'flex flex-col items-center gap-1 p-1 rounded min-w-[70px]',
-      compact: 'flex flex-col items-center gap-2 p-3 rounded min-w-[80px] max-w-[100px]',
-      grid: 'flex flex-col items-center gap-3 p-5 rounded'
+      dense: 'flex flex-col items-center justify-center gap-1 p-2 rounded min-w-[70px] h-full',
+      compact: 'flex flex-col items-center justify-center gap-2 p-3 rounded min-w-[80px] max-w-[100px] h-full',
+      grid: 'flex flex-col items-center justify-center gap-3 p-5 rounded h-full'
     };
 
     return (
@@ -186,13 +187,13 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         `}
       >
         <Plus className={`
-          ${viewMode === 'dense' ? 'w-4 h-4' : viewMode === 'compact' ? 'w-5 h-5' : 'w-6 h-6'}
+          ${viewMode === 'dense' ? 'w-5 h-5' : viewMode === 'compact' ? 'w-6 h-6' : 'w-8 h-8'}
           text-white/50 transition-colors duration-200 group-hover:text-white/70
         `} />
         
         <span className={`
           font-medium text-center truncate w-full leading-tight
-          ${viewMode === 'dense' ? 'text-sm max-w-[70px]' : 'text-sm'}
+          ${viewMode === 'dense' ? 'text-xs max-w-[70px]' : 'text-sm'}
           text-white/50 transition-colors duration-200 group-hover:text-white/70
         `}>
           Add Link
