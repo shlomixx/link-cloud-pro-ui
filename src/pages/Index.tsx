@@ -6,6 +6,7 @@ import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
 import { LinkModal } from '@/components/LinkModal';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
+import { DesktopQuickActions } from '@/components/DesktopQuickActions';
 import { LinkData, FormData, ViewMode, SortBy } from '@/types';
 
 const Index = () => {
@@ -862,6 +863,17 @@ const Index = () => {
           </div>
         )}
       </div>
+
+      {/* Desktop Quick Actions */}
+      <DesktopQuickActions
+        isDarkMode={isDarkMode}
+        onQuickAction={handleQuickAction}
+        favoriteCount={favoriteLinks.length}
+        recentCount={recentLinks.length}
+        popularCount={popularLinks.length}
+        viewMode={getCompatibleViewMode(viewMode)}
+        onViewModeChange={(mode) => setViewMode(mode as ViewMode)}
+      />
 
       {/* Floating Action Button */}
       <Button

@@ -242,24 +242,47 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       >
         {/* Enhanced Category Header for Desktop */}
         <div 
-          className="group cursor-pointer mb-16 relative"
+          className="group cursor-pointer mb-20 relative"
           onClick={() => onAddLink(category)}
         >
           <div className="text-center relative">
-            <div className={`
-              text-white text-3xl font-bold tracking-wide drop-shadow-2xl 
-              transition-all duration-300 group-hover:scale-110 text-center
-              bg-gradient-to-r from-white via-white/90 to-white bg-clip-text text-transparent
-            `}>
-              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            {/* Main Category Title */}
+            <div className="relative">
+              <div className={`
+                text-white text-4xl font-bold tracking-wide drop-shadow-2xl 
+                transition-all duration-300 group-hover:scale-110 text-center
+                bg-gradient-to-r from-white via-white/90 to-white bg-clip-text text-transparent
+                mb-4
+              `}>
+                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+              </div>
+              
+              {/* Decorative Elements */}
+              <div className="absolute -top-2 -left-2 w-8 h-8 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 blur-xl"></div>
+              <div className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 blur-lg"></div>
             </div>
             
+            {/* Enhanced Underline */}
             <div className="mt-8">
               <div className={`
-                mt-3 w-32 h-1.5 mx-auto rounded-full
+                mt-3 w-40 h-2 mx-auto rounded-full
                 bg-gradient-to-r from-transparent via-white/60 to-transparent
-                shadow-lg transition-all duration-300 group-hover:via-white/80 group-hover:w-40
-              `}></div>
+                shadow-lg transition-all duration-300 group-hover:via-white/80 group-hover:w-48
+                relative
+              `}>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 via-pink-500/30 to-blue-500/30 rounded-full blur-sm"></div>
+              </div>
+            </div>
+            
+            {/* Category Badge */}
+            <div className="mt-6">
+              <div className={`
+                inline-flex items-center px-4 py-2 rounded-full text-sm font-medium
+                bg-white/10 text-white/80 border border-white/20 backdrop-blur-sm
+                transition-all duration-300 group-hover:bg-white/20 group-hover:scale-105
+              `}>
+                {links.length} {links.length === 1 ? 'link' : 'links'}
+              </div>
             </div>
           </div>
         </div>
