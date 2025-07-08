@@ -1,28 +1,6 @@
+
 import React from 'react';
 import { LinkCard } from './LinkCard';
-import { 
-  Briefcase, 
-  Users, 
-  Play, 
-  Wrench, 
-  Newspaper, 
-  ShoppingBag, 
-  GraduationCap, 
-  DollarSign, 
-  Heart, 
-  Plane, 
-  UtensilsCrossed, 
-  Trophy, 
-  Gamepad2, 
-  Music, 
-  Camera, 
-  Palette, 
-  Code, 
-  Building, 
-  User, 
-  MoreHorizontal,
-  Sparkles
-} from 'lucide-react';
 
 interface LinkData {
   key: string;
@@ -178,92 +156,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     return isHoveringCategory ? 'animate-pulse' : '';
   };
 
-  const getCategoryTextColor = () => {
-    const textMap: Record<string, string> = {
-      work: 'text-blue-400',
-      social: 'text-pink-400',
-      entertainment: 'text-purple-400',
-      tools: 'text-orange-400',
-      news: 'text-gray-400',
-      shopping: 'text-green-400',
-      education: 'text-indigo-400',
-      finance: 'text-emerald-400',
-      health: 'text-red-400',
-      travel: 'text-sky-400',
-      food: 'text-yellow-400',
-      sports: 'text-amber-400',
-      gaming: 'text-violet-400',
-      music: 'text-fuchsia-400',
-      photography: 'text-slate-400',
-      design: 'text-rose-400',
-      development: 'text-green-400',
-      business: 'text-blue-400',
-      personal: 'text-teal-400',
-      other: 'text-neutral-400',
-      custom: 'text-purple-400'
-    };
-    
-    return textMap[category] || 'text-gray-400';
-  };
-
-  const getCategoryGlow = () => {
-    const glowMap: Record<string, string> = {
-      work: 'group-hover:drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]',
-      social: 'group-hover:drop-shadow-[0_0_20px_rgba(236,72,153,0.6)]',
-      entertainment: 'group-hover:drop-shadow-[0_0_20px_rgba(147,51,234,0.6)]',
-      tools: 'group-hover:drop-shadow-[0_0_20px_rgba(249,115,22,0.6)]',
-      news: 'group-hover:drop-shadow-[0_0_20px_rgba(107,114,128,0.6)]',
-      shopping: 'group-hover:drop-shadow-[0_0_20px_rgba(34,197,94,0.6)]',
-      education: 'group-hover:drop-shadow-[0_0_20px_rgba(99,102,241,0.6)]',
-      finance: 'group-hover:drop-shadow-[0_0_20px_rgba(16,185,129,0.6)]',
-      health: 'group-hover:drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]',
-      travel: 'group-hover:drop-shadow-[0_0_20px_rgba(14,165,233,0.6)]',
-      food: 'group-hover:drop-shadow-[0_0_20px_rgba(245,158,11,0.6)]',
-      sports: 'group-hover:drop-shadow-[0_0_20px_rgba(245,158,11,0.6)]',
-      gaming: 'group-hover:drop-shadow-[0_0_20px_rgba(139,92,246,0.6)]',
-      music: 'group-hover:drop-shadow-[0_0_20px_rgba(217,70,239,0.6)]',
-      photography: 'group-hover:drop-shadow-[0_0_20px_rgba(100,116,139,0.6)]',
-      design: 'group-hover:drop-shadow-[0_0_20px_rgba(244,63,94,0.6)]',
-      development: 'group-hover:drop-shadow-[0_0_20px_rgba(20,184,166,0.6)]',
-      business: 'group-hover:drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]',
-      personal: 'group-hover:drop-shadow-[0_0_20px_rgba(6,182,212,0.6)]',
-      other: 'group-hover:drop-shadow-[0_0_20px_rgba(115,115,115,0.6)]',
-      custom: 'group-hover:drop-shadow-[0_0_20px_rgba(147,51,234,0.6)]'
-    };
-    
-    return glowMap[category] || 'group-hover:drop-shadow-[0_0_20px_rgba(107,114,128,0.6)]';
-  };
-
-  const getCategoryIcon = () => {
-    const iconMap: Record<string, React.ComponentType<any>> = {
-      work: Briefcase,
-      social: Users,
-      entertainment: Play,
-      tools: Wrench,
-      news: Newspaper,
-      shopping: ShoppingBag,
-      education: GraduationCap,
-      finance: DollarSign,
-      health: Heart,
-      travel: Plane,
-      food: UtensilsCrossed,
-      sports: Trophy,
-      gaming: Gamepad2,
-      music: Music,
-      photography: Camera,
-      design: Palette,
-      development: Code,
-      business: Building,
-      personal: User,
-      other: MoreHorizontal,
-      custom: Sparkles
-    };
-    
-    return iconMap[category] || MoreHorizontal;
-  };
-
-  const CategoryIcon = getCategoryIcon();
-
   return (
     <>
       {/* Desktop Layout */}
@@ -284,16 +176,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
             {/* Animated background glow */}
             <div className={`absolute inset-0 rounded-full ${getCategoryGradient()} opacity-20 blur-3xl transform scale-150 transition-all duration-700 ${isHoveringCategory ? 'opacity-40 scale-175' : ''}`}></div>
             
-            {/* Main category icon container */}
+            {/* Main category container */}
             <div className={`relative inline-flex items-center justify-center w-40 h-40 rounded-full ${getCategoryGradient()} ${getCategoryHoverEffect()} ${getCategoryPulse()} border-4 border-white/20 backdrop-blur-sm`}>
               {/* Inner glow effect */}
               <div className="absolute inset-2 rounded-full bg-white/10 backdrop-blur-sm"></div>
               
-              {/* Icon with enhanced styling */}
-              <CategoryIcon 
-                size={72} 
-                className="text-white drop-shadow-2xl relative z-10 transition-all duration-300 group-hover:scale-110"
-              />
+              {/* Category text label */}
+              <div className="text-white text-xl font-bold tracking-wide drop-shadow-2xl relative z-10 transition-all duration-300 group-hover:scale-110 text-center px-4">
+                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+              </div>
               
               {/* Floating particles effect */}
               {isHoveringCategory && (
@@ -305,11 +196,8 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               )}
             </div>
             
-            {/* Enhanced category label */}
+            {/* Enhanced category subtitle */}
             <div className="mt-6">
-              <h2 className="text-2xl font-bold text-white/90 tracking-wide drop-shadow-lg">
-                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-              </h2>
               <div className="mt-2 w-24 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto rounded-full"></div>
             </div>
           </div>
@@ -353,20 +241,18 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
             {/* Mobile background glow */}
             <div className={`absolute inset-0 rounded-full ${getCategoryGradient()} opacity-20 blur-2xl transform scale-150 transition-all duration-500`}></div>
             
-            {/* Mobile category icon container */}
+            {/* Mobile category container */}
             <div className={`relative inline-flex items-center justify-center w-32 h-32 rounded-full ${getCategoryGradient()} hover:scale-105 transition-all duration-500 border-3 border-white/20 backdrop-blur-sm shadow-2xl`}>
               <div className="absolute inset-2 rounded-full bg-white/10 backdrop-blur-sm"></div>
-              <CategoryIcon 
-                size={56} 
-                className="text-white drop-shadow-2xl relative z-10"
-              />
+              
+              {/* Mobile Category text label */}
+              <div className="text-white text-lg font-bold tracking-wide drop-shadow-2xl relative z-10 text-center px-3">
+                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+              </div>
             </div>
             
-            {/* Mobile category label */}
+            {/* Mobile category subtitle */}
             <div className="mt-4">
-              <h2 className="text-xl font-bold text-white/90 tracking-wide drop-shadow-lg">
-                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-              </h2>
               <div className="mt-2 w-16 h-0.5 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto rounded-full"></div>
             </div>
           </div>
