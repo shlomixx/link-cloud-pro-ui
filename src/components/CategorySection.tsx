@@ -119,7 +119,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       onDrop={handleDrop}
     >
       {/* Category Label - Left Side */}
-      <div className="flex-shrink-0 w-24 pt-1">
+      <div className="flex-shrink-0 w-24 flex items-start">
         <div 
           className={`flex items-center gap-2 cursor-pointer transition-all duration-300 hover:scale-105 ${
             isDragOverCategory ? 'scale-105' : ''
