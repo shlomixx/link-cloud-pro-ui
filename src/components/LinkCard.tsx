@@ -60,8 +60,8 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 }) => {
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStarted, setDragStarted] = React.useState(false);
+  const [showContextMenu, setShowContextMenu] = React.useState(false);
   const longPressTimerRef = React.useRef<NodeJS.Timeout | null>(null);
-  const dragPreviewRef = React.useRef<HTMLDivElement | null>(null);
 
   const isHovered = hoveredLink === link.key;
   const isClicked = clickedLink === link.key;
@@ -69,6 +69,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   const handleTouchStart = (e: React.TouchEvent) => {
     longPressTimerRef.current = setTimeout(() => {
       setDragStarted(true);
+      setShowContextMenu(true);
       // Add haptic feedback if available
       if (navigator.vibrate) {
         navigator.vibrate(50);
@@ -94,6 +95,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   const handleMouseDown = (e: React.MouseEvent) => {
     longPressTimerRef.current = setTimeout(() => {
       setDragStarted(true);
+      setShowContextMenu(true);
     }, 500);
   };
 
@@ -103,6 +105,15 @@ export const LinkCard: React.FC<LinkCardProps> = ({
     }
     setDragStarted(false);
     setIsDragging(false);
+  };
+
+  const handleContextMenuClick = (action: () => void) => {
+    return (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      action();
+      setShowContextMenu(false);
+    };
   };
 
   React.useEffect(() => {
@@ -119,7 +130,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <ContextMenu>
+            <ContextMenu open={showContextMenu} onOpenChange={setShowContextMenu}>
               <ContextMenuTrigger asChild>
                 <div
                   draggable={dragStarted}
@@ -149,6 +160,9 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                         <GripVertical className="w-3 h-3 text-white" />
                       </div>
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-white bg-black/70 px-2 py-1 rounded pointer-events-none">
+                        גרור או לחץ לתפריט
+                      </div>
                     </>
                   )}
                   <img
@@ -170,27 +184,23 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                 </div>
               </ContextMenuTrigger>
               <ContextMenuContent className={isDarkMode ? 'bg-slate-900/95 border-slate-700' : 'bg-white/95 border-slate-200'}>
-                <ContextMenuItem onClick={onEdit}>
+                <ContextMenuItem onClick={handleContextMenuClick(onEdit)}>
                   <Edit className="w-4 h-4 mr-2" />
-                  Edit
+                  עריכה
                 </ContextMenuItem>
-                <ContextMenuItem onClick={onCopyUrl}>
+                <ContextMenuItem onClick={handleContextMenuClick(onCopyUrl)}>
                   <Copy className="w-4 h-4 mr-2" />
-                  Copy URL
+                  העתק URL
                 </ContextMenuItem>
-                <ContextMenuItem onClick={onToggleFavorite}>
+                <ContextMenuItem onClick={handleContextMenuClick((e) => onToggleFavorite(e as any))}>
                   <Heart className="w-4 h-4 mr-2" />
-                  {link.isFavorite ? 'Remove Favorite' : 'Add Favorite'}
+                  {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
                 </ContextMenuItem>
-                {onDelete && (
-                  <>
-                    <ContextMenuSeparator />
-                    <ContextMenuItem onClick={onDelete} className="text-red-600">
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Delete
-                    </ContextMenuItem>
-                  </>
-                )}
+                <ContextMenuSeparator />
+                <ContextMenuItem onClick={handleContextMenuClick(onDelete || (() => {}))} className="text-red-600">
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  מחק
+                </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>
           </TooltipTrigger>
@@ -208,7 +218,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   // Compact view - minimal with icons and names only
   if (viewMode === 'compact') {
     return (
-      <ContextMenu>
+      <ContextMenu open={showContextMenu} onOpenChange={setShowContextMenu}>
         <ContextMenuTrigger asChild>
           <div
             draggable={dragStarted}
@@ -238,6 +248,9 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                   <GripVertical className="w-3 h-3 text-white" />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-white bg-black/70 px-2 py-1 rounded pointer-events-none">
+                  גרור או לחץ לתפריט
+                </div>
               </>
             )}
             <div className="relative">
@@ -262,27 +275,23 @@ export const LinkCard: React.FC<LinkCardProps> = ({
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent className={isDarkMode ? 'bg-slate-900/95 border-slate-700' : 'bg-white/95 border-slate-200'}>
-          <ContextMenuItem onClick={onEdit}>
+          <ContextMenuItem onClick={handleContextMenuClick(onEdit)}>
             <Edit className="w-4 h-4 mr-2" />
-            Edit
+            עריכה
           </ContextMenuItem>
-          <ContextMenuItem onClick={onCopyUrl}>
+          <ContextMenuItem onClick={handleContextMenuClick(onCopyUrl)}>
             <Copy className="w-4 h-4 mr-2" />
-            Copy URL
+            העתק URL
           </ContextMenuItem>
-          <ContextMenuItem onClick={onToggleFavorite}>
+          <ContextMenuItem onClick={handleContextMenuClick((e) => onToggleFavorite(e as any))}>
             <Heart className="w-4 h-4 mr-2" />
-            {link.isFavorite ? 'Remove Favorite' : 'Add Favorite'}
+            {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
           </ContextMenuItem>
-          {onDelete && (
-            <>
-              <ContextMenuSeparator />
-              <ContextMenuItem onClick={onDelete} className="text-red-600">
-                <Trash2 className="w-4 h-4 mr-2" />
-                Delete
-              </ContextMenuItem>
-            </>
-          )}
+          <ContextMenuSeparator />
+          <ContextMenuItem onClick={handleContextMenuClick(onDelete || (() => {}))} className="text-red-600">
+            <Trash2 className="w-4 h-4 mr-2" />
+            מחק
+          </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
     );
@@ -291,7 +300,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   // Grid view - icons and names only
   if (viewMode === 'grid') {
     return (
-      <ContextMenu>
+      <ContextMenu open={showContextMenu} onOpenChange={setShowContextMenu}>
         <ContextMenuTrigger asChild>
           <div
             draggable={dragStarted}
@@ -321,6 +330,9 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                   <GripVertical className="w-4 h-4 text-white" />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-white bg-black/70 px-2 py-1 rounded pointer-events-none">
+                  גרור או לחץ לתפריט
+                </div>
               </>
             )}
 
@@ -361,27 +373,23 @@ export const LinkCard: React.FC<LinkCardProps> = ({
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent className={isDarkMode ? 'bg-slate-900/95 border-slate-700' : 'bg-white/95 border-slate-200'}>
-          <ContextMenuItem onClick={onEdit}>
+          <ContextMenuItem onClick={handleContextMenuClick(onEdit)}>
             <Edit className="w-4 h-4 mr-2" />
-            Edit
+            עריכה
           </ContextMenuItem>
-          <ContextMenuItem onClick={onCopyUrl}>
+          <ContextMenuItem onClick={handleContextMenuClick(onCopyUrl)}>
             <Copy className="w-4 h-4 mr-2" />
-            Copy URL
+            העתק URL
           </ContextMenuItem>
-          <ContextMenuItem onClick={onToggleFavorite}>
+          <ContextMenuItem onClick={handleContextMenuClick((e) => onToggleFavorite(e as any))}>
             <Heart className="w-4 h-4 mr-2" />
-            {link.isFavorite ? 'Remove Favorite' : 'Add Favorite'}
+            {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
           </ContextMenuItem>
-          {onDelete && (
-            <>
-              <ContextMenuSeparator />
-              <ContextMenuItem onClick={onDelete} className="text-red-600">
-                <Trash2 className="w-4 h-4 mr-2" />
-                Delete
-              </ContextMenuItem>
-            </>
-          )}
+          <ContextMenuSeparator />
+          <ContextMenuItem onClick={handleContextMenuClick(onDelete || (() => {}))} className="text-red-600">
+            <Trash2 className="w-4 h-4 mr-2" />
+            מחק
+          </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
     );
@@ -389,7 +397,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 
   // List view - simplified
   return (
-    <ContextMenu>
+    <ContextMenu open={showContextMenu} onOpenChange={setShowContextMenu}>
       <ContextMenuTrigger asChild>
         <div
           draggable={dragStarted}
@@ -419,6 +427,9 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                 <GripVertical className="w-4 h-4 text-white" />
               </div>
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded blur-sm -z-10" />
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-white bg-black/70 px-2 py-1 rounded pointer-events-none">
+                גרור או לחץ לתפריט
+              </div>
             </>
           )}
           <div className="flex items-center gap-5 flex-1">
@@ -456,27 +467,23 @@ export const LinkCard: React.FC<LinkCardProps> = ({
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent className={isDarkMode ? 'bg-slate-900/95 border-slate-700' : 'bg-white/95 border-slate-200'}>
-        <ContextMenuItem onClick={onEdit}>
+        <ContextMenuItem onClick={handleContextMenuClick(onEdit)}>
           <Edit className="w-4 h-4 mr-2" />
-          Edit
+          עריכה
         </ContextMenuItem>
-        <ContextMenuItem onClick={onCopyUrl}>
+        <ContextMenuItem onClick={handleContextMenuClick(onCopyUrl)}>
           <Copy className="w-4 h-4 mr-2" />
-          Copy URL
+          העתק URL
         </ContextMenuItem>
-        <ContextMenuItem onClick={onToggleFavorite}>
+        <ContextMenuItem onClick={handleContextMenuClick((e) => onToggleFavorite(e as any))}>
           <Heart className="w-4 h-4 mr-2" />
-          {link.isFavorite ? 'Remove Favorite' : 'Add Favorite'}
+          {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
         </ContextMenuItem>
-        {onDelete && (
-          <>
-            <ContextMenuSeparator />
-            <ContextMenuItem onClick={onDelete} className="text-red-600">
-              <Trash2 className="w-4 h-4 mr-2" />
-              Delete
-            </ContextMenuItem>
-          </>
-        )}
+        <ContextMenuSeparator />
+        <ContextMenuItem onClick={handleContextMenuClick(onDelete || (() => {}))} className="text-red-600">
+          <Trash2 className="w-4 h-4 mr-2" />
+          מחק
+        </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   );
