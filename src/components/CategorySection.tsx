@@ -244,13 +244,13 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:block mb-6 animate-slide-up"
+        className="hidden md:block mb-7 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {/* Enhanced Minimalist Category Header for Desktop */}
-        <div className="flex items-center gap-4 mb-4 group cursor-pointer hover:translate-x-1 transition-bounce">
+        <div className="flex items-center gap-4 mb-5 group cursor-pointer hover:translate-x-1 transition-bounce">
           <div className={`w-3 h-3 rounded-full ${getCategoryColor()} shadow-lg group-hover:scale-125 transition-bounce hover-glow`}></div>
           <h2 className="text-white text-xl font-semibold tracking-wide group-hover:text-white/90 transition-smooth">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
@@ -282,14 +282,14 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-6 animate-fade-in"
+        className="md:hidden mb-7 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {/* Simplified Mobile Category Header */}
         <div 
-          className="group cursor-pointer mb-6 relative"
+          className="group cursor-pointer mb-7 relative"
           onClick={() => onAddLink(category)}
         >
           <div className="text-center relative">
