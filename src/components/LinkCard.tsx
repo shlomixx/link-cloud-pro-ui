@@ -1,22 +1,9 @@
-
 import React from 'react';
 import { Edit, Heart, ExternalLink, Star, Copy, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger, ContextMenuSeparator, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent } from '@/components/ui/context-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-
-interface LinkData {
-  key: string;
-  name: string;
-  url?: string;
-  defaultUrl?: string;
-  category: string;
-  isPrivate?: boolean;
-  clicks?: number;
-  createdAt?: string;
-  isFavorite?: boolean;
-  lastClicked?: string;
-}
+import { LinkData } from '@/types';
 
 interface LinkCardProps {
   link: LinkData;

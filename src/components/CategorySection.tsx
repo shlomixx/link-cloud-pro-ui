@@ -35,7 +35,6 @@ interface CategorySectionProps {
   onCopyUrl: (url: string, name: string) => void;
   onMouseEnter: (linkKey: string) => void;
   onMouseLeave: () => void;
-  onDragStart: (linkKey: string) => void;
   onAddLink: (category: string) => void;
   onDropUrl: (url: string, category: string) => void;
 }
@@ -58,7 +57,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onCopyUrl,
   onMouseEnter,
   onMouseLeave,
-  onDragStart,
   onAddLink,
   onDropUrl
 }) => {
@@ -241,11 +239,16 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               clickedLink={clickedLink}
               onMouseEnter={() => onMouseEnter(link.key)}
               onMouseLeave={onMouseLeave}
-              onDragStart={() => onDragStart(link.key)}
               onLinkClick={() => onLinkClick(link)}
               onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
               onEdit={() => onEditLink(link)}
               onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+              categories={Object.keys(categoryLabels)}
+              onChangeCategory={(newCategory) => onDrop({ 
+                currentTarget: {}, 
+                dataTransfer: { getData: () => link.key } 
+              } as unknown as React.DragEvent, newCategory)}
+              onDelete={() => {}}
             />
           ))}
           {/* Add Button */}
@@ -290,11 +293,16 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               clickedLink={clickedLink}
               onMouseEnter={() => onMouseEnter(link.key)}
               onMouseLeave={onMouseLeave}
-              onDragStart={() => onDragStart(link.key)}
               onLinkClick={() => onLinkClick(link)}
               onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
               onEdit={() => onEditLink(link)}
               onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+              categories={Object.keys(categoryLabels)}
+              onChangeCategory={(newCategory) => onDrop({ 
+                currentTarget: {}, 
+                dataTransfer: { getData: () => link.key } 
+              } as unknown as React.DragEvent, newCategory)}
+              onDelete={() => {}}
             />
           ))}
           {/* Add Button */}
