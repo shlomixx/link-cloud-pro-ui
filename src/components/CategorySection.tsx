@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LinkCard } from './LinkCard';
 import { 
@@ -145,30 +144,38 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
   const getCategoryGradient = () => {
     const gradientMap: Record<string, string> = {
-      work: 'bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700',
-      social: 'bg-gradient-to-br from-pink-500 via-rose-600 to-red-700',
-      entertainment: 'bg-gradient-to-br from-purple-500 via-violet-600 to-purple-700',
-      tools: 'bg-gradient-to-br from-orange-500 via-amber-600 to-yellow-700',
-      news: 'bg-gradient-to-br from-gray-500 via-slate-600 to-gray-700',
-      shopping: 'bg-gradient-to-br from-green-500 via-emerald-600 to-teal-700',
-      education: 'bg-gradient-to-br from-indigo-500 via-blue-600 to-cyan-700',
-      finance: 'bg-gradient-to-br from-emerald-500 via-green-600 to-lime-700',
-      health: 'bg-gradient-to-br from-red-500 via-pink-600 to-rose-700',
-      travel: 'bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700',
-      food: 'bg-gradient-to-br from-yellow-500 via-orange-600 to-red-700',
-      sports: 'bg-gradient-to-br from-amber-500 via-yellow-600 to-orange-700',
-      gaming: 'bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700',
-      music: 'bg-gradient-to-br from-fuchsia-500 via-pink-600 to-rose-700',
-      photography: 'bg-gradient-to-br from-slate-500 via-gray-600 to-zinc-700',
-      design: 'bg-gradient-to-br from-rose-500 via-pink-600 to-fuchsia-700',
-      development: 'bg-gradient-to-br from-green-500 via-teal-600 to-cyan-700',
-      business: 'bg-gradient-to-br from-blue-500 via-indigo-600 to-violet-700',
-      personal: 'bg-gradient-to-br from-teal-500 via-cyan-600 to-blue-700',
-      other: 'bg-gradient-to-br from-neutral-500 via-stone-600 to-gray-700',
-      custom: 'bg-gradient-to-br from-rainbow-500 via-rainbow-600 to-rainbow-700'
+      work: 'bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-600 shadow-[0_0_40px_rgba(59,130,246,0.3)]',
+      social: 'bg-gradient-to-br from-pink-400 via-rose-500 to-red-600 shadow-[0_0_40px_rgba(236,72,153,0.3)]',
+      entertainment: 'bg-gradient-to-br from-purple-400 via-violet-500 to-purple-600 shadow-[0_0_40px_rgba(147,51,234,0.3)]',
+      tools: 'bg-gradient-to-br from-orange-400 via-amber-500 to-yellow-600 shadow-[0_0_40px_rgba(249,115,22,0.3)]',
+      news: 'bg-gradient-to-br from-gray-400 via-slate-500 to-gray-600 shadow-[0_0_40px_rgba(107,114,128,0.3)]',
+      shopping: 'bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 shadow-[0_0_40px_rgba(34,197,94,0.3)]',
+      education: 'bg-gradient-to-br from-indigo-400 via-blue-500 to-cyan-600 shadow-[0_0_40px_rgba(99,102,241,0.3)]',
+      finance: 'bg-gradient-to-br from-emerald-400 via-green-500 to-lime-600 shadow-[0_0_40px_rgba(16,185,129,0.3)]',
+      health: 'bg-gradient-to-br from-red-400 via-pink-500 to-rose-600 shadow-[0_0_40px_rgba(239,68,68,0.3)]',
+      travel: 'bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 shadow-[0_0_40px_rgba(14,165,233,0.3)]',
+      food: 'bg-gradient-to-br from-yellow-400 via-orange-500 to-red-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]',
+      sports: 'bg-gradient-to-br from-amber-400 via-yellow-500 to-orange-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]',
+      gaming: 'bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-600 shadow-[0_0_40px_rgba(139,92,246,0.3)]',
+      music: 'bg-gradient-to-br from-fuchsia-400 via-pink-500 to-rose-600 shadow-[0_0_40px_rgba(217,70,239,0.3)]',
+      photography: 'bg-gradient-to-br from-slate-400 via-gray-500 to-zinc-600 shadow-[0_0_40px_rgba(100,116,139,0.3)]',
+      design: 'bg-gradient-to-br from-rose-400 via-pink-500 to-fuchsia-600 shadow-[0_0_40px_rgba(244,63,94,0.3)]',
+      development: 'bg-gradient-to-br from-green-400 via-teal-500 to-cyan-600 shadow-[0_0_40px_rgba(20,184,166,0.3)]',
+      business: 'bg-gradient-to-br from-blue-400 via-indigo-500 to-violet-600 shadow-[0_0_40px_rgba(59,130,246,0.3)]',
+      personal: 'bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-600 shadow-[0_0_40px_rgba(6,182,212,0.3)]',
+      other: 'bg-gradient-to-br from-neutral-400 via-stone-500 to-gray-600 shadow-[0_0_40px_rgba(115,115,115,0.3)]',
+      custom: 'bg-gradient-to-br from-purple-400 via-pink-500 to-rose-600 shadow-[0_0_40px_rgba(147,51,234,0.3)]'
     };
     
-    return gradientMap[category] || 'bg-gradient-to-br from-gray-500 via-slate-600 to-gray-700';
+    return gradientMap[category] || 'bg-gradient-to-br from-gray-400 via-slate-500 to-gray-600 shadow-[0_0_40px_rgba(107,114,128,0.3)]';
+  };
+
+  const getCategoryHoverEffect = () => {
+    return 'hover:scale-110 hover:rotate-3 hover:shadow-[0_0_60px_rgba(255,255,255,0.2)] transition-all duration-500 ease-out';
+  };
+
+  const getCategoryPulse = () => {
+    return isHoveringCategory ? 'animate-pulse' : '';
   };
 
   const getCategoryTextColor = () => {
@@ -266,19 +273,44 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Category Header */}
+        {/* Enhanced Category Header with Modern UI */}
         <div 
-          className="group cursor-pointer mb-12"
+          className="group cursor-pointer mb-16 relative"
           onMouseEnter={() => setIsHoveringCategory(true)}
           onMouseLeave={() => setIsHoveringCategory(false)}
           onClick={() => onAddLink(category)}
         >
-          <div className="text-center">
-            <div className={`inline-flex items-center justify-center w-32 h-32 rounded-full ${getCategoryGradient()} transition-all duration-500 group-hover:scale-110 ${getCategoryGlow()} shadow-2xl`}>
+          <div className="text-center relative">
+            {/* Animated background glow */}
+            <div className={`absolute inset-0 rounded-full ${getCategoryGradient()} opacity-20 blur-3xl transform scale-150 transition-all duration-700 ${isHoveringCategory ? 'opacity-40 scale-175' : ''}`}></div>
+            
+            {/* Main category icon container */}
+            <div className={`relative inline-flex items-center justify-center w-40 h-40 rounded-full ${getCategoryGradient()} ${getCategoryHoverEffect()} ${getCategoryPulse()} border-4 border-white/20 backdrop-blur-sm`}>
+              {/* Inner glow effect */}
+              <div className="absolute inset-2 rounded-full bg-white/10 backdrop-blur-sm"></div>
+              
+              {/* Icon with enhanced styling */}
               <CategoryIcon 
-                size={60} 
-                className="text-white drop-shadow-lg"
+                size={72} 
+                className="text-white drop-shadow-2xl relative z-10 transition-all duration-300 group-hover:scale-110"
               />
+              
+              {/* Floating particles effect */}
+              {isHoveringCategory && (
+                <>
+                  <div className="absolute -top-2 -right-2 w-3 h-3 bg-white/80 rounded-full animate-bounce"></div>
+                  <div className="absolute -bottom-2 -left-2 w-2 h-2 bg-white/60 rounded-full animate-bounce animation-delay-200"></div>
+                  <div className="absolute top-1/2 -left-4 w-1.5 h-1.5 bg-white/40 rounded-full animate-bounce animation-delay-400"></div>
+                </>
+              )}
+            </div>
+            
+            {/* Enhanced category label */}
+            <div className="mt-6">
+              <h2 className="text-2xl font-bold text-white/90 tracking-wide drop-shadow-lg">
+                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+              </h2>
+              <div className="mt-2 w-24 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto rounded-full"></div>
             </div>
           </div>
         </div>
@@ -312,17 +344,30 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Mobile Category Header */}
+        {/* Enhanced Mobile Category Header */}
         <div 
-          className="group cursor-pointer mb-8"
+          className="group cursor-pointer mb-10 relative"
           onClick={() => onAddLink(category)}
         >
-          <div className="text-center">
-            <div className={`inline-flex items-center justify-center w-24 h-24 rounded-full ${getCategoryGradient()} transition-all duration-500 group-hover:scale-105 ${getCategoryGlow()} shadow-2xl`}>
+          <div className="text-center relative">
+            {/* Mobile background glow */}
+            <div className={`absolute inset-0 rounded-full ${getCategoryGradient()} opacity-20 blur-2xl transform scale-150 transition-all duration-500`}></div>
+            
+            {/* Mobile category icon container */}
+            <div className={`relative inline-flex items-center justify-center w-32 h-32 rounded-full ${getCategoryGradient()} hover:scale-105 transition-all duration-500 border-3 border-white/20 backdrop-blur-sm shadow-2xl`}>
+              <div className="absolute inset-2 rounded-full bg-white/10 backdrop-blur-sm"></div>
               <CategoryIcon 
-                size={40} 
-                className="text-white drop-shadow-lg"
+                size={56} 
+                className="text-white drop-shadow-2xl relative z-10"
               />
+            </div>
+            
+            {/* Mobile category label */}
+            <div className="mt-4">
+              <h2 className="text-xl font-bold text-white/90 tracking-wide drop-shadow-lg">
+                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+              </h2>
+              <div className="mt-2 w-16 h-0.5 bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto rounded-full"></div>
             </div>
           </div>
         </div>
