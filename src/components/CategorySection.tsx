@@ -244,7 +244,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:block mb-4 animate-slide-up"
+        className="hidden md:block mb-6 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -282,7 +282,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-4 animate-fade-in"
+        className="md:hidden mb-6 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
