@@ -138,39 +138,39 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
   const getCategoryColor = () => {
     const colorMap: Record<string, string> = {
-      tools: 'bg-orange-400',
-      streaming: 'bg-green-400',
-      social: 'bg-pink-400',
-      shopping: 'bg-yellow-400',
-      education: 'bg-blue-400',
-      news: 'bg-red-400',
-      ai: 'bg-purple-400',
-      languages: 'bg-indigo-400',
-      learning: 'bg-cyan-400',
-      technology: 'bg-teal-400',
-      design: 'bg-rose-400',
-      business: 'bg-violet-400',
-      finance: 'bg-emerald-400',
-      entertainment: 'bg-fuchsia-400',
-      communication: 'bg-sky-400',
-      productivity: 'bg-amber-400',
-      health: 'bg-red-500',
-      music: 'bg-pink-500',
-      photography: 'bg-slate-400',
-      art: 'bg-purple-500',
-      books: 'bg-indigo-500',
-      sports: 'bg-orange-500',
-      gaming: 'bg-violet-500',
-      investing: 'bg-green-500',
-      cryptocurrency: 'bg-yellow-500',
-      freelance: 'bg-blue-500',
-      meditation: 'bg-cyan-500',
-      dating: 'bg-rose-500',
-      parenting: 'bg-emerald-500',
-      custom: 'bg-purple-400'
+      tools: 'text-orange-400',
+      streaming: 'text-green-400',
+      social: 'text-pink-400',
+      shopping: 'text-yellow-400',
+      education: 'text-blue-400',
+      news: 'text-red-400',
+      ai: 'text-purple-400',
+      languages: 'text-indigo-400',
+      learning: 'text-cyan-400',
+      technology: 'text-teal-400',
+      design: 'text-rose-400',
+      business: 'text-violet-400',
+      finance: 'text-emerald-400',
+      entertainment: 'text-fuchsia-400',
+      communication: 'text-sky-400',
+      productivity: 'text-amber-400',
+      health: 'text-red-500',
+      music: 'text-pink-500',
+      photography: 'text-slate-400',
+      art: 'text-purple-500',
+      books: 'text-indigo-500',
+      sports: 'text-orange-500',
+      gaming: 'text-violet-500',
+      investing: 'text-green-500',
+      cryptocurrency: 'text-yellow-500',
+      freelance: 'text-blue-500',
+      meditation: 'text-cyan-500',
+      dating: 'text-rose-500',
+      parenting: 'text-emerald-500',
+      custom: 'text-purple-400'
     };
     
-    return colorMap[category] || 'bg-gray-400';
+    return colorMap[category] || 'text-gray-400';
   };
 
   const renderAddButton = () => {
@@ -197,7 +197,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       >
         {/* Minimalistic Category Sidebar - Left Side */}
         <div className="flex items-center gap-3 min-w-[120px] pt-4">
-          <h2 className={`text-lg font-medium ${getCategoryColor().replace('bg-', 'text-')}`}>
+          <h2 className={`text-lg font-medium ${getCategoryColor()}`}>
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
         </div>
@@ -239,7 +239,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         >
           <div className="text-center relative p-3 rounded-2xl transition-all duration-300 group-active:bg-white/5">
             <div className="flex items-center justify-center gap-4 mb-3">
-              <div className={`text-base font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-105 group-active:scale-102 ${getCategoryColor().replace('bg-', 'text-')}`}>
+              <div className={`text-base font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-105 group-active:scale-102 ${getCategoryColor()}`}>
                 {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
               </div>
             </div>
