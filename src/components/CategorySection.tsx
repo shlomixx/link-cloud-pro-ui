@@ -160,53 +160,14 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   };
 
   const renderAddButton = () => {
-    if (viewMode === 'list') {
-      return (
-        <Button
-          onClick={() => onAddLink(category)}
-          variant="ghost"
-          className="group flex items-center gap-4 p-4 rounded-lg cursor-pointer w-full transition-all duration-200 hover:bg-white/10"
-        >
-          <div className="flex items-center gap-4 flex-1">
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-white/10 group-hover:bg-white/20 transition-all duration-200">
-              <Plus className="w-6 h-6 text-white/70 group-hover:text-white transition-colors duration-200" />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-medium text-white/80 group-hover:text-white transition-colors duration-200">
-                Add New Link
-              </h3>
-              <p className="text-sm text-white/50">
-                Click to create a new link
-              </p>
-            </div>
-          </div>
-        </Button>
-      );
-    }
-
     return (
       <Button
         onClick={() => onAddLink(category)}
         variant="ghost"
-        className="group flex flex-col items-center justify-center gap-2 p-4 rounded-lg h-full cursor-pointer transition-all duration-200 hover:bg-white/10"
+        className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg h-full cursor-pointer hover:bg-white/5 transition-colors duration-200"
       >
-        <div className={`
-          ${viewMode === 'grid' ? 'w-16 h-16 rounded-lg' : viewMode === 'compact' ? 'w-12 h-12 rounded-lg' : 'w-10 h-10 rounded-lg'} 
-          flex items-center justify-center bg-white/10 group-hover:bg-white/20 transition-all duration-200
-        `}>
-          <Plus className={`
-            ${viewMode === 'dense' ? 'w-5 h-5' : viewMode === 'compact' ? 'w-6 h-6' : 'w-8 h-8'}
-            text-white/70 group-hover:text-white transition-colors duration-200
-          `} />
-        </div>
-        
-        <span className={`
-          font-medium text-center truncate w-full
-          ${viewMode === 'dense' ? 'text-xs' : 'text-sm'}
-          text-white/70 group-hover:text-white transition-colors duration-200
-        `}>
-          Add Link
-        </span>
+        <Plus className="w-5 h-5 text-white/50 hover:text-white/70" />
+        <span className="text-xs text-white/50 hover:text-white/70">Add</span>
       </Button>
     );
   };
