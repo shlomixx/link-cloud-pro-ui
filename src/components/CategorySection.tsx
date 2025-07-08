@@ -244,15 +244,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:block mb-16 animate-fade-in"
+        className="hidden md:block mb-16 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {/* Enhanced Minimalist Category Header for Desktop */}
-        <div className="flex items-center gap-4 mb-8 group cursor-pointer hover:translate-x-1 transition-all duration-200">
-          <div className={`w-3 h-3 rounded-full ${getCategoryColor()} shadow-lg group-hover:scale-125 transition-all duration-200`}></div>
-          <h2 className="text-white text-xl font-semibold tracking-wide group-hover:text-white/90 transition-all duration-200">
+        <div className="flex items-center gap-4 mb-8 group cursor-pointer hover:translate-x-1 transition-bounce">
+          <div className={`w-3 h-3 rounded-full ${getCategoryColor()} shadow-lg group-hover:scale-125 transition-bounce hover-glow`}></div>
+          <h2 className="text-white text-xl font-semibold tracking-wide group-hover:text-white/90 transition-smooth">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
           <div className="flex-1 h-px bg-gradient-to-r from-white/20 via-white/5 to-transparent"></div>
