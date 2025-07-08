@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LinkCard } from './LinkCard';
 
@@ -123,6 +122,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     }
   };
 
+  // Get gradient text classes based on category
+  const getGradientTextClass = () => {
+    const colorClass = categoryColors[category as keyof typeof categoryColors] || categoryColors.custom;
+    return colorClass.replace('from-', 'from-').replace('to-', 'to-');
+  };
+
   return (
     <>
       {/* Desktop Layout */}
@@ -139,17 +144,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           onMouseLeave={() => setIsHoveringCategory(false)}
           onClick={() => onAddLink(category)}
         >
-          <div className="flex items-center gap-4 transition-all duration-300 hover:scale-105">
-            {/* Enhanced Color Indicator */}
-            <div className="relative">
-              <div className={`h-1 w-12 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full shadow-lg`}></div>
-              <div className={`absolute -inset-1 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full opacity-30 blur-md`}></div>
-            </div>
-            
-            {/* Category Title */}
-            <h2 className={`text-2xl font-bold tracking-wide transition-all duration-300 ${
-              isDarkMode ? 'text-slate-100 group-hover:text-white' : 'text-slate-800 group-hover:text-slate-900'
-            }`}>
+          <div className="flex items-center transition-all duration-300 hover:scale-105">
+            {/* Category Title with Gradient Color */}
+            <h2 className={`text-2xl font-bold tracking-wide transition-all duration-300 bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent hover:scale-105`}>
               {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
             </h2>
           </div>
@@ -189,17 +186,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           className="mb-5 cursor-pointer group"
           onClick={() => onAddLink(category)}
         >
-          <div className="flex items-center justify-center gap-3 transition-all duration-300 group-hover:scale-105">
-            {/* Enhanced Color Indicator */}
-            <div className="relative">
-              <div className={`h-1 w-8 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full shadow-md`}></div>
-              <div className={`absolute -inset-0.5 bg-gradient-to-r ${categoryColors[category as keyof typeof categoryColors] || categoryColors.custom} rounded-full opacity-30 blur-sm`}></div>
-            </div>
-            
-            {/* Category Title */}
-            <h2 className={`text-xl font-bold tracking-wide transition-all duration-300 ${
-              isDarkMode ? 'text-slate-100 group-hover:text-white' : 'text-slate-800 group-hover:text-slate-900'
-            }`}>
+          <div className="flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+            {/* Category Title with Gradient Color */}
+            <h2 className={`text-xl font-bold tracking-wide transition-all duration-300 bg-gradient-to-r ${getGradientTextClass()} bg-clip-text text-transparent hover:scale-105`}>
               {categoryLabels[category as keyof typeof categoryLabels] || category.charAt(0).toUpperCase() + category.slice(1)}
             </h2>
           </div>
