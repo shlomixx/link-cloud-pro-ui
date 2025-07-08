@@ -60,7 +60,6 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 }) => {
   const [isDragging, setIsDragging] = React.useState(false);
   const [dragStarted, setDragStarted] = React.useState(false);
-  const [showContextMenu, setShowContextMenu] = React.useState(false);
   const longPressTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const isHovered = hoveredLink === link.key;
@@ -69,7 +68,6 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   const handleTouchStart = (e: React.TouchEvent) => {
     longPressTimerRef.current = setTimeout(() => {
       setDragStarted(true);
-      setShowContextMenu(true);
       // Add haptic feedback if available
       if (navigator.vibrate) {
         navigator.vibrate(50);
@@ -95,7 +93,6 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   const handleMouseDown = (e: React.MouseEvent) => {
     longPressTimerRef.current = setTimeout(() => {
       setDragStarted(true);
-      setShowContextMenu(true);
     }, 500);
   };
 
@@ -108,11 +105,8 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   };
 
   const handleContextMenuClick = (action: () => void) => {
-    return (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
+    return () => {
       action();
-      setShowContextMenu(false);
     };
   };
 
@@ -130,7 +124,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <ContextMenu open={showContextMenu} onOpenChange={setShowContextMenu}>
+            <ContextMenu>
               <ContextMenuTrigger asChild>
                 <div
                   draggable={dragStarted}
@@ -192,7 +186,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                   <Copy className="w-4 h-4 mr-2" />
                   העתק URL
                 </ContextMenuItem>
-                <ContextMenuItem onClick={handleContextMenuClick((e) => onToggleFavorite(e as any))}>
+                <ContextMenuItem onClick={handleContextMenuClick(() => onToggleFavorite({} as React.MouseEvent))}>
                   <Heart className="w-4 h-4 mr-2" />
                   {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
                 </ContextMenuItem>
@@ -218,7 +212,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   // Compact view - minimal with icons and names only
   if (viewMode === 'compact') {
     return (
-      <ContextMenu open={showContextMenu} onOpenChange={setShowContextMenu}>
+      <ContextMenu>
         <ContextMenuTrigger asChild>
           <div
             draggable={dragStarted}
@@ -283,7 +277,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             <Copy className="w-4 h-4 mr-2" />
             העתק URL
           </ContextMenuItem>
-          <ContextMenuItem onClick={handleContextMenuClick((e) => onToggleFavorite(e as any))}>
+          <ContextMenuItem onClick={handleContextMenuClick(() => onToggleFavorite({} as React.MouseEvent))}>
             <Heart className="w-4 h-4 mr-2" />
             {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
           </ContextMenuItem>
@@ -300,7 +294,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
   // Grid view - icons and names only
   if (viewMode === 'grid') {
     return (
-      <ContextMenu open={showContextMenu} onOpenChange={setShowContextMenu}>
+      <ContextMenu>
         <ContextMenuTrigger asChild>
           <div
             draggable={dragStarted}
@@ -381,7 +375,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             <Copy className="w-4 h-4 mr-2" />
             העתק URL
           </ContextMenuItem>
-          <ContextMenuItem onClick={handleContextMenuClick((e) => onToggleFavorite(e as any))}>
+          <ContextMenuItem onClick={handleContextMenuClick(() => onToggleFavorite({} as React.MouseEvent))}>
             <Heart className="w-4 h-4 mr-2" />
             {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
           </ContextMenuItem>
@@ -397,7 +391,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 
   // List view - simplified
   return (
-    <ContextMenu open={showContextMenu} onOpenChange={setShowContextMenu}>
+    <ContextMenu>
       <ContextMenuTrigger asChild>
         <div
           draggable={dragStarted}
@@ -475,7 +469,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
           <Copy className="w-4 h-4 mr-2" />
           העתק URL
         </ContextMenuItem>
-        <ContextMenuItem onClick={handleContextMenuClick((e) => onToggleFavorite(e as any))}>
+        <ContextMenuItem onClick={handleContextMenuClick(() => onToggleFavorite({} as React.MouseEvent))}>
           <Heart className="w-4 h-4 mr-2" />
           {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
         </ContextMenuItem>
