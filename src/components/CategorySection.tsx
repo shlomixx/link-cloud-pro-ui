@@ -233,24 +233,28 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Mobile Category Header */}
-        <div className="mx-3 mb-6">
-          <div className="flex items-center justify-center py-4 px-6">
-              {/* Left Accent Line */}
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-white/10"></div>
+        {/* Professional Mobile Category Header */}
+        <div className="mx-4 mb-8">
+          <div className="relative">
+            {/* Subtle background */}
+            <div className="absolute inset-0 bg-white/5 rounded-xl backdrop-blur-sm border border-white/10"></div>
+            
+            {/* Content */}
+            <div className="relative flex items-center py-5 px-6">
+              {/* Category indicator */}
+              <div className={`w-1 h-6 rounded-full ${getCategoryColor()} mr-4 shadow-sm`}></div>
               
-              {/* Category Badge */}
-              <div className="flex items-center gap-3 px-4">
-                <div className={`w-2 h-2 rounded-full ${getCategoryColor()} shadow-lg`}></div>
-                <span className="text-white font-medium text-base tracking-wide">
+              {/* Category label */}
+              <div className="flex-1">
+                <h3 className="text-white font-semibold text-lg tracking-tight">
                   {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-                </span>
-                <div className={`w-2 h-2 rounded-full ${getCategoryColor()} shadow-lg opacity-60`}></div>
+                </h3>
               </div>
               
-              {/* Right Accent Line */}
-              <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/30 to-white/10"></div>
+              {/* Subtle accent */}
+              <div className="w-8 h-px bg-white/20"></div>
             </div>
+          </div>
         </div>
 
         {/* Links Grid with Better Spacing */}
