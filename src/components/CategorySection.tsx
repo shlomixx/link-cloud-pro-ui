@@ -178,10 +178,10 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       <Button
         onClick={() => onAddLink(category)}
         variant="ghost"
-        className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg h-full cursor-pointer hover:bg-white/5 transition-colors duration-200"
+        className="flex flex-col items-center justify-center gap-3 p-6 rounded-lg h-full min-h-[80px] cursor-pointer hover:bg-white/5 transition-colors duration-200"
       >
-        <Plus className="w-5 h-5 text-white/50 hover:text-white/70" />
-        <span className="text-xs text-white/50 hover:text-white/70">Add</span>
+        <Plus className="w-8 h-8 text-white/50 hover:text-white/70" />
+        <span className="text-sm text-white/50 hover:text-white/70">Add</span>
       </Button>
     );
   };
