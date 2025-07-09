@@ -233,14 +233,25 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Minimalist Mobile Category Header */}
-        <div className="mb-3 px-4">
-          <div className="flex items-center gap-3 py-3 border-b border-white/10">
-            <div className={`w-2 h-2 rounded-full ${getCategoryColor()}`}></div>
-            <span className="text-white/80 text-sm font-medium tracking-wide flex-1">
-              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-            </span>
-            <div className="w-8 h-px bg-white/20"></div>
+        {/* Alternative Mobile Category Header - Card Style */}
+        <div className="mb-4 px-4">
+          <div className="relative">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10 shadow-lg">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={`w-3 h-3 rounded-full ${getCategoryColor()} shadow-sm`}></div>
+                  <span className="text-white/90 text-sm font-medium tracking-wide">
+                    {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-1 h-1 rounded-full bg-white/30"></div>
+                  <div className="w-1 h-1 rounded-full bg-white/20"></div>
+                  <div className="w-1 h-1 rounded-full bg-white/10"></div>
+                </div>
+              </div>
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rounded-2xl opacity-50"></div>
           </div>
         </div>
 
