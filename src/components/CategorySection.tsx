@@ -177,82 +177,50 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     const separators: Record<string, JSX.Element> = {
       tools: (
         <div className="relative flex items-center">
-          <div className="flex-1 flex items-center justify-center gap-1">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="w-1 h-1 bg-orange-400 rotate-45" />
-            ))}
-          </div>
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-orange-400 to-orange-300" />
           <div className="px-4 flex items-center gap-2">
-            <div className="w-2 h-2 bg-orange-400 rotate-45" />
+            <div className="w-3 h-2 bg-orange-400 rounded-sm" />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 flex items-center justify-center gap-1">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="w-1 h-1 bg-orange-400 rotate-45" />
-            ))}
-          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-orange-300 via-orange-400 to-transparent" />
         </div>
       ),
       streaming: (
         <div className="relative flex items-center">
-          <div className="flex-1 h-4 overflow-hidden">
-            <svg viewBox="0 0 100 20" className="w-full h-full">
-              <path d="M0,10 Q25,0 50,10 T100,10" stroke="rgb(34, 197, 94)" strokeWidth="2" fill="none" />
-            </svg>
-          </div>
+          <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-green-400 to-green-300" />
           <div className="px-4 flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-green-400" />
+            <div className="w-2 h-2 bg-green-400 rounded-full" />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 h-4 overflow-hidden">
-            <svg viewBox="0 0 100 20" className="w-full h-full">
-              <path d="M0,10 Q25,0 50,10 T100,10" stroke="rgb(34, 197, 94)" strokeWidth="2" fill="none" />
-            </svg>
-          </div>
+          <div className="flex-1 h-0.5 bg-gradient-to-l from-green-300 via-green-400 to-transparent" />
         </div>
       ),
       social: (
         <div className="relative flex items-center">
-          <div className="flex-1 flex items-center justify-center gap-2">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 bg-pink-400 rounded-full transform rotate-45" />
-            ))}
-          </div>
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-pink-400 via-pink-300 to-transparent" />
           <div className="px-4 flex items-center gap-2">
             <div className="w-2 h-2 bg-pink-400 rounded-full" />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 flex items-center justify-center gap-2">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 bg-pink-400 rounded-full transform rotate-45" />
-            ))}
-          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-pink-300 via-pink-400 to-transparent" />
         </div>
       ),
       shopping: (
         <div className="relative flex items-center">
-          <div className="flex-1 flex items-center justify-center gap-3">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="w-2 h-2 border border-yellow-400 rounded-sm" />
-            ))}
-          </div>
+          <div className="flex-1 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-yellow-500" />
           <div className="px-4 flex items-center gap-2">
             <div className="w-2 h-2 bg-yellow-400 rounded-sm" />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 flex items-center justify-center gap-3">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="w-2 h-2 border border-yellow-400 rounded-sm" />
-            ))}
-          </div>
+          <div className="flex-1 h-1 bg-gradient-to-l from-yellow-500 via-yellow-400 to-transparent" />
         </div>
       ),
       education: (
@@ -267,137 +235,317 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           <div className="flex-1 h-px bg-gradient-to-l from-transparent via-blue-400 to-transparent" />
         </div>
       ),
+      learning: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-3 h-2 bg-cyan-400 rounded-t-sm" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-cyan-400 to-transparent" />
+        </div>
+      ),
       news: (
         <div className="relative flex items-center">
-          <div className="flex-1 flex items-center justify-center gap-1">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className={`w-0.5 ${i % 2 === 0 ? 'h-2' : 'h-1'} bg-red-400`} />
-            ))}
-          </div>
+          <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-red-400 via-red-500 to-red-400" />
           <div className="px-4 flex items-center gap-2">
             <div className="w-2 h-2 bg-red-400" />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 flex items-center justify-center gap-1">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className={`w-0.5 ${i % 2 === 0 ? 'h-2' : 'h-1'} bg-red-400`} />
-            ))}
-          </div>
+          <div className="flex-1 h-0.5 bg-gradient-to-l from-red-400 via-red-500 via-red-400 to-transparent" />
         </div>
       ),
       ai: (
         <div className="relative flex items-center">
-          <div className="flex-1 flex items-center justify-center gap-2">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="w-1 h-1 bg-purple-400 transform rotate-45" />
-            ))}
-          </div>
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-400 to-purple-500" />
           <div className="px-4 flex items-center gap-2">
             <div className="w-2 h-2 bg-purple-400 rounded-full" />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 flex items-center justify-center gap-2">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="w-1 h-1 bg-purple-400 transform rotate-45" />
-            ))}
-          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-purple-500 via-purple-400 to-transparent" />
         </div>
       ),
-      technology: (
+      languages: (
         <div className="relative flex items-center">
-          <div className="flex-1 flex items-center justify-center gap-2">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 border border-teal-400 transform rotate-45" />
-            ))}
-          </div>
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-indigo-400 to-transparent" />
           <div className="px-4 flex items-center gap-2">
-            <div className="w-2 h-2 border-2 border-teal-400 transform rotate-45" />
+            <div className="w-2 h-2 bg-indigo-400 rounded-full" />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 flex items-center justify-center gap-2">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 border border-teal-400 transform rotate-45" />
-            ))}
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-indigo-400 to-transparent" />
+        </div>
+      ),
+      technology: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-1 bg-gradient-to-r from-transparent via-teal-400 to-teal-300" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 border border-teal-400 transform rotate-45" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
           </div>
+          <div className="flex-1 h-1 bg-gradient-to-l from-teal-300 via-teal-400 to-transparent" />
         </div>
       ),
       design: (
         <div className="relative flex items-center">
-          <div className="flex-1 h-4 overflow-hidden">
-            <svg viewBox="0 0 100 20" className="w-full h-full">
-              <path d="M0,10 C20,0 30,20 50,10 C70,0 80,20 100,10" stroke="rgb(244, 63, 94)" strokeWidth="2" fill="none" />
-            </svg>
-          </div>
+          <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-rose-400 via-rose-300 via-rose-400 to-transparent" />
           <div className="px-4 flex items-center gap-2">
             <div className="w-2 h-2 bg-rose-400 rounded-full" />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 h-4 overflow-hidden">
-            <svg viewBox="0 0 100 20" className="w-full h-full">
-              <path d="M0,10 C20,0 30,20 50,10 C70,0 80,20 100,10" stroke="rgb(244, 63, 94)" strokeWidth="2" fill="none" />
-            </svg>
+          <div className="flex-1 h-0.5 bg-gradient-to-l from-transparent via-rose-400 via-rose-300 via-rose-400 to-transparent" />
+        </div>
+      ),
+      business: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-violet-400 to-violet-500" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-violet-400 rounded-sm" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
           </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-violet-500 via-violet-400 to-transparent" />
+        </div>
+      ),
+      finance: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-emerald-400 to-emerald-500" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-emerald-400 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-emerald-500 via-emerald-400 to-transparent" />
+        </div>
+      ),
+      entertainment: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-fuchsia-400 to-fuchsia-300" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-fuchsia-400 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-0.5 bg-gradient-to-l from-fuchsia-300 via-fuchsia-400 to-transparent" />
+        </div>
+      ),
+      communication: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-sky-400 to-transparent" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-sky-400 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-sky-400 to-transparent" />
+        </div>
+      ),
+      productivity: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-1 bg-gradient-to-r from-transparent via-amber-400 to-amber-300" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-amber-400 rounded-sm" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-1 bg-gradient-to-l from-amber-300 via-amber-400 to-transparent" />
+        </div>
+      ),
+      health: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-red-500 to-red-400" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-red-500 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-red-400 via-red-500 to-transparent" />
         </div>
       ),
       music: (
         <div className="relative flex items-center">
-          <div className="flex-1 flex items-center justify-center gap-1">
-            {[...Array(10)].map((_, i) => (
-              <div key={i} className={`w-0.5 bg-pink-500 ${i % 3 === 0 ? 'h-3' : i % 3 === 1 ? 'h-2' : 'h-1'}`} />
-            ))}
-          </div>
+          <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-pink-500 via-pink-400 to-transparent" />
           <div className="px-4 flex items-center gap-2">
             <div className="w-2 h-2 bg-pink-500 rounded-full" />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 flex items-center justify-center gap-1">
-            {[...Array(10)].map((_, i) => (
-              <div key={i} className={`w-0.5 bg-pink-500 ${i % 3 === 0 ? 'h-3' : i % 3 === 1 ? 'h-2' : 'h-1'}`} />
-            ))}
+          <div className="flex-1 h-0.5 bg-gradient-to-l from-transparent via-pink-400 via-pink-500 to-transparent" />
+        </div>
+      ),
+      photography: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-400 to-slate-300" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-slate-400 rounded-sm" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
           </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-slate-300 via-slate-400 to-transparent" />
+        </div>
+      ),
+      art: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-purple-500 to-purple-400" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-purple-500 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-0.5 bg-gradient-to-l from-purple-400 via-purple-500 to-transparent" />
+        </div>
+      ),
+      books: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-3 h-2 bg-indigo-500 rounded-t-sm" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-indigo-500 to-transparent" />
+        </div>
+      ),
+      sports: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-1 bg-gradient-to-r from-transparent via-orange-500 to-orange-400" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-orange-500 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-1 bg-gradient-to-l from-orange-400 via-orange-500 to-transparent" />
         </div>
       ),
       gaming: (
         <div className="relative flex items-center">
-          <div className="flex-1 flex items-center justify-center gap-2">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="w-1 h-1 bg-violet-500 rounded-full" />
-            ))}
-          </div>
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-violet-500 to-violet-400" />
           <div className="px-4 flex items-center gap-2">
             <div className="w-2 h-2 bg-violet-500 rounded-sm" />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 flex items-center justify-center gap-2">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="w-1 h-1 bg-violet-500 rounded-full" />
-            ))}
+          <div className="flex-1 h-px bg-gradient-to-l from-violet-400 via-violet-500 to-transparent" />
+        </div>
+      ),
+      investing: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-green-500 to-green-400" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
           </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-green-400 via-green-500 to-transparent" />
+        </div>
+      ),
+      cryptocurrency: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-yellow-500 to-yellow-400" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-yellow-500 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-0.5 bg-gradient-to-l from-yellow-400 via-yellow-500 to-transparent" />
+        </div>
+      ),
+      freelance: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-blue-500 to-blue-400" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-blue-500 rounded-sm" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-blue-400 via-blue-500 to-transparent" />
+        </div>
+      ),
+      meditation: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-cyan-500 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-cyan-500 to-transparent" />
+        </div>
+      ),
+      dating: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-0.5 bg-gradient-to-r from-transparent via-rose-500 to-rose-400" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-rose-500 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-0.5 bg-gradient-to-l from-rose-400 via-rose-500 to-transparent" />
+        </div>
+      ),
+      parenting: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-emerald-500 to-emerald-400" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-emerald-400 via-emerald-500 to-transparent" />
+        </div>
+      ),
+      custom: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-purple-400 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-purple-400 to-transparent" />
         </div>
       ),
       // Default pattern for other categories
       default: (
         <div className="relative flex items-center">
-          <div className="flex-1 h-px bg-white/20" />
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           <div className="px-4 flex items-center gap-2">
             <div className={`w-2 h-2 rounded-full ${getCategoryColor()}`} />
             <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
               {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
             </span>
           </div>
-          <div className="flex-1 h-px bg-white/20" />
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/20 to-transparent" />
         </div>
       )
     };
