@@ -173,6 +173,238 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     return colorMap[category] || 'bg-gray-400';
   };
 
+  const getMobileSeparator = () => {
+    const separators: Record<string, JSX.Element> = {
+      tools: (
+        <div className="relative flex items-center">
+          <div className="flex-1 flex items-center justify-center gap-1">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="w-1 h-1 bg-orange-400 rotate-45" />
+            ))}
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-orange-400 rotate-45" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 flex items-center justify-center gap-1">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="w-1 h-1 bg-orange-400 rotate-45" />
+            ))}
+          </div>
+        </div>
+      ),
+      streaming: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-4 overflow-hidden">
+            <svg viewBox="0 0 100 20" className="w-full h-full">
+              <path d="M0,10 Q25,0 50,10 T100,10" stroke="rgb(34, 197, 94)" strokeWidth="2" fill="none" />
+            </svg>
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-green-400" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-4 overflow-hidden">
+            <svg viewBox="0 0 100 20" className="w-full h-full">
+              <path d="M0,10 Q25,0 50,10 T100,10" stroke="rgb(34, 197, 94)" strokeWidth="2" fill="none" />
+            </svg>
+          </div>
+        </div>
+      ),
+      social: (
+        <div className="relative flex items-center">
+          <div className="flex-1 flex items-center justify-center gap-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="w-1.5 h-1.5 bg-pink-400 rounded-full transform rotate-45" />
+            ))}
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-pink-400 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 flex items-center justify-center gap-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="w-1.5 h-1.5 bg-pink-400 rounded-full transform rotate-45" />
+            ))}
+          </div>
+        </div>
+      ),
+      shopping: (
+        <div className="relative flex items-center">
+          <div className="flex-1 flex items-center justify-center gap-3">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="w-2 h-2 border border-yellow-400 rounded-sm" />
+            ))}
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-yellow-400 rounded-sm" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 flex items-center justify-center gap-3">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="w-2 h-2 border border-yellow-400 rounded-sm" />
+            ))}
+          </div>
+        </div>
+      ),
+      education: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent" />
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-3 h-2 bg-blue-400 rounded-t-sm" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-blue-400 to-transparent" />
+        </div>
+      ),
+      news: (
+        <div className="relative flex items-center">
+          <div className="flex-1 flex items-center justify-center gap-1">
+            {[...Array(12)].map((_, i) => (
+              <div key={i} className={`w-0.5 ${i % 2 === 0 ? 'h-2' : 'h-1'} bg-red-400`} />
+            ))}
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-red-400" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 flex items-center justify-center gap-1">
+            {[...Array(12)].map((_, i) => (
+              <div key={i} className={`w-0.5 ${i % 2 === 0 ? 'h-2' : 'h-1'} bg-red-400`} />
+            ))}
+          </div>
+        </div>
+      ),
+      ai: (
+        <div className="relative flex items-center">
+          <div className="flex-1 flex items-center justify-center gap-2">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="w-1 h-1 bg-purple-400 transform rotate-45" />
+            ))}
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-purple-400 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 flex items-center justify-center gap-2">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="w-1 h-1 bg-purple-400 transform rotate-45" />
+            ))}
+          </div>
+        </div>
+      ),
+      technology: (
+        <div className="relative flex items-center">
+          <div className="flex-1 flex items-center justify-center gap-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="w-1.5 h-1.5 border border-teal-400 transform rotate-45" />
+            ))}
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 border-2 border-teal-400 transform rotate-45" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 flex items-center justify-center gap-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="w-1.5 h-1.5 border border-teal-400 transform rotate-45" />
+            ))}
+          </div>
+        </div>
+      ),
+      design: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-4 overflow-hidden">
+            <svg viewBox="0 0 100 20" className="w-full h-full">
+              <path d="M0,10 C20,0 30,20 50,10 C70,0 80,20 100,10" stroke="rgb(244, 63, 94)" strokeWidth="2" fill="none" />
+            </svg>
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-rose-400 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-4 overflow-hidden">
+            <svg viewBox="0 0 100 20" className="w-full h-full">
+              <path d="M0,10 C20,0 30,20 50,10 C70,0 80,20 100,10" stroke="rgb(244, 63, 94)" strokeWidth="2" fill="none" />
+            </svg>
+          </div>
+        </div>
+      ),
+      music: (
+        <div className="relative flex items-center">
+          <div className="flex-1 flex items-center justify-center gap-1">
+            {[...Array(10)].map((_, i) => (
+              <div key={i} className={`w-0.5 bg-pink-500 ${i % 3 === 0 ? 'h-3' : i % 3 === 1 ? 'h-2' : 'h-1'}`} />
+            ))}
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-pink-500 rounded-full" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 flex items-center justify-center gap-1">
+            {[...Array(10)].map((_, i) => (
+              <div key={i} className={`w-0.5 bg-pink-500 ${i % 3 === 0 ? 'h-3' : i % 3 === 1 ? 'h-2' : 'h-1'}`} />
+            ))}
+          </div>
+        </div>
+      ),
+      gaming: (
+        <div className="relative flex items-center">
+          <div className="flex-1 flex items-center justify-center gap-2">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="w-1 h-1 bg-violet-500 rounded-full" />
+            ))}
+          </div>
+          <div className="px-4 flex items-center gap-2">
+            <div className="w-2 h-2 bg-violet-500 rounded-sm" />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 flex items-center justify-center gap-2">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="w-1 h-1 bg-violet-500 rounded-full" />
+            ))}
+          </div>
+        </div>
+      ),
+      // Default pattern for other categories
+      default: (
+        <div className="relative flex items-center">
+          <div className="flex-1 h-px bg-white/20" />
+          <div className="px-4 flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full ${getCategoryColor()}`} />
+            <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+          </div>
+          <div className="flex-1 h-px bg-white/20" />
+        </div>
+      )
+    };
+    
+    return separators[category] || separators.default;
+  };
+
   const renderAddButton = () => {
     return (
       <Button
@@ -233,18 +465,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Line Separator with Category */}
+        {/* Unique Category Separator */}
         <div className="mx-4 mb-6">
-          <div className="relative flex items-center">
-            <div className="flex-1 h-px bg-white/20"></div>
-            <div className="px-4 flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${getCategoryColor()}`}></div>
-              <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
-                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-              </span>
-            </div>
-            <div className="flex-1 h-px bg-white/20"></div>
-          </div>
+          {getMobileSeparator()}
         </div>
 
         {/* Links Grid with Better Spacing */}
