@@ -136,41 +136,196 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     }
   };
 
-  const getCategoryColor = () => {
-    const colorMap: Record<string, string> = {
-      tools: 'bg-orange-400',
-      streaming: 'bg-green-400',
-      social: 'bg-pink-400',
-      shopping: 'bg-yellow-400',
-      education: 'bg-blue-400',
-      news: 'bg-red-400',
-      ai: 'bg-purple-400',
-      languages: 'bg-indigo-400',
-      learning: 'bg-cyan-400',
-      technology: 'bg-teal-400',
-      design: 'bg-rose-400',
-      business: 'bg-violet-400',
-      finance: 'bg-emerald-400',
-      entertainment: 'bg-fuchsia-400',
-      communication: 'bg-sky-400',
-      productivity: 'bg-amber-400',
-      health: 'bg-red-500',
-      music: 'bg-pink-500',
-      photography: 'bg-slate-400',
-      art: 'bg-purple-500',
-      books: 'bg-indigo-500',
-      sports: 'bg-orange-500',
-      gaming: 'bg-violet-500',
-      investing: 'bg-green-500',
-      cryptocurrency: 'bg-yellow-500',
-      freelance: 'bg-blue-500',
-      meditation: 'bg-cyan-500',
-      dating: 'bg-rose-500',
-      parenting: 'bg-emerald-500',
-      custom: 'bg-purple-400'
+  const getCategoryDesign = () => {
+    const designs: Record<string, any> = {
+      tools: {
+        shape: 'w-2 h-8 rounded-none bg-gradient-to-b from-orange-400 to-orange-600',
+        text: 'text-orange-100 text-xl font-bold tracking-wide',
+        background: 'bg-gradient-to-r from-orange-500/10 to-transparent',
+        icon: '🔧'
+      },
+      streaming: {
+        shape: 'w-3 h-6 rounded-full bg-gradient-to-b from-green-400 to-green-600 animate-pulse',
+        text: 'text-green-100 text-xl font-semibold tracking-normal',
+        background: 'bg-gradient-to-r from-green-500/10 to-transparent',
+        icon: '▶️'
+      },
+      social: {
+        shape: 'w-4 h-4 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 shadow-lg shadow-pink-500/30',
+        text: 'text-pink-100 text-xl font-medium tracking-wide',
+        background: 'bg-gradient-to-r from-pink-500/10 to-transparent',
+        icon: '💬'
+      },
+      shopping: {
+        shape: 'w-6 h-3 rounded-sm bg-gradient-to-r from-yellow-400 to-yellow-600 rotate-45',
+        text: 'text-yellow-100 text-xl font-bold tracking-wider',
+        background: 'bg-gradient-to-r from-yellow-500/10 to-transparent',
+        icon: '🛒'
+      },
+      education: {
+        shape: 'w-2 h-10 rounded-full bg-gradient-to-t from-blue-400 to-blue-600',
+        text: 'text-blue-100 text-xl font-light tracking-widest',
+        background: 'bg-gradient-to-r from-blue-500/10 to-transparent',
+        icon: '📚'
+      },
+      news: {
+        shape: 'w-8 h-2 rounded-none bg-gradient-to-r from-red-400 to-red-600',
+        text: 'text-red-100 text-xl font-black tracking-tight',
+        background: 'bg-gradient-to-r from-red-500/10 to-transparent',
+        icon: '📰'
+      },
+      ai: {
+        shape: 'w-3 h-3 rounded-none bg-gradient-to-br from-purple-400 to-purple-600 rotate-45 animate-spin-slow',
+        text: 'text-purple-100 text-xl font-mono tracking-wide',
+        background: 'bg-gradient-to-r from-purple-500/10 to-transparent',
+        icon: '🤖'
+      },
+      languages: {
+        shape: 'w-1 h-12 rounded-full bg-gradient-to-b from-indigo-400 via-indigo-500 to-indigo-600',
+        text: 'text-indigo-100 text-xl font-serif tracking-wide',
+        background: 'bg-gradient-to-r from-indigo-500/10 to-transparent',
+        icon: '🗣️'
+      },
+      learning: {
+        shape: 'w-4 h-6 rounded-tr-full rounded-bl-full bg-gradient-to-br from-cyan-400 to-cyan-600',
+        text: 'text-cyan-100 text-xl font-medium tracking-wide',
+        background: 'bg-gradient-to-r from-cyan-500/10 to-transparent',
+        icon: '🎓'
+      },
+      technology: {
+        shape: 'w-5 h-5 rounded-sm bg-gradient-to-br from-teal-400 to-teal-600 border-2 border-teal-300',
+        text: 'text-teal-100 text-xl font-semibold tracking-wide',
+        background: 'bg-gradient-to-r from-teal-500/10 to-transparent',
+        icon: '💻'
+      },
+      design: {
+        shape: 'w-6 h-6 rounded-tl-full rounded-br-full bg-gradient-to-br from-rose-400 to-rose-600',
+        text: 'text-rose-100 text-xl font-light tracking-wider',
+        background: 'bg-gradient-to-r from-rose-500/10 to-transparent',
+        icon: '🎨'
+      },
+      business: {
+        shape: 'w-3 h-8 rounded-sm bg-gradient-to-b from-violet-400 to-violet-600 skew-x-12',
+        text: 'text-violet-100 text-xl font-semibold tracking-wide',
+        background: 'bg-gradient-to-r from-violet-500/10 to-transparent',
+        icon: '💼'
+      },
+      finance: {
+        shape: 'w-4 h-4 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/30',
+        text: 'text-emerald-100 text-xl font-bold tracking-wide',
+        background: 'bg-gradient-to-r from-emerald-500/10 to-transparent',
+        icon: '💰'
+      },
+      entertainment: {
+        shape: 'w-5 h-5 rounded-full bg-gradient-to-br from-fuchsia-400 to-fuchsia-600 animate-bounce',
+        text: 'text-fuchsia-100 text-xl font-playful tracking-wide',
+        background: 'bg-gradient-to-r from-fuchsia-500/10 to-transparent',
+        icon: '🎬'
+      },
+      communication: {
+        shape: 'w-2 h-6 rounded-full bg-gradient-to-b from-sky-400 to-sky-600',
+        text: 'text-sky-100 text-xl font-medium tracking-wide',
+        background: 'bg-gradient-to-r from-sky-500/10 to-transparent',
+        icon: '📞'
+      },
+      productivity: {
+        shape: 'w-6 h-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-600',
+        text: 'text-amber-100 text-xl font-semibold tracking-wide',
+        background: 'bg-gradient-to-r from-amber-500/10 to-transparent',
+        icon: '⚡'
+      },
+      health: {
+        shape: 'w-4 h-4 rounded-full bg-gradient-to-br from-red-500 to-red-700 animate-pulse',
+        text: 'text-red-100 text-xl font-medium tracking-wide',
+        background: 'bg-gradient-to-r from-red-500/10 to-transparent',
+        icon: '❤️'
+      },
+      music: {
+        shape: 'w-3 h-7 rounded-full bg-gradient-to-b from-pink-500 to-pink-700 animate-pulse',
+        text: 'text-pink-100 text-xl font-medium tracking-wide',
+        background: 'bg-gradient-to-r from-pink-500/10 to-transparent',
+        icon: '🎵'
+      },
+      photography: {
+        shape: 'w-5 h-5 rounded-sm bg-gradient-to-br from-slate-400 to-slate-600 border border-slate-300',
+        text: 'text-slate-100 text-xl font-light tracking-wide',
+        background: 'bg-gradient-to-r from-slate-500/10 to-transparent',
+        icon: '📸'
+      },
+      art: {
+        shape: 'w-4 h-6 rounded-tr-full rounded-bl-full bg-gradient-to-br from-purple-500 to-purple-700',
+        text: 'text-purple-100 text-xl font-artistic tracking-wide',
+        background: 'bg-gradient-to-r from-purple-500/10 to-transparent',
+        icon: '🎭'
+      },
+      books: {
+        shape: 'w-2 h-8 rounded-sm bg-gradient-to-b from-indigo-500 to-indigo-700',
+        text: 'text-indigo-100 text-xl font-serif tracking-wide',
+        background: 'bg-gradient-to-r from-indigo-500/10 to-transparent',
+        icon: '📖'
+      },
+      sports: {
+        shape: 'w-4 h-4 rounded-full bg-gradient-to-br from-orange-500 to-orange-700 animate-bounce',
+        text: 'text-orange-100 text-xl font-bold tracking-wide',
+        background: 'bg-gradient-to-r from-orange-500/10 to-transparent',
+        icon: '⚽'
+      },
+      gaming: {
+        shape: 'w-5 h-5 rounded-sm bg-gradient-to-br from-violet-500 to-violet-700 animate-pulse',
+        text: 'text-violet-100 text-xl font-mono tracking-wide',
+        background: 'bg-gradient-to-r from-violet-500/10 to-transparent',
+        icon: '🎮'
+      },
+      investing: {
+        shape: 'w-3 h-6 rounded-sm bg-gradient-to-b from-green-500 to-green-700 rotate-12',
+        text: 'text-green-100 text-xl font-bold tracking-wide',
+        background: 'bg-gradient-to-r from-green-500/10 to-transparent',
+        icon: '📈'
+      },
+      cryptocurrency: {
+        shape: 'w-4 h-4 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-700 animate-spin-slow',
+        text: 'text-yellow-100 text-xl font-mono tracking-wide',
+        background: 'bg-gradient-to-r from-yellow-500/10 to-transparent',
+        icon: '₿'
+      },
+      freelance: {
+        shape: 'w-6 h-3 rounded-sm bg-gradient-to-r from-blue-500 to-blue-700 skew-y-6',
+        text: 'text-blue-100 text-xl font-medium tracking-wide',
+        background: 'bg-gradient-to-r from-blue-500/10 to-transparent',
+        icon: '💪'
+      },
+      meditation: {
+        shape: 'w-4 h-4 rounded-full bg-gradient-to-br from-cyan-500 to-cyan-700 animate-pulse',
+        text: 'text-cyan-100 text-xl font-light tracking-widest',
+        background: 'bg-gradient-to-r from-cyan-500/10 to-transparent',
+        icon: '🧘'
+      },
+      dating: {
+        shape: 'w-4 h-4 rounded-full bg-gradient-to-br from-rose-500 to-rose-700 animate-pulse',
+        text: 'text-rose-100 text-xl font-medium tracking-wide',
+        background: 'bg-gradient-to-r from-rose-500/10 to-transparent',
+        icon: '💕'
+      },
+      parenting: {
+        shape: 'w-3 h-6 rounded-full bg-gradient-to-b from-emerald-500 to-emerald-700',
+        text: 'text-emerald-100 text-xl font-medium tracking-wide',
+        background: 'bg-gradient-to-r from-emerald-500/10 to-transparent',
+        icon: '👶'
+      },
+      custom: {
+        shape: 'w-3 h-6 rounded-sm bg-gradient-to-b from-purple-400 to-purple-600 rotate-45',
+        text: 'text-purple-100 text-xl font-medium tracking-wide',
+        background: 'bg-gradient-to-r from-purple-500/10 to-transparent',
+        icon: '⚙️'
+      }
     };
     
-    return colorMap[category] || 'bg-gray-400';
+    return designs[category] || {
+      shape: 'w-2 h-8 rounded-full bg-gradient-to-b from-gray-400 to-gray-600',
+      text: 'text-gray-100 text-xl font-medium tracking-wide',
+      background: 'bg-gradient-to-r from-gray-500/10 to-transparent',
+      icon: '📁'
+    };
   };
 
   const renderAddButton = () => {
@@ -195,12 +350,19 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Clean Category Header - Left Side */}
-        <div className="flex items-center gap-4 min-w-[140px] pt-6">
-          <div className={`w-2 h-8 rounded-full ${getCategoryColor()}`}></div>
-          <h2 className="text-white/90 text-xl font-light tracking-wide">
-            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-          </h2>
+        {/* Unique Category Design - Desktop */}
+        <div className={`flex items-center gap-4 min-w-[160px] pt-6 px-4 py-3 rounded-lg ${getCategoryDesign().background}`}>
+          <div className="flex items-center gap-3">
+            <div className={`${getCategoryDesign().shape} flex items-center justify-center`}>
+              <span className="text-xs">{getCategoryDesign().icon}</span>
+            </div>
+            <div>
+              <span className="text-lg opacity-60">{getCategoryDesign().icon}</span>
+              <h2 className={getCategoryDesign().text}>
+                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+              </h2>
+            </div>
+          </div>
         </div>
 
         {/* Enhanced Links Grid - Right Side */}
@@ -233,13 +395,18 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Clean Category Header - Mobile */}
-        <div className="px-4 mb-6">
+        {/* Unique Category Design - Mobile */}
+        <div className={`mx-4 mb-6 px-4 py-3 rounded-lg ${getCategoryDesign().background}`}>
           <div className="flex items-center gap-3">
-            <div className={`w-1 h-6 rounded-full ${getCategoryColor()}`}></div>
-            <h2 className="text-white/90 text-lg font-light tracking-wide">
-              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-            </h2>
+            <div className={`${getCategoryDesign().shape} flex items-center justify-center`}>
+              <span className="text-xs">{getCategoryDesign().icon}</span>
+            </div>
+            <div>
+              <span className="text-sm opacity-60">{getCategoryDesign().icon}</span>
+              <h2 className={getCategoryDesign().text.replace('text-xl', 'text-lg')}>
+                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+              </h2>
+            </div>
           </div>
         </div>
 
