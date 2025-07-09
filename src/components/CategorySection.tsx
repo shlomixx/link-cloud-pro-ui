@@ -228,20 +228,38 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-4 animate-fade-in"
+        className="md:hidden mb-8 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Mobile Category Line Separator */}
-        <div className="flex items-center gap-3 mb-2 px-4">
-          <div className="h-px bg-white/20 flex-1"></div>
-          <span className="text-white/70 text-sm font-medium px-2">
-            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-          </span>
-          <div className="h-px bg-white/20 flex-1"></div>
+        {/* Enhanced Mobile Category Header */}
+        <div className="mx-3 mb-6">
+          <div className="relative">
+            {/* Gradient Background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5 rounded-2xl backdrop-blur-sm"></div>
+            
+            {/* Content */}
+            <div className="relative flex items-center justify-center py-4 px-6">
+              {/* Left Accent Line */}
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-white/10"></div>
+              
+              {/* Category Badge */}
+              <div className="flex items-center gap-3 px-4">
+                <div className={`w-2 h-2 rounded-full ${getCategoryColor()} shadow-lg`}></div>
+                <span className="text-white font-medium text-base tracking-wide">
+                  {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+                </span>
+                <div className={`w-2 h-2 rounded-full ${getCategoryColor()} shadow-lg opacity-60`}></div>
+              </div>
+              
+              {/* Right Accent Line */}
+              <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/30 to-white/10"></div>
+            </div>
+          </div>
         </div>
 
+        {/* Links Grid with Better Spacing */}
         <div className={`${getMobileGridClasses()}`}>
           {links.map((link) => (
             <LinkCard
