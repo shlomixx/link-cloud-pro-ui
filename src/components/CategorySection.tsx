@@ -228,18 +228,23 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-4 animate-fade-in"
+        className="md:hidden mb-6 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Mobile Category Line Separator */}
-        <div className="flex items-center gap-3 mb-2 px-4">
-          <div className="h-px bg-white/20 flex-1"></div>
-          <span className="text-white/70 text-sm font-medium px-2">
-            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-          </span>
-          <div className="h-px bg-white/20 flex-1"></div>
+        {/* Enhanced Mobile Category Header */}
+        <div className="relative mb-4 px-4">
+          <div className="flex items-center justify-center gap-3 py-3 px-4 rounded-2xl bg-white/[0.02] backdrop-blur-sm border border-white/[0.05] shadow-sm">
+            <div className={`w-2 h-2 rounded-full ${getCategoryColor()} shadow-lg`}></div>
+            <h2 className="text-white/90 text-sm font-medium tracking-wide">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </h2>
+          </div>
+          
+          {/* Subtle decorative elements */}
+          <div className="absolute -top-1 -right-1 w-1 h-1 bg-white/10 rounded-full"></div>
+          <div className="absolute -bottom-1 -left-1 w-1 h-1 bg-white/10 rounded-full"></div>
         </div>
 
         <div className={`${getMobileGridClasses()}`}>
