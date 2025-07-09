@@ -149,6 +149,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       learning: 'bg-cyan-400',
       technology: 'bg-teal-400',
       design: 'bg-rose-400',
+      ux: 'bg-slate-400',
       business: 'bg-violet-400',
       finance: 'bg-emerald-400',
       entertainment: 'bg-fuchsia-400',
