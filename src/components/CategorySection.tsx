@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
@@ -215,7 +214,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       <div className="relative flex items-center py-4">
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         <div className="px-6">
-          <span className="text-white/90 text-base font-semibold uppercase tracking-wide">
+          <span className="text-white/90 text-lg font-semibold uppercase tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
         </div>
