@@ -239,40 +239,46 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
   return (
     <>
-      {/* Desktop Layout */}
+      {/* Desktop Layout - Enhanced UI/UX */}
       <div 
-        className="hidden md:flex items-start gap-8 mb-12 animate-slide-up"
+        className="hidden md:block mb-16 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Minimalist Category Label - Left Side */}
-        <div className="flex items-center min-w-[100px] pt-2">
-          <h2 className="text-white/90 text-base font-medium uppercase tracking-wide">
-            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-          </h2>
+        {/* Modern Category Header */}
+        <div className="flex items-center mb-8">
+          <div className="flex items-center gap-4">
+            <div className="w-1 h-8 bg-gradient-to-b from-white/40 to-white/10 rounded-full" />
+            <h2 className="text-white/95 text-xl font-light tracking-wide">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </h2>
+          </div>
+          <div className="flex-1 ml-8 h-px bg-gradient-to-r from-white/20 via-white/5 to-transparent" />
         </div>
 
-        {/* Links Grid - Right Side */}
-        <div className={`flex-1 ${getGridClasses()}`}>
-          {links.map((link) => (
-            <LinkCard
-              key={link.key}
-              link={link}
-              viewMode={viewMode}
-              isDarkMode={isDarkMode}
-              hoveredLink={hoveredLink}
-              clickedLink={clickedLink}
-              onMouseEnter={() => onMouseEnter(link.key)}
-              onMouseLeave={onMouseLeave}
-              onLinkClick={() => onLinkClick(link)}
-              onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
-              onEdit={() => onEditLink(link)}
-              onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
-              onDragStart={() => onDragStart(link.key)}
-            />
-          ))}
-          {renderAddButton()}
+        {/* Links Container with Enhanced Spacing */}
+        <div className="pl-5">
+          <div className={`${getGridClasses()}`}>
+            {links.map((link) => (
+              <LinkCard
+                key={link.key}
+                link={link}
+                viewMode={viewMode}
+                isDarkMode={isDarkMode}
+                hoveredLink={hoveredLink}
+                clickedLink={clickedLink}
+                onMouseEnter={() => onMouseEnter(link.key)}
+                onMouseLeave={onMouseLeave}
+                onLinkClick={() => onLinkClick(link)}
+                onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
+                onEdit={() => onEditLink(link)}
+                onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+                onDragStart={() => onDragStart(link.key)}
+              />
+            ))}
+            {renderAddButton()}
+          </div>
         </div>
       </div>
 
