@@ -213,13 +213,13 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getMobileSeparator = () => {
     return (
       <div className="relative flex items-center">
-        <div className="flex-1 h-px bg-white" />
+        <div className="flex-1 h-px bg-white/30" />
         <div className="px-4 flex items-center gap-2">
           <span className="text-white text-sm font-bold uppercase tracking-wider drop-shadow-lg">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
         </div>
-        <div className="flex-1 h-px bg-white" />
+        <div className="flex-1 h-px bg-white/30" />
       </div>
     );
   };
