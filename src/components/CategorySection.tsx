@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
@@ -138,40 +137,8 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   };
 
   const getCategoryColor = () => {
-    const colorMap: Record<string, string> = {
-      tools: 'bg-orange-400',
-      streaming: 'bg-green-400',
-      social: 'bg-pink-400',
-      shopping: 'bg-yellow-400',
-      education: 'bg-blue-400',
-      news: 'bg-red-400',
-      ai: 'bg-purple-400',
-      languages: 'bg-indigo-400',
-      learning: 'bg-cyan-400',
-      technology: 'bg-teal-400',
-      design: 'bg-rose-400',
-      business: 'bg-violet-400',
-      finance: 'bg-emerald-400',
-      entertainment: 'bg-fuchsia-400',
-      communication: 'bg-sky-400',
-      productivity: 'bg-amber-400',
-      health: 'bg-red-500',
-      music: 'bg-pink-500',
-      photography: 'bg-slate-400',
-      art: 'bg-purple-500',
-      books: 'bg-indigo-500',
-      sports: 'bg-orange-500',
-      gaming: 'bg-violet-500',
-      investing: 'bg-green-500',
-      cryptocurrency: 'bg-yellow-500',
-      freelance: 'bg-blue-500',
-      meditation: 'bg-cyan-500',
-      dating: 'bg-rose-500',
-      parenting: 'bg-emerald-500',
-      custom: 'bg-purple-400'
-    };
-    
-    return colorMap[category] || 'bg-gray-400';
+    // All categories now use the same pink color as social
+    return 'bg-pink-400';
   };
 
   const getMobileSeparator = () => {
