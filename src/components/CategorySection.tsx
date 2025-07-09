@@ -82,15 +82,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getMobileGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-5 gap-0.5 px-1 py-1';
+        return 'grid grid-cols-6 gap-2 px-2 py-1';
       case 'compact':
-        return 'grid grid-cols-5 gap-0.5 px-1 py-1';
+        return 'grid grid-cols-6 gap-2 px-2 py-1';
       case 'grid':
-        return 'grid grid-cols-5 gap-0.5 px-1 py-1';
+        return 'grid grid-cols-6 gap-2 px-2 py-1';
       case 'list':
-        return 'flex flex-col gap-1 px-1 py-1';
+        return 'flex flex-col gap-1 px-2 py-1';
       default:
-        return 'grid grid-cols-5 gap-0.5 px-1 py-1';
+        return 'grid grid-cols-6 gap-2 px-2 py-1';
     }
   };
 
@@ -233,26 +233,13 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Alternative Mobile Category Header - Card Style */}
-        <div className="mb-4 px-4">
-          <div className="relative">
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10 shadow-lg">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`w-3 h-3 rounded-full ${getCategoryColor()} shadow-sm`}></div>
-                  <span className="text-white/90 text-sm font-medium tracking-wide">
-                    {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-1 h-1 rounded-full bg-white/30"></div>
-                  <div className="w-1 h-1 rounded-full bg-white/20"></div>
-                  <div className="w-1 h-1 rounded-full bg-white/10"></div>
-                </div>
-              </div>
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rounded-2xl opacity-50"></div>
-          </div>
+        {/* Mobile Category Line Separator */}
+        <div className="flex items-center gap-3 mb-2 px-4">
+          <div className="h-px bg-white/20 flex-1"></div>
+          <span className="text-white/70 text-sm font-medium px-2">
+            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+          </span>
+          <div className="h-px bg-white/20 flex-1"></div>
         </div>
 
         <div className={`${getMobileGridClasses()}`}>
