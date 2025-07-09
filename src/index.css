@@ -8,13 +8,13 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 260 15% 5%;
+    --background: 0 0% 8%;
     --foreground: 0 0% 95%;
 
-    --card: 260 20% 8%;
+    --card: 0 0% 12%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 260 25% 6%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 95%;
 
     --primary: 260 100% 65%;
@@ -63,19 +63,19 @@ All colors MUST be HSL.
     --gradient-success: linear-gradient(135deg, hsl(120 100% 45%) 0%, hsl(140 90% 50%) 100%);
     --gradient-warning: linear-gradient(135deg, hsl(45 100% 55%) 0%, hsl(35 100% 60%) 100%);
     --gradient-info: linear-gradient(135deg, hsl(200 100% 50%) 0%, hsl(220 100% 55%) 100%);
-    --gradient-background: linear-gradient(180deg, hsl(260 15% 5%) 0%, hsl(280 20% 4%) 50%, hsl(240 18% 6%) 100%);
-    --gradient-card: linear-gradient(135deg, hsla(260 30% 8% / 0.9) 0%, hsla(280 25% 6% / 0.95) 100%);
+    --gradient-background: linear-gradient(180deg, hsl(0 0% 8%) 0%, hsl(0 0% 6%) 50%, hsl(0 0% 10%) 100%);
+    --gradient-card: linear-gradient(135deg, hsla(0 0% 12% / 0.9) 0%, hsla(0 0% 8% / 0.95) 100%);
     --gradient-hover: linear-gradient(135deg, hsl(260 100% 70%) 0%, hsl(280 100% 75%) 100%);
   }
 
   .dark {
-    --background: 260 15% 5%;
+    --background: 0 0% 8%;
     --foreground: 0 0% 95%;
 
-    --card: 260 20% 8%;
+    --card: 0 0% 12%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 260 25% 6%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 95%;
 
     --primary: 260 100% 65%;
@@ -121,8 +121,8 @@ All colors MUST be HSL.
     --gradient-success: linear-gradient(135deg, hsl(120 100% 45%) 0%, hsl(140 90% 50%) 100%);
     --gradient-warning: linear-gradient(135deg, hsl(45 100% 55%) 0%, hsl(35 100% 60%) 100%);
     --gradient-info: linear-gradient(135deg, hsl(200 100% 50%) 0%, hsl(220 100% 55%) 100%);
-    --gradient-background: linear-gradient(180deg, hsl(260 15% 5%) 0%, hsl(280 20% 4%) 50%, hsl(240 18% 6%) 100%);
-    --gradient-card: linear-gradient(135deg, hsla(260 30% 8% / 0.9) 0%, hsla(280 25% 6% / 0.95) 100%);
+    --gradient-background: linear-gradient(180deg, hsl(0 0% 8%) 0%, hsl(0 0% 6%) 50%, hsl(0 0% 10%) 100%);
+    --gradient-card: linear-gradient(135deg, hsla(0 0% 12% / 0.9) 0%, hsla(0 0% 8% / 0.95) 100%);
     --gradient-hover: linear-gradient(135deg, hsl(260 100% 70%) 0%, hsl(280 100% 75%) 100%);
   }
 }
