@@ -178,9 +178,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       <Button
         onClick={() => onAddLink(category)}
         variant="ghost"
-        className="flex items-center justify-center p-8 rounded-xl h-full min-h-[100px] cursor-pointer hover:bg-white/10 transition-all duration-300 group border-none"
+        className="flex items-center justify-center p-3 rounded-xl h-full cursor-pointer hover:bg-white/10 transition-all duration-300 group border-none"
       >
-        <Plus className="w-20 h-20 text-white/40 group-hover:text-white/70 transition-colors stroke-2" />
+        <Plus className="w-6 h-6 text-white/40 group-hover:text-white/70 transition-colors stroke-2" />
       </Button>
     );
   };
