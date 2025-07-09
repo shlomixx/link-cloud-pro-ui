@@ -233,22 +233,13 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Mobile Category Header */}
-        <div 
-          className="group cursor-pointer mb-4 relative active:scale-95 transition-all duration-200"
-          onClick={() => onAddLink(category)}
-        >
-          <div className="text-center relative p-3 rounded-2xl transition-all duration-300 group-active:bg-white/5">
-            <div className="flex items-center justify-center mb-3">
-              <div className="text-white text-xl font-bold tracking-wide drop-shadow-2xl transition-all duration-300 group-hover:scale-105 group-active:scale-102">
-                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-              </div>
-            </div>
-            
-            <div className="mt-3">
-              <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto rounded-full group-hover:via-white/80 group-hover:w-32 transition-all duration-300"></div>
-            </div>
-          </div>
+        {/* Mobile Category Line Separator */}
+        <div className="flex items-center gap-3 mb-2 px-4">
+          <div className="h-px bg-white/20 flex-1"></div>
+          <span className="text-white/70 text-sm font-medium px-2">
+            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+          </span>
+          <div className="h-px bg-white/20 flex-1"></div>
         </div>
 
         <div className={`${getMobileGridClasses()}`}>
