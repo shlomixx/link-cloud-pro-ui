@@ -268,6 +268,11 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           ))}
           {renderAddButton()}
         </div>
+        
+        {/* Mobile Category Separator */}
+        <div className="mx-4 mt-4 mb-2">
+          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+        </div>
       </div>
     </>
   );
