@@ -175,14 +175,18 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
   const renderAddButton = () => {
     return (
-      <Button
+      <div
         onClick={() => onAddLink(category)}
-        variant="ghost"
-        className="flex flex-col items-center justify-center gap-3 p-6 rounded-lg h-full min-h-[80px] cursor-pointer hover:bg-white/5 transition-colors duration-200"
+        className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-xl min-h-[80px] cursor-pointer border-2 border-dashed border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-all duration-300 hover:scale-105"
       >
-        <Plus className="w-8 h-8 text-white/50 hover:text-white/70" />
-        <span className="text-sm text-white/50 hover:text-white/70">Add</span>
-      </Button>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="relative z-10 p-2 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors duration-300">
+          <Plus className="w-6 h-6 text-white/60 group-hover:text-white/90 transition-colors duration-300" />
+        </div>
+        <span className="relative z-10 text-sm text-white/60 group-hover:text-white/90 font-medium transition-colors duration-300">
+          Add Link
+        </span>
+      </div>
     );
   };
 
