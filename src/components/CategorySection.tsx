@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
@@ -212,10 +211,10 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
   const getMobileSeparator = () => {
     return (
-      <div className="relative flex items-center py-3">
+      <div className="relative flex items-center py-4">
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-        <div className="px-4">
-          <span className="text-white/80 text-sm font-medium uppercase tracking-wide">
+        <div className="px-6">
+          <span className="text-white/90 text-lg font-semibold uppercase tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
         </div>
@@ -284,8 +283,8 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Minimal Category Separator */}
-        <div className="mx-4 mb-4">
+        {/* Larger Category Separator for Mobile */}
+        <div className="mx-4 mb-6">
           {getMobileSeparator()}
         </div>
 
