@@ -195,10 +195,10 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Minimalistic Category Sidebar - Left Side */}
-        <div className="flex items-center gap-3 min-w-[120px] pt-4">
-          <div className={`w-3 h-3 rounded-full ${getCategoryColor()}`}></div>
-          <h2 className="text-white text-lg font-medium">
+        {/* Clean Category Header - Left Side */}
+        <div className="flex items-center gap-4 min-w-[140px] pt-6">
+          <div className={`w-2 h-8 rounded-full ${getCategoryColor()}`}></div>
+          <h2 className="text-white/90 text-xl font-light tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
         </div>
@@ -233,17 +233,13 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Line Separator with Category */}
-        <div className="mx-4 mb-6">
-          <div className="relative flex items-center">
-            <div className="flex-1 h-px bg-white/20"></div>
-            <div className="px-4 flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${getCategoryColor()}`}></div>
-              <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
-                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-              </span>
-            </div>
-            <div className="flex-1 h-px bg-white/20"></div>
+        {/* Clean Category Header - Mobile */}
+        <div className="px-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className={`w-1 h-6 rounded-full ${getCategoryColor()}`}></div>
+            <h2 className="text-white/90 text-lg font-light tracking-wide">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </h2>
           </div>
         </div>
 
