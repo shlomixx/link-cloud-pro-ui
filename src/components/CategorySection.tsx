@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
@@ -212,16 +211,14 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
   const getMobileSeparator = () => {
     return (
-      <div className="relative flex items-center py-2">
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-        <div className="px-6 flex items-center gap-2">
-          <div className={`w-2 h-2 rounded-full ${getCategoryColor()} opacity-80`}></div>
-          <span className="text-white/90 text-sm font-medium uppercase tracking-wider">
+      <div className="relative flex items-center py-3">
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        <div className="px-4">
+          <span className="text-white/70 text-xs font-light uppercase tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
-          <div className={`w-2 h-2 rounded-full ${getCategoryColor()} opacity-80`}></div>
         </div>
-        <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/40 to-transparent" />
+        <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/20 to-transparent" />
       </div>
     );
   };
@@ -243,20 +240,19 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout */}
       <div 
-        className="hidden md:flex items-start gap-12 mb-10 animate-slide-up"
+        className="hidden md:flex items-start gap-8 mb-12 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Minimalistic Category Sidebar - Left Side */}
-        <div className="flex items-center gap-3 min-w-[120px] pt-4">
-          <div className={`w-3 h-3 rounded-full ${getCategoryColor()}`}></div>
-          <h2 className="text-white text-lg font-medium">
+        {/* Minimalist Category Label - Left Side */}
+        <div className="flex items-center min-w-[100px] pt-2">
+          <h2 className="text-white/80 text-sm font-light uppercase tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
         </div>
 
-        {/* Enhanced Links Grid - Right Side */}
+        {/* Links Grid - Right Side */}
         <div className={`flex-1 ${getGridClasses()}`}>
           {links.map((link) => (
             <LinkCard
@@ -286,12 +282,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Category Separator with Better Colors */}
-        <div className="mx-4 mb-6">
+        {/* Minimal Category Separator */}
+        <div className="mx-4 mb-4">
           {getMobileSeparator()}
         </div>
 
-        {/* Links Grid with Better Spacing */}
+        {/* Links Grid */}
         <div className={`${getMobileGridClasses()}`}>
           {links.map((link) => (
             <LinkCard
