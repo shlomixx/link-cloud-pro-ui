@@ -233,27 +233,13 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Professional Mobile Category Header */}
-        <div className="mx-4 mb-8">
-          <div className="relative">
-            {/* Subtle background */}
-            <div className="absolute inset-0 bg-white/5 rounded-xl backdrop-blur-sm border border-white/10"></div>
-            
-            {/* Content */}
-            <div className="relative flex items-center py-5 px-6">
-              {/* Category indicator */}
-              <div className={`w-1 h-6 rounded-full ${getCategoryColor()} mr-4 shadow-sm`}></div>
-              
-              {/* Category label */}
-              <div className="flex-1">
-                <h3 className="text-white font-semibold text-lg tracking-tight">
-                  {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-                </h3>
-              </div>
-              
-              {/* Subtle accent */}
-              <div className="w-8 h-px bg-white/20"></div>
-            </div>
+        {/* Minimalist Mobile Category Header */}
+        <div className="mx-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className={`w-1 h-4 rounded-full ${getCategoryColor()}`}></div>
+            <h3 className="text-white/90 text-sm font-medium uppercase tracking-wider">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </h3>
           </div>
         </div>
 
