@@ -233,18 +233,14 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Enhanced Mobile Category Header */}
+        {/* Minimalist Mobile Category Header */}
         <div className="mb-3 px-4">
-          <div className="flex items-center justify-center">
-            <div className="relative bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 shadow-lg">
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${getCategoryColor()} shadow-sm`}></div>
-                <span className="text-white/90 text-sm font-medium tracking-wide">
-                  {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-                </span>
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rounded-full opacity-50"></div>
-            </div>
+          <div className="flex items-center gap-3 py-3 border-b border-white/10">
+            <div className={`w-2 h-2 rounded-full ${getCategoryColor()}`}></div>
+            <span className="text-white/80 text-sm font-medium tracking-wide flex-1">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </span>
+            <div className="w-8 h-px bg-white/20"></div>
           </div>
         </div>
 
@@ -267,11 +263,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
             />
           ))}
           {renderAddButton()}
-        </div>
-        
-        {/* Mobile Category Separator */}
-        <div className="mx-4 mt-4 mb-2">
-          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
         </div>
       </div>
     </>
