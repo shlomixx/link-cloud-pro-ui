@@ -239,38 +239,27 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
   return (
     <>
-      {/* Desktop Layout - Premium UI/UX */}
+      {/* Desktop Layout - Enhanced UI/UX */}
       <div 
-        className="hidden md:block mb-20 animate-slide-up"
+        className="hidden md:block mb-16 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Elegant Category Header with Visual Hierarchy */}
-        <div className="flex items-center mb-10 group">
-          <div className="flex items-center gap-6">
-            {/* Sophisticated Accent Line */}
-            <div className="w-1.5 h-12 bg-gradient-to-b from-white/50 via-white/30 to-white/10 rounded-full shadow-sm" />
-            
-            {/* Premium Typography */}
-            <div className="flex flex-col gap-1">
-              <h2 className="text-white/95 text-2xl font-light tracking-tight leading-tight">
-                {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-              </h2>
-              <div className="h-0.5 w-8 bg-gradient-to-r from-white/40 to-transparent rounded-full transition-all duration-300 group-hover:w-16" />
-            </div>
+        {/* Modern Category Header */}
+        <div className="flex items-center mb-8">
+          <div className="flex items-center gap-4">
+            <div className="w-1 h-8 bg-gradient-to-b from-white/40 to-white/10 rounded-full" />
+            <h2 className="text-white/95 text-xl font-light tracking-wide">
+              {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+            </h2>
           </div>
-          
-          {/* Refined Separator Line */}
-          <div className="flex-1 ml-12 h-px bg-gradient-to-r from-white/25 via-white/10 to-transparent" />
+          <div className="flex-1 ml-8 h-px bg-gradient-to-r from-white/20 via-white/5 to-transparent" />
         </div>
 
-        {/* Enhanced Links Container */}
-        <div className="pl-8 relative">
-          {/* Subtle Background Accent */}
-          <div className="absolute -left-2 top-0 w-1 h-full bg-gradient-to-b from-white/5 via-white/2 to-transparent rounded-full" />
-          
-          <div className={`${getGridClasses()} relative`}>
+        {/* Links Container with Enhanced Spacing */}
+        <div className="pl-5">
+          <div className={`${getGridClasses()}`}>
             {links.map((link) => (
               <LinkCard
                 key={link.key}
