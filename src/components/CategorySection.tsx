@@ -82,15 +82,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getMobileGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-6 gap-4 px-4 py-3';
+        return 'grid grid-cols-5 gap-4 px-4 py-3';
       case 'compact':
-        return 'grid grid-cols-6 gap-4 px-4 py-3';
+        return 'grid grid-cols-5 gap-4 px-4 py-3';
       case 'grid':
-        return 'grid grid-cols-6 gap-4 px-4 py-3';
+        return 'grid grid-cols-5 gap-4 px-4 py-3';
       case 'list':
         return 'flex flex-col gap-3 px-4 py-3';
       default:
-        return 'grid grid-cols-6 gap-4 px-4 py-3';
+        return 'grid grid-cols-5 gap-4 px-4 py-3';
     }
   };
 
