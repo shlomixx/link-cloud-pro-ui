@@ -233,13 +233,19 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Mobile Category Line Separator */}
-        <div className="flex items-center gap-3 mb-2 px-4">
-          <div className="h-px bg-white/20 flex-1"></div>
-          <span className="text-white/70 text-sm font-medium px-2">
-            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-          </span>
-          <div className="h-px bg-white/20 flex-1"></div>
+        {/* Enhanced Mobile Category Header */}
+        <div className="mb-3 px-4">
+          <div className="flex items-center justify-center">
+            <div className="relative bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 shadow-lg">
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${getCategoryColor()} shadow-sm`}></div>
+                <span className="text-white/90 text-sm font-medium tracking-wide">
+                  {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
+                </span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent rounded-full opacity-50"></div>
+            </div>
+          </div>
         </div>
 
         <div className={`${getMobileGridClasses()}`}>
