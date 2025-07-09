@@ -235,12 +235,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       >
         {/* Enhanced Mobile Category Header */}
         <div className="mx-3 mb-6">
-          <div className="relative">
-            {/* Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-white/10 to-white/5 rounded-2xl backdrop-blur-sm"></div>
-            
-            {/* Content */}
-            <div className="relative flex items-center justify-center py-4 px-6">
+          <div className="flex items-center justify-center py-4 px-6">
               {/* Left Accent Line */}
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-white/10"></div>
               
@@ -256,7 +251,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               {/* Right Accent Line */}
               <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/30 to-white/10"></div>
             </div>
-          </div>
         </div>
 
         {/* Links Grid with Better Spacing */}
