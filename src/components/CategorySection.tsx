@@ -239,7 +239,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
             <div className="flex-1 h-px bg-white/20"></div>
             <div className="px-4 flex items-center gap-2">
               <div className={`w-2 h-2 rounded-full ${getCategoryColor()}`}></div>
-              <span className="text-white/80 text-xs font-medium uppercase tracking-wider">
+              <span className="text-white/80 text-sm font-medium uppercase tracking-wider">
                 {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
               </span>
             </div>
