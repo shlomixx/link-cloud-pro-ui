@@ -742,7 +742,11 @@ const Index = () => {
 
   if (isLoading) {
     return (
-      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300`}>
+      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' 
+          : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
+      }`}>
         <div className="text-center space-y-4">
           <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full mx-auto"></div>
           <p className={`text-lg ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
@@ -759,7 +763,11 @@ const Index = () => {
   };
 
   return (
-    <div className={`min-h-screen transition-all duration-500`}>
+    <div className={`min-h-screen transition-all duration-500 ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' 
+        : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
+    }`}>
       <AppHeader
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
