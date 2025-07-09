@@ -68,15 +68,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16 gap-4';
+        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16 gap-3';
       case 'compact':
-        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-5';
+        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-4';
       case 'grid':
-        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-6';
+        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-5';
       case 'list':
-        return 'flex flex-col gap-4';
+        return 'flex flex-col gap-3';
       default:
-        return 'grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-5';
+        return 'grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-4';
     }
   };
 
@@ -239,22 +239,23 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
   return (
     <>
-      {/* Desktop Layout */}
+      {/* Desktop Layout - Minimalist Design */}
       <div 
-        className="hidden md:flex items-start gap-8 mb-12 animate-slide-up"
+        className="hidden md:block mb-8 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Minimalist Category Label - Left Side */}
-        <div className="flex items-center min-w-[100px] pt-2">
-          <h2 className="text-white/90 text-base font-medium uppercase tracking-wide">
+        {/* Minimalist Category Header */}
+        <div className="flex items-center justify-between mb-6 px-1">
+          <h2 className="text-2xl font-light text-white/90 tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
+          <div className="h-px flex-1 bg-gradient-to-r from-white/20 via-white/10 to-transparent ml-8" />
         </div>
 
-        {/* Links Grid - Right Side */}
-        <div className={`flex-1 ${getGridClasses()}`}>
+        {/* Clean Links Grid */}
+        <div className={`${getGridClasses()} min-h-[120px]`}>
           {links.map((link) => (
             <LinkCard
               key={link.key}

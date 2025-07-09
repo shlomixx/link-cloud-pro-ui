@@ -799,10 +799,10 @@ const Index = () => {
       />
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-4">
-        {/* Desktop: Show only first 8 categories */}
-        <div className="hidden md:block">
-          {Object.entries(groupedLinks).slice(0, 8).map(([category, links]) => (
+      <div className="container mx-auto px-6 py-2">
+        {/* Desktop: Show first 6 categories to fill screen */}
+        <div className="hidden md:block space-y-4">
+          {Object.entries(groupedLinks).slice(0, 6).map(([category, links]) => (
             <CategorySection
               key={category}
               category={category}
