@@ -340,6 +340,30 @@ const Index = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [viewMode, isDarkMode, isModalOpen, searchTerm, isCompactHeader, showShortcuts]);
 
+  useEffect(() => {
+    if (sortBy === 'custom') return; // Don't sort if we are in custom mode
+
+    setLinksData(prevLinks => {
+      const sorted = [...prevLinks];
+      switch (sortBy) {
+        case 'clicks':
+          return sorted.sort((a, b) => (b.clicks || 0) - (a.clicks || 0));
+        case 'recent':
+          return sorted.sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
+        case 'favorites':
+          return sorted.sort((a, b) => {
+            if (a.isFavorite && !b.isFavorite) return -1;
+            if (!a.isFavorite && b.isFavorite) return 1;
+            return (b.clicks || 0) - (a.clicks || 0);
+          });
+        case 'name':
+           return sorted.sort((a, b) => a.name.localeCompare(b.name));
+        default:
+          return prevLinks;
+      }
+    });
+  }, [sortBy]);
+
   const handleQuickAction = (action: string) => {
     setQuickFilter(action);
     switch (action) {
@@ -374,7 +398,6 @@ const Index = () => {
 
     setTimeout(() => setClickedLink(null), 200);
     
-    // Actually open the link in a new tab
     const url = link.url || link.defaultUrl;
     if (url) {
       window.open(url, '_blank');
@@ -408,28 +431,10 @@ const Index = () => {
     );
   };
 
-  const sortLinks = (links: LinkData[]) => {
-    switch (sortBy) {
-      case 'clicks':
-        return [...links].sort((a, b) => (b.clicks || 0) - (a.clicks || 0));
-      case 'recent':
-        return [...links].sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
-      case 'favorites':
-        return [...links].sort((a, b) => {
-          if (a.isFavorite && !b.isFavorite) return -1;
-          if (!a.isFavorite && b.isFavorite) return 1;
-          return (b.clicks || 0) - (a.clicks || 0);
-        });
-      default:
-        return [...links].sort((a, b) => a.name.localeCompare(b.name));
-    }
-  };
-
   const filteredLinks = linksData.filter(link => {
     if (!showPrivateLinks && link.isPrivate) return false;
     if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
     
-    // Apply quick filter
     if (quickFilter === 'favorites' && !link.isFavorite) return false;
     if (quickFilter === 'recent') {
       const weekAgo = new Date();
@@ -449,11 +454,10 @@ const Index = () => {
   const groupedLinks = categoryOrder.reduce((acc, category) => {
     const linksForCategory = filteredLinks.filter(link => link.category === category);
     if (linksForCategory.length > 0) {
-      acc[category] = sortLinks(linksForCategory);
+      acc[category] = linksForCategory;
     }
     return acc;
   }, {} as Record<string, LinkData[]>);
-
 
   const openModal = (link?: LinkData, presetCategory?: string) => {
     if (link) {
@@ -579,6 +583,7 @@ const Index = () => {
     if (dragData) {
       const parsed = JSON.parse(dragData);
       if (parsed.type === 'link' && parsed.key) {
+        setSortBy('custom');
         setLinksData(prev => prev.map(link =>
           link.key === parsed.key ? { ...link, category: targetCategory } : link
         ));
@@ -589,7 +594,6 @@ const Index = () => {
   
   const handleDropUrl = async (url: string, targetCategory: string) => {
     try {
-      // Extract domain name for the link title
       const urlObj = new URL(url);
       const domain = urlObj.hostname.replace('www.', '');
       const name = domain.charAt(0).toUpperCase() + domain.slice(1);
@@ -603,7 +607,8 @@ const Index = () => {
         clicks: 0,
         createdAt: new Date().toISOString()
       };
-
+      
+      setSortBy('custom');
       setLinksData(prev => [...prev, newLink]);
       toast.success(`${name} added to ${categoryLabels[targetCategory as keyof typeof categoryLabels] || targetCategory}!`, {
         description: 'Link created from dropped URL',
@@ -617,30 +622,24 @@ const Index = () => {
     }
   };
 
-  const handleReorderLinks = (draggedKey: string, targetKey: string, category: string) => {
+  const handleReorderLinks = (draggedKey: string, targetKey: string) => {
+    setSortBy('custom');
     setLinksData(prev => {
-      const linksForCategory = prev.filter(link => link.category === category);
-      const otherLinks = prev.filter(link => link.category !== category);
-      
-      const draggedIndex = linksForCategory.findIndex(link => link.key === draggedKey);
-      const targetIndex = linksForCategory.findIndex(link => link.key === targetKey);
-  
-      if (draggedIndex === -1 || targetIndex === -1) return prev;
-  
-      const reorderedCategoryLinks = [...linksForCategory];
-      const [draggedLink] = reorderedCategoryLinks.splice(draggedIndex, 1);
-      reorderedCategoryLinks.splice(targetIndex, 0, draggedLink);
-  
-      // Re-assemble by preserving the main category order
-      return categoryOrder.flatMap(cat => 
-        cat === category ? reorderedCategoryLinks : otherLinks.filter(l => l.category === cat)
-      );
+        const newLinks = [...prev];
+        const draggedIndex = newLinks.findIndex(l => l.key === draggedKey);
+        const targetIndex = newLinks.findIndex(l => l.key === targetKey);
+
+        if (draggedIndex > -1 && targetIndex > -1) {
+            const [draggedItem] = newLinks.splice(draggedIndex, 1);
+            newLinks.splice(targetIndex, 0, draggedItem);
+        }
+        return newLinks;
     });
     toast.success('Link reordered!');
   };
 
   const exportData = () => {
-    const dataStr = JSON.stringify(linksData, null, 2);
+    const dataStr = JSON.stringify({ linksData, categoryOrder }, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
@@ -657,9 +656,14 @@ const Index = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
-          const importedData = JSON.parse(e.target?.result as string);
-          setLinksData(importedData);
-          setCategoryOrder(Array.from(new Set(importedData.map((link: LinkData) => link.category))));
+          const imported = JSON.parse(e.target?.result as string);
+          if (Array.isArray(imported)) { // Legacy format
+            setLinksData(imported);
+            setCategoryOrder(Array.from(new Set(imported.map((link: LinkData) => link.category))));
+          } else { // New format
+            setLinksData(imported.linksData);
+            setCategoryOrder(imported.categoryOrder);
+          }
           toast.success('Data imported successfully!');
         } catch (error) {
           toast.error('Invalid file format');
@@ -742,7 +746,6 @@ const Index = () => {
         popularCount={popularLinks.length}
       />
 
-      {/* Main Content */}
       <div className="container mx-auto px-6 py-2">
         <div className="space-y-4">
           {Object.entries(groupedLinks).map(([category, links]) => (
@@ -773,7 +776,6 @@ const Index = () => {
           ))}
         </div>
         
-        {/* Enhanced Empty State */}
         {Object.keys(groupedLinks).length === 0 && (
           <div className="text-center py-20 animate-fade-in">
             <div className="text-6xl mb-6 animate-bounce">🔗</div>
@@ -822,7 +824,6 @@ const Index = () => {
         )}
       </div>
 
-      {/* Floating Action Button */}
       <Button
         onClick={() => openModal()}
         className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 z-50 group"
@@ -830,7 +831,6 @@ const Index = () => {
         <Plus className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
       </Button>
 
-      {/* Hidden file input for import */}
       <input
         ref={fileInputRef}
         type="file"
