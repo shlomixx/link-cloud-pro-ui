@@ -1,4 +1,3 @@
-
 export interface LinkData {
   key: string;
   name: string;
@@ -26,6 +25,7 @@ export interface BaseLinkCardProps {
   onEdit: () => void;
   onCopyUrl: () => void;
   onDelete?: () => void;
+  onAdd?: () => void;
   onChangeCategory?: (newCategory: string) => void;
   onDragStart?: () => void;
 }
