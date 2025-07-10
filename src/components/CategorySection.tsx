@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
@@ -247,7 +248,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       >
         {/* Minimalist Category Header */}
         <div className="flex items-center justify-between mb-6 px-1">
-          <h2 className="text-2xl font-light text-white/90 tracking-wide">
+          <h2 className="text-2xl font-light text-white tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
           <div className="h-px flex-1 bg-gradient-to-r from-white/20 via-white/10 to-transparent ml-8" />
