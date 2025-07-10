@@ -454,6 +454,7 @@ const Index = () => {
     return acc;
   }, {} as Record<string, LinkData[]>);
 
+
   const openModal = (link?: LinkData, presetCategory?: string) => {
     if (link) {
       setEditingLink(link);
@@ -618,38 +619,23 @@ const Index = () => {
 
   const handleReorderLinks = (draggedKey: string, targetKey: string, category: string) => {
     setLinksData(prev => {
-      const categoryLinks = prev.filter(link => link.category === category);
+      const linksForCategory = prev.filter(link => link.category === category);
       const otherLinks = prev.filter(link => link.category !== category);
+      
+      const draggedIndex = linksForCategory.findIndex(link => link.key === draggedKey);
+      const targetIndex = linksForCategory.findIndex(link => link.key === targetKey);
   
-      const draggedIndex = categoryLinks.findIndex(link => link.key === draggedKey);
-      const targetIndex = categoryLinks.findIndex(link => link.key === targetKey);
+      if (draggedIndex === -1 || targetIndex === -1) return prev;
   
-      if (draggedIndex === -1 || targetIndex === -1) {
-        return prev;
-      }
-  
-      const reorderedCategoryLinks = [...categoryLinks];
+      const reorderedCategoryLinks = [...linksForCategory];
       const [draggedLink] = reorderedCategoryLinks.splice(draggedIndex, 1);
       reorderedCategoryLinks.splice(targetIndex, 0, draggedLink);
   
-      // Re-assemble the list, preserving the order of other categories
-      const newLinksData: LinkData[] = [];
-      const usedCategories = new Set<string>();
-  
-      prev.forEach(link => {
-        if (!usedCategories.has(link.category)) {
-          if (link.category === category) {
-            newLinksData.push(...reorderedCategoryLinks);
-          } else {
-            newLinksData.push(...otherLinks.filter(l => l.category === link.category));
-          }
-          usedCategories.add(link.category);
-        }
-      });
-  
-      return newLinksData;
+      // Re-assemble by preserving the main category order
+      return categoryOrder.flatMap(cat => 
+        cat === category ? reorderedCategoryLinks : otherLinks.filter(l => l.category === cat)
+      );
     });
-  
     toast.success('Link reordered!');
   };
 
@@ -758,8 +744,7 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-6 py-2">
-        {/* Desktop: Show all categories */}
-        <div className="hidden md:block space-y-4">
+        <div className="space-y-4">
           {Object.entries(groupedLinks).map(([category, links]) => (
             <CategorySection
               key={category}
@@ -787,37 +772,7 @@ const Index = () => {
             />
           ))}
         </div>
-
-        {/* Mobile: Show all categories */}
-        <div className="md:hidden">
-          {Object.entries(groupedLinks).map(([category, links]) => (
-            <CategorySection
-              key={category}
-              category={category}
-              links={links}
-              categoryLabels={categoryLabels}
-              categoryColors={categoryColors}
-              viewMode={viewMode}
-              isDarkMode={isDarkMode}
-              draggedItem={draggedItem}
-              hoveredLink={hoveredLink}
-              clickedLink={clickedLink}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-              onLinkClick={handleLinkClick}
-              onToggleFavorite={toggleFavorite}
-              onEditLink={openModal}
-              onCopyUrl={copyLinkUrl}
-              onMouseEnter={setHoveredLink}
-              onMouseLeave={() => setHoveredLink(null)}
-              onDragStart={handleDragStart}
-              onAddLink={(category) => openModal(undefined, category)}
-              onDropUrl={handleDropUrl}
-              onReorderLinks={handleReorderLinks}
-            />
-          ))}
-        </div>
-
+        
         {/* Enhanced Empty State */}
         {Object.keys(groupedLinks).length === 0 && (
           <div className="text-center py-20 animate-fade-in">
