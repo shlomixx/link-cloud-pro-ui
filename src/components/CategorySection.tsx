@@ -260,36 +260,54 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     e.stopPropagation();
     setDragOverIndex(null);
     
+    console.log('=== handleLinkDrop ===');
+    console.log('targetIndex:', targetIndex);
+    console.log('category:', category);
+    
     // Check for internal link drag data
     try {
       const dragData = e.dataTransfer.getData('application/json');
+      console.log('dragData:', dragData);
+      
       if (dragData) {
         const parsed = JSON.parse(dragData);
+        console.log('parsed drag data:', parsed);
+        
         if (parsed.type === 'link' && parsed.key) {
           const draggedLink = links.find(link => link.key === parsed.key);
           const targetLink = links[targetIndex];
           
+          console.log('draggedLink:', draggedLink);
+          console.log('targetLink:', targetLink);
+          
           if (draggedLink && targetLink && draggedLink.category === category && targetLink.category === category) {
+            console.log('Calling onReorderLinks with:', parsed.key, targetLink.key, category);
             onReorderLinks(parsed.key, targetLink.key, category);
             return;
           }
         }
       }
     } catch (error) {
-      // Fallback to old method
+      console.log('Error parsing drag data:', error);
     }
     
     // Fallback for old drag method
     if (draggedItem) {
+      console.log('Using fallback method with draggedItem:', draggedItem);
       const draggedLink = links.find(link => link.key === draggedItem);
       const targetLink = links[targetIndex];
       
+      console.log('Fallback - draggedLink:', draggedLink);
+      console.log('Fallback - targetLink:', targetLink);
+      
       if (draggedLink && targetLink && draggedLink.category === category && targetLink.category === category) {
+        console.log('Fallback - Calling onReorderLinks with:', draggedItem, targetLink.key, category);
         onReorderLinks(draggedItem, targetLink.key, category);
         return;
       }
     }
     
+    console.log('Not reordering - calling regular handleDrop');
     // If not reordering within same category, handle as regular drop
     handleDrop(e);
   };

@@ -625,27 +625,47 @@ const Index = () => {
   };
 
   const handleReorderLinks = (draggedKey: string, targetKey: string, category: string) => {
+    console.log('=== handleReorderLinks ===');
+    console.log('draggedKey:', draggedKey);
+    console.log('targetKey:', targetKey);
+    console.log('category:', category);
+    
     setLinksData(prev => {
+      console.log('Previous linksData:', prev);
+      
       // Get only links from the specific category and maintain their order
       const categoryLinks = prev.filter(link => link.category === category);
       const otherLinks = prev.filter(link => link.category !== category);
+      
+      console.log('categoryLinks:', categoryLinks);
+      console.log('otherLinks:', otherLinks);
       
       // Find the dragged and target link indices within the category
       const draggedIndex = categoryLinks.findIndex(link => link.key === draggedKey);
       const targetIndex = categoryLinks.findIndex(link => link.key === targetKey);
       
-      if (draggedIndex === -1 || targetIndex === -1) return prev;
+      console.log('draggedIndex:', draggedIndex);
+      console.log('targetIndex:', targetIndex);
+      
+      if (draggedIndex === -1 || targetIndex === -1) {
+        console.log('One of the indices not found, returning previous state');
+        return prev;
+      }
       
       // Reorder within the category
       const reorderedCategoryLinks = [...categoryLinks];
       const [draggedLink] = reorderedCategoryLinks.splice(draggedIndex, 1);
       reorderedCategoryLinks.splice(targetIndex, 0, draggedLink);
       
+      console.log('reorderedCategoryLinks:', reorderedCategoryLinks);
+      
       // Reconstruct the full array maintaining the original category order
       const result: LinkData[] = [];
       
       // Get unique categories in their original order
       const categoryOrder = Array.from(new Set(prev.map(link => link.category)));
+      
+      console.log('categoryOrder:', categoryOrder);
       
       for (const cat of categoryOrder) {
         if (cat === category) {
@@ -655,6 +675,7 @@ const Index = () => {
         }
       }
       
+      console.log('Final result:', result);
       return result;
     });
     
