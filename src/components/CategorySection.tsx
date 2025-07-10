@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
@@ -38,6 +37,7 @@ interface CategorySectionProps {
   onDragStart: (linkKey: string) => void;
   onAddLink: (category: string) => void;
   onDropUrl: (url: string, category: string) => void;
+  onReorderLinks: (draggedKey: string, targetKey: string, category: string) => void;
 }
 
 export const CategorySection: React.FC<CategorySectionProps> = ({
@@ -60,10 +60,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onMouseLeave,
   onDragStart,
   onAddLink,
-  onDropUrl
+  onDropUrl,
+  onReorderLinks
 }) => {
   const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
   const [isDragOverCategory, setIsDragOverCategory] = React.useState(false);
+  const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
 
   const getGridClasses = () => {
     switch (viewMode) {
@@ -92,48 +94,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         return 'flex flex-col gap-2 px-6 py-2';
       default:
         return 'grid grid-cols-5 gap-3 px-6 py-2';
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOverCategory(true);
-    onDragOver(e);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOverCategory(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOverCategory(false);
-    
-    // First check for internal link drag data
-    try {
-      const internalData = e.dataTransfer.getData('application/json');
-      if (internalData) {
-        const parsed = JSON.parse(internalData);
-        if (parsed.type === 'link' && parsed.key) {
-          onDrop(e, category);
-          return;
-        }
-      }
-    } catch (error) {
-      // Not internal drag data, continue with URL check
-    }
-    
-    // Then check for external URL drops
-    const url = e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain');
-    
-    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-      onDropUrl(url, category);
-    } else {
-      onDrop(e, category);
     }
   };
 
@@ -224,6 +184,116 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     );
   };
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOverCategory(true);
+    onDragOver(e);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOverCategory(false);
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOverCategory(false);
+    setDragOverIndex(null);
+    
+    // First check for internal link drag data
+    try {
+      const internalData = e.dataTransfer.getData('application/json');
+      if (internalData) {
+        const parsed = JSON.parse(internalData);
+        if (parsed.type === 'link' && parsed.key) {
+          onDrop(e, category);
+          return;
+        }
+      }
+    } catch (error) {
+      // Not internal drag data, continue with URL check
+    }
+    
+    // Then check for external URL drops
+    const url = e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain');
+    
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      onDropUrl(url, category);
+    } else {
+      onDrop(e, category);
+    }
+  };
+
+  const handleLinkDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Check if we're dragging a link from the same category
+    try {
+      const dragData = e.dataTransfer.getData('application/json');
+      if (dragData) {
+        const parsed = JSON.parse(dragData);
+        if (parsed.type === 'link' && parsed.key) {
+          const draggedLink = links.find(link => link.key === parsed.key);
+          if (draggedLink && draggedLink.category === category) {
+            setDragOverIndex(index);
+          }
+        }
+      }
+    } catch (error) {
+      // Handle fallback for old drag method
+      if (draggedItem) {
+        const draggedLink = links.find(link => link.key === draggedItem);
+        if (draggedLink && draggedLink.category === category) {
+          setDragOverIndex(index);
+        }
+      }
+    }
+  };
+
+  const handleLinkDrop = (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOverIndex(null);
+    
+    // Check for internal link drag data
+    try {
+      const dragData = e.dataTransfer.getData('application/json');
+      if (dragData) {
+        const parsed = JSON.parse(dragData);
+        if (parsed.type === 'link' && parsed.key) {
+          const draggedLink = links.find(link => link.key === parsed.key);
+          const targetLink = links[targetIndex];
+          
+          if (draggedLink && targetLink && draggedLink.category === category && targetLink.category === category) {
+            onReorderLinks(parsed.key, targetLink.key, category);
+            return;
+          }
+        }
+      }
+    } catch (error) {
+      // Fallback to old method
+    }
+    
+    // Fallback for old drag method
+    if (draggedItem) {
+      const draggedLink = links.find(link => link.key === draggedItem);
+      const targetLink = links[targetIndex];
+      
+      if (draggedLink && targetLink && draggedLink.category === category && targetLink.category === category) {
+        onReorderLinks(draggedItem, targetLink.key, category);
+        return;
+      }
+    }
+    
+    // If not reordering within same category, handle as regular drop
+    handleDrop(e);
+  };
+
   const renderAddButton = () => {
     return (
       <Button
@@ -256,22 +326,28 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
         {/* Clean Links Grid */}
         <div className={`${getGridClasses()} min-h-[120px]`}>
-          {links.map((link) => (
-            <LinkCard
+          {links.map((link, index) => (
+            <div
               key={link.key}
-              link={link}
-              viewMode={viewMode}
-              isDarkMode={isDarkMode}
-              hoveredLink={hoveredLink}
-              clickedLink={clickedLink}
-              onMouseEnter={() => onMouseEnter(link.key)}
-              onMouseLeave={onMouseLeave}
-              onLinkClick={() => onLinkClick(link)}
-              onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
-              onEdit={() => onEditLink(link)}
-              onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
-              onDragStart={() => onDragStart(link.key)}
-            />
+              onDragOver={(e) => handleLinkDragOver(e, index)}
+              onDrop={(e) => handleLinkDrop(e, index)}
+              className={`relative ${dragOverIndex === index ? 'ring-2 ring-blue-400 rounded-lg' : ''}`}
+            >
+              <LinkCard
+                link={link}
+                viewMode={viewMode}
+                isDarkMode={isDarkMode}
+                hoveredLink={hoveredLink}
+                clickedLink={clickedLink}
+                onMouseEnter={() => onMouseEnter(link.key)}
+                onMouseLeave={onMouseLeave}
+                onLinkClick={() => onLinkClick(link)}
+                onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
+                onEdit={() => onEditLink(link)}
+                onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+                onDragStart={() => onDragStart(link.key)}
+              />
+            </div>
           ))}
           {renderAddButton()}
         </div>
@@ -291,22 +367,28 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
         {/* Links Grid */}
         <div className={`${getMobileGridClasses()}`}>
-          {links.map((link) => (
-            <LinkCard
+          {links.map((link, index) => (
+            <div
               key={link.key}
-              link={link}
-              viewMode={viewMode}
-              isDarkMode={isDarkMode}
-              hoveredLink={hoveredLink}
-              clickedLink={clickedLink}
-              onMouseEnter={() => onMouseEnter(link.key)}
-              onMouseLeave={onMouseLeave}
-              onLinkClick={() => onLinkClick(link)}
-              onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
-              onEdit={() => onEditLink(link)}
-              onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
-              onDragStart={() => onDragStart(link.key)}
-            />
+              onDragOver={(e) => handleLinkDragOver(e, index)}
+              onDrop={(e) => handleLinkDrop(e, index)}
+              className={`relative ${dragOverIndex === index ? 'ring-2 ring-blue-400 rounded-lg' : ''}`}
+            >
+              <LinkCard
+                link={link}
+                viewMode={viewMode}
+                isDarkMode={isDarkMode}
+                hoveredLink={hoveredLink}
+                clickedLink={clickedLink}
+                onMouseEnter={() => onMouseEnter(link.key)}
+                onMouseLeave={onMouseLeave}
+                onLinkClick={() => onLinkClick(link)}
+                onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
+                onEdit={() => onEditLink(link)}
+                onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+                onDragStart={() => onDragStart(link.key)}
+              />
+            </div>
           ))}
           {renderAddButton()}
         </div>

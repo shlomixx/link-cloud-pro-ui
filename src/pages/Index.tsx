@@ -624,6 +624,26 @@ const Index = () => {
     }
   };
 
+  const handleReorderLinks = (draggedKey: string, targetKey: string, category: string) => {
+    setLinksData(prev => {
+      const categoryLinks = prev.filter(link => link.category === category);
+      const otherLinks = prev.filter(link => link.category !== category);
+      
+      const draggedIndex = categoryLinks.findIndex(link => link.key === draggedKey);
+      const targetIndex = categoryLinks.findIndex(link => link.key === targetKey);
+      
+      if (draggedIndex === -1 || targetIndex === -1) return prev;
+      
+      const reorderedCategoryLinks = [...categoryLinks];
+      const [draggedLink] = reorderedCategoryLinks.splice(draggedIndex, 1);
+      reorderedCategoryLinks.splice(targetIndex, 0, draggedLink);
+      
+      return [...otherLinks, ...reorderedCategoryLinks];
+    });
+    
+    toast.success('Link reordered within category!');
+  };
+
   const exportData = () => {
     const dataStr = JSON.stringify(linksData, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -753,6 +773,7 @@ const Index = () => {
               onDragStart={handleDragStart}
               onAddLink={(category) => openModal(undefined, category)}
               onDropUrl={handleDropUrl}
+              onReorderLinks={handleReorderLinks}
             />
           ))}
         </div>
@@ -782,6 +803,7 @@ const Index = () => {
               onDragStart={handleDragStart}
               onAddLink={(category) => openModal(undefined, category)}
               onDropUrl={handleDropUrl}
+              onReorderLinks={handleReorderLinks}
             />
           ))}
         </div>
