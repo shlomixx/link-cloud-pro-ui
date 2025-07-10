@@ -82,15 +82,15 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getMobileGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-5 gap-6 px-6 py-4';
+        return 'grid grid-cols-5 gap-6 px-6 py-2';
       case 'compact':
-        return 'grid grid-cols-5 gap-6 px-6 py-4';
+        return 'grid grid-cols-5 gap-6 px-6 py-2';
       case 'grid':
-        return 'grid grid-cols-5 gap-6 px-6 py-4';
+        return 'grid grid-cols-5 gap-6 px-6 py-2';
       case 'list':
-        return 'flex flex-col gap-4 px-6 py-4';
+        return 'flex flex-col gap-4 px-6 py-2';
       default:
-        return 'grid grid-cols-5 gap-6 px-6 py-4';
+        return 'grid grid-cols-5 gap-6 px-6 py-2';
     }
   };
 
@@ -211,7 +211,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
   const getMobileSeparator = () => {
     return (
-      <div className="relative flex items-center py-4">
+      <div className="relative flex items-center py-2">
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         <div className="px-6">
           <span className="text-white/90 text-lg font-semibold uppercase tracking-wide">
@@ -278,13 +278,13 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-8 animate-fade-in"
+        className="md:hidden mb-4 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {/* Larger Category Separator for Mobile */}
-        <div className="mx-4 mb-6">
+        <div className="mx-4 mb-2">
           {getMobileSeparator()}
         </div>
 
