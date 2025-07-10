@@ -626,19 +626,27 @@ const Index = () => {
 
   const handleReorderLinks = (draggedKey: string, targetKey: string, category: string) => {
     setLinksData(prev => {
-      const categoryLinks = prev.filter(link => link.category === category);
-      const otherLinks = prev.filter(link => link.category !== category);
+      const result = [...prev];
       
-      const draggedIndex = categoryLinks.findIndex(link => link.key === draggedKey);
-      const targetIndex = categoryLinks.findIndex(link => link.key === targetKey);
+      // Find the dragged and target link indices in the full array
+      const draggedIndex = result.findIndex(link => link.key === draggedKey);
+      const targetIndex = result.findIndex(link => link.key === targetKey);
       
       if (draggedIndex === -1 || targetIndex === -1) return prev;
       
-      const reorderedCategoryLinks = [...categoryLinks];
-      const [draggedLink] = reorderedCategoryLinks.splice(draggedIndex, 1);
-      reorderedCategoryLinks.splice(targetIndex, 0, draggedLink);
+      // Make sure both links are in the same category
+      if (result[draggedIndex].category !== category || result[targetIndex].category !== category) {
+        return prev;
+      }
       
-      return [...otherLinks, ...reorderedCategoryLinks];
+      // Remove the dragged item and insert it at the target position
+      const [draggedLink] = result.splice(draggedIndex, 1);
+      
+      // Adjust target index if the dragged item was before the target
+      const adjustedTargetIndex = draggedIndex < targetIndex ? targetIndex - 1 : targetIndex;
+      result.splice(adjustedTargetIndex, 0, draggedLink);
+      
+      return result;
     });
     
     toast.success('Link reordered within category!');
