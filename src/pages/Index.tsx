@@ -27,7 +27,8 @@ const Index = () => {
   const [quickFilter, setQuickFilter] = useState<string>('all');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  
+  const [categoryOrder, setCategoryOrder] = useState<string[]>([]);
+
   const [formData, setFormData] = useState<FormData>({
     name: '',
     url: '',
@@ -224,11 +225,15 @@ const Index = () => {
     setTimeout(() => {
       if (saved) {
         try {
-          setLinksData(JSON.parse(saved));
+          const loadedLinks = JSON.parse(saved);
+          setLinksData(loadedLinks);
+          setCategoryOrder(Array.from(new Set(loadedLinks.map((link: LinkData) => link.category))));
         } catch (error) {
           console.error('Error loading saved links:', error);
           toast.error('Failed to load saved links');
         }
+      } else {
+        setCategoryOrder(Array.from(new Set(linksData.map(link => link.category))));
       }
       
       if (savedSettings) {
@@ -441,16 +446,13 @@ const Index = () => {
     );
   });
 
-  const groupedLinks = filteredLinks.reduce((acc, link) => {
-    const category = link.category || 'custom';
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(link);
+  const groupedLinks = categoryOrder.reduce((acc, category) => {
+    const linksForCategory = filteredLinks.filter(link => link.category === category);
+    if (linksForCategory.length > 0) {
+      acc[category] = sortLinks(linksForCategory);
+    }
     return acc;
   }, {} as Record<string, LinkData[]>);
-
-  Object.keys(groupedLinks).forEach(category => {
-    groupedLinks[category] = sortLinks(groupedLinks[category]);
-  });
 
   const openModal = (link?: LinkData, presetCategory?: string) => {
     if (link) {
@@ -508,6 +510,9 @@ const Index = () => {
         createdAt: new Date().toISOString()
       };
       setLinksData(prev => [...prev, newLink]);
+      if (!categoryOrder.includes(formData.category)) {
+        setCategoryOrder(prev => [...prev, formData.category]);
+      }
       toast.success(`${formData.name} added successfully!`, {
         description: 'Your new link is ready to use',
         action: {
@@ -521,6 +526,9 @@ const Index = () => {
           ? { ...link, name: formData.name.trim(), url: url, category: formData.category, isPrivate: formData.isPrivate }
           : link
       ));
+      if (!categoryOrder.includes(formData.category)) {
+        setCategoryOrder(prev => [...prev, formData.category]);
+      }
       toast.success(`${formData.name} updated successfully!`);
     }
 
@@ -565,35 +573,19 @@ const Index = () => {
 
   const handleDrop = (e: React.DragEvent, targetCategory: string) => {
     e.preventDefault();
-    
-    // Try to get internal drag data first
-    try {
-      const dragData = e.dataTransfer.getData('application/json');
-      if (dragData) {
-        const parsed = JSON.parse(dragData);
-        if (parsed.type === 'link' && parsed.key) {
-          setLinksData(prev => prev.map(link => 
-            link.key === parsed.key ? { ...link, category: targetCategory } : link
-          ));
-          setDraggedItem(null);
-          toast.success('Link moved to new category!');
-          return;
-        }
+
+    const dragData = e.dataTransfer.getData('application/json');
+    if (dragData) {
+      const parsed = JSON.parse(dragData);
+      if (parsed.type === 'link' && parsed.key) {
+        setLinksData(prev => prev.map(link =>
+          link.key === parsed.key ? { ...link, category: targetCategory } : link
+        ));
+        toast.success('Link moved to new category!');
       }
-    } catch (error) {
-      // Fall back to the old method if JSON parsing fails
-    }
-    
-    // Fallback for the draggedItem state method
-    if (draggedItem) {
-      setLinksData(prev => prev.map(link => 
-        link.key === draggedItem ? { ...link, category: targetCategory } : link
-      ));
-      setDraggedItem(null);
-      toast.success('Link moved to new category!');
     }
   };
-
+  
   const handleDropUrl = async (url: string, targetCategory: string) => {
     try {
       // Extract domain name for the link title
@@ -625,61 +617,40 @@ const Index = () => {
   };
 
   const handleReorderLinks = (draggedKey: string, targetKey: string, category: string) => {
-    console.log('=== handleReorderLinks ===');
-    console.log('draggedKey:', draggedKey);
-    console.log('targetKey:', targetKey);
-    console.log('category:', category);
-    
     setLinksData(prev => {
-      console.log('Previous linksData:', prev);
-      
-      // Get only links from the specific category and maintain their order
       const categoryLinks = prev.filter(link => link.category === category);
       const otherLinks = prev.filter(link => link.category !== category);
-      
-      console.log('categoryLinks:', categoryLinks);
-      console.log('otherLinks:', otherLinks);
-      
-      // Find the dragged and target link indices within the category
+  
       const draggedIndex = categoryLinks.findIndex(link => link.key === draggedKey);
       const targetIndex = categoryLinks.findIndex(link => link.key === targetKey);
-      
-      console.log('draggedIndex:', draggedIndex);
-      console.log('targetIndex:', targetIndex);
-      
+  
       if (draggedIndex === -1 || targetIndex === -1) {
-        console.log('One of the indices not found, returning previous state');
         return prev;
       }
-      
-      // Reorder within the category
+  
       const reorderedCategoryLinks = [...categoryLinks];
       const [draggedLink] = reorderedCategoryLinks.splice(draggedIndex, 1);
       reorderedCategoryLinks.splice(targetIndex, 0, draggedLink);
-      
-      console.log('reorderedCategoryLinks:', reorderedCategoryLinks);
-      
-      // Reconstruct the full array maintaining the original category order
-      const result: LinkData[] = [];
-      
-      // Get unique categories in their original order
-      const categoryOrder = Array.from(new Set(prev.map(link => link.category)));
-      
-      console.log('categoryOrder:', categoryOrder);
-      
-      for (const cat of categoryOrder) {
-        if (cat === category) {
-          result.push(...reorderedCategoryLinks);
-        } else {
-          result.push(...otherLinks.filter(link => link.category === cat));
+  
+      // Re-assemble the list, preserving the order of other categories
+      const newLinksData: LinkData[] = [];
+      const usedCategories = new Set<string>();
+  
+      prev.forEach(link => {
+        if (!usedCategories.has(link.category)) {
+          if (link.category === category) {
+            newLinksData.push(...reorderedCategoryLinks);
+          } else {
+            newLinksData.push(...otherLinks.filter(l => l.category === link.category));
+          }
+          usedCategories.add(link.category);
         }
-      }
-      
-      console.log('Final result:', result);
-      return result;
+      });
+  
+      return newLinksData;
     });
-    
-    toast.success('Link reordered within category!');
+  
+    toast.success('Link reordered!');
   };
 
   const exportData = () => {
@@ -702,6 +673,7 @@ const Index = () => {
         try {
           const importedData = JSON.parse(e.target?.result as string);
           setLinksData(importedData);
+          setCategoryOrder(Array.from(new Set(importedData.map((link: LinkData) => link.category))));
           toast.success('Data imported successfully!');
         } catch (error) {
           toast.error('Invalid file format');
@@ -786,9 +758,9 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-6 py-2">
-        {/* Desktop: Show first 6 categories to fill screen */}
+        {/* Desktop: Show all categories */}
         <div className="hidden md:block space-y-4">
-          {Object.entries(groupedLinks).slice(0, 6).map(([category, links]) => (
+          {Object.entries(groupedLinks).map(([category, links]) => (
             <CategorySection
               key={category}
               category={category}
