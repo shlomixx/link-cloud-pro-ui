@@ -626,25 +626,34 @@ const Index = () => {
 
   const handleReorderLinks = (draggedKey: string, targetKey: string, category: string) => {
     setLinksData(prev => {
-      const result = [...prev];
+      // Get only links from the specific category and maintain their order
+      const categoryLinks = prev.filter(link => link.category === category);
+      const otherLinks = prev.filter(link => link.category !== category);
       
-      // Find the dragged and target link indices in the full array
-      const draggedIndex = result.findIndex(link => link.key === draggedKey);
-      const targetIndex = result.findIndex(link => link.key === targetKey);
+      // Find the dragged and target link indices within the category
+      const draggedIndex = categoryLinks.findIndex(link => link.key === draggedKey);
+      const targetIndex = categoryLinks.findIndex(link => link.key === targetKey);
       
       if (draggedIndex === -1 || targetIndex === -1) return prev;
       
-      // Make sure both links are in the same category
-      if (result[draggedIndex].category !== category || result[targetIndex].category !== category) {
-        return prev;
+      // Reorder within the category
+      const reorderedCategoryLinks = [...categoryLinks];
+      const [draggedLink] = reorderedCategoryLinks.splice(draggedIndex, 1);
+      reorderedCategoryLinks.splice(targetIndex, 0, draggedLink);
+      
+      // Reconstruct the full array maintaining the original category order
+      const result: LinkData[] = [];
+      
+      // Get unique categories in their original order
+      const categoryOrder = Array.from(new Set(prev.map(link => link.category)));
+      
+      for (const cat of categoryOrder) {
+        if (cat === category) {
+          result.push(...reorderedCategoryLinks);
+        } else {
+          result.push(...otherLinks.filter(link => link.category === cat));
+        }
       }
-      
-      // Remove the dragged item and insert it at the target position
-      const [draggedLink] = result.splice(draggedIndex, 1);
-      
-      // Adjust target index if the dragged item was before the target
-      const adjustedTargetIndex = draggedIndex < targetIndex ? targetIndex - 1 : targetIndex;
-      result.splice(adjustedTargetIndex, 0, draggedLink);
       
       return result;
     });

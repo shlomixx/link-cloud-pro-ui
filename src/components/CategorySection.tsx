@@ -325,7 +325,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         </div>
 
         {/* Clean Links Grid */}
-        <div className={`${getGridClasses()} min-h-[120px]`}>
+        <div className={`${getGridClasses()} min-h-[120px] relative`}>
           {links.map((link, index) => (
             <div
               key={link.key}
@@ -366,7 +366,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         </div>
 
         {/* Links Grid */}
-        <div className={`${getMobileGridClasses()}`}>
+        <div className={`${getMobileGridClasses()} relative`}>
           {links.map((link, index) => (
             <div
               key={link.key}
