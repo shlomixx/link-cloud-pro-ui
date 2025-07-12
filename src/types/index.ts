@@ -20,4 +20,4 @@ export interface FormData {
 }
 
 export type ViewMode = 'grid' | 'list' | 'compact' | 'dense';
-export type SortBy = 'name' | 'clicks' | 'recent' | 'favorites' | 'custom';
+export type SortBy = 'name' | 'clicks' | 'recent' | 'favorites';

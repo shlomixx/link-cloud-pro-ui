@@ -1,4 +1,3 @@
-// src/components/CategorySection.tsx
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
@@ -71,30 +70,30 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16 gap-4';
+        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16 gap-3';
       case 'compact':
-        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-6';
+        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-4';
       case 'grid':
-        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-8';
+        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-5';
       case 'list':
         return 'flex flex-col gap-3';
       default:
-        return 'grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-6';
+        return 'grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-4';
     }
   };
 
   const getMobileGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-5 gap-4 px-6 py-2';
+        return 'grid grid-cols-5 gap-3 px-6 py-2';
       case 'compact':
-        return 'grid grid-cols-5 gap-4 px-6 py-2';
+        return 'grid grid-cols-5 gap-3 px-6 py-2';
       case 'grid':
-        return 'grid grid-cols-5 gap-4 px-6 py-2';
+        return 'grid grid-cols-5 gap-3 px-6 py-2';
       case 'list':
-        return 'flex flex-col gap-3 px-6 py-2';
+        return 'flex flex-col gap-2 px-6 py-2';
       default:
-        return 'grid grid-cols-5 gap-4 px-6 py-2';
+        return 'grid grid-cols-5 gap-3 px-6 py-2';
     }
   };
 

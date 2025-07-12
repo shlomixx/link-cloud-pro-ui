@@ -1,6 +1,5 @@
-// src/components/link-card/GridView.tsx
-import React from 'react';
-import { Star, MoreHorizontal } from 'lucide-react';
+import React, { useState } from 'react';
+import { Star, GripVertical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
@@ -27,6 +26,23 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
 }) => {
   const isClicked = clickedLink === link.key;
   const isDesktop = useIsDesktop();
+  const [isHovered, setIsHovered] = useState(false);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    onMouseEnter();
+    setHoverTimeout(setTimeout(() => {
+      setIsHovered(true);
+    }, 1000));
+  };
+
+  const handleMouseLeave = () => {
+    onMouseLeave();
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+    setIsHovered(false);
+  };
 
   const handleAdd = onAdd ? onAdd : () => console.log('Add action triggered');
 
@@ -34,8 +50,8 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <div
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
           onClick={onLinkClick}
           {...(isDesktop ? { 
             draggable: "true",
@@ -58,11 +74,39 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
             ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
           `}
         >
-          <div className="absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <Button size="icon" variant="ghost" className="h-6 w-6">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </div>
+          {isHovered && (
+             <div className="absolute top-1 right-1 flex flex-col gap-1 z-20">
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-6 w-6"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete?.();
+                }}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-6 w-6"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAdd();
+                }}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+               <Button
+                size="icon"
+                variant="ghost"
+                className="h-6 w-6 cursor-grab"
+              >
+                <GripVertical className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
 
           <Button
             size="sm"
@@ -81,21 +125,21 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
 
           <div className="relative">
             <div className={`
-              w-20 h-20 rounded-2xl flex items-center justify-center
+              w-16 h-16 rounded-2xl flex items-center justify-center
               ${isDarkMode ? 'bg-slate-700/50' : 'bg-white/50'}
               backdrop-blur-sm transition-all duration-300 group-hover:scale-110
             `}>
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
-                className="w-12 h-12 rounded-lg"
+                className="w-10 h-10 rounded-lg"
                 onError={handleFaviconError}
               />
             </div>
           </div>
           
           <div className="w-full text-center">
-            <h3 className={`font-semibold text-lg truncate ${
+            <h3 className={`font-semibold text-base truncate ${
               isDarkMode ? 'text-white' : 'text-slate-800'
             }`}>
               {link.name}
