@@ -63,7 +63,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             }
           } : {})}
           className={`
-            group relative flex flex-col items-center gap-2 p-3 cursor-pointer min-w-[80px] max-w-[80px]
+            group relative flex flex-col items-center gap-2 p-3 cursor-pointer min-w-[90px] max-w-[90px]
             transition-all duration-300 hover:scale-105 hover:translate-y-[-2px]
             ${isClicked ? 'scale-95' : ''}
             ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
@@ -85,17 +85,17 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             </div>
           )}
           <div className="relative">
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300">
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300">
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
-                className="w-10 h-10 rounded-lg"
+                className="w-12 h-12 rounded-lg"
                 onError={handleFaviconError}
               />
             </div>
           </div>
           
-          <span className="text-white/90 text-sm text-center truncate w-full font-medium group-hover:text-white transition-all duration-200">
+          <span className="text-white/90 text-base text-center truncate w-full font-medium group-hover:text-white transition-all duration-200">
             {link.name}
           </span>
         </div>
