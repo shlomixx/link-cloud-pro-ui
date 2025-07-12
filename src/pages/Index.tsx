@@ -29,7 +29,7 @@ const Index = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [categoryOrder, setCategoryOrder] = useState<string[]>([]);
   const [recentlyDeleted, setRecentlyDeleted] = useState<Array<LinkData & { deletedAt: number }>>([]);
-  const [linkSize, setLinkSize] = useState(90);
+  const [linkSize, setLinkSize] = useState(80);
 
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -673,14 +673,10 @@ const Index = () => {
 
   if (isLoading) {
     return (
-      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
-        isDarkMode 
-          ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' 
-          : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
-      }`}>
+      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 bg-background`}>
         <div className="text-center space-y-4">
           <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full mx-auto"></div>
-          <p className={`text-lg ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
+          <p className={`text-lg text-foreground`}>
             Loading your links...
           </p>
         </div>
@@ -694,11 +690,7 @@ const Index = () => {
   };
 
   return (
-    <div className={`min-h-screen transition-all duration-500 ${
-      isDarkMode 
-        ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' 
-        : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
-    }`}>
+    <div className={`min-h-screen transition-all duration-500 bg-background`}>
       <AppHeader
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
@@ -765,14 +757,10 @@ const Index = () => {
         {Object.keys(groupedLinks).length === 0 && (
           <div className="text-center py-20 animate-fade-in">
             <div className="text-6xl mb-6 animate-bounce">🔗</div>
-            <h3 className={`text-2xl font-bold mb-3 transition-colors duration-300 ${
-              isDarkMode ? 'text-white' : 'text-slate-800'
-            }`}>
+            <h3 className={`text-2xl font-bold mb-3 transition-colors duration-300 text-foreground`}>
               {searchTerm || quickFilter !== 'all' ? 'No links found' : 'Your link collection awaits'}
             </h3>
-            <p className={`mb-8 text-lg transition-colors duration-300 ${
-              isDarkMode ? 'text-slate-400' : 'text-slate-500'
-            }`}>
+            <p className={`mb-8 text-lg transition-colors duration-300 text-muted-foreground`}>
               {searchTerm 
                 ? `No links match "${searchTerm}". Try adjusting your search terms.`
                 : quickFilter !== 'all'
@@ -796,11 +784,7 @@ const Index = () => {
                     setQuickFilter('all');
                     setSortBy('name');
                   }}
-                  className={`px-6 py-3 text-lg transition-all duration-300 hover:scale-105 ${
-                    isDarkMode 
-                      ? 'border-white/20 text-white hover:bg-white/10' 
-                      : 'border-black/20 text-slate-800 hover:bg-black/10'
-                  }`}
+                  className={`px-6 py-3 text-lg transition-all duration-300 hover:scale-105 border-foreground/20 text-foreground hover:bg-foreground/10`}
                 >
                   Clear Filters
                 </Button>
