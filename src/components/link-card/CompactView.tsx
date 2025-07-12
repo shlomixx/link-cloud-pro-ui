@@ -23,7 +23,6 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
   onChangeCategory,
   onDragStart,
   onAdd,
-  linkSize = 90, // Default size
 }) => {
   const isClicked = clickedLink === link.key;
   const isDesktop = useIsDesktop();
@@ -47,10 +46,6 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
 
   const handleAdd = onAdd ? onAdd : () => console.log('Add action triggered');
 
-  const containerSize = linkSize;
-  const iconContainerSize = containerSize * 0.7;
-  const iconSize = iconContainerSize * 0.7;
-
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
@@ -68,12 +63,11 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             }
           } : {})}
           className={`
-            group relative flex flex-col items-center gap-2 p-3 cursor-pointer
+            group relative flex flex-col items-center gap-2 p-3 cursor-pointer min-w-[60px] max-w-[60px]
             transition-all duration-300 hover:scale-105 hover:translate-y-[-2px]
             ${isClicked ? 'scale-95' : ''}
             ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
           `}
-          style={{ minWidth: `${containerSize}px`, maxWidth: `${containerSize}px` }}
         >
           {isHovered && (
              <div className="absolute top-0 right-0 flex flex-col gap-0.5 z-20">
@@ -91,18 +85,17 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             </div>
           )}
           <div className="relative">
-            <div className="rounded-xl flex items-center justify-center transition-all duration-300" style={{ width: `${iconContainerSize}px`, height: `${iconContainerSize}px`}}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300">
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
-                className="rounded-lg"
-                style={{ width: `${iconSize}px`, height: `${iconSize}px`}}
+                className="w-8 h-8 rounded-lg"
                 onError={handleFaviconError}
               />
             </div>
           </div>
           
-          <span className="text-white/90 text-base text-center truncate w-full font-medium group-hover:text-white transition-all duration-200">
+          <span className="text-white/90 text-xs text-center truncate w-full font-medium group-hover:text-white transition-all duration-200">
             {link.name}
           </span>
         </div>

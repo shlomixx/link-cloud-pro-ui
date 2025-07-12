@@ -28,8 +28,6 @@ const Index = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [categoryOrder, setCategoryOrder] = useState<string[]>([]);
-  const [recentlyDeleted, setRecentlyDeleted] = useState<Array<LinkData & { deletedAt: number }>>([]);
-  const [linkSize, setLinkSize] = useState(90);
 
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -510,45 +508,10 @@ const Index = () => {
   };
 
   const handleDeleteLink = (linkKey: string) => {
-    const linkToDelete = linksData.find((link) => link.key === linkKey);
-    if (linkToDelete) {
-      const newRecentlyDeleted = [
-        ...recentlyDeleted,
-        { ...linkToDelete, deletedAt: Date.now() },
-      ];
-      setRecentlyDeleted(newRecentlyDeleted);
-      setLinksData((prev) => prev.filter((link) => link.key !== linkKey));
-
-      toast.success(`${linkToDelete.name} deleted`, {
-        action: {
-          label: "Undo",
-          onClick: () => handleRestoreLink(linkKey),
-        },
-      });
-    }
-  };
-
-  const handleRestoreLink = (linkKey: string) => {
-    const linkToRestore = recentlyDeleted.find((link) => link.key === linkKey);
-    if (linkToRestore) {
-      const { deletedAt, ...originalLink } = linkToRestore;
-      setLinksData((prev) => [...prev, originalLink]);
-      setRecentlyDeleted((prev) => prev.filter((link) => link.key !== linkKey));
-      toast.success(`${linkToRestore.name} restored`);
-    }
-  };
-
-  const handleToggleFavorite = (linkKey: string) => {
-    setLinksData((prev) => 
-      prev.map((link) => 
-        link.key === linkKey 
-          ? { ...link, isFavorite: !link.isFavorite }
-          : link
-      )
-    );
-    const link = linksData.find(l => l.key === linkKey);
-    if (link) {
-      toast.success(`${link.name} ${link.isFavorite ? 'removed from' : 'added to'} favorites`);
+    setLinksData(prev => prev.filter(link => link.key !== linkKey));
+    const deletedLink = linksData.find(link => link.key === linkKey);
+    if (deletedLink) {
+      toast.success(`${deletedLink.name} deleted successfully`);
     }
   };
 
@@ -726,8 +689,6 @@ const Index = () => {
         onQuickAction={handleQuickAction}
         recentCount={recentLinks.length}
         popularCount={popularLinks.length}
-        linkSize={linkSize}
-        onLinkSizeChange={setLinkSize}
       />
 
       <div className="container mx-auto px-6 py-2">
@@ -756,8 +717,6 @@ const Index = () => {
               onDropUrl={handleDropUrl}
               onReorderLinks={handleReorderLinks}
               onDeleteLink={handleDeleteLink}
-              onToggleFavorite={handleToggleFavorite}
-              linkSize={linkSize}
             />
           ))}
         </div>

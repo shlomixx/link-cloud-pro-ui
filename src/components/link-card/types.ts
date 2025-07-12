@@ -28,5 +28,4 @@ export interface BaseLinkCardProps {
   onAdd?: () => void;
   onChangeCategory?: (newCategory: string) => void;
   onDragStart?: () => void;
-  linkSize?: number;
 }

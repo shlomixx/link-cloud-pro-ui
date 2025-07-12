@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Search, Plus, Grid, List, Moon, Sun, Maximize2, Minimize2, Zap, Filter, Settings, Download, Upload, Eye, EyeOff, Keyboard, Heart, Clock, TrendingUp, Menu, X, ArrowUpDown, Trash2, Copy, RotateCcw, Share2, BookmarkPlus, Shuffle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Slider } from "@/components/ui/slider"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Star } from 'lucide-react';
 
 interface AppHeaderProps {
@@ -28,13 +27,12 @@ interface AppHeaderProps {
   onShowShortcuts: () => void;
   linksCount: number;
   totalClicks: number;
+  favoriteCount: number;
   categoriesCount: number;
   fileInputRef: React.RefObject<HTMLInputElement>;
   onQuickAction: (action: string) => void;
   recentCount: number;
   popularCount: number;
-  linkSize: number;
-  onLinkSizeChange: (size: number) => void;
 }
 
 export const AppHeader: React.FC<AppHeaderProps> = ({
@@ -59,13 +57,12 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   onShowShortcuts,
   linksCount,
   totalClicks,
+  favoriteCount,
   categoriesCount,
   fileInputRef,
   onQuickAction,
   recentCount,
-  popularCount,
-  linkSize,
-  onLinkSizeChange
+  popularCount
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -182,6 +179,13 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                     לינק אקראי
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    onClick={() => onQuickAction('favorites')}
+                    className="h-8 justify-start cursor-pointer"
+                  >
+                    <Heart className="w-4 h-4 mr-2" />
+                    מועדפים ({favoriteCount})
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
                     onClick={() => onQuickAction('recent')}
                     className="h-8 justify-start cursor-pointer"
                   >
@@ -256,19 +260,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                   {showPrivateLinks ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
                   {showPrivateLinks ? 'הסתר פרטיים' : 'הצג פרטיים'}
                 </DropdownMenuItem>
-                
-                <DropdownMenuSeparator />
-
-                <DropdownMenuLabel>Link Size: {linkSize}px</DropdownMenuLabel>
-                <div className="p-2">
-                  <Slider
-                    defaultValue={[linkSize]}
-                    max={150}
-                    min={40}
-                    step={1}
-                    onValueChange={(value) => onLinkSizeChange(value[0])}
-                  />
-                </div>
                 
                 <DropdownMenuSeparator />
                 
