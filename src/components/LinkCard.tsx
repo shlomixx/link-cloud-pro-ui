@@ -3,12 +3,12 @@ import { Star, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { BaseLinkCardProps } from './types';
-import { getFaviconUrl, handleFaviconError } from './utils';
-import { LinkCardContextMenu } from './ContextMenuContent';
+import { BaseLinkCardProps } from './link-card/types';
+import { getFaviconUrl, handleFaviconError } from './link-card/utils';
+import { LinkCardContextMenu } from './link-card/ContextMenuContent';
 import { useIsDesktop } from '@/hooks/use-is-desktop';
 
-export const DenseView: React.FC<BaseLinkCardProps> = ({
+export const LinkCard: React.FC<BaseLinkCardProps> = ({
   link,
   isDarkMode,
   hoveredLink,
