@@ -23,6 +23,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
   onChangeCategory,
   onDragStart,
   onAdd,
+  linkSize = 90, // Default size
 }) => {
   const isClicked = clickedLink === link.key;
   const isDesktop = useIsDesktop();
@@ -46,6 +47,10 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
 
   const handleAdd = onAdd ? onAdd : () => console.log('Add action triggered');
 
+  const containerSize = linkSize;
+  const iconContainerSize = containerSize * 0.7;
+  const iconSize = iconContainerSize * 0.7;
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
@@ -63,11 +68,12 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             }
           } : {})}
           className={`
-            group relative flex flex-col items-center gap-2 p-3 cursor-pointer min-w-[90px] max-w-[90px]
+            group relative flex flex-col items-center gap-2 p-3 cursor-pointer
             transition-all duration-300 hover:scale-105 hover:translate-y-[-2px]
             ${isClicked ? 'scale-95' : ''}
             ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
           `}
+          style={{ minWidth: `${containerSize}px`, maxWidth: `${containerSize}px` }}
         >
           {isHovered && (
              <div className="absolute top-0 right-0 flex flex-col gap-0.5 z-20">
@@ -85,11 +91,12 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             </div>
           )}
           <div className="relative">
-            <div className="w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300">
+            <div className="rounded-xl flex items-center justify-center transition-all duration-300" style={{ width: `${iconContainerSize}px`, height: `${iconContainerSize}px`}}>
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
-                className="w-12 h-12 rounded-lg"
+                className="rounded-lg"
+                style={{ width: `${iconSize}px`, height: `${iconSize}px`}}
                 onError={handleFaviconError}
               />
             </div>

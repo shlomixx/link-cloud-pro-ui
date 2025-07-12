@@ -262,7 +262,90 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                 </DropdownMenuItem>
                 
                 <DropdownMenuSeparator />
+                import React, { useState } from 'react';
+import { Search, Plus, Grid, List, Moon, Sun, Maximize2, Minimize2, Zap, Filter, Settings, Download, Upload, Eye, EyeOff, Keyboard, Heart, Clock, TrendingUp, Menu, X, ArrowUpDown, Trash2, Copy, RotateCcw, Share2, BookmarkPlus, Shuffle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Slider } from "@/components/ui/slider"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
+import { Star } from 'lucide-react';
+
+interface AppHeaderProps {
+  // ... other props
+  linkSize: number;
+  onLinkSizeChange: (size: number) => void;
+}
+
+export const AppHeader: React.FC<AppHeaderProps> = ({
+  // ... other props
+  linkSize,
+  onLinkSizeChange,
+}) => {
+...
+...
+...
+              {/* Settings */}
+              <div className="p-2">
+                <div className="text-xs font-medium mb-2 text-muted-foreground">הגדרות</div>
+                <DropdownMenuItem
+                  onClick={onToggleDarkMode}
+                  className="h-8 justify-start cursor-pointer mb-1"
+                >
+                  {isDarkMode ? <Sun className="w-4 h-4 mr-2" /> : <Moon className="w-4 h-4 mr-2" />}
+                  {isDarkMode ? 'מצב בהיר' : 'מצב כהה'}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={onTogglePrivateLinks}
+                  className="h-8 justify-start cursor-pointer mb-1"
+                >
+                  {showPrivateLinks ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
+                  {showPrivateLinks ? 'הסתר פרטיים' : 'הצג פרטיים'}
+                </DropdownMenuItem>
                 
+                <DropdownMenuSeparator />
+
+                <DropdownMenuLabel>Link Size: {linkSize}px</DropdownMenuLabel>
+                <div className="p-2">
+                  <Slider
+                    defaultValue={[linkSize]}
+                    max={150}
+                    min={40}
+                    step={1}
+                    onValueChange={(value) => onLinkSizeChange(value[0])}
+                  />
+                </div>
+
+                <DropdownMenuSeparator />
+                
+                <DropdownMenuItem
+                  onClick={onExportData}
+                  className="h-8 justify-start cursor-pointer mb-1"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  ייצא נתונים
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => fileInputRef.current?.click()}
+                  className="h-8 justify-start cursor-pointer mb-1"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  ייבא נתונים
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={onShowShortcuts}
+                  className="h-8 justify-start cursor-pointer"
+                >
+                  <Keyboard className="w-4 h-4 mr-2" />
+                  קיצורי מקלדת
+                </DropdownMenuItem>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </div>
+  );
+};
                 <DropdownMenuItem
                   onClick={onExportData}
                   className="h-8 justify-start cursor-pointer mb-1"
