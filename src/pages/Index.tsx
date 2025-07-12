@@ -29,7 +29,7 @@ const Index = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [categoryOrder, setCategoryOrder] = useState<string[]>([]);
   const [recentlyDeleted, setRecentlyDeleted] = useState<Array<LinkData & { deletedAt: number }>>([]);
-  const [linkSize, setLinkSize] = useState(90);
+  const [linkSize, setLinkSize] = useState(80);
 
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -675,7 +675,7 @@ const Index = () => {
     return (
       <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
         isDarkMode 
-          ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' 
+          ? 'bg-black' 
           : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
       }`}>
         <div className="text-center space-y-4">
@@ -696,7 +696,7 @@ const Index = () => {
   return (
     <div className={`min-h-screen transition-all duration-500 ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' 
+        ? 'bg-black' 
         : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
     }`}>
       <AppHeader
