@@ -1,3 +1,5 @@
+// src/components/link-card/GridView.tsx
+
 import React, { useState } from 'react';
 import { Star, GripVertical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -86,24 +88,6 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
                 }}
               >
                 <X className="h-4 w-4" />
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-6 w-6"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleAdd();
-                }}
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-               <Button
-                size="icon"
-                variant="ghost"
-                className="h-6 w-6 cursor-grab"
-              >
-                <GripVertical className="h-4 w-4" />
               </Button>
             </div>
           )}

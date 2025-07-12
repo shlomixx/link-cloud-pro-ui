@@ -1,3 +1,5 @@
+// src/components/link-card/DenseView.tsx
+
 import React, { useState } from 'react';
 import { Star, GripVertical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -89,24 +91,6 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
                       }}
                     >
                       <X className="h-2.5 w-2.5" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="h-4 w-4"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAdd();
-                      }}
-                    >
-                      <Plus className="h-2.5 w-2.5" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="h-4 w-4 cursor-grab"
-                    >
-                      <GripVertical className="h-2.5 w-2.5" />
                     </Button>
                   </div>
                 )}

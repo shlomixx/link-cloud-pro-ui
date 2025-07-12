@@ -1,3 +1,5 @@
+// src/components/link-card/CompactView.tsx
+
 import React, { useState } from 'react';
 import { Star, GripVertical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -81,24 +83,6 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
                 }}
               >
                 <X className="h-3 w-3" />
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-5 w-5"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleAdd();
-                }}
-              >
-                <Plus className="h-3 w-3" />
-              </Button>
-               <Button
-                size="icon"
-                variant="ghost"
-                className="h-5 w-5 cursor-grab"
-              >
-                <GripVertical className="h-3 w-3" />
               </Button>
             </div>
           )}
