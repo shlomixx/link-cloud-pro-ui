@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Edit, Heart, Copy, Trash2 } from 'lucide-react';
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubTrigger, ContextMenuSubContent } from '@/components/ui/context-menu';
@@ -40,10 +39,6 @@ export const LinkCardContextMenu: React.FC<ContextMenuProps> = ({
       <ContextMenuItem onClick={handleContextMenuClick(onCopyUrl)}>
         <Copy className="w-4 h-4 mr-2" />
         העתק URL
-      </ContextMenuItem>
-      <ContextMenuItem onClick={handleContextMenuClick(onToggleFavorite)}>
-        <Heart className="w-4 h-4 mr-2" />
-        {link.isFavorite ? 'הסר מועדפים' : 'הוסף למועדפים'}
       </ContextMenuItem>
       {categories.length > 0 && onChangeCategory && (
         <ContextMenuSub>

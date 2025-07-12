@@ -1,5 +1,3 @@
-// src/components/link-card/ListView.tsx
-
 import React, { useState } from 'react';
 import { Star, ExternalLink, GripVertical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -68,8 +66,8 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
             group flex items-center gap-6 p-5 rounded-xl cursor-pointer w-full
             transition-all duration-300 hover:scale-[1.02] hover:shadow-xl
             ${isDarkMode 
-              ? 'bg-slate-800/20 hover:bg-slate-700/30 border border-slate-700/50 hover:border-slate-600/70' 
-              : 'bg-white/20 hover:bg-white/30 border border-white/20 hover:border-white/40'
+              ? 'bg-slate-800/20 hover:bg-slate-700/30' 
+              : 'bg-white/20 hover:bg-white/30'
             }
             backdrop-blur-sm
             ${isClicked ? 'scale-[0.98]' : ''}
@@ -111,9 +109,6 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
                 }`}>
                   {link.name}
                 </h3>
-                {link.isFavorite && (
-                  <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                )}
                 {link.isPrivate && <span className="text-yellow-500">🔒</span>}
               </div>
             </div>
@@ -125,8 +120,8 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
               className={`
                 px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105
                 ${isDarkMode 
-                  ? 'bg-slate-700/50 hover:bg-slate-600/60 text-white border border-slate-600/50' 
-                  : 'bg-white/50 hover:bg-white/70 text-slate-800 border border-white/30'
+                  ? 'bg-slate-700/50 hover:bg-slate-600/60 text-white' 
+                  : 'bg-white/50 hover:bg-white/70 text-slate-800'
                 }
                 backdrop-blur-sm
               `}

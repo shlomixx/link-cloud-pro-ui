@@ -1,5 +1,3 @@
-// src/components/link-card/CompactView.tsx
-
 import React, { useState } from 'react';
 import { Star, GripVertical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -95,9 +93,6 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
                 onError={handleFaviconError}
               />
             </div>
-            {link.isFavorite && (
-              <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400 absolute -top-1 -right-1 drop-shadow-lg" />
-            )}
           </div>
           
           <span className="text-white/90 text-xs text-center truncate w-full font-medium group-hover:text-white transition-all duration-200">

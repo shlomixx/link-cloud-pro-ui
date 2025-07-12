@@ -1,5 +1,3 @@
-// src/components/link-card/DenseView.tsx
-
 import React, { useState } from 'react';
 import { Star, GripVertical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -105,9 +103,6 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
                 }`}>
                   {link.name}
                 </span>
-                {link.isFavorite && (
-                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 absolute -top-0.5 -right-0.5" />
-                )}
               </div>
             </ContextMenuTrigger>
             <LinkCardContextMenu

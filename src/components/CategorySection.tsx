@@ -38,6 +38,7 @@ interface CategorySectionProps {
   onAddLink: (category: string) => void;
   onDropUrl: (url: string, category: string) => void;
   onReorderLinks: (draggedKey: string, targetKey: string, category: string) => void;
+  onDeleteLink: (linkKey: string) => void;
 }
 
 export const CategorySection: React.FC<CategorySectionProps> = ({
@@ -61,7 +62,8 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onDragStart,
   onAddLink,
   onDropUrl,
-  onReorderLinks
+  onReorderLinks,
+  onDeleteLink
 }) => {
   const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
   const [isDragOverCategory, setIsDragOverCategory] = React.useState(false);
@@ -364,6 +366,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                 onEdit={() => onEditLink(link)}
                 onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
                 onDragStart={() => onDragStart(link.key)}
+                onDelete={() => onDeleteLink(link.key)}
               />
             </div>
           ))}
@@ -405,6 +408,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                 onEdit={() => onEditLink(link)}
                 onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
                 onDragStart={() => onDragStart(link.key)}
+                onDelete={() => onDeleteLink(link.key)}
               />
             </div>
           ))}

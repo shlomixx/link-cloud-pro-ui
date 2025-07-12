@@ -541,30 +541,19 @@ const Index = () => {
     closeModal();
   };
 
-  const handleDelete = async () => {
-    if (editingLink) {
-      setIsLoading(true);
-      
-      const confirmed = window.confirm(`Are you sure you want to delete "${editingLink.name}"?`);
-      if (!confirmed) {
-        setIsLoading(false);
-        return;
-      }
-
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      setLinksData(prev => prev.filter(link => link.key !== editingLink.key));
-      toast.success(`${editingLink.name} deleted successfully`, {
+  const handleDeleteLink = (linkKey: string) => {
+    const linkToDelete = linksData.find(link => link.key === linkKey);
+    if (linkToDelete) {
+      setLinksData(prev => prev.filter(link => link.key !== linkKey));
+      toast.success(`${linkToDelete.name} deleted successfully`, {
         action: {
           label: 'Undo',
           onClick: () => {
-            setLinksData(prev => [...prev, editingLink]);
+            setLinksData(prev => [...prev, linkToDelete]);
             toast.success('Link restored');
           }
         }
       });
-      setIsLoading(false);
-      closeModal();
     }
   };
 
@@ -846,7 +835,12 @@ const Index = () => {
         formData={formData}
         onFormDataChange={setFormData}
         onSave={handleSave}
-        onDelete={handleDelete}
+        onDelete={() => {
+          if (editingLink) {
+            handleDeleteLink(editingLink.key);
+            closeModal();
+          }
+        }}
         isLoading={isLoading}
         isDarkMode={isDarkMode}
         categoryLabels={categoryLabels}
