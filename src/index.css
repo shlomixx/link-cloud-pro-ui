@@ -14,7 +14,7 @@ All colors MUST be HSL.
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 5%;
-    --primary: 340 82% 52%; /* Pink color as a substitute for --theme-color-pink */
+    --primary: 336 78% 57%; /* Mapped from --color-primary */
     --primary-foreground: 0 0% 100%;
     --secondary: 240 4.8% 91%;
     --secondary-foreground: 240 7% 10%;
@@ -40,7 +40,7 @@ All colors MUST be HSL.
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 5%;
     --popover-foreground: 240 10% 85%;
-    --primary: 340 82% 52%; /* Pink color as a substitute for --theme-color-pink */
+    --primary: 336 78% 57%; /* Mapped from --color-primary */
     --primary-foreground: 0 0% 100%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
@@ -73,6 +73,7 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background-image: radial-gradient(circle,hsl(var(--background))46%,hsl(var(--muted)));
     min-height: 100vh;
     font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
@@ -82,7 +83,6 @@ All colors MUST be HSL.
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    background-image: radial-gradient(circle,hsl(var(--background))46%,hsl(var(--muted)));
   }
 
   /* Mobile-style smooth scrolling for all elements */
