@@ -12,7 +12,6 @@ interface LinkData {
   isPrivate?: boolean;
   clicks?: number;
   createdAt?: string;
-  isFavorite?: boolean;
   lastClicked?: string;
 }
 
@@ -29,7 +28,6 @@ interface CategorySectionProps {
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent, category: string) => void;
   onLinkClick: (link: LinkData) => void;
-  onToggleFavorite: (linkKey: string, e: React.MouseEvent) => void;
   onEditLink: (link: LinkData) => void;
   onCopyUrl: (url: string, name: string) => void;
   onMouseEnter: (linkKey: string) => void;
@@ -39,6 +37,7 @@ interface CategorySectionProps {
   onDropUrl: (url: string, category: string) => void;
   onReorderLinks: (draggedKey: string, targetKey: string, category: string) => void;
   onDeleteLink: (linkKey: string) => void;
+  linkSize: number;
 }
 
 export const CategorySection: React.FC<CategorySectionProps> = ({
@@ -54,7 +53,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onDragOver,
   onDrop,
   onLinkClick,
-  onToggleFavorite,
   onEditLink,
   onCopyUrl,
   onMouseEnter,
@@ -63,7 +61,8 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onAddLink,
   onDropUrl,
   onReorderLinks,
-  onDeleteLink
+  onDeleteLink,
+  linkSize
 }) => {
   const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
   const [isDragOverCategory, setIsDragOverCategory] = React.useState(false);
@@ -362,11 +361,11 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                 onMouseEnter={() => onMouseEnter(link.key)}
                 onMouseLeave={onMouseLeave}
                 onLinkClick={() => onLinkClick(link)}
-                onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
                 onEdit={() => onEditLink(link)}
                 onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
                 onDragStart={() => onDragStart(link.key)}
                 onDelete={() => onDeleteLink(link.key)}
+                linkSize={linkSize}
               />
             </div>
           ))}
@@ -404,11 +403,11 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                 onMouseEnter={() => onMouseEnter(link.key)}
                 onMouseLeave={onMouseLeave}
                 onLinkClick={() => onLinkClick(link)}
-                onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
                 onEdit={() => onEditLink(link)}
                 onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
                 onDragStart={() => onDragStart(link.key)}
                 onDelete={() => onDeleteLink(link.key)}
+                linkSize={linkSize}
               />
             </div>
           ))}
