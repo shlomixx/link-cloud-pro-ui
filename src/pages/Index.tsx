@@ -38,14 +38,14 @@ const Index = () => {
 
   const [linksData, setLinksData] = useState<LinkData[]>([
     // My Daily Links
-    { key: 'google', name: 'Google', defaultUrl: 'https://google.com', category: 'daily', clicks: 120, createdAt: '2024-01-01', isFavorite: true },
-    { key: 'youtube', name: 'YouTube', defaultUrl: 'https://youtube.com', category: 'daily', clicks: 95, createdAt: '2024-01-02', isFavorite: true },
+    { key: 'google', name: 'Google', defaultUrl: 'https://google.com', category: 'daily', clicks: 120, createdAt: '2024-01-01' },
+    { key: 'youtube', name: 'YouTube', defaultUrl: 'https://youtube.com', category: 'daily', clicks: 95, createdAt: '2024-01-02' },
     { key: 'facebook', name: 'Facebook', defaultUrl: 'https://facebook.com', category: 'daily', clicks: 78, createdAt: '2024-01-03' },
-    { key: 'instagram', name: 'Instagram', defaultUrl: 'https://instagram.com', category: 'daily', clicks: 85, createdAt: '2024-01-04', isFavorite: true },
+    { key: 'instagram', name: 'Instagram', defaultUrl: 'https://instagram.com', category: 'daily', clicks: 85, createdAt: '2024-01-04' },
     { key: 'whatsapp', name: 'WhatsApp', defaultUrl: 'https://whatsapp.com', category: 'daily', clicks: 65, createdAt: '2024-01-05' },
     { key: 'reddit', name: 'Reddit', defaultUrl: 'https://reddit.com', category: 'daily', clicks: 55, createdAt: '2024-01-06' },
     { key: 'tiktok', name: 'TikTok', defaultUrl: 'https://tiktok.com', category: 'daily', clicks: 70, createdAt: '2024-01-07' },
-    { key: 'gmail', name: 'Gmail', defaultUrl: 'https://gmail.com', category: 'daily', clicks: 110, createdAt: '2024-01-08', isFavorite: true },
+    { key: 'gmail', name: 'Gmail', defaultUrl: 'https://gmail.com', category: 'daily', clicks: 110, createdAt: '2024-01-08' },
     { key: 'maps', name: 'Google Maps', defaultUrl: 'https://google.com/maps', category: 'daily', clicks: 45, createdAt: '2024-01-09' },
     { key: 'netflix', name: 'Netflix', defaultUrl: 'https://netflix.com', category: 'daily', clicks: 60, createdAt: '2024-01-10' },
     { key: 'spotify', name: 'Spotify', defaultUrl: 'https://spotify.com', category: 'daily', clicks: 75, createdAt: '2024-01-11' },
@@ -60,7 +60,7 @@ const Index = () => {
 
     // Tools
     { key: 'canva_tools', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 45, createdAt: '2024-01-20' },
-    { key: 'github_tools', name: 'GitHub', defaultUrl: 'https://github.com', category: 'tools', clicks: 65, createdAt: '2024-01-21', isFavorite: true },
+    { key: 'github_tools', name: 'GitHub', defaultUrl: 'https://github.com', category: 'tools', clicks: 65, createdAt: '2024-01-21' },
     { key: 'dropbox_tools', name: 'Dropbox', defaultUrl: 'https://dropbox.com', category: 'tools', clicks: 38, createdAt: '2024-01-22' },
     { key: 'trello_tools', name: 'Trello', defaultUrl: 'https://trello.com', category: 'tools', clicks: 42, createdAt: '2024-01-23' },
     { key: 'notion_tools', name: 'Notion', defaultUrl: 'https://notion.so', category: 'tools', clicks: 55, createdAt: '2024-01-24' },
@@ -70,7 +70,7 @@ const Index = () => {
     { key: 'paypal', name: 'PayPal', defaultUrl: 'https://paypal.com', category: 'tools', clicks: 32, createdAt: '2024-01-28' },
 
     // Entertainment
-    { key: 'youtube_ent', name: 'YouTube', defaultUrl: 'https://youtube.com', category: 'entertainment', clicks: 95, createdAt: '2024-01-29', isFavorite: true },
+    { key: 'youtube_ent', name: 'YouTube', defaultUrl: 'https://youtube.com', category: 'entertainment', clicks: 95, createdAt: '2024-01-29' },
     { key: 'netflix_ent', name: 'Netflix', defaultUrl: 'https://netflix.com', category: 'entertainment', clicks: 78, createdAt: '2024-01-30' },
     { key: 'tiktok_ent', name: 'TikTok', defaultUrl: 'https://tiktok.com', category: 'entertainment', clicks: 68, createdAt: '2024-01-31' },
     { key: 'spotify_ent', name: 'Spotify', defaultUrl: 'https://spotify.com', category: 'entertainment', clicks: 72, createdAt: '2024-02-01' },
@@ -82,7 +82,7 @@ const Index = () => {
 
     // Society
     { key: 'facebook_society', name: 'Facebook', defaultUrl: 'https://facebook.com', category: 'society', clicks: 75, createdAt: '2024-02-07' },
-    { key: 'instagram_society', name: 'Instagram', defaultUrl: 'https://instagram.com', category: 'society', clicks: 82, createdAt: '2024-02-08', isFavorite: true },
+    { key: 'instagram_society', name: 'Instagram', defaultUrl: 'https://instagram.com', category: 'society', clicks: 82, createdAt: '2024-02-08' },
     { key: 'x', name: 'X (Twitter)', defaultUrl: 'https://x.com', category: 'society', clicks: 55, createdAt: '2024-02-09' },
     { key: 'whatsapp_society', name: 'WhatsApp', defaultUrl: 'https://whatsapp.com', category: 'society', clicks: 68, createdAt: '2024-02-10' },
     { key: 'discord', name: 'Discord', defaultUrl: 'https://discord.com', category: 'society', clicks: 42, createdAt: '2024-02-11' },
@@ -92,8 +92,8 @@ const Index = () => {
     { key: 'reddit_society', name: 'Reddit', defaultUrl: 'https://reddit.com', category: 'society', clicks: 52, createdAt: '2024-02-15' },
 
     // Knowledge
-    { key: 'wikipedia', name: 'Wikipedia', defaultUrl: 'https://wikipedia.org', category: 'knowledge', clicks: 65, createdAt: '2024-02-16', isFavorite: true },
-    { key: 'chatgpt', name: 'ChatGPT', defaultUrl: 'https://chatgpt.com', category: 'knowledge', clicks: 88, createdAt: '2024-02-17', isFavorite: true },
+    { key: 'wikipedia', name: 'Wikipedia', defaultUrl: 'https://wikipedia.org', category: 'knowledge', clicks: 65, createdAt: '2024-02-16' },
+    { key: 'chatgpt', name: 'ChatGPT', defaultUrl: 'https://chatgpt.com', category: 'knowledge', clicks: 88, createdAt: '2024-02-17' },
     { key: 'quora', name: 'Quora', defaultUrl: 'https://quora.com', category: 'knowledge', clicks: 42, createdAt: '2024-02-18' },
     { key: 'khanacademy_knowledge', name: 'Khan Academy', defaultUrl: 'https://khanacademy.org', category: 'knowledge', clicks: 35, createdAt: '2024-02-19' },
     { key: 'coursera_knowledge', name: 'Coursera', defaultUrl: 'https://coursera.org', category: 'knowledge', clicks: 38, createdAt: '2024-02-20' },
@@ -304,10 +304,6 @@ const Index = () => {
       
       if (e.altKey) {
         switch (e.key) {
-          case 'f':
-            e.preventDefault();
-            handleQuickAction('favorites');
-            break;
           case 'r':
             e.preventDefault();
             handleQuickAction('recent');
@@ -350,12 +346,6 @@ const Index = () => {
           return sorted.sort((a, b) => (b.clicks || 0) - (a.clicks || 0));
         case 'recent':
           return sorted.sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
-        case 'favorites':
-          return sorted.sort((a, b) => {
-            if (a.isFavorite && !b.isFavorite) return -1;
-            if (!a.isFavorite && b.isFavorite) return 1;
-            return (b.clicks || 0) - (a.clicks || 0);
-          });
         case 'name':
            return sorted.sort((a, b) => a.name.localeCompare(b.name));
         default:
@@ -367,10 +357,6 @@ const Index = () => {
   const handleQuickAction = (action: string) => {
     setQuickFilter(action);
     switch (action) {
-      case 'favorites':
-        setSortBy('favorites');
-        toast.success('Showing favorite links');
-        break;
       case 'recent':
         setSortBy('recent');
         toast.success('Showing recent links');
@@ -412,30 +398,10 @@ const Index = () => {
     });
   };
 
-  const toggleFavorite = (linkKey: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    setLinksData(prev => prev.map(link => 
-      link.key === linkKey 
-        ? { ...link, isFavorite: !link.isFavorite }
-        : link
-    ));
-    
-    const link = linksData.find(l => l.key === linkKey);
-    const isFavorite = link?.isFavorite;
-    
-    toast.success(
-      isFavorite ? `Removed ${link?.name} from favorites` : `Added ${link?.name} to favorites`,
-      { duration: 2000 }
-    );
-  };
-
   const filteredLinks = linksData.filter(link => {
     if (!showPrivateLinks && link.isPrivate) return false;
     if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
     
-    if (quickFilter === 'favorites' && !link.isFavorite) return false;
     if (quickFilter === 'recent') {
       const weekAgo = new Date();
       weekAgo.setDate(weekAgo.getDate() - 7);
@@ -542,18 +508,10 @@ const Index = () => {
   };
 
   const handleDeleteLink = (linkKey: string) => {
-    const linkToDelete = linksData.find(link => link.key === linkKey);
-    if (linkToDelete) {
-      setLinksData(prev => prev.filter(link => link.key !== linkKey));
-      toast.success(`${linkToDelete.name} deleted successfully`, {
-        action: {
-          label: 'Undo',
-          onClick: () => {
-            setLinksData(prev => [...prev, linkToDelete]);
-            toast.success('Link restored');
-          }
-        }
-      });
+    setLinksData(prev => prev.filter(link => link.key !== linkKey));
+    const deletedLink = linksData.find(link => link.key === linkKey);
+    if (deletedLink) {
+      toast.success(`${deletedLink.name} deleted successfully`);
     }
   };
 
@@ -669,7 +627,6 @@ const Index = () => {
 
   const categories = Array.from(new Set(linksData.map(link => link.category)));
   const totalClicks = linksData.reduce((sum, link) => sum + (link.clicks || 0), 0);
-  const favoriteLinks = linksData.filter(link => link.isFavorite);
   const recentLinks = linksData.filter(link => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
@@ -727,7 +684,6 @@ const Index = () => {
         onShowShortcuts={() => setShowShortcuts(true)}
         linksCount={linksData.length}
         totalClicks={totalClicks}
-        favoriteCount={favoriteLinks.length}
         categoriesCount={categories.length}
         fileInputRef={fileInputRef}
         onQuickAction={handleQuickAction}
@@ -752,7 +708,6 @@ const Index = () => {
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               onLinkClick={handleLinkClick}
-              onToggleFavorite={toggleFavorite}
               onEditLink={openModal}
               onCopyUrl={copyLinkUrl}
               onMouseEnter={setHoveredLink}
@@ -761,6 +716,7 @@ const Index = () => {
               onAddLink={(category) => openModal(undefined, category)}
               onDropUrl={handleDropUrl}
               onReorderLinks={handleReorderLinks}
+              onDeleteLink={handleDeleteLink}
             />
           ))}
         </div>
