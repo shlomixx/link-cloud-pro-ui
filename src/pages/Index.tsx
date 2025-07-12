@@ -29,7 +29,7 @@ const Index = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [categoryOrder, setCategoryOrder] = useState<string[]>([]);
   const [recentlyDeleted, setRecentlyDeleted] = useState<Array<LinkData & { deletedAt: number }>>([]);
-  const [linkSize, setLinkSize] = useState(80);
+  const [linkSize, setLinkSize] = useState(90);
 
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -673,10 +673,14 @@ const Index = () => {
 
   if (isLoading) {
     return (
-      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 bg-background`}>
+      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' 
+          : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
+      }`}>
         <div className="text-center space-y-4">
           <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full mx-auto"></div>
-          <p className={`text-lg text-foreground`}>
+          <p className={`text-lg ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
             Loading your links...
           </p>
         </div>
@@ -690,7 +694,11 @@ const Index = () => {
   };
 
   return (
-    <div className={`min-h-screen transition-all duration-500 bg-background`}>
+    <div className={`min-h-screen transition-all duration-500 ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900' 
+        : 'bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100'
+    }`}>
       <AppHeader
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
@@ -722,50 +730,49 @@ const Index = () => {
         onLinkSizeChange={setLinkSize}
       />
 
-      <main className="container mx-auto px-6 py-8">
-        <div className="space-y-12">
-          {Object.entries(groupedLinks).map(([category, links], index) => (
-            <div
+      <div className="container mx-auto px-6 py-2">
+        <div className="space-y-4">
+          {Object.entries(groupedLinks).map(([category, links]) => (
+            <CategorySection
               key={category}
-              className="animate-slide-up"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <CategorySection
-                category={category}
-                links={links}
-                categoryLabels={categoryLabels}
-                categoryColors={categoryColors}
-                viewMode={viewMode}
-                isDarkMode={isDarkMode}
-                draggedItem={draggedItem}
-                hoveredLink={hoveredLink}
-                clickedLink={clickedLink}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-                onLinkClick={handleLinkClick}
-                onEditLink={openModal}
-                onCopyUrl={copyLinkUrl}
-                onMouseEnter={setHoveredLink}
-                onMouseLeave={() => setHoveredLink(null)}
-                onDragStart={handleDragStart}
-                onAddLink={(category) => openModal(undefined, category)}
-                onDropUrl={handleDropUrl}
-                onReorderLinks={handleReorderLinks}
-                onDeleteLink={handleDeleteLink}
-                onToggleFavorite={handleToggleFavorite}
-                linkSize={linkSize}
-              />
-            </div>
+              category={category}
+              links={links}
+              categoryLabels={categoryLabels}
+              categoryColors={categoryColors}
+              viewMode={viewMode}
+              isDarkMode={isDarkMode}
+              draggedItem={draggedItem}
+              hoveredLink={hoveredLink}
+              clickedLink={clickedLink}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onLinkClick={handleLinkClick}
+              onEditLink={openModal}
+              onCopyUrl={copyLinkUrl}
+              onMouseEnter={setHoveredLink}
+              onMouseLeave={() => setHoveredLink(null)}
+              onDragStart={handleDragStart}
+              onAddLink={(category) => openModal(undefined, category)}
+              onDropUrl={handleDropUrl}
+              onReorderLinks={handleReorderLinks}
+              onDeleteLink={handleDeleteLink}
+              onToggleFavorite={handleToggleFavorite}
+              linkSize={linkSize}
+            />
           ))}
         </div>
         
         {Object.keys(groupedLinks).length === 0 && (
           <div className="text-center py-20 animate-fade-in">
             <div className="text-6xl mb-6 animate-bounce">🔗</div>
-            <h3 className={`text-2xl font-bold mb-3 transition-colors duration-300 text-foreground`}>
+            <h3 className={`text-2xl font-bold mb-3 transition-colors duration-300 ${
+              isDarkMode ? 'text-white' : 'text-slate-800'
+            }`}>
               {searchTerm || quickFilter !== 'all' ? 'No links found' : 'Your link collection awaits'}
             </h3>
-            <p className={`mb-8 text-lg transition-colors duration-300 text-muted-foreground`}>
+            <p className={`mb-8 text-lg transition-colors duration-300 ${
+              isDarkMode ? 'text-slate-400' : 'text-slate-500'
+            }`}>
               {searchTerm 
                 ? `No links match "${searchTerm}". Try adjusting your search terms.`
                 : quickFilter !== 'all'
@@ -776,7 +783,7 @@ const Index = () => {
             <div className="flex gap-3 justify-center">
               <Button 
                 onClick={() => openModal()} 
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-primary-foreground px-8 py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 <Plus className="w-5 h-5 mr-2" />
                 {searchTerm || quickFilter !== 'all' ? 'Add New Link' : 'Add Your First Link'}
@@ -789,7 +796,11 @@ const Index = () => {
                     setQuickFilter('all');
                     setSortBy('name');
                   }}
-                  className={`px-6 py-3 text-lg transition-all duration-300 hover:scale-105 border-foreground/20 text-foreground hover:bg-foreground/10`}
+                  className={`px-6 py-3 text-lg transition-all duration-300 hover:scale-105 ${
+                    isDarkMode 
+                      ? 'border-white/20 text-white hover:bg-white/10' 
+                      : 'border-black/20 text-slate-800 hover:bg-black/10'
+                  }`}
                 >
                   Clear Filters
                 </Button>
@@ -797,7 +808,14 @@ const Index = () => {
             </div>
           </div>
         )}
-      </main>
+      </div>
+
+      <Button
+        onClick={() => openModal()}
+        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 z-50 group"
+      >
+        <Plus className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
+      </Button>
 
       <input
         ref={fileInputRef}
