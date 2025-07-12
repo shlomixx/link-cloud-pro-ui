@@ -101,7 +101,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
   return (
     <div className={`sticky top-0 z-50 transition-all duration-300`}>
-      <div className={`container mx-auto px-4 py-3 border-b ${isDarkMode ? 'border-white/10' : 'border-black/10'} ${isCompactHeader ? 'backdrop-blur-xl bg-transparent' : 'bg-transparent'}`}>
+      <div className={`container mx-auto px-4 py-3 ${isCompactHeader ? 'backdrop-blur-xl bg-transparent' : 'bg-transparent'}`}>
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex-shrink-0">
