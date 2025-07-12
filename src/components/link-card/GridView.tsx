@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Star, GripVertical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
@@ -26,23 +26,6 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
 }) => {
   const isClicked = clickedLink === link.key;
   const isDesktop = useIsDesktop();
-  const [isHovered, setIsHovered] = useState(false);
-  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
-
-  const handleMouseEnter = () => {
-    onMouseEnter();
-    setHoverTimeout(setTimeout(() => {
-      setIsHovered(true);
-    }, 1000));
-  };
-
-  const handleMouseLeave = () => {
-    onMouseLeave();
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-    }
-    setIsHovered(false);
-  };
 
   const handleAdd = onAdd ? onAdd : () => console.log('Add action triggered');
 
@@ -50,8 +33,8 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <div
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
           onClick={onLinkClick}
           {...(isDesktop ? { 
             draggable: "true",
@@ -74,39 +57,37 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
             ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
           `}
         >
-          {isHovered && (
-             <div className="absolute top-1 right-1 flex flex-col gap-1 z-20">
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-6 w-6"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete?.();
-                }}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-6 w-6"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleAdd();
-                }}
-              >
-                <Plus className="h-4 w-4" />
-              </Button>
-               <Button
-                size="icon"
-                variant="ghost"
-                className="h-6 w-6 cursor-grab"
-              >
-                <GripVertical className="h-4 w-4" />
-              </Button>
-            </div>
-          )}
+          <div className="absolute top-1 right-1 flex flex-col gap-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-6 w-6"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete?.();
+              }}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-6 w-6"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAdd();
+              }}
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-6 w-6 cursor-grab"
+            >
+              <GripVertical className="h-4 w-4" />
+            </Button>
+          </div>
 
           <Button
             size="sm"

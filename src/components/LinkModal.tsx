@@ -1,179 +1,131 @@
 import React from 'react';
-import { Trash2 } from 'lucide-react';
+import { Star, GripVertical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { BaseLinkCardProps } from './types';
+import { getFaviconUrl, handleFaviconError } from './utils';
+import { LinkCardContextMenu } from './ContextMenuContent';
+import { useIsDesktop } from '@/hooks/use-is-desktop';
 
-interface LinkData {
-  key: string;
-  name: string;
-  url?: string;
-  defaultUrl?: string;
-  category: string;
-  isPrivate?: boolean;
-  clicks?: number;
-  createdAt?: string;
-  isFavorite?: boolean;
-  lastClicked?: string;
-}
-
-interface FormData {
-  name: string;
-  url: string;
-  category: string;
-  isPrivate: boolean;
-}
-
-interface LinkModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  isNewLink: boolean;
-  editingLink: LinkData | null;
-  formData: FormData;
-  onFormDataChange: (data: FormData) => void;
-  onSave: () => void;
-  onDelete: () => void;
-  isLoading: boolean;
-  isDarkMode: boolean;
-  categoryLabels: Record<string, string>;
-}
-
-export const LinkModal: React.FC<LinkModalProps> = ({
-  isOpen,
-  onClose,
-  isNewLink,
-  editingLink,
-  formData,
-  onFormDataChange,
-  onSave,
-  onDelete,
-  isLoading,
+export const DenseView: React.FC<BaseLinkCardProps> = ({
+  link,
   isDarkMode,
-  categoryLabels
+  hoveredLink,
+  clickedLink,
+  categories = [],
+  onMouseEnter,
+  onMouseLeave,
+  onLinkClick,
+  onToggleFavorite,
+  onEdit,
+  onCopyUrl,
+  onDelete,
+  onChangeCategory,
+  onDragStart,
+  onAdd,
 }) => {
-  if (!isOpen) return null;
+  const isClicked = clickedLink === link.key;
+  const isDesktop = useIsDesktop();
+  
+  const handleAdd = onAdd ? onAdd : () => console.log('Add action triggered');
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={`${isDarkMode ? 'bg-slate-900/95 border-slate-700 text-white backdrop-blur-sm' : 'bg-white/95 border-slate-200 text-slate-800 backdrop-blur-sm'}`}>
-        <DialogHeader>
-          <DialogTitle>{isNewLink ? 'הוסף לינק חדש' : 'ערוך לינק'}</DialogTitle>
-        </DialogHeader>
-
-        <Tabs defaultValue="general" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="general">כללי</TabsTrigger>
-            <TabsTrigger value="advanced">מתקדם</TabsTrigger>
-          </TabsList>
-          <TabsContent value="general">
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">שם</Label>
-                <Input id="name" value={formData.name} onChange={(e) => onFormDataChange({ ...formData, name: e.target.value })} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="url">URL</Label>
-                <Input id="url" value={formData.url} onChange={(e) => onFormDataChange({ ...formData, url: e.target.value })} />
-              </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="advanced">
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="category">קטגוריה</Label>
-                <Select value={formData.category} onValueChange={(value) => onFormDataChange({ ...formData, category: value })}>
-                  <SelectTrigger id="category">
-                    <SelectValue placeholder="בחר קטגוריה" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(categoryLabels).map(([key, label]) => (
-                      <SelectItem key={key} value={key}>{label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Switch id="isPrivate" checked={formData.isPrivate} onCheckedChange={(checked) => onFormDataChange({ ...formData, isPrivate: checked })} />
-                <Label htmlFor="isPrivate">לינק פרטי</Label>
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        <div className="flex justify-between pt-4">
-          <div>
-            {!isNewLink && editingLink && (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <ContextMenu>
+            <ContextMenuTrigger asChild>
+              <div
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onLinkClick}
+                {...(isDesktop ? { 
+                  draggable: "true",
+                  onDragStart: (e: React.DragEvent) => {
+                    e.stopPropagation();
+                    e.dataTransfer.setData('application/json', JSON.stringify({ type: 'link', key: link.key }));
+                    e.dataTransfer.effectAllowed = 'move';
+                    onDragStart?.();
+                  }
+                } : {})}
+                className={`
+                  group relative flex flex-col items-center gap-1 p-1 rounded cursor-pointer
+                  transition-all duration-200 hover:scale-110
+                  ${isDarkMode 
+                    ? 'hover:bg-white/10' 
+                    : 'hover:bg-black/10'
+                  }
+                  ${isClicked ? 'scale-95' : ''}
+                  ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
+                `}
+              >
+                <div className="absolute top-0 right-0 flex flex-col gap-0.5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <Button
-                    variant="destructive"
-                    disabled={isLoading}
-                    className="bg-red-600 hover:bg-red-700 transition-all duration-300 hover:scale-105"
+                    size="icon"
+                    variant="ghost"
+                    className="h-4 w-4"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete?.();
+                    }}
                   >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Delete
+                    <X className="h-2.5 w-2.5" />
                   </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className={`${isDarkMode ? 'bg-slate-900/95 border-slate-700 text-white backdrop-blur-sm' : 'bg-white/95 border-slate-200 text-slate-800 backdrop-blur-sm'}`}>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="text-xl font-bold">Confirm Deletion</AlertDialogTitle>
-                    <AlertDialogDescription className={`${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                      Are you sure you want to delete &quot;{editingLink.name}&quot;? This action cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel
-                      className={`transition-all duration-300 hover:scale-105 ${
-                        isDarkMode 
-                          ? 'border-slate-600 text-white hover:bg-slate-800/50' 
-                          : 'border-slate-300 text-slate-800 hover:bg-slate-100/50'
-                      }`}
-                    >
-                      Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={onDelete}
-                      className="bg-red-600 hover:bg-red-700 transition-all duration-300 hover:scale-105"
-                    >
-                      Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            )}
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-4 w-4"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAdd();
+                    }}
+                  >
+                    <Plus className="h-2.5 w-2.5" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-4 w-4 cursor-grab"
+                  >
+                    <GripVertical className="h-2.5 w-2.5" />
+                  </Button>
+                </div>
+                <img
+                  src={getFaviconUrl(link.url || link.defaultUrl || '')}
+                  alt=""
+                  className="w-7 h-7 rounded"
+                  onError={handleFaviconError}
+                />
+                <span className={`text-sm font-medium text-center max-w-[70px] leading-tight truncate ${
+                  isDarkMode ? 'text-white' : 'text-slate-800'
+                }`}>
+                  {link.name}
+                </span>
+                {link.isFavorite && (
+                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 absolute -top-0.5 -right-0.5" />
+                )}
+              </div>
+            </ContextMenuTrigger>
+            <LinkCardContextMenu
+              link={link}
+              isDarkMode={isDarkMode}
+              categories={categories}
+              onEdit={onEdit}
+              onCopyUrl={onCopyUrl}
+              onToggleFavorite={() => onToggleFavorite({} as React.MouseEvent)}
+              onChangeCategory={onChangeCategory}
+              onDelete={onDelete}
+            />
+          </ContextMenu>
+        </TooltipTrigger>
+        <TooltipContent>
+          <div className="text-xs">
+            <div className="font-medium">{link.name}</div>
+            <div className="text-muted-foreground">{link.url || link.defaultUrl}</div>
           </div>
-
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={onClose}
-              disabled={isLoading}
-              className={`transition-all duration-300 hover:scale-105 ${
-                isDarkMode 
-                  ? 'border-slate-600 text-white hover:bg-slate-800/50' 
-                  : 'border-slate-300 text-slate-800 hover:bg-slate-100/50'
-              }`}
-            >
-              בטל
-            </Button>
-            <Button
-              onClick={onSave}
-              disabled={isLoading}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white transition-all duration-300 hover:scale-105"
-            >
-              {isLoading ? (
-                <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-              ) : null}
-              {isNewLink ? 'שמור לינק' : 'שמור שינויים'}
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
