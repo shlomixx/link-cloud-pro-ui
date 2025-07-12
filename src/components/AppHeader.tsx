@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Search,
   Plus,
@@ -12,7 +12,6 @@ import {
   Upload,
   Eye,
   Keyboard,
-  SlidersHorizontal,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,62 +37,46 @@ interface AppHeaderProps {
   onViewModeChange: (mode: 'grid' | 'list' | 'compact') => void;
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
-  isCompactHeader: boolean;
-  onToggleCompactHeader: () => void;
-  selectedCategory: string;
-  onCategoryChange: (category: string) => void;
-  categories: string[];
-  categoryLabels: Record<string, string>;
   showPrivateLinks: boolean;
   onTogglePrivateLinks: () => void;
   onExportData: () => void;
   onImportData: () => void;
   onAddLink: () => void;
   onShowShortcuts: () => void;
-  linksCount: number;
-  totalClicks: number;
-  categoriesCount: number;
   fileInputRef: React.RefObject<HTMLInputElement>;
-  onQuickAction: (action: string) => void;
-  recentCount: number;
-  popularCount: number;
   linkSize: number;
   onLinkSizeChange: (size: number) => void;
 }
 
 export function AppHeader(props: AppHeaderProps) {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-
   return (
-    <header className="sticky top-4 z-50 mx-auto max-w-5xl">
+    <header className="sticky top-4 z-50 mx-auto max-w-4xl">
       <div className="container mx-auto flex h-14 items-center justify-between gap-4 rounded-full border border-slate-700/50 bg-slate-900/50 px-4 shadow-lg backdrop-blur-xl">
         {/* Logo */}
-        <div className="flex items-center gap-3">
-          <Zap className="h-6 w-6 text-slate-300" />
-          <h1 className="hidden text-lg font-normal text-slate-300 sm:block">
+        <div className="flex items-center gap-2">
+          <Zap className="h-5 w-5 text-slate-300" />
+          <h1 className="hidden text-md font-normal text-slate-300 sm:block">
             Link Hub
           </h1>
         </div>
 
         {/* Search */}
-        <div className="relative flex flex-1 items-center justify-center">
-          <div className="relative w-full max-w-xs">
-            <Search
-              className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground`}
-            />
-            <Input
-              ref={props.searchInputRef}
-              type="text"
-              placeholder="Search links..."
-              value={props.searchTerm}
-              onChange={(e) => props.onSearchChange(e.target.value)}
-              className={`h-9 w-full rounded-full border-transparent bg-white/5 pl-10 pr-4 transition-all duration-300 focus:border-purple-500/50 focus:bg-white/10 focus:ring-2 focus:ring-purple-500/20`}
-            />
-          </div>
+        <div className="relative flex-1 max-w-xs">
+          <Search
+            className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground`}
+          />
+          <Input
+            ref={props.searchInputRef}
+            type="text"
+            placeholder="Search..."
+            value={props.searchTerm}
+            onChange={(e) => props.onSearchChange(e.target.value)}
+            className={`h-9 w-full rounded-full border-transparent bg-white/5 pl-10 pr-4 transition-all duration-300 focus:border-purple-500/50 focus:bg-white/10 focus:ring-2 focus:ring-purple-500/20`}
+          />
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <Button
             size="icon"
             variant="ghost"
@@ -113,7 +96,9 @@ export function AppHeader(props: AppHeaderProps) {
               align="end"
               className={`w-64 rounded-xl border-slate-700/50 bg-slate-900/80 p-2 backdrop-blur-xl`}
             >
-              <DropdownMenuLabel>Display</DropdownMenuLabel>
+              <DropdownMenuLabel>Settings</DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-slate-700/50" />
+
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger className="rounded-md">
                   <Grid className="mr-2 h-4 w-4" />
@@ -141,20 +126,6 @@ export function AppHeader(props: AppHeaderProps) {
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
 
-              <DropdownMenuLabel className="pt-2">Link Size: {props.linkSize}px</DropdownMenuLabel>
-              <div className="p-2">
-                <Slider
-                  defaultValue={[props.linkSize]}
-                  max={150}
-                  min={40}
-                  step={1}
-                  onValueChange={(value) => props.onLinkSizeChange(value[0])}
-                />
-              </div>
-
-              <DropdownMenuSeparator className="bg-slate-700/50" />
-              
-              <DropdownMenuLabel>Settings</DropdownMenuLabel>
               <DropdownMenuItem
                 onClick={props.onToggleDarkMode}
                 className="rounded-md"
@@ -173,7 +144,20 @@ export function AppHeader(props: AppHeaderProps) {
               >
                 <Eye className="mr-2 h-4 w-4" /> Show Private Links
               </DropdownMenuCheckboxItem>
+
+              <DropdownMenuSeparator className="bg-slate-700/50" />
               
+              <DropdownMenuLabel>Link Size: {props.linkSize}px</DropdownMenuLabel>
+              <div className="p-2">
+                <Slider
+                  defaultValue={[props.linkSize]}
+                  max={150}
+                  min={40}
+                  step={1}
+                  onValueChange={(value) => props.onLinkSizeChange(value[0])}
+                />
+              </div>
+
               <DropdownMenuSeparator className="bg-slate-700/50" />
 
               <DropdownMenuItem onClick={props.onExportData} className="rounded-md">
