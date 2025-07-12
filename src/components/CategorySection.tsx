@@ -37,6 +37,7 @@ interface CategorySectionProps {
   onDropUrl: (url: string, category: string) => void;
   onReorderLinks: (draggedKey: string, targetKey: string, category: string) => void;
   onDeleteLink: (linkKey: string) => void;
+  onToggleFavorite: (linkKey: string) => void;
   linkSize: number;
 }
 
@@ -62,6 +63,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onDropUrl,
   onReorderLinks,
   onDeleteLink,
+  onToggleFavorite,
   linkSize
 }) => {
   const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
@@ -361,6 +363,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                 onMouseEnter={() => onMouseEnter(link.key)}
                 onMouseLeave={onMouseLeave}
                 onLinkClick={() => onLinkClick(link)}
+                onToggleFavorite={(e) => {e.stopPropagation(); onToggleFavorite(link.key);}}
                 onEdit={() => onEditLink(link)}
                 onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
                 onDragStart={() => onDragStart(link.key)}
@@ -403,6 +406,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                 onMouseEnter={() => onMouseEnter(link.key)}
                 onMouseLeave={onMouseLeave}
                 onLinkClick={() => onLinkClick(link)}
+                onToggleFavorite={(e) => {e.stopPropagation(); onToggleFavorite(link.key);}}
                 onEdit={() => onEditLink(link)}
                 onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
                 onDragStart={() => onDragStart(link.key)}

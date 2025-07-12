@@ -538,6 +538,20 @@ const Index = () => {
     }
   };
 
+  const handleToggleFavorite = (linkKey: string) => {
+    setLinksData((prev) => 
+      prev.map((link) => 
+        link.key === linkKey 
+          ? { ...link, isFavorite: !link.isFavorite }
+          : link
+      )
+    );
+    const link = linksData.find(l => l.key === linkKey);
+    if (link) {
+      toast.success(`${link.name} ${link.isFavorite ? 'removed from' : 'added to'} favorites`);
+    }
+  };
+
   const handleDragStart = (key: string) => {
     setDraggedItem(key);
   };
@@ -742,6 +756,7 @@ const Index = () => {
               onDropUrl={handleDropUrl}
               onReorderLinks={handleReorderLinks}
               onDeleteLink={handleDeleteLink}
+              onToggleFavorite={handleToggleFavorite}
               linkSize={linkSize}
             />
           ))}
