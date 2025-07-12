@@ -843,6 +843,7 @@ const Index = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
         isNewLink={isNewLink}
+        editingLink={editingLink}
         formData={formData}
         onFormDataChange={setFormData}
         onSave={handleSave}
