@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, GripVertical, Plus, X } from 'lucide-react';
+import { Star, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
@@ -57,35 +57,9 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
             ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
           `}
         >
-          <div className="absolute top-1 right-1 flex flex-col gap-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <Button
-              size="icon"
-              variant="ghost"
-              className="h-6 w-6"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete?.();
-              }}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="h-6 w-6"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleAdd();
-              }}
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="h-6 w-6 cursor-grab"
-            >
-              <GripVertical className="h-4 w-4" />
+          <div className="absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Button size="icon" variant="ghost" className="h-6 w-6">
+              <MoreHorizontal className="h-4 w-4" />
             </Button>
           </div>
 

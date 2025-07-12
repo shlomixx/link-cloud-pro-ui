@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, GripVertical, Plus, X } from 'lucide-react';
+import { Star, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
@@ -52,35 +52,9 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
           `}
         >
-          <div className="absolute top-0 right-0 flex flex-col gap-0.5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <Button
-              size="icon"
-              variant="ghost"
-              className="h-5 w-5"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete?.();
-              }}
-            >
-              <X className="h-3 w-3" />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="h-5 w-5"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleAdd();
-              }}
-            >
-              <Plus className="h-3 w-3" />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="h-5 w-5 cursor-grab"
-            >
-              <GripVertical className="h-3 w-3" />
+          <div className="absolute top-1 right-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Button size="icon" variant="ghost" className="h-6 w-6">
+              <MoreHorizontal className="h-4 w-4" />
             </Button>
           </div>
           <div className="relative">
