@@ -1,213 +1,80 @@
-
-import React from 'react';
-import { Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-interface LinkData {
-  key: string;
-  name: string;
-  url?: string;
-  defaultUrl?: string;
-  category: string;
-  isPrivate?: boolean;
-  clicks?: number;
-  createdAt?: string;
-  isFavorite?: boolean;
-  lastClicked?: string;
-}
-
-interface FormData {
-  name: string;
-  url: string;
-  category: string;
-  isPrivate: boolean;
-}
-
-interface LinkModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  isNewLink: boolean;
-  formData: FormData;
-  onFormDataChange: (data: FormData) => void;
-  onSave: () => void;
-  onDelete: () => void;
-  isLoading: boolean;
-  isDarkMode: boolean;
-  categoryLabels: Record<string, string>;
-}
-
-export const LinkModal: React.FC<LinkModalProps> = ({
-  isOpen,
-  onClose,
-  isNewLink,
-  formData,
-  onFormDataChange,
-  onSave,
-  onDelete,
-  isLoading,
-  isDarkMode,
-  categoryLabels
-}) => {
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={`max-w-md transition-all duration-300 ${
-        isDarkMode 
-          ? 'bg-slate-900/95 border-slate-700 text-white backdrop-blur-sm' 
-          : 'bg-white/95 border-slate-200 text-slate-800 backdrop-blur-sm'
-      }`}>
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
-            {isNewLink ? 'Add New Link' : 'Edit Link'}
-          </DialogTitle>
-          <DialogDescription className={`${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-            {isNewLink 
-              ? 'Create a new link for your collection'
-              : 'Update your link details'
-            }
-          </DialogDescription>
-        </DialogHeader>
-        
-        <Tabs defaultValue="basic" className="w-full">
-          <TabsList className={`grid w-full grid-cols-2 ${
-            isDarkMode ? 'bg-slate-800/50' : 'bg-slate-100/50'
-          }`}>
-            <TabsTrigger value="basic" className="transition-all duration-300">Basic Info</TabsTrigger>
-            <TabsTrigger value="advanced" className="transition-all duration-300">Advanced</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="basic" className="space-y-4 mt-4">
-            <div>
-              <Label htmlFor="name" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                Link Name
-              </Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => onFormDataChange({ ...formData, name: e.target.value })}
-                placeholder="e.g., Google"
-                className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                  isDarkMode 
-                    ? 'bg-slate-800/50 border-slate-600 text-white focus:border-purple-500' 
-                    : 'bg-slate-50/50 border-slate-300 text-slate-800 focus:border-purple-500'
-                }`}
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="url" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                URL
-              </Label>
-              <Input
-                id="url"
-                value={formData.url}
-                onChange={(e) => onFormDataChange({ ...formData, url: e.target.value })}
-                placeholder="https://example.com"
-                className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                  isDarkMode 
-                    ? 'bg-slate-800/50 border-slate-600 text-white focus:border-purple-500' 
-                    : 'bg-slate-50/50 border-slate-300 text-slate-800 focus:border-purple-500'
-                }`}
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="category" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                Category
-              </Label>
-              <Select
-                value={formData.category}
-                onValueChange={(value) => onFormDataChange({ ...formData, category: value })}
-              >
-                <SelectTrigger className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                  isDarkMode 
-                    ? 'bg-slate-800/50 border-slate-600 text-white focus:border-purple-500' 
-                    : 'bg-slate-50/50 border-slate-300 text-slate-800 focus:border-purple-500'
-                }`}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className={`z-50 ${
-                  isDarkMode ? 'bg-slate-800/95 border-slate-600 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
-                }`}>
-                  {Object.entries(categoryLabels).map(([key, label]) => (
-                    <SelectItem key={key} value={key} className={`transition-all duration-300 ${
-                      isDarkMode ? 'text-white focus:bg-slate-700/50' : 'text-slate-800 focus:bg-slate-100/50'
-                    }`}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="advanced" className="space-y-4 mt-4">
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="private"
-                checked={formData.isPrivate}
-                onCheckedChange={(checked) => onFormDataChange({ ...formData, isPrivate: checked })}
-              />
-              <Label htmlFor="private" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                Private Link
-              </Label>
-            </div>
-            <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-              Private links are only visible when "Show Private Links" is enabled.
-            </p>
-          </TabsContent>
-        </Tabs>
-        
-        <div className="flex justify-between pt-4">
-          <div>
-            {!isNewLink && (
-              <Button
-                variant="destructive"
-                onClick={onDelete}
-                disabled={isLoading}
-                className="bg-red-600 hover:bg-red-700 transition-all duration-300 hover:scale-105"
-              >
-                {isLoading ? (
-                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                ) : (
-                  <Trash2 className="w-4 h-4 mr-2" />
-                )}
-                Delete
-              </Button>
-            )}
-          </div>
-          
-          <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              onClick={onClose} 
-              disabled={isLoading}
-              className={`transition-all duration-300 hover:scale-105 ${
-                isDarkMode 
-                  ? 'border-slate-600 text-white hover:bg-slate-800/50' 
-                  : 'border-slate-300 text-slate-800 hover:bg-slate-100/50'
-              }`}
-            >
-              Cancel
-            </Button>
-            <Button 
-              onClick={onSave} 
-              disabled={isLoading}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 hover:scale-105"
-            >
-              {isLoading ? (
-                <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-              ) : null}
-              {isNewLink ? 'Add Link' : 'Save Changes'}
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-};
+--- a/shlomixx/link-cloud-pro-ui/shlomixx-link-cloud-pro-ui-0e1d06010fe1bcf89277b8cd68bddb4223d57a22/src/components/LinkModal.tsx
++++ b/shlomixx/link-cloud-pro-ui/shlomixx-link-cloud-pro-ui-0e1d06010fe1bcf89277b8cd68bddb4223d57a22/src/components/LinkModal.tsx
+@@ -1,7 +1,7 @@
+ 
+ import React from 'react';
+ import { Trash2 } from 'lucide-react';
+-import { Button } from '@/components/ui/button';
++import { Button } from '@/components/ui/button'; // Import Button for Alert Dialog actions
+ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+ import { Label } from '@/components/ui/label';
+ import { Input } from '@/components/ui/input';
+@@ -9,6 +9,7 @@
+ import { Switch } from '@/components/ui/switch';
+ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+ 
++import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+ interface LinkData {
+   key: string;
+   name: string;
+@@ -82,19 +83,43 @@
+         
+         <div className="flex justify-between pt-4">
+           <div>
+-            {!isNewLink && (
+-              <Button
+-                variant="destructive"
+-                onClick={onDelete}
+-                disabled={isLoading}
+-                className="bg-red-600 hover:bg-red-700 transition-all duration-300 hover:scale-105"
+-              >
+-                {isLoading ? (
+-                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+-                ) : (
+-                  <Trash2 className="w-4 h-4 mr-2" />
+-                )}
+-                Delete
+-              </Button>
+-            )}
++            {!isNewLink && editingLink && (
++              <AlertDialog>
++                <AlertDialogTrigger asChild>
++                  <Button
++                    variant="destructive"
++                    disabled={isLoading}
++                    className="bg-red-600 hover:bg-red-700 transition-all duration-300 hover:scale-105"
++                  >
++                    <Trash2 className="w-4 h-4 mr-2" />
++                    Delete
++                  </Button>
++                </AlertDialogTrigger>
++                <AlertDialogContent className={`${isDarkMode ? 'bg-slate-900/95 border-slate-700 text-white backdrop-blur-sm' : 'bg-white/95 border-slate-200 text-slate-800 backdrop-blur-sm'}`}>
++                  <AlertDialogHeader>
++                    <AlertDialogTitle className="text-xl font-bold">Confirm Deletion</AlertDialogTitle>
++                    <AlertDialogDescription className={`${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
++                      Are you sure you want to delete &quot;{editingLink.name}&quot;? This action cannot be undone.
++                    </AlertDialogDescription>
++                  </AlertDialogHeader>
++                  <AlertDialogFooter>
++                    <AlertDialogCancel
++                      className={`transition-all duration-300 hover:scale-105 ${
++                        isDarkMode 
++                          ? 'border-slate-600 text-white hover:bg-slate-800/50' 
++                          : 'border-slate-300 text-slate-800 hover:bg-slate-100/50'
++                      }`}
++                    >
++                      Cancel
++                    </AlertDialogCancel>
++                    <AlertDialogAction
++                      onClick={onDelete}
++                      className="bg-red-600 hover:bg-red-700 transition-all duration-300 hover:scale-105"
++                    >
++                      Delete
++                    </AlertDialogAction>
++                  </AlertDialogFooter>
++                </AlertDialogContent>
++              </AlertDialog>
++            )}
+           </div>
+           
+           <div className="flex gap-2">
