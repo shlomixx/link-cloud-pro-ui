@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Search, Plus, Grid, List, Moon, Sun, Maximize2, Minimize2, Zap, Filter, Settings, Download, Upload, Eye, EyeOff, Keyboard, Heart, Clock, TrendingUp, Menu, X, ArrowUpDown, Trash2, Copy, RotateCcw, Share2, BookmarkPlus, Shuffle } from 'lucide-react';
+import { Search, Plus, Grid, List, Moon, Sun, Zap, Settings, Download, Upload, Eye, EyeOff, Keyboard, Shuffle, SlidersHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Slider } from "@/components/ui/slider"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
-import { Star } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuCheckboxItem } from '@/components/ui/dropdown-menu';
 
 interface AppHeaderProps {
   searchTerm: string;
@@ -37,263 +36,116 @@ interface AppHeaderProps {
   onLinkSizeChange: (size: number) => void;
 }
 
-export const AppHeader: React.FC<AppHeaderProps> = ({
-  searchTerm,
-  onSearchChange,
-  searchInputRef,
-  viewMode,
-  onViewModeChange,
-  isDarkMode,
-  onToggleDarkMode,
-  isCompactHeader,
-  onToggleCompactHeader,
-  selectedCategory,
-  onCategoryChange,
-  categories,
-  categoryLabels,
-  showPrivateLinks,
-  onTogglePrivateLinks,
-  onExportData,
-  onImportData,
-  onAddLink,
-  onShowShortcuts,
-  linksCount,
-  totalClicks,
-  categoriesCount,
-  fileInputRef,
-  onQuickAction,
-  recentCount,
-  popularCount,
-  linkSize,
-  onLinkSizeChange
-}) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  // New handler functions for additional controls
-  const handleSortAction = (sortType: string) => {
-    console.log(`Sorting by ${sortType}`);
-    // This would be implemented in the parent component
-  };
-
-  const handleBulkAction = (action: string) => {
-    console.log(`Bulk action: ${action}`);
-    // This would be implemented in the parent component
-  };
-
-  const handleRandomLink = () => {
-    console.log('Opening random link');
-    // This would be implemented in the parent component
-  };
-
-  const handleShareCollection = () => {
-    console.log('Sharing collection');
-    // This would be implemented in the parent component
-  };
-
-  const handleBackup = () => {
-    console.log('Creating backup');
-    // This would be implemented in the parent component
-  };
+export const AppHeader: React.FC<AppHeaderProps> = (props) => {
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
-    <div className={`sticky top-0 z-50 transition-all duration-300`}>
-      <div className={`container mx-auto px-4 py-3 ${isCompactHeader ? 'backdrop-blur-xl bg-transparent' : 'bg-transparent'}`}>
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <h1 className={`text-xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-colors duration-300 ${
-              isDarkMode 
-                ? 'from-white to-purple-300' 
-                : 'from-slate-800 to-purple-600'
-            }`}>
-              Link Hub
-            </h1>
-          </div>
+    <header className="sticky top-4 z-50 mx-auto max-w-5xl">
+        <div className="container mx-auto flex h-16 items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/30 px-4 shadow-lg backdrop-blur-xl">
+            {/* Logo */}
+            <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-pink-600">
+                    <Zap className="h-5 w-5 text-white" />
+                </div>
+                <h1 className="hidden text-xl font-bold text-foreground sm:block">Link Hub</h1>
+            </div>
 
-          {/* Main Menu Button */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                size="sm"
-                variant="outline"
-                className={`h-9 px-3 z-50 rounded-full ${
-                  isDarkMode 
-                    ? 'bg-white/5 border-white/20 text-white hover:bg-white/10' 
-                    : 'bg-black/5 border-black/20 text-slate-800 hover:bg-black/10'
-                }`}
-              >
-                <Menu className="w-4 h-4 mr-2" />
-                תפריט
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent 
-              align="end" 
-              className={`w-80 max-h-[80vh] overflow-y-auto z-50 rounded-xl ${
-                isDarkMode 
-                  ? 'bg-slate-900/90 border-slate-700 backdrop-blur-sm' 
-                  : 'bg-white/90 border-slate-200 backdrop-blur-sm'
-              }`}
-            >
-              {/* Search */}
-              <div className="p-3 border-b border-white/10">
-                <div className="relative">
-                  <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
-                    isDarkMode ? 'text-slate-400' : 'text-slate-500'
-                  }`} />
-                  <Input
-                    ref={searchInputRef}
+            {/* Search */}
+            <div className={`relative flex-1 transition-all duration-300 sm:max-w-xs ${isSearchOpen ? 'max-w-full' : 'max-w-[40px] sm:max-w-xs'}`}>
+                <Search className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-all ${isSearchOpen ? 'opacity-100' : 'opacity-0 sm:opacity-100'}`} />
+                <Input
+                    ref={props.searchInputRef}
                     type="text"
                     placeholder="חפש לינקים..."
-                    value={searchTerm}
-                    onChange={(e) => onSearchChange(e.target.value)}
-                    className={`pl-10 h-9 rounded-md ${
-                      isDarkMode 
-                        ? 'bg-white/10 border-white/20 text-white placeholder:text-slate-400' 
-                        : 'bg-black/5 border-black/20 text-slate-800 placeholder:text-slate-500'
-                    }`}
-                  />
-                </div>
-              </div>
+                    value={props.searchTerm}
+                    onChange={(e) => props.onSearchChange(e.target.value)}
+                    onFocus={() => setIsSearchOpen(true)}
+                    onBlur={() => setIsSearchOpen(false)}
+                    className={`h-10 w-full rounded-full border-transparent bg-white/5 pl-10 pr-4 transition-all duration-300 focus:border-purple-500/50 focus:bg-white/10 focus:ring-purple-500/20`}
+                />
+            </div>
 
-              {/* Quick Actions */}
-              <div className="p-2 border-b border-white/10">
-                <div className="text-xs font-medium mb-2 text-muted-foreground px-2">פעולות מהירות</div>
-                <div className="grid grid-cols-2 gap-1">
-                  <DropdownMenuItem
-                    onClick={onAddLink}
-                    className="h-8 justify-start cursor-pointer rounded-md"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    הוסף לינק
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={handleRandomLink}
-                    className="h-8 justify-start cursor-pointer rounded-md"
-                  >
-                    <Shuffle className="w-4 h-4 mr-2" />
-                    לינק אקראי
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => onQuickAction('recent')}
-                    className="h-8 justify-start cursor-pointer rounded-md"
-                  >
-                    <Clock className="w-4 h-4 mr-2" />
-                    אחרונים ({recentCount})
-                  </DropdownMenuItem>
-                </div>
-              </div>
+            {/* Actions */}
+            <div className="flex items-center gap-2">
+                <Button size="icon" variant="ghost" className="rounded-full" onClick={props.onAddLink}>
+                    <Plus className="h-5 w-5" />
+                </Button>
 
-              {/* View Mode */}
-              <div className="p-2 border-b border-white/10">
-                <div className="text-xs font-medium mb-2 text-muted-foreground px-2">מצב תצוגה</div>
-                <div className="grid grid-cols-3 gap-1">
-                  <DropdownMenuItem
-                    onClick={() => onViewModeChange('compact')}
-                    className={`h-8 justify-center cursor-pointer rounded-md ${viewMode === 'compact' ? 'bg-primary/10' : ''}`}
-                  >
-                    <Zap className="w-4 h-4 mr-1" />
-                    קומפקטי
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => onViewModeChange('grid')}
-                    className={`h-8 justify-center cursor-pointer rounded-md ${viewMode === 'grid' ? 'bg-primary/10' : ''}`}
-                  >
-                    <Grid className="w-4 h-4 mr-1" />
-                    רשת
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => onViewModeChange('list')}
-                    className={`h-8 justify-center cursor-pointer rounded-md ${viewMode === 'list' ? 'bg-primary/10' : ''}`}
-                  >
-                    <List className="w-4 h-4 mr-1" />
-                    רשימה
-                  </DropdownMenuItem>
-                </div>
-              </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button size="icon" variant="ghost" className="rounded-full">
+                            <SlidersHorizontal className="h-5 w-5" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent 
+                      align="end" 
+                      className={`w-64 rounded-xl border-white/10 bg-slate-900/80 p-2 backdrop-blur-xl`}>
+                        <DropdownMenuLabel>תצוגה</DropdownMenuLabel>
+                        <DropdownMenuSeparator className="bg-white/10" />
+                        <DropdownMenuItem onClick={() => props.onViewModeChange('compact')} className="rounded-md">
+                            <Zap className="mr-2 h-4 w-4" /> קומפקטי
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => props.onViewModeChange('grid')} className="rounded-md">
+                            <Grid className="mr-2 h-4 w-4" /> רשת
+                        </DropdownMenuItem>
+                         <DropdownMenuItem onClick={() => props.onViewModeChange('list')} className="rounded-md">
+                            <List className="mr-2 h-4 w-4" /> רשימה
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-white/10" />
+                        <DropdownMenuLabel>גודל לינקים: {props.linkSize}px</DropdownMenuLabel>
+                        <div className="p-2">
+                            <Slider
+                                defaultValue={[props.linkSize]}
+                                max={150}
+                                min={40}
+                                step={1}
+                                onValueChange={(value) => props.onLinkSizeChange(value[0])}
+                            />
+                        </div>
+                    </DropdownMenuContent>
+                </DropdownMenu>
 
-              {/* Categories */}
-              <div className="p-2 border-b border-white/10 max-h-40 overflow-y-auto">
-                <div className="text-xs font-medium mb-2 text-muted-foreground px-2">קטגוריות</div>
-                <DropdownMenuItem
-                  onClick={() => onCategoryChange('all')}
-                  className={`h-7 justify-start cursor-pointer mb-1 rounded-md ${selectedCategory === 'all' ? 'bg-primary/10' : ''}`}
-                >
-                  כל הקטגוריות
-                </DropdownMenuItem>
-                {categories.slice(0, 6).map(category => (
-                  <DropdownMenuItem
-                    key={category}
-                    onClick={() => onCategoryChange(category)}
-                    className={`h-7 justify-start cursor-pointer mb-1 rounded-md ${selectedCategory === category ? 'bg-primary/10' : ''}`}
-                  >
-                    {categoryLabels[category as keyof typeof categoryLabels]}
-                  </DropdownMenuItem>
-                ))}
-              </div>
-
-              {/* Settings */}
-              <div className="p-2">
-                <div className="text-xs font-medium mb-2 text-muted-foreground px-2">הגדרות</div>
-                <DropdownMenuItem
-                  onClick={onToggleDarkMode}
-                  className="h-8 justify-start cursor-pointer mb-1 rounded-md"
-                >
-                  {isDarkMode ? <Sun className="w-4 h-4 mr-2" /> : <Moon className="w-4 h-4 mr-2" />}
-                  {isDarkMode ? 'מצב בהיר' : 'מצב כהה'}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={onTogglePrivateLinks}
-                  className="h-8 justify-start cursor-pointer mb-1 rounded-md"
-                >
-                  {showPrivateLinks ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-                  {showPrivateLinks ? 'הסתר פרטיים' : 'הצג פרטיים'}
-                </DropdownMenuItem>
-                
-                <DropdownMenuSeparator className='bg-white/10 my-2'/>
-
-                <DropdownMenuLabel>Link Size: {linkSize}px</DropdownMenuLabel>
-                <div className="p-2">
-                  <Slider
-                    defaultValue={[linkSize]}
-                    max={150}
-                    min={40}
-                    step={1}
-                    onValueChange={(value) => onLinkSizeChange(value[0])}
-                  />
-                </div>
-                
-                <DropdownMenuSeparator className='bg-white/10 my-2'/>
-                
-                <DropdownMenuItem
-                  onClick={onExportData}
-                  className="h-8 justify-start cursor-pointer mb-1 rounded-md"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  ייצא נתונים
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => fileInputRef.current?.click()}
-                  className="h-8 justify-start cursor-pointer mb-1 rounded-md"
-                >
-                  <Upload className="w-4 h-4 mr-2" />
-                  ייבא נתונים
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={onShowShortcuts}
-                  className="h-8 justify-start cursor-pointer rounded-md"
-                >
-                  <Keyboard className="w-4 h-4 mr-2" />
-                  קיצורי מקלדת
-                </DropdownMenuItem>
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button size="icon" variant="ghost" className="rounded-full">
+                            <Settings className="h-5 w-5" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                     <DropdownMenuContent 
+                      align="end" 
+                      className={`w-64 rounded-xl border-white/10 bg-slate-900/80 p-2 backdrop-blur-xl`}>
+                        <DropdownMenuLabel>הגדרות</DropdownMenuLabel>
+                        <DropdownMenuSeparator className="bg-white/10" />
+                        <DropdownMenuItem onClick={props.onToggleDarkMode} className="rounded-md">
+                            {props.isDarkMode ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
+                            {props.isDarkMode ? 'מצב בהיר' : 'מצב כהה'}
+                        </DropdownMenuItem>
+                         <DropdownMenuCheckboxItem
+                            checked={props.showPrivateLinks}
+                            onCheckedChange={props.onTogglePrivateLinks}
+                             className="rounded-md"
+                        >
+                             <Eye className="mr-2 h-4 w-4" /> הצג לינקים פרטיים
+                        </DropdownMenuCheckboxItem>
+                         <DropdownMenuSeparator className="bg-white/10" />
+                          <DropdownMenuItem onClick={props.onExportData} className="rounded-md">
+                            <Download className="mr-2 h-4 w-4" />
+                            ייצא נתונים
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => props.fileInputRef.current?.click()} className="rounded-md">
+                            <Upload className="mr-2 h-4 w-4" />
+                            ייבא נתונים
+                        </DropdownMenuItem>
+                         <DropdownMenuSeparator className="bg-white/10" />
+                         <DropdownMenuItem onClick={props.onShowShortcuts} className="rounded-md">
+                            <Keyboard className="mr-2 h-4 w-4" />
+                            קיצורי מקלדת
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };

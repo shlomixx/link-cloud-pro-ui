@@ -722,35 +722,40 @@ const Index = () => {
         onLinkSizeChange={setLinkSize}
       />
 
-      <div className="container mx-auto px-6 py-2">
-        <div className="space-y-4">
-          {Object.entries(groupedLinks).map(([category, links]) => (
-            <CategorySection
+      <main className="container mx-auto px-6 py-8">
+        <div className="space-y-12">
+          {Object.entries(groupedLinks).map(([category, links], index) => (
+            <div
               key={category}
-              category={category}
-              links={links}
-              categoryLabels={categoryLabels}
-              categoryColors={categoryColors}
-              viewMode={viewMode}
-              isDarkMode={isDarkMode}
-              draggedItem={draggedItem}
-              hoveredLink={hoveredLink}
-              clickedLink={clickedLink}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-              onLinkClick={handleLinkClick}
-              onEditLink={openModal}
-              onCopyUrl={copyLinkUrl}
-              onMouseEnter={setHoveredLink}
-              onMouseLeave={() => setHoveredLink(null)}
-              onDragStart={handleDragStart}
-              onAddLink={(category) => openModal(undefined, category)}
-              onDropUrl={handleDropUrl}
-              onReorderLinks={handleReorderLinks}
-              onDeleteLink={handleDeleteLink}
-              onToggleFavorite={handleToggleFavorite}
-              linkSize={linkSize}
-            />
+              className="animate-slide-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <CategorySection
+                category={category}
+                links={links}
+                categoryLabels={categoryLabels}
+                categoryColors={categoryColors}
+                viewMode={viewMode}
+                isDarkMode={isDarkMode}
+                draggedItem={draggedItem}
+                hoveredLink={hoveredLink}
+                clickedLink={clickedLink}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onLinkClick={handleLinkClick}
+                onEditLink={openModal}
+                onCopyUrl={copyLinkUrl}
+                onMouseEnter={setHoveredLink}
+                onMouseLeave={() => setHoveredLink(null)}
+                onDragStart={handleDragStart}
+                onAddLink={(category) => openModal(undefined, category)}
+                onDropUrl={handleDropUrl}
+                onReorderLinks={handleReorderLinks}
+                onDeleteLink={handleDeleteLink}
+                onToggleFavorite={handleToggleFavorite}
+                linkSize={linkSize}
+              />
+            </div>
           ))}
         </div>
         
@@ -792,14 +797,7 @@ const Index = () => {
             </div>
           </div>
         )}
-      </div>
-
-      <Button
-        onClick={() => openModal()}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 z-50 group"
-      >
-        <Plus className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
-      </Button>
+      </main>
 
       <input
         ref={fileInputRef}
