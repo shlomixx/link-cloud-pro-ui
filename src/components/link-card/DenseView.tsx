@@ -1,3 +1,4 @@
+// src/components/link-card/DenseView.tsx
 import React, { useState } from 'react';
 import { Star, GripVertical, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -113,10 +114,10 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
                 <img
                   src={getFaviconUrl(link.url || link.defaultUrl || '')}
                   alt=""
-                  className="w-7 h-7 rounded"
+                  className="w-9 h-9 rounded"
                   onError={handleFaviconError}
                 />
-                <span className={`text-sm font-medium text-center max-w-[70px] leading-tight truncate ${
+                <span className={`text-base font-medium text-center max-w-[70px] leading-tight truncate ${
                   isDarkMode ? 'text-white' : 'text-slate-800'
                 }`}>
                   {link.name}

@@ -1,3 +1,4 @@
+// src/components/link-card/CompactView.tsx
 import React from 'react';
 import { Star, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -46,7 +47,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             }
           } : {})}
           className={`
-            group relative flex flex-col items-center gap-2 p-3 cursor-pointer min-w-[60px] max-w-[60px]
+            group relative flex flex-col items-center gap-2 p-3 cursor-pointer min-w-[80px] max-w-[80px]
             transition-all duration-300 hover:scale-105 hover:translate-y-[-2px]
             ${isClicked ? 'scale-95' : ''}
             ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
@@ -58,11 +59,11 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             </Button>
           </div>
           <div className="relative">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300">
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
-                className="w-8 h-8 rounded-lg"
+                className="w-10 h-10 rounded-lg"
                 onError={handleFaviconError}
               />
             </div>
@@ -71,7 +72,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             )}
           </div>
           
-          <span className="text-white/90 text-xs text-center truncate w-full font-medium group-hover:text-white transition-all duration-200">
+          <span className="text-white/90 text-sm text-center truncate w-full font-medium group-hover:text-white transition-all duration-200">
             {link.name}
           </span>
         </div>

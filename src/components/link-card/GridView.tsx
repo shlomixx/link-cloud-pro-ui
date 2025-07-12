@@ -1,3 +1,4 @@
+// src/components/link-card/GridView.tsx
 import React from 'react';
 import { Star, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -80,21 +81,21 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
 
           <div className="relative">
             <div className={`
-              w-16 h-16 rounded-2xl flex items-center justify-center
+              w-20 h-20 rounded-2xl flex items-center justify-center
               ${isDarkMode ? 'bg-slate-700/50' : 'bg-white/50'}
               backdrop-blur-sm transition-all duration-300 group-hover:scale-110
             `}>
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
-                className="w-10 h-10 rounded-lg"
+                className="w-12 h-12 rounded-lg"
                 onError={handleFaviconError}
               />
             </div>
           </div>
           
           <div className="w-full text-center">
-            <h3 className={`font-semibold text-base truncate ${
+            <h3 className={`font-semibold text-lg truncate ${
               isDarkMode ? 'text-white' : 'text-slate-800'
             }`}>
               {link.name}

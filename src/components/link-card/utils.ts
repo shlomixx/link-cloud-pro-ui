@@ -1,3 +1,4 @@
+
 export const getFaviconUrl = (url: string) => {
   try {
     const domain = new URL(url).hostname;
