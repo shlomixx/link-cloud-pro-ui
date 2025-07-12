@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { Search, Plus, Grid, List, Moon, Sun, Zap, Settings, Download, Upload, Eye, EyeOff, Keyboard, Shuffle, SlidersHorizontal } from 'lucide-react';
+import { 
+    Search, Plus, Grid, List, Moon, Sun, Zap, Settings, Download, Upload, Eye, EyeOff, 
+    Keyboard, Shuffle, SlidersHorizontal 
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Slider } from "@/components/ui/slider"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuCheckboxItem } from '@/components/ui/dropdown-menu';
+import { Slider } from "@/components/ui/slider";
+import { 
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, 
+    DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuCheckboxItem 
+} from '@/components/ui/dropdown-menu';
 
 interface AppHeaderProps {
   searchTerm: string;
