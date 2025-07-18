@@ -24,19 +24,16 @@ export default {
         heading: ['Poppins', 'sans-serif'],
 			},
 			colors: {
-        // New Terra Color Palette
-        'terra-green': {
-          DEFAULT: '#2E7D32',
-          light: '#4CAF50',
-        },
-        'terra-blue': {
-          DEFAULT: '#1976D2',
-          light: '#2196F3',
-        },
-        'terra-light': '#F5F5F5',
-        'terra-dark': '#121212',
-        'terra-gray': '#616161',
-        // Existing colors mapped for compatibility
+        // Terra semantic colors using HSL tokens
+        'terra-green': 'hsl(var(--terra-green))',
+        'terra-green-light': 'hsl(var(--terra-green-light))',
+        'terra-blue': 'hsl(var(--terra-blue))',
+        'terra-blue-light': 'hsl(var(--terra-blue-light))',
+        'terra-light': 'hsl(var(--terra-light))',
+        'terra-dark': 'hsl(var(--terra-dark))',
+        'terra-gray': 'hsl(var(--terra-gray))',
+        
+        // Design system colors
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -45,6 +42,30 @@ export default {
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
+				},
+				secondary: {
+					DEFAULT: 'hsl(var(--secondary))',
+					foreground: 'hsl(var(--secondary-foreground))'
+				},
+				muted: {
+					DEFAULT: 'hsl(var(--muted))',
+					foreground: 'hsl(var(--muted-foreground))'
+				},
+				accent: {
+					DEFAULT: 'hsl(var(--accent))',
+					foreground: 'hsl(var(--accent-foreground))'
+				},
+				destructive: {
+					DEFAULT: 'hsl(var(--destructive))',
+					foreground: 'hsl(var(--destructive-foreground))'
+				},
+				card: {
+					DEFAULT: 'hsl(var(--card))',
+					foreground: 'hsl(var(--card-foreground))'
+				},
+				popover: {
+					DEFAULT: 'hsl(var(--popover))',
+					foreground: 'hsl(var(--popover-foreground))'
 				},
 			},
 			borderRadius: {
