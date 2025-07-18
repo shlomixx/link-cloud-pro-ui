@@ -684,9 +684,8 @@ const Index = () => {
     );
   }
 
-  const getCompatibleViewMode = (mode: ViewMode): "grid" | "list" | "compact" => {
-    if (mode === 'dense') return 'compact';
-    return mode as "grid" | "list" | "compact";
+  const getCompatibleViewMode = (mode: ViewMode): "grid" | "list" | "compact" | "dense" => {
+    return mode;
   };
 
   return (
@@ -707,7 +706,7 @@ const Index = () => {
         onLinkSizeChange={setLinkSize}
       />
 
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-6">
         <div className="space-y-12">
           {Object.entries(groupedLinks).map(([category, links], index) => (
             <div
