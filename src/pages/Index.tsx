@@ -692,32 +692,16 @@ const Index = () => {
   return (
     <div className={`min-h-screen transition-all duration-500 bg-background`}>
       <AppHeader
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchInputRef={searchInputRef}
         viewMode={getCompatibleViewMode(viewMode)}
         onViewModeChange={(mode) => setViewMode(mode as ViewMode)}
         isDarkMode={isDarkMode}
         onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
-        isCompactHeader={isCompactHeader}
-        onToggleCompactHeader={() => setIsCompactHeader(!isCompactHeader)}
-        selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
-        categories={categories}
-        categoryLabels={categoryLabels}
         showPrivateLinks={showPrivateLinks}
         onTogglePrivateLinks={() => setShowPrivateLinks(!showPrivateLinks)}
         onExportData={exportData}
         onImportData={() => fileInputRef.current?.click()}
-        onAddLink={() => openModal()}
         onShowShortcuts={() => setShowShortcuts(true)}
-        linksCount={linksData.length}
-        totalClicks={totalClicks}
-        categoriesCount={categories.length}
         fileInputRef={fileInputRef}
-        onQuickAction={handleQuickAction}
-        recentCount={recentLinks.length}
-        popularCount={popularLinks.length}
         linkSize={linkSize}
         onLinkSizeChange={setLinkSize}
       />

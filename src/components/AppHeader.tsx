@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-  Search,
-  Plus,
   Grid,
   List,
   Moon,
@@ -14,7 +12,6 @@ import {
   Keyboard,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import {
   DropdownMenu,
@@ -30,9 +27,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 interface AppHeaderProps {
-  searchTerm: string;
-  onSearchChange: (term: string) => void;
-  searchInputRef: React.RefObject<HTMLInputElement>;
   viewMode: 'grid' | 'list' | 'compact';
   onViewModeChange: (mode: 'grid' | 'list' | 'compact') => void;
   isDarkMode: boolean;
@@ -41,7 +35,6 @@ interface AppHeaderProps {
   onTogglePrivateLinks: () => void;
   onExportData: () => void;
   onImportData: () => void;
-  onAddLink: () => void;
   onShowShortcuts: () => void;
   fileInputRef: React.RefObject<HTMLInputElement>;
   linkSize: number;
@@ -52,40 +45,11 @@ export function AppHeader(props: AppHeaderProps) {
   return (
     <header className="sticky top-4 z-50 mx-auto max-w-4xl">
       <div className="container mx-auto flex h-14 items-center justify-between gap-4 rounded-full border border-slate-700/50 bg-slate-900/50 px-4 shadow-lg backdrop-blur-xl">
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-          <Zap className="h-5 w-5 text-slate-300" />
-          <h1 className="hidden text-md font-normal text-slate-300 sm:block">
-            Link Hub
-          </h1>
-        </div>
-
-        {/* Search */}
-        <div className="relative flex-1 max-w-xs">
-          <Search
-            className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground`}
-          />
-          <Input
-            ref={props.searchInputRef}
-            type="text"
-            placeholder="Search..."
-            value={props.searchTerm}
-            onChange={(e) => props.onSearchChange(e.target.value)}
-            className={`h-9 w-full rounded-full border-transparent bg-white/5 pl-10 pr-4 transition-all duration-300 focus:border-purple-500/50 focus:bg-white/10 focus:ring-2 focus:ring-purple-500/20`}
-          />
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-1">
-          <Button
-            size="icon"
-            variant="ghost"
-            className="rounded-full"
-            onClick={props.onAddLink}
-          >
-            <Plus className="h-5 w-5" />
-          </Button>
-
+        <div className="flex-1"></div>
+        <h1 className="text-xl font-semibold text-slate-100 text-center flex-shrink-0">
+          All Your Favorite Links in One Place
+        </h1>
+        <div className="flex-1 flex justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="ghost" className="rounded-full">
