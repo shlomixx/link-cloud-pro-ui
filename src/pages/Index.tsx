@@ -708,7 +708,7 @@ const Index = () => {
       />
 
       <main className="container mx-auto px-6 py-8">
-        <div className="space-y-12">
+        <div className="space-y-6">
           {Object.entries(groupedLinks).map(([category, links], index) => (
             <div
               key={category}
