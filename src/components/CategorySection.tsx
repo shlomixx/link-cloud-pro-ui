@@ -338,8 +338,8 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDrop={handleDrop}
       >
         {/* Minimalist Category Header */}
-        <div className="flex items-center justify-between mb-6 px-1">
-          <h2 className="text-3xl font-light text-white tracking-wide">
+        <div className="flex items-center justify-between mb-4 px-1">
+          <h2 className="text-3xl font-normal text-slate-100 tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
           <div className="h-px flex-1 bg-gradient-to-r from-white/20 via-white/10 to-transparent ml-8" />

@@ -47,13 +47,13 @@ interface AppHeaderProps {
 
 export function AppHeader(props: AppHeaderProps) {
   return (
-    <header className="py-8 mb-4">
+    <header className="py-4 mb-2">
       <div className="container mx-auto flex items-center justify-between">
         {/* Spacer to keep title centered */}
         <div className="w-10"></div>
         
         {/* Centered Title with updated font */}
-        <h1 className="text-3xl font-light text-white tracking-wide text-center flex-grow">
+        <h1 className="text-3xl font-normal text-slate-100 tracking-wide text-center flex-grow">
           All Your Favorite Links in One Place
         </h1>
         
