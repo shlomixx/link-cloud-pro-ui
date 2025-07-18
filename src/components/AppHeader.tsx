@@ -46,22 +46,20 @@ interface AppHeaderProps {
 
 export function AppHeader(props: AppHeaderProps) {
   return (
-    <header className="pt-16 pb-8">
-      <div className="container mx-auto flex items-center justify-between">
-        {/* Spacer to keep title centered */}
-        <div className="w-10"></div>
+    <header className="sticky top-4 z-50 mx-auto max-w-2xl animate-slide-up mb-8">
+      <div className="container relative flex h-16 items-center justify-center rounded-full border border-white/10 bg-slate-900/60 px-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
         
-        {/* Centered Title with updated font and color */}
-        <h1 className="text-3xl font-normal text-white tracking-wide text-center flex-grow">
+        {/* Centered Title */}
+        <h1 className="gradient-text text-xl font-semibold tracking-tight">
           All Your Favorite Links in One Place
         </h1>
         
-        {/* Menu Button */}
-        <div className="w-10 flex justify-end">
+        {/* Menu Button - Positioned absolutely to the right */}
+        <div className="absolute right-3 flex items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="ghost" className="rounded-full">
-                <Settings className="h-5 w-5" />
+              <Button size="icon" variant="ghost" className="rounded-full hover:bg-white/10">
+                <Settings className="h-5 w-5 text-slate-300" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
