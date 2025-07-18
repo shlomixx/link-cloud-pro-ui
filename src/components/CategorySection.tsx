@@ -235,7 +235,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout - Minimalist Design */}
       <div 
-        className="hidden md:block mb-6 animate-slide-up"
+        className="hidden md:block mb-4 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
