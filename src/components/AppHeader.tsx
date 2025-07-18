@@ -43,13 +43,18 @@ interface AppHeaderProps {
 
 export function AppHeader(props: AppHeaderProps) {
   return (
-    <header className="sticky top-4 z-50 mx-auto max-w-4xl">
-      <div className="container mx-auto flex h-14 items-center justify-between gap-4 rounded-full border border-slate-700/50 bg-slate-900/50 px-4 shadow-lg backdrop-blur-xl">
-        <div className="flex-1"></div>
-        <h1 className="text-xl font-semibold text-slate-100 text-center flex-shrink-0">
+    <header className="py-8 mb-4">
+      <div className="container mx-auto flex items-center justify-between">
+        {/* Spacer to keep title centered */}
+        <div className="w-10"></div>
+        
+        {/* Centered Title */}
+        <h1 className="text-2xl font-light text-slate-100 text-center flex-grow">
           All Your Favorite Links in One Place
         </h1>
-        <div className="flex-1 flex justify-end">
+        
+        {/* Menu Button */}
+        <div className="w-10 flex justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="ghost" className="rounded-full">
