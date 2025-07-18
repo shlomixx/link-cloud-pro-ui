@@ -10,7 +10,7 @@ import {
   Upload,
   Eye,
   Keyboard,
-  Plus, // Make sure Plus is imported
+  Plus,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -26,9 +26,8 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ViewMode } from '@/types'; // Import ViewMode
+import { ViewMode } from '@/types';
 
-// The props interface should accept the full ViewMode type
 interface AppHeaderProps {
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
@@ -38,7 +37,7 @@ interface AppHeaderProps {
   onTogglePrivateLinks: () => void;
   onExportData: () => void;
   onImportData: () => void;
-  onAddLink: () => void; // Add onAddLink to props
+  onAddLink: () => void;
   onShowShortcuts: () => void;
   fileInputRef: React.RefObject<HTMLInputElement>;
   linkSize: number;
@@ -47,13 +46,13 @@ interface AppHeaderProps {
 
 export function AppHeader(props: AppHeaderProps) {
   return (
-    <header className="py-4 mb-2">
+    <header className="pt-16 pb-8">
       <div className="container mx-auto flex items-center justify-between">
         {/* Spacer to keep title centered */}
         <div className="w-10"></div>
         
-        {/* Centered Title with updated font */}
-        <h1 className="text-3xl font-normal text-slate-100 tracking-wide text-center flex-grow">
+        {/* Centered Title with updated font and color */}
+        <h1 className="text-3xl font-normal text-white tracking-wide text-center flex-grow">
           All Your Favorite Links in One Place
         </h1>
         
@@ -72,7 +71,6 @@ export function AppHeader(props: AppHeaderProps) {
               <DropdownMenuLabel>Settings</DropdownMenuLabel>
               <DropdownMenuSeparator className="bg-slate-700/50" />
 
-              {/* Add New Link Item */}
               <DropdownMenuItem onClick={props.onAddLink} className="rounded-md">
                 <Plus className="mr-2 h-4 w-4" />
                 <span>Add New Link</span>

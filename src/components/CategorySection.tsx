@@ -100,85 +100,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     }
   };
 
-  const getCategoryColor = () => {
-    const colorMap: Record<string, string> = {
-      tools: 'bg-orange-400',
-      streaming: 'bg-green-400',
-      social: 'bg-pink-400',
-      shopping: 'bg-yellow-400',
-      education: 'bg-blue-400',
-      news: 'bg-red-400',
-      ai: 'bg-purple-400',
-      languages: 'bg-indigo-400',
-      learning: 'bg-cyan-400',
-      technology: 'bg-teal-400',
-      design: 'bg-rose-400',
-      business: 'bg-violet-400',
-      finance: 'bg-emerald-400',
-      entertainment: 'bg-fuchsia-400',
-      communication: 'bg-sky-400',
-      productivity: 'bg-amber-400',
-      health: 'bg-red-500',
-      music: 'bg-pink-500',
-      photography: 'bg-slate-400',
-      art: 'bg-purple-500',
-      books: 'bg-indigo-500',
-      sports: 'bg-orange-500',
-      gaming: 'bg-violet-500',
-      investing: 'bg-green-500',
-      cryptocurrency: 'bg-yellow-500',
-      freelance: 'bg-blue-500',
-      meditation: 'bg-cyan-500',
-      dating: 'bg-rose-500',
-      parenting: 'bg-emerald-500',
-      custom: 'bg-purple-400'
-    };
-    
-    return colorMap[category] || 'bg-gray-400';
-  };
-
-  const getCategoryGradientColors = () => {
-    const gradientMap: Record<string, { from: string; via1: string; via2: string; to: string }> = {
-      tools: { from: 'from-orange-500/20', via1: 'via-orange-400', via2: 'via-orange-300', to: 'to-orange-500/20' },
-      streaming: { from: 'from-green-500/20', via1: 'via-green-400', via2: 'via-green-300', to: 'to-green-500/20' },
-      social: { from: 'from-pink-500/20', via1: 'via-pink-400', via2: 'via-pink-300', to: 'to-pink-500/20' },
-      shopping: { from: 'from-yellow-500/20', via1: 'via-yellow-400', via2: 'via-yellow-300', to: 'to-yellow-500/20' },
-      education: { from: 'from-blue-500/20', via1: 'via-blue-400', via2: 'via-blue-300', to: 'to-blue-500/20' },
-      news: { from: 'from-red-500/20', via1: 'via-red-400', via2: 'via-red-300', to: 'to-red-500/20' },
-      ai: { from: 'from-purple-500/20', via1: 'via-purple-400', via2: 'via-purple-300', to: 'to-purple-500/20' },
-      languages: { from: 'from-indigo-500/20', via1: 'via-indigo-400', via2: 'via-indigo-300', to: 'to-indigo-500/20' },
-      learning: { from: 'from-cyan-500/20', via1: 'via-cyan-400', via2: 'via-cyan-300', to: 'to-cyan-500/20' },
-      technology: { from: 'from-teal-500/20', via1: 'via-teal-400', via2: 'via-teal-300', to: 'to-teal-500/20' },
-      design: { from: 'from-rose-500/20', via1: 'via-rose-400', via2: 'via-rose-300', to: 'to-rose-500/20' },
-      business: { from: 'from-violet-500/20', via1: 'via-violet-400', via2: 'via-violet-300', to: 'to-violet-500/20' },
-      finance: { from: 'from-emerald-500/20', via1: 'via-emerald-400', via2: 'via-emerald-300', to: 'to-emerald-500/20' },
-      entertainment: { from: 'from-fuchsia-500/20', via1: 'via-fuchsia-400', via2: 'via-fuchsia-300', to: 'to-fuchsia-500/20' },
-      communication: { from: 'from-sky-500/20', via1: 'via-sky-400', via2: 'via-sky-300', to: 'to-sky-500/20' },
-      productivity: { from: 'from-amber-500/20', via1: 'via-amber-400', via2: 'via-amber-300', to: 'to-amber-500/20' },
-      health: { from: 'from-red-600/20', via1: 'via-red-500', via2: 'via-red-400', to: 'to-red-600/20' },
-      music: { from: 'from-pink-600/20', via1: 'via-pink-500', via2: 'via-pink-400', to: 'to-pink-600/20' },
-      photography: { from: 'from-slate-500/20', via1: 'via-slate-400', via2: 'via-slate-300', to: 'to-slate-500/20' },
-      art: { from: 'from-purple-600/20', via1: 'via-purple-500', via2: 'via-purple-400', to: 'to-purple-600/20' },
-      books: { from: 'from-indigo-600/20', via1: 'via-indigo-500', via2: 'via-indigo-400', to: 'to-indigo-600/20' },
-      sports: { from: 'from-orange-600/20', via1: 'via-orange-500', via2: 'via-orange-400', to: 'to-orange-600/20' },
-      gaming: { from: 'from-violet-600/20', via1: 'via-violet-500', via2: 'via-violet-400', to: 'to-violet-600/20' },
-      investing: { from: 'from-green-600/20', via1: 'via-green-500', via2: 'via-green-400', to: 'to-green-600/20' },
-      cryptocurrency: { from: 'from-yellow-600/20', via1: 'via-yellow-500', via2: 'via-yellow-400', to: 'to-yellow-600/20' },
-      freelance: { from: 'from-blue-600/20', via1: 'via-blue-500', via2: 'via-blue-400', to: 'to-blue-600/20' },
-      meditation: { from: 'from-cyan-600/20', via1: 'via-cyan-500', via2: 'via-cyan-400', to: 'to-cyan-600/20' },
-      dating: { from: 'from-rose-600/20', via1: 'via-rose-500', via2: 'via-rose-400', to: 'to-rose-600/20' },
-      parenting: { from: 'from-emerald-600/20', via1: 'via-emerald-500', via2: 'via-emerald-400', to: 'to-emerald-600/20' },
-    };
-    
-    return gradientMap[category] || { from: 'from-purple-500/20', via1: 'via-purple-400', via2: 'via-purple-300', to: 'to-purple-500/20' };
-  };
-
   const getMobileSeparator = () => {
     return (
       <div className="relative flex items-center py-2">
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         <div className="px-6">
-          <span className="text-white/90 text-xl font-semibold uppercase tracking-wide">
+          <span className="text-white text-xl font-semibold uppercase tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
         </div>
@@ -207,7 +134,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     setIsDragOverCategory(false);
     setDragOverIndex(null);
     
-    // First check for internal link drag data
     try {
       const internalData = e.dataTransfer.getData('application/json');
       if (internalData) {
@@ -218,10 +144,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         }
       }
     } catch (error) {
-      // Not internal drag data, continue with URL check
+      // Not internal drag data, continue
     }
     
-    // Then check for external URL drops
     const url = e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain');
     
     if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
@@ -235,7 +160,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     e.preventDefault();
     e.stopPropagation();
     
-    // Check if we're dragging a link from the same category
     try {
       const dragData = e.dataTransfer.getData('application/json');
       if (dragData) {
@@ -248,7 +172,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         }
       }
     } catch (error) {
-      // Handle fallback for old drag method
       if (draggedItem) {
         const draggedLink = links.find(link => link.key === draggedItem);
         if (draggedLink && draggedLink.category === category) {
@@ -263,55 +186,35 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     e.stopPropagation();
     setDragOverIndex(null);
     
-    console.log('=== handleLinkDrop ===');
-    console.log('targetIndex:', targetIndex);
-    console.log('category:', category);
-    
-    // Check for internal link drag data
     try {
       const dragData = e.dataTransfer.getData('application/json');
-      console.log('dragData:', dragData);
-      
       if (dragData) {
         const parsed = JSON.parse(dragData);
-        console.log('parsed drag data:', parsed);
         
         if (parsed.type === 'link' && parsed.key) {
           const draggedLink = links.find(link => link.key === parsed.key);
           const targetLink = links[targetIndex];
           
-          console.log('draggedLink:', draggedLink);
-          console.log('targetLink:', targetLink);
-          
           if (draggedLink && targetLink && draggedLink.category === category && targetLink.category === category) {
-            console.log('Calling onReorderLinks with:', parsed.key, targetLink.key, category);
             onReorderLinks(parsed.key, targetLink.key, category);
             return;
           }
         }
       }
     } catch (error) {
-      console.log('Error parsing drag data:', error);
+      // Fallback for old drag method
     }
     
-    // Fallback for old drag method
     if (draggedItem) {
-      console.log('Using fallback method with draggedItem:', draggedItem);
       const draggedLink = links.find(link => link.key === draggedItem);
       const targetLink = links[targetIndex];
       
-      console.log('Fallback - draggedLink:', draggedLink);
-      console.log('Fallback - targetLink:', targetLink);
-      
       if (draggedLink && targetLink && draggedLink.category === category && targetLink.category === category) {
-        console.log('Fallback - Calling onReorderLinks with:', draggedItem, targetLink.key, category);
         onReorderLinks(draggedItem, targetLink.key, category);
         return;
       }
     }
     
-    console.log('Not reordering - calling regular handleDrop');
-    // If not reordering within same category, handle as regular drop
     handleDrop(e);
   };
 
@@ -337,15 +240,13 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Minimalist Category Header */}
         <div className="flex items-center justify-between mb-4 px-1">
-          <h2 className="text-3xl font-normal text-slate-100 tracking-wide">
+          <h2 className="text-3xl font-normal text-white tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
           <div className="h-px flex-1 bg-gradient-to-r from-white/20 via-white/10 to-transparent ml-8" />
         </div>
 
-        {/* Clean Links Grid */}
         <div className={`${getGridClasses()} min-h-[120px] relative`}>
           {links.map((link, index) => (
             <div
@@ -383,12 +284,10 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {/* Larger Category Separator for Mobile */}
         <div className="mx-4 mb-2">
           {getMobileSeparator()}
         </div>
 
-        {/* Links Grid */}
         <div className={`${getMobileGridClasses()} relative`}>
           {links.map((link, index) => (
             <div
