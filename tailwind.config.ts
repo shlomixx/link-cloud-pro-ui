@@ -19,7 +19,7 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
+				sans: ['Gaegu', 'sans-serif'],
 			},
 			gridTemplateColumns: {
 				'13': 'repeat(13, minmax(0, 1fr))',
