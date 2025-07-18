@@ -12,7 +12,6 @@ interface LinkData {
   isPrivate?: boolean;
   clicks?: number;
   createdAt?: string;
-  isFavorite?: boolean;
   lastClicked?: string;
 }
 
@@ -29,7 +28,6 @@ interface CategorySectionProps {
   onDragOver: (e: React.DragEvent) => void;
   onDrop: (e: React.DragEvent, category: string) => void;
   onLinkClick: (link: LinkData) => void;
-  onToggleFavorite: (linkKey: string, e: React.MouseEvent) => void;
   onEditLink: (link: LinkData) => void;
   onCopyUrl: (url: string, name: string) => void;
   onMouseEnter: (linkKey: string) => void;
@@ -39,6 +37,8 @@ interface CategorySectionProps {
   onDropUrl: (url: string, category: string) => void;
   onReorderLinks: (draggedKey: string, targetKey: string, category: string) => void;
   onDeleteLink: (linkKey: string) => void;
+  onToggleFavorite: (linkKey: string) => void;
+  linkSize: number;
 }
 
 export const CategorySection: React.FC<CategorySectionProps> = ({
@@ -54,7 +54,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onDragOver,
   onDrop,
   onLinkClick,
-  onToggleFavorite,
   onEditLink,
   onCopyUrl,
   onMouseEnter,
@@ -63,7 +62,9 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onAddLink,
   onDropUrl,
   onReorderLinks,
-  onDeleteLink
+  onDeleteLink,
+  onToggleFavorite,
+  linkSize
 }) => {
   const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
   const [isDragOverCategory, setIsDragOverCategory] = React.useState(false);
@@ -177,7 +178,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       <div className="relative flex items-center py-2">
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         <div className="px-6">
-          <span className="text-white/90 text-lg font-semibold uppercase tracking-wide">
+          <span className="text-white/90 text-xl font-semibold uppercase tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
         </div>
@@ -338,7 +339,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       >
         {/* Minimalist Category Header */}
         <div className="flex items-center justify-between mb-6 px-1">
-          <h2 className="text-2xl font-light text-white tracking-wide">
+          <h2 className="text-3xl font-light text-white tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
           <div className="h-px flex-1 bg-gradient-to-r from-white/20 via-white/10 to-transparent ml-8" />
@@ -362,11 +363,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                 onMouseEnter={() => onMouseEnter(link.key)}
                 onMouseLeave={onMouseLeave}
                 onLinkClick={() => onLinkClick(link)}
-                onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
+                onToggleFavorite={(e) => {e.stopPropagation(); onToggleFavorite(link.key);}}
                 onEdit={() => onEditLink(link)}
                 onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
                 onDragStart={() => onDragStart(link.key)}
                 onDelete={() => onDeleteLink(link.key)}
+                linkSize={linkSize}
               />
             </div>
           ))}
@@ -404,11 +406,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                 onMouseEnter={() => onMouseEnter(link.key)}
                 onMouseLeave={onMouseLeave}
                 onLinkClick={() => onLinkClick(link)}
-                onToggleFavorite={(e) => onToggleFavorite(link.key, e)}
+                onToggleFavorite={(e) => {e.stopPropagation(); onToggleFavorite(link.key);}}
                 onEdit={() => onEditLink(link)}
                 onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
                 onDragStart={() => onDragStart(link.key)}
                 onDelete={() => onDeleteLink(link.key)}
+                linkSize={linkSize}
               />
             </div>
           ))}
