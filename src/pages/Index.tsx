@@ -700,6 +700,7 @@ const Index = () => {
         onTogglePrivateLinks={() => setShowPrivateLinks(!showPrivateLinks)}
         onExportData={exportData}
         onImportData={() => fileInputRef.current?.click()}
+        onAddLink={() => openModal()}
         onShowShortcuts={() => setShowShortcuts(true)}
         fileInputRef={fileInputRef}
         linkSize={linkSize}

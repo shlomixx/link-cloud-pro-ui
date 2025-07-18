@@ -141,7 +141,7 @@ All colors MUST be HSL.
   }
   
   .gradient-text {
-    background: var(--gradient-primary);
+    background: linear-gradient(90deg, #d8b4fe, #a5b4fc);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
