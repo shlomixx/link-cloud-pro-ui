@@ -707,8 +707,8 @@ const Index = () => {
         onLinkSizeChange={setLinkSize}
       />
 
-      <main className="container mx-auto px-6 py-8">
-        <div className="space-y-6">
+      <main className="container mx-auto px-6 py-4">
+        <div className="space-y-4">
           {Object.entries(groupedLinks).map(([category, links], index) => (
             <div
               key={category}
