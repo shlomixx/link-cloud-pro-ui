@@ -47,6 +47,7 @@ const Index = () => {
     { key: 'daily-calendar', name: 'Calendar', defaultUrl: 'https://calendar.google.com', category: 'daily', clicks: 80, createdAt: '2024-01-27' },
     { key: 'daily-notion', name: 'Notion', defaultUrl: 'https://notion.so', category: 'daily', clicks: 75, createdAt: '2024-01-16' },
     { key: 'daily-chatgpt', name: 'ChatGPT', defaultUrl: 'https://chatgpt.com', category: 'daily', clicks: 95, createdAt: '2024-02-17' },
+    { key: 'daily-weather', name: 'Weather', defaultUrl: 'https://weather.com', category: 'daily', clicks: 40, createdAt: '2024-03-10' },
 
     // Social Media Platforms
     { key: 'social-facebook', name: 'Facebook', defaultUrl: 'https://facebook.com', category: 'society', clicks: 88, createdAt: '2024-02-07' },
@@ -56,6 +57,8 @@ const Index = () => {
     { key: 'social-reddit', name: 'Reddit', defaultUrl: 'https://reddit.com', category: 'society', clicks: 65, createdAt: '2024-02-15' },
     { key: 'social-pinterest', name: 'Pinterest', defaultUrl: 'https://pinterest.com', category: 'society', clicks: 50, createdAt: '2024-02-14' },
     { key: 'social-discord', name: 'Discord', defaultUrl: 'https://discord.com', category: 'society', clicks: 55, createdAt: '2024-02-11' },
+    { key: 'social-tiktok', name: 'TikTok', defaultUrl: 'https://tiktok.com', category: 'society', clicks: 85, createdAt: '2024-03-11' },
+    { key: 'social-telegram', name: 'Telegram', defaultUrl: 'https://telegram.org', category: 'society', clicks: 50, createdAt: '2024-03-12' },
 
     // Tools
     { key: 'tools-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
@@ -65,26 +68,22 @@ const Index = () => {
     { key: 'tools-slack', name: 'Slack', defaultUrl: 'https://slack.com', category: 'tools', clicks: 62, createdAt: '2024-03-02' },
     { key: 'tools-zoom', name: 'Zoom', defaultUrl: 'https://zoom.us', category: 'tools', clicks: 48, createdAt: '2024-03-03' },
     { key: 'tools-miro', name: 'Miro', defaultUrl: 'https://miro.com', category: 'tools', clicks: 40, createdAt: '2024-03-04' },
-    
-    // Social
-    { key: 'social-wikipedia', name: 'Wikipedia', defaultUrl: 'https://wikipedia.org', category: 'social', clicks: 75, createdAt: '2024-02-16' },
-    { key: 'social-quora', name: 'Quora', defaultUrl: 'https://quora.com', category: 'social', clicks: 45, createdAt: '2024-02-18' },
-    { key: 'social-medium', name: 'Medium', defaultUrl: 'https://medium.com', category: 'social', clicks: 55, createdAt: '2024-03-05' },
-    { key: 'social-devto', name: 'Dev.to', defaultUrl: 'https://dev.to', category: 'social', clicks: 50, createdAt: '2024-03-06' },
-    { key: 'social-stackoverflow', name: 'Stack Overflow', defaultUrl: 'https://stackoverflow.com', category: 'social', clicks: 80, createdAt: '2024-03-07' },
+    { key: 'tools-vsc', name: 'VS Code', defaultUrl: 'https://code.visualstudio.com', category: 'tools', clicks: 68, createdAt: '2024-03-13' },
+    { key: 'tools-docker', name: 'Docker', defaultUrl: 'https://docker.com', category: 'tools', clicks: 52, createdAt: '2024-03-14' },
 
     // Entertainment
     { key: 'ent-netflix', name: 'Netflix', defaultUrl: 'https://netflix.com', category: 'entertainment', clicks: 85, createdAt: '2024-01-30' },
     { key: 'ent-spotify', name: 'Spotify', defaultUrl: 'https://spotify.com', category: 'entertainment', clicks: 80, createdAt: '2024-02-01' },
     { key: 'ent-hulu', name: 'Hulu', defaultUrl: 'https://hulu.com', category: 'entertainment', clicks: 60, createdAt: '2024-03-08' },
     { key: 'ent-disneyplus', name: 'Disney+', defaultUrl: 'https://disneyplus.com', category: 'entertainment', clicks: 65, createdAt: '2024-03-09' },
+    { key: 'ent-twitch', name: 'Twitch', defaultUrl: 'https://twitch.tv', category: 'entertainment', clicks: 70, createdAt: '2024-03-15' },
+    { key: 'ent-steam', name: 'Steam', defaultUrl: 'https://steampowered.com', category: 'entertainment', clicks: 75, createdAt: '2024-03-16' },
   ]);
 
   const categoryLabels = {
     daily: 'My Daily Links',
     society: 'Social Media Platforms',
     tools: 'Productivity Tools',
-    social: 'Knowledge & Forums',
     entertainment: 'Streaming & Entertainment', 
     ai: 'AI Tools',
     shopping: 'Shopping',
@@ -103,7 +102,6 @@ const Index = () => {
     tools: 'from-gray-600 to-gray-800',
     entertainment: 'from-purple-500 to-pink-500',
     society: 'from-green-500 to-emerald-500',
-    social: 'from-orange-500 to-red-500',
     ai: 'from-purple-500 to-pink-500',
     shopping: 'from-yellow-500 to-orange-500',
     news: 'from-red-500 to-rose-500',
