@@ -84,7 +84,7 @@ const Index = () => {
     daily: 'My Daily Links',
     society: 'Social Media Platforms',
     tools: 'Productivity Tools',
-    social: 'Social & Knowledge',
+    social: 'Knowledge & Forums',
     entertainment: 'Streaming & Entertainment', 
     ai: 'AI Tools',
     shopping: 'Shopping',
@@ -125,7 +125,8 @@ const Index = () => {
       const preferredOrder = ['daily', 'society', 'tools'];
       if (saved) {
         try {
-          const loadedLinks = JSON.parse(saved);
+          const loadedData = JSON.parse(saved);
+          let loadedLinks = Array.isArray(loadedData) ? loadedData : loadedData.linksData;
           setLinksData(loadedLinks);
           const allCategories = Array.from(new Set(loadedLinks.map((link: LinkData) => link.category)));
           const remainingCategories = allCategories.filter(c => !preferredOrder.includes(c));
