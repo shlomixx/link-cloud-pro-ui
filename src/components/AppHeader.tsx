@@ -46,113 +46,133 @@ interface AppHeaderProps {
 
 export function AppHeader(props: AppHeaderProps) {
   return (
-    <header className="pt-2 pb-1">
-      <div className="container mx-auto flex items-center justify-between">
-        {/* Spacer to keep title centered */}
-        <div className="w-10"></div>
+    <header className="sticky top-8 z-50 mx-auto max-w-2xl animate-slide-up mb-8">
+      <div className="container relative flex h-16 items-center justify-center rounded-full border border-white/10 bg-slate-900/60 px-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
         
-        {/* Centered Title with updated font and color */}
-        <h1 className="text-4xl font-normal text-white tracking-wide text-center flex-grow">
+        {/* Centered Title */}
+        <h1 className="gradient-text text-xl font-semibold tracking-tight">
           All Your Favorite Links in One Place
         </h1>
         
-        {/* Menu Button */}
-        <div className="w-10 flex justify-end">
+        {/* Menu Button - Positioned absolutely to the right */}
+        <div className="absolute right-3 flex items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="ghost" className="rounded-full">
-                <Settings className="h-5 w-5" />
+              <Button size="icon" variant="ghost" className="rounded-full hover:bg-white/10">
+                <Settings className="h-5 w-5 text-slate-300" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className={`w-64 rounded-xl border-slate-700/50 bg-slate-900/80 p-2 backdrop-blur-xl`}
+              className="w-64 rounded-xl border bg-popover p-2 backdrop-blur-xl z-50"
             >
-              <DropdownMenuLabel>Settings</DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-slate-700/50" />
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger className="rounded-md">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Appearance</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent className="rounded-xl border bg-popover p-1 backdrop-blur-xl z-50">
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger className="rounded-md">
+                      <Grid className="mr-2 h-4 w-4" />
+                      <span>View Mode</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuSubContent className="rounded-xl border bg-popover p-1 backdrop-blur-xl z-50">
+                      <DropdownMenuItem
+                        onClick={() => props.onViewModeChange('compact')}
+                        className="rounded-md"
+                      >
+                        <Zap className="mr-2 h-4 w-4" /> Compact
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => props.onViewModeChange('grid')}
+                        className="rounded-md"
+                      >
+                        <Grid className="mr-2 h-4 w-4" /> Grid
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => props.onViewModeChange('list')}
+                        className="rounded-md"
+                      >
+                        <List className="mr-2 h-4 w-4" /> List
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => props.onViewModeChange('dense')}
+                        className="rounded-md"
+                      >
+                        <List className="mr-2 h-4 w-4" /> Dense
+                      </DropdownMenuItem>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuSub>
+                  
+                  <DropdownMenuItem
+                    onClick={props.onToggleDarkMode}
+                    className="rounded-md"
+                  >
+                    {props.isDarkMode ? (
+                      <Sun className="mr-2 h-4 w-4" />
+                    ) : (
+                      <Moon className="mr-2 h-4 w-4" />
+                    )}
+                    <span>{props.isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuCheckboxItem
+                    checked={props.showPrivateLinks}
+                    onCheckedChange={props.onTogglePrivateLinks}
+                    className="rounded-md"
+                  >
+                    <Eye className="mr-2 h-4 w-4" /> Show Private Links
+                  </DropdownMenuCheckboxItem>
+                  
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Link Size: {props.linkSize}px</DropdownMenuLabel>
+                  <div className="p-2">
+                    <Slider
+                      defaultValue={[props.linkSize]}
+                      max={150}
+                      min={40}
+                      step={1}
+                      onValueChange={(value) => props.onLinkSizeChange(value[0])}
+                    />
+                  </div>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
 
-              <DropdownMenuItem onClick={props.onAddLink} className="rounded-md">
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem onClick={props.onAddLink} className="rounded-md hover-lift">
                 <Plus className="mr-2 h-4 w-4" />
                 <span>Add New Link</span>
               </DropdownMenuItem>
 
-              <DropdownMenuSeparator className="bg-slate-700/50" />
+              <DropdownMenuSeparator />
 
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger className="rounded-md">
-                  <Grid className="mr-2 h-4 w-4" />
-                  <span>View Mode</span>
+                  <Download className="mr-2 h-4 w-4" />
+                  <span>Data</span>
                 </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent className="rounded-xl border-slate-700/50 bg-slate-900/80 p-1 backdrop-blur-xl">
-                  <DropdownMenuItem
-                    onClick={() => props.onViewModeChange('compact')}
-                    className="rounded-md"
-                  >
-                    <Zap className="mr-2 h-4 w-4" /> Compact
+                <DropdownMenuSubContent className="rounded-xl border bg-popover p-1 backdrop-blur-xl z-50">
+                  <DropdownMenuItem onClick={props.onExportData} className="rounded-md">
+                    <Download className="mr-2 h-4 w-4" />
+                    Export Data
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => props.onViewModeChange('grid')}
+                    onClick={() => props.fileInputRef.current?.click()}
                     className="rounded-md"
                   >
-                    <Grid className="mr-2 h-4 w-4" /> Grid
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => props.onViewModeChange('list')}
-                    className="rounded-md"
-                  >
-                    <List className="mr-2 h-4 w-4" /> List
+                    <Upload className="mr-2 h-4 w-4" />
+                    Import Data
                   </DropdownMenuItem>
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
 
-              <DropdownMenuItem
-                onClick={props.onToggleDarkMode}
-                className="rounded-md"
-              >
-                {props.isDarkMode ? (
-                  <Sun className="mr-2 h-4 w-4" />
-                ) : (
-                  <Moon className="mr-2 h-4 w-4" />
-                )}
-                <span>{props.isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
-              </DropdownMenuItem>
-              <DropdownMenuCheckboxItem
-                checked={props.showPrivateLinks}
-                onCheckedChange={props.onTogglePrivateLinks}
-                className="rounded-md"
-              >
-                <Eye className="mr-2 h-4 w-4" /> Show Private Links
-              </DropdownMenuCheckboxItem>
+              <DropdownMenuSeparator />
 
-              <DropdownMenuSeparator className="bg-slate-700/50" />
-              
-              <DropdownMenuLabel>Link Size: {props.linkSize}px</DropdownMenuLabel>
-              <div className="p-2">
-                <Slider
-                  defaultValue={[props.linkSize]}
-                  max={150}
-                  min={40}
-                  step={1}
-                  onValueChange={(value) => props.onLinkSizeChange(value[0])}
-                />
-              </div>
-
-              <DropdownMenuSeparator className="bg-slate-700/50" />
-
-              <DropdownMenuItem onClick={props.onExportData} className="rounded-md">
-                <Download className="mr-2 h-4 w-4" />
-                Export Data
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => props.fileInputRef.current?.click()}
-                className="rounded-md"
-              >
-                <Upload className="mr-2 h-4 w-4" />
-                Import Data
-              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={props.onShowShortcuts}
-                className="rounded-md"
+                className="rounded-md hover-lift"
               >
                 <Keyboard className="mr-2 h-4 w-4" />
                 Keyboard Shortcuts
