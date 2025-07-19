@@ -73,39 +73,39 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16 gap-3';
+        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16 gap-2';
       case 'compact':
-        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-4';
+        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-3';
       case 'grid':
-        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-5';
+        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-4';
       case 'list':
-        return 'flex flex-col gap-3';
+        return 'flex flex-col gap-2';
       default:
-        return 'grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-4';
+        return 'grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-3';
     }
   };
 
   const getMobileGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-5 gap-3 px-6 py-2';
+        return 'grid grid-cols-5 gap-2 px-6 py-2';
       case 'compact':
-        return 'grid grid-cols-5 gap-3 px-6 py-2';
+        return 'grid grid-cols-5 gap-2 px-6 py-2';
       case 'grid':
-        return 'grid grid-cols-5 gap-3 px-6 py-2';
+        return 'grid grid-cols-5 gap-2 px-6 py-2';
       case 'list':
-        return 'flex flex-col gap-2 px-6 py-2';
+        return 'flex flex-col gap-1 px-6 py-2';
       default:
-        return 'grid grid-cols-5 gap-3 px-6 py-2';
+        return 'grid grid-cols-5 gap-2 px-6 py-2';
     }
   };
 
   const getMobileSeparator = () => {
     return (
-      <div className="relative flex items-center py-2">
+      <div className="relative flex items-center py-1">
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-        <div className="px-6">
-          <span className="text-white text-xl font-semibold uppercase tracking-wide">
+        <div className="px-4">
+          <span className="text-white text-lg font-semibold uppercase tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
         </div>
@@ -225,7 +225,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         variant="ghost"
         className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg h-full cursor-pointer hover:bg-white/5 transition-colors duration-200"
       >
-        <Plus className="w-5 h-5 text-white/50 hover:text-white/70" />
+        <Plus className="w-5 h-5 text-white" />
         <span className="text-xs text-white/50 hover:text-white/70">Add</span>
       </Button>
     );
@@ -235,12 +235,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout - Minimalist Design */}
       <div 
-        className="hidden md:block mb-4 animate-slide-up"
+        className="hidden md:block mb-2 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <div className="flex items-center justify-between mb-4 px-1">
+        <div className="flex items-center justify-between mb-2 px-1">
           <h2 className="text-3xl font-normal text-white tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
@@ -279,7 +279,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-4 animate-fade-in"
+        className="md:hidden mb-2 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
