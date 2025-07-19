@@ -27,20 +27,14 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
   const isClicked = clickedLink === link.key;
   const isDesktop = useIsDesktop();
   const [isHovered, setIsHovered] = useState(false);
-  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
     onMouseEnter();
-    setHoverTimeout(setTimeout(() => {
-      setIsHovered(true);
-    }, 1000));
+    setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
     onMouseLeave();
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-    }
     setIsHovered(false);
   };
 
@@ -75,7 +69,7 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           `}
         >
           {isHovered && (
-             <div className="absolute top-1 right-1 flex flex-col gap-1 z-20">
+             <div className="absolute top-1 left-1 flex flex-col gap-1 z-20">
               <Button
                 size="icon"
                 variant="ghost"

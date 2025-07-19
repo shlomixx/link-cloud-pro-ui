@@ -28,20 +28,14 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
   const isClicked = clickedLink === link.key;
   const isDesktop = useIsDesktop();
   const [isHovered, setIsHovered] = useState(false);
-  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
     onMouseEnter();
-    setHoverTimeout(setTimeout(() => {
-      setIsHovered(true);
-    }, 1000));
+    setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
     onMouseLeave();
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-    }
     setIsHovered(false);
   };
 
@@ -76,7 +70,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           style={{ minWidth: `${containerSize}px`, maxWidth: `${containerSize}px` }}
         >
           {isHovered && (
-             <div className="absolute top-0 right-0 flex flex-col gap-0.5 z-20">
+             <div className="absolute top-0 left-0 flex flex-col gap-0.5 z-20">
               <Button
                 size="icon"
                 variant="ghost"
