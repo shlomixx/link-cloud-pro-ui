@@ -105,7 +105,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       <div className="relative flex items-center py-1">
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         <div className="px-4">
-          <span className="text-white text-2xl font-semibold uppercase tracking-wide">
+          <span className="text-white text-xl font-semibold uppercase tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </span>
         </div>
@@ -241,7 +241,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDrop={handleDrop}
       >
         <div className="flex items-center justify-between mb-1 px-1">
-          <h2 className="text-4xl font-normal text-white tracking-wide">
+          <h2 className="text-3xl font-normal text-white tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
           <div className="h-px flex-1 bg-gradient-to-r from-white/20 via-white/10 to-transparent ml-8" />
