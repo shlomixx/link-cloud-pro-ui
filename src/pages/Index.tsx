@@ -60,6 +60,13 @@ const Index = () => {
     { key: 'daily-espn', name: 'ESPN', defaultUrl: 'https://espn.com', category: 'daily', clicks: 30, createdAt: '2024-03-20' },
     { key: 'daily-stackoverflow', name: 'Stack Overflow', defaultUrl: 'https://stackoverflow.com', category: 'daily', clicks: 80, createdAt: '2024-03-07' },
     { key: 'daily-github', name: 'GitHub', defaultUrl: 'https://github.com', category: 'daily', clicks: 70, createdAt: '2024-01-21' },
+    { key: 'daily-dropbox', name: 'Dropbox', defaultUrl: 'https://dropbox.com', category: 'daily', clicks: 28, createdAt: '2024-01-17' },
+    { key: 'daily-paypal', name: 'PayPal', defaultUrl: 'https://paypal.com', category: 'daily', clicks: 32, createdAt: '2024-01-28' },
+    { key: 'daily-udemy', name: 'Udemy', defaultUrl: 'https://udemy.com', category: 'daily', clicks: 25, createdAt: '2024-04-13' },
+    { key: 'daily-coursera', name: 'Coursera', defaultUrl: 'https://coursera.org', category: 'daily', clicks: 22, createdAt: '2024-04-14' },
+    { key: 'daily-linkedin-learning', name: 'LinkedIn Learning', defaultUrl: 'https://linkedin.com/learning', category: 'daily', clicks: 20, createdAt: '2024-04-15' },
+    { key: 'daily-khan-academy', name: 'Khan Academy', defaultUrl: 'https://khanacademy.org', category: 'daily', clicks: 18, createdAt: '2024-04-16' },
+    { key: 'daily-medium', name: 'Medium', defaultUrl: 'https://medium.com', category: 'daily', clicks: 55, createdAt: '2024-03-05' },
 
     // Social Media Platforms
     { key: 'social-facebook', name: 'Facebook', defaultUrl: 'https://facebook.com', category: 'society', clicks: 88, createdAt: '2024-02-07' },
@@ -75,13 +82,6 @@ const Index = () => {
     { key: 'social-snapchat', name: 'Snapchat', defaultUrl: 'https://snapchat.com', category: 'society', clicks: 45, createdAt: '2024-03-22' },
     { key: 'social-threads', name: 'Threads', defaultUrl: 'https://threads.net', category: 'society', clicks: 30, createdAt: '2024-03-23' },
     { key: 'social-mastodon', name: 'Mastodon', defaultUrl: 'https://mastodon.social', category: 'society', clicks: 20, createdAt: '2024-03-24' },
-    { key: 'social-bereal', name: 'BeReal', defaultUrl: 'https://bere.al', category: 'society', clicks: 25, createdAt: '2024-03-25' },
-    { key: 'social-wechat', name: 'WeChat', defaultUrl: 'https://wechat.com', category: 'society', clicks: 40, createdAt: '2024-03-26' },
-    { key: 'social-signal', name: 'Signal', defaultUrl: 'https://signal.org', category: 'society', clicks: 35, createdAt: '2024-03-27' },
-    { key: 'social-viber', name: 'Viber', defaultUrl: 'https://viber.com', category: 'society', clicks: 28, createdAt: '2024-03-28' },
-    { key: 'social-nextdoor', name: 'Nextdoor', defaultUrl: 'https://nextdoor.com', category: 'society', clicks: 15, createdAt: '2024-03-29' },
-    { key: 'social-tumblr', name: 'Tumblr', defaultUrl: 'https://tumblr.com', category: 'society', clicks: 22, createdAt: '2024-03-30' },
-    { key: 'social-flickr', name: 'Flickr', defaultUrl: 'https://flickr.com', category: 'society', clicks: 18, createdAt: '2024-03-31' },
 
     // Tools
     { key: 'tools-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
@@ -97,13 +97,6 @@ const Index = () => {
     { key: 'tools-monday', name: 'Monday.com', defaultUrl: 'https://monday.com', category: 'tools', clicks: 35, createdAt: '2024-04-03' },
     { key: 'tools-airtable', name: 'Airtable', defaultUrl: 'https://airtable.com', category: 'tools', clicks: 32, createdAt: '2024-04-04' },
     { key: 'tools-zapier', name: 'Zapier', defaultUrl: 'https://zapier.com', category: 'tools', clicks: 28, createdAt: '2024-04-05' },
-    { key: 'tools-make', name: 'Make', defaultUrl: 'https://make.com', category: 'tools', clicks: 25, createdAt: '2024-04-06' },
-    { key: 'tools-webflow', name: 'Webflow', defaultUrl: 'https://webflow.com', category: 'tools', clicks: 45, createdAt: '2024-04-07' },
-    { key: 'tools-framer', name: 'Framer', defaultUrl: 'https://framer.com', category: 'tools', clicks: 39, createdAt: '2024-04-08' },
-    { key: 'tools-photoshop', name: 'Photoshop', defaultUrl: 'https://adobe.com/products/photoshop.html', category: 'tools', clicks: 55, createdAt: '2024-04-09' },
-    { key: 'tools-illustrator', name: 'Illustrator', defaultUrl: 'https://adobe.com/products/illustrator.html', category: 'tools', clicks: 49, createdAt: '2024-04-10' },
-    { key: 'tools-premiere', name: 'Premiere Pro', defaultUrl: 'https://adobe.com/products/premiere.html', category: 'tools', clicks: 47, createdAt: '2024-04-11' },
-    { key: 'tools-aftereffects', name: 'After Effects', defaultUrl: 'https://adobe.com/products/aftereffects.html', category: 'tools', clicks: 43, createdAt: '2024-04-12' },
   ]);
 
   const categoryLabels = {
