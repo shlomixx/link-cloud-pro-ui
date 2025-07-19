@@ -235,12 +235,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout - Minimalist Design */}
       <div 
-        className="hidden md:block mb-1 animate-slide-up"
+        className="hidden md:block mb-8 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <div className="flex items-center justify-between mb-1 px-1">
+        <div className="flex items-center justify-between mb-4 px-1">
           <h2 className="text-3xl font-normal text-white tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
@@ -279,12 +279,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-1 animate-fade-in"
+        className="md:hidden mb-8 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <div className="mx-4 mb-1">
+        <div className="mx-4 mb-4">
           {getMobileSeparator()}
         </div>
 
