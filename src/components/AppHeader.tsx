@@ -46,7 +46,7 @@ interface AppHeaderProps {
 
 export function AppHeader(props: AppHeaderProps) {
   return (
-    <header className="py-3">
+    <header className="pt-8 pb-3">
       <div className="container mx-auto flex items-center justify-between">
         {/* Spacer to keep title centered */}
         <div className="w-10"></div>
