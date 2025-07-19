@@ -73,30 +73,30 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const getGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16 gap-2';
+        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16 gap-1';
       case 'compact':
-        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-3';
+        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-2';
       case 'grid':
-        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-4';
+        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-3';
       case 'list':
-        return 'flex flex-col gap-2';
+        return 'flex flex-col gap-1';
       default:
-        return 'grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-3';
+        return 'grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-2';
     }
   };
 
   const getMobileGridClasses = () => {
     switch (viewMode) {
       case 'dense':
-        return 'grid grid-cols-5 gap-2 px-6 py-2';
+        return 'grid grid-cols-5 gap-1 px-6 py-2';
       case 'compact':
-        return 'grid grid-cols-5 gap-2 px-6 py-2';
+        return 'grid grid-cols-5 gap-1 px-6 py-2';
       case 'grid':
-        return 'grid grid-cols-5 gap-2 px-6 py-2';
+        return 'grid grid-cols-5 gap-1 px-6 py-2';
       case 'list':
         return 'flex flex-col gap-1 px-6 py-2';
       default:
-        return 'grid grid-cols-5 gap-2 px-6 py-2';
+        return 'grid grid-cols-5 gap-1 px-6 py-2';
     }
   };
 
@@ -235,12 +235,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
     <>
       {/* Desktop Layout - Minimalist Design */}
       <div 
-        className="hidden md:block mb-2 animate-slide-up"
+        className="hidden md:block mb-1 animate-slide-up"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <div className="flex items-center justify-between mb-2 px-1">
+        <div className="flex items-center justify-between mb-1 px-1">
           <h2 className="text-3xl font-normal text-white tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
@@ -279,12 +279,12 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
 
       {/* Mobile Layout */}
       <div 
-        className="md:hidden mb-2 animate-fade-in"
+        className="md:hidden mb-1 animate-fade-in"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <div className="mx-4 mb-2">
+        <div className="mx-4 mb-1">
           {getMobileSeparator()}
         </div>
 
