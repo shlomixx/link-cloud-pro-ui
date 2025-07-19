@@ -46,13 +46,13 @@ interface AppHeaderProps {
 
 export function AppHeader(props: AppHeaderProps) {
   return (
-    <header className="pt-8 pb-4">
+    <header className="pt-4 pb-2">
       <div className="container mx-auto flex items-center justify-between">
         {/* Spacer to keep title centered */}
         <div className="w-10"></div>
         
         {/* Centered Title with updated font and color */}
-        <h1 className="text-5xl font-normal text-white tracking-wide text-center flex-grow">
+        <h1 className="text-4xl font-normal text-white tracking-wide text-center flex-grow">
           All Your Favorite Links in One Place
         </h1>
         
