@@ -107,9 +107,9 @@ const Index = () => {
 
   const categoryLabels = {
     daily: 'My Daily Links',
+    society: 'Social Media Platforms',
     tools: 'Tools',
     entertainment: 'Entertainment', 
-    society: 'Society',
     knowledge: 'Knowledge',
     ai: 'AI Tools',
     shopping: 'Shopping',
@@ -225,17 +225,22 @@ const Index = () => {
     const savedSettings = localStorage.getItem('linkRouterSettings');
     
     setTimeout(() => {
+      const preferredOrder = ['daily', 'society', 'tools'];
       if (saved) {
         try {
           const loadedLinks = JSON.parse(saved);
           setLinksData(loadedLinks);
-          setCategoryOrder(Array.from(new Set(loadedLinks.map((link: LinkData) => link.category))));
+          const allCategories = Array.from(new Set(loadedLinks.map((link: LinkData) => link.category)));
+          const remainingCategories = allCategories.filter(c => !preferredOrder.includes(c));
+          setCategoryOrder([...preferredOrder, ...remainingCategories]);
         } catch (error) {
           console.error('Error loading saved links:', error);
           toast.error('Failed to load saved links');
         }
       } else {
-        setCategoryOrder(Array.from(new Set(linksData.map(link => link.category))));
+        const allCategories = Array.from(new Set(linksData.map(link => link.category)));
+        const remainingCategories = allCategories.filter(c => !preferredOrder.includes(c));
+        setCategoryOrder([...preferredOrder, ...remainingCategories]);
       }
       
       if (savedSettings) {
@@ -707,8 +712,8 @@ const Index = () => {
         onLinkSizeChange={setLinkSize}
       />
 
-      <main className="container mx-auto px-6 py-4">
-        <div className="space-y-4">
+      <main className="container mx-auto px-6 py-2">
+        <div className="space-y-2">
           {Object.entries(groupedLinks).map(([category, links], index) => (
             <div
               key={category}
