@@ -125,8 +125,8 @@ const Index = () => {
           const loadedData = JSON.parse(saved);
           let loadedLinks = Array.isArray(loadedData) ? loadedData : loadedData.linksData;
           setLinksData(loadedLinks);
-          const allCategories = Array.from(new Set(loadedLinks.map((link: LinkData) => link.category)));
-          const remainingCategories = allCategories.filter(c => !preferredOrder.includes(c));
+          const allCategories = Array.from(new Set(loadedLinks.map((link: LinkData) => link.category))) as string[];
+          const remainingCategories = allCategories.filter((c: string) => !preferredOrder.includes(c));
           setCategoryOrder([...preferredOrder, ...remainingCategories]);
         } catch (error) {
           console.error('Error loading saved links:', error);
