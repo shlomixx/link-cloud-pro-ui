@@ -15,7 +15,7 @@ const Index = () => {
   const [isNewLink, setIsNewLink] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('compact');
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [sortBy, setSortBy] = useState<SortBy>('name');
+  const [sortBy, setSortBy] = useState<SortBy>('custom');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showPrivateLinks, setShowPrivateLinks] = useState(true);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
@@ -143,7 +143,7 @@ const Index = () => {
           const settings = JSON.parse(savedSettings);
           setIsDarkMode(settings.isDarkMode ?? true);
           setViewMode(settings.viewMode ?? 'compact');
-          setSortBy(settings.sortBy ?? 'name');
+          setSortBy(settings.sortBy ?? 'custom');
           setShowPrivateLinks(settings.showPrivateLinks ?? true);
           setIsCompactHeader(settings.isCompactHeader ?? false);
         } catch (error) {
