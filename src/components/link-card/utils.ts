@@ -1,12 +1,6 @@
 
-export const getFaviconUrl = (url: string) => {
-  try {
-    const domain = new URL(url).hostname;
-    return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-  } catch {
-    return '';
-  }
-};
+// Re-export from the new optimized cache system
+export { getFaviconUrl } from '@/utils/faviconCache';
 
 export const handleFaviconError = (e: React.SyntheticEvent<HTMLImageElement>) => {
   (e.target as HTMLImageElement).style.display = 'none';

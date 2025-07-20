@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
-import { LinkModal } from '@/components/LinkModal';
-import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
+import { LazyLinkModal } from '@/components/LazyLinkModal';
+import { LazyKeyboardShortcuts } from '@/components/LazyKeyboardShortcuts';
 import { LinkData, FormData, ViewMode, SortBy } from '@/types';
+import { useFaviconPreloader } from '@/hooks/useFaviconPreloader';
+import { debounce } from '@/utils/performanceOptimizations';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<LinkData | null>(null);
   const [isNewLink, setIsNewLink] = useState(false);
@@ -141,12 +144,26 @@ const Index = () => {
     custom: 'from-slate-600 to-gray-700'
   };
 
+  // Debounced search to improve performance
+  const debouncedSetSearch = useMemo(
+    () => debounce((term: string) => setDebouncedSearchTerm(term), 300),
+    []
+  );
+
+  useEffect(() => {
+    debouncedSetSearch(searchTerm);
+  }, [searchTerm, debouncedSetSearch]);
+
+  // Preload favicons for better performance
+  useFaviconPreloader(linksData);
+
   useEffect(() => {
     setIsLoading(true);
     const saved = localStorage.getItem('linkRouterData');
     const savedSettings = localStorage.getItem('linkRouterSettings');
     
-    setTimeout(() => {
+    // Use requestIdleCallback for non-critical loading
+    const loadData = () => {
       const preferredOrder = ['daily', 'society', 'tools'];
       if (saved) {
         try {
@@ -179,7 +196,14 @@ const Index = () => {
         }
       }
       setIsLoading(false);
-    }, 300);
+    };
+
+    // Use requestIdleCallback if available, otherwise setTimeout
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(loadData);
+    } else {
+      setTimeout(loadData, 100);
+    }
   }, []);
 
   useEffect(() => {
@@ -248,6 +272,7 @@ const Index = () => {
           setShowShortcuts(false);
         } else if (searchTerm) {
           setSearchTerm('');
+          setDebouncedSearchTerm('');
           searchInputRef.current?.blur();
         }
       }
@@ -330,7 +355,7 @@ const Index = () => {
     }
     if (quickFilter === 'popular' && (link.clicks || 0) < 20) return false;
     
-    const searchLower = searchTerm.toLowerCase();
+    const searchLower = debouncedSearchTerm.toLowerCase();
     return (
       link.name.toLowerCase().includes(searchLower) ||
       (link.url || link.defaultUrl || '').toLowerCase().includes(searchLower) ||
@@ -622,11 +647,11 @@ const Index = () => {
           <div className="text-center py-20 animate-fade-in">
             <div className="text-6xl mb-6 animate-bounce">🔗</div>
             <h3 className={`text-2xl font-bold mb-3 transition-colors duration-300 text-foreground`}>
-              {searchTerm || quickFilter !== 'all' ? 'No links found' : 'Your link collection awaits'}
+              {debouncedSearchTerm || quickFilter !== 'all' ? 'No links found' : 'Your link collection awaits'}
             </h3>
             <p className={`mb-8 text-lg transition-colors duration-300 text-muted-foreground`}>
-              {searchTerm 
-                ? `No links match "${searchTerm}". Try adjusting your search terms.`
+              {debouncedSearchTerm 
+                ? `No links match "${debouncedSearchTerm}". Try adjusting your search terms.`
                 : quickFilter !== 'all'
                 ? `No ${quickFilter} links found. Try a different filter.`
                 : 'Add your first link to start building your personal link hub'
@@ -638,9 +663,9 @@ const Index = () => {
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-primary-foreground px-8 py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 <Plus className="w-5 h-5 mr-2" />
-                {searchTerm || quickFilter !== 'all' ? 'Add New Link' : 'Add Your First Link'}
+                {debouncedSearchTerm || quickFilter !== 'all' ? 'Add New Link' : 'Add Your First Link'}
               </Button>
-              {(searchTerm || quickFilter !== 'all') && (
+              {(debouncedSearchTerm || quickFilter !== 'all') && (
                 <Button 
                   variant="outline"
                   onClick={() => {
@@ -659,7 +684,7 @@ const Index = () => {
       </main>
 
 
-      <LinkModal
+      <LazyLinkModal
         isOpen={isModalOpen}
         onClose={closeModal}
         isNewLink={isNewLink}
@@ -676,7 +701,7 @@ const Index = () => {
         categoryLabels={categoryLabels}
       />
 
-      <KeyboardShortcuts
+      <LazyKeyboardShortcuts
         isOpen={showShortcuts}
         onClose={() => setShowShortcuts(false)}
       />
