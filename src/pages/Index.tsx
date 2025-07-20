@@ -583,16 +583,11 @@ const Index = () => {
       </div>
     );
   }
-
-  const getCompatibleViewMode = (mode: ViewMode): "grid" | "list" | "compact" => {
-    if (mode === 'dense') return 'compact';
-    return mode as "grid" | "list" | "compact";
-  };
-
+  
   return (
     <div className={`min-h-screen transition-all duration-500 bg-background`}>
       <AppHeader
-        viewMode={getCompatibleViewMode(viewMode)}
+        viewMode={viewMode}
         onViewModeChange={(mode) => setViewMode(mode as ViewMode)}
         isDarkMode={isDarkMode}
         onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
