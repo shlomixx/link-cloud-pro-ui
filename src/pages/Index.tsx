@@ -126,99 +126,123 @@ const Index = () => {
     { key: 'tools-canva-3', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
   ]);
 
-  useEffect(() => {
-    localStorage.setItem('linkRouterData', JSON.stringify({ linksData, categoryOrder }));
-  }, [linksData, categoryOrder]);
+  const categoryLabels = {
+    daily: 'My Daily Links',
+    society: 'Social Media Platforms',
+    tools: 'Productivity Tools',
+    custom: 'Custom Links'
+  };
+
+  const categoryColors = {
+    daily: 'from-blue-500 to-cyan-500',
+    society: 'from-green-500 to-emerald-500',
+    tools: 'from-gray-600 to-gray-800',
+    custom: 'from-slate-600 to-gray-700'
+  };
 
   useEffect(() => {
-    const settings = { viewMode, sortBy, showPrivateLinks, isCompactHeader, linkSize };
+    setIsLoading(true);
+    const saved = localStorage.getItem('linkRouterData');
+    const savedSettings = localStorage.getItem('linkRouterSettings');
+    
+    setTimeout(() => {
+      const preferredOrder = ['daily', 'society', 'tools'];
+      if (saved) {
+        try {
+          const loadedData = JSON.parse(saved);
+          let loadedLinks = Array.isArray(loadedData) ? loadedData : loadedData.linksData;
+          setLinksData(loadedLinks);
+          const allCategories = Array.from(new Set(loadedLinks.map((link: LinkData) => link.category))) as string[];
+          const remainingCategories = allCategories.filter((c: string) => !preferredOrder.includes(c));
+          setCategoryOrder([...preferredOrder, ...remainingCategories]);
+        } catch (error) {
+          console.error('Error loading saved links:', error);
+          toast.error('Failed to load saved links');
+        }
+      } else {
+        const allCategories = Array.from(new Set(linksData.map(link => link.category)));
+        const remainingCategories = allCategories.filter(c => !preferredOrder.includes(c));
+        setCategoryOrder([...preferredOrder, ...remainingCategories]);
+      }
+      
+      if (savedSettings) {
+        try {
+          const settings = JSON.parse(savedSettings);
+          setViewMode(settings.viewMode ?? 'compact');
+          setSortBy(settings.sortBy ?? 'custom');
+          setShowPrivateLinks(settings.showPrivateLinks ?? true);
+          setIsCompactHeader(settings.isCompactHeader ?? false);
+        } catch (error) {
+          console.error('Error loading settings:', error);
+        }
+      }
+      setIsLoading(false);
+    }, 300);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('linkRouterData', JSON.stringify(linksData));
+  }, [linksData]);
+
+  useEffect(() => {
+    const settings = { viewMode, sortBy, showPrivateLinks, isCompactHeader };
     localStorage.setItem('linkRouterSettings', JSON.stringify(settings));
     document.documentElement.classList.add('dark');
-  }, [viewMode, sortBy, showPrivateLinks, isCompactHeader, linkSize]);
-
-  const exportData = () => {
-    const dataStr = JSON.stringify({ linksData, categoryOrder }, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'link-router-data.json';
-    link.click();
-    URL.revokeObjectURL(url);
-    toast.success('Data exported successfully!');
-  };
-
-  const importData = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const imported = JSON.parse(e.target?.result as string);
-          if (Array.isArray(imported)) { // Legacy format
-            setLinksData(imported);
-            const allCategories = Array.from(new Set(imported.map((link: LinkData) => link.category)));
-            const preferredOrder = ['daily', 'society', 'tools'];
-            const remainingCategories = allCategories.filter((c: string) => !preferredOrder.includes(c));
-            setCategoryOrder([...preferredOrder, ...remainingCategories]);
-          } else { // New format
-            setLinksData(imported.linksData);
-            setCategoryOrder(imported.categoryOrder);
-          }
-          toast.success('Data imported successfully!');
-        } catch (error) {
-          toast.error('Invalid file format');
-        }
-      };
-      reader.readAsText(file);
-    }
-  };
-
-  const copyLinkUrl = (url: string, name: string) => {
-    navigator.clipboard.writeText(url);
-    toast.success(`${name} link copied to clipboard!`);
-  };
+  }, [viewMode, sortBy, showPrivateLinks, isCompactHeader]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        searchInputRef.current?.focus();
-        searchInputRef.current?.select();
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.key) {
+          case 'k':
+            e.preventDefault();
+            searchInputRef.current?.focus();
+            searchInputRef.current?.select();
+            break;
+          case 'n':
+            e.preventDefault();
+            openModal();
+            break;
+          case 'g':
+            e.preventDefault();
+            const modes: ViewMode[] = ['compact', 'grid', 'list', 'dense'];
+            const currentIndex = modes.indexOf(viewMode);
+            const nextMode = modes[(currentIndex + 1) % modes.length];
+            setViewMode(nextMode);
+            toast.success(`Switched to ${nextMode} view`);
+            break;
+          case 'h':
+            e.preventDefault();
+            setIsCompactHeader(!isCompactHeader);
+            toast.success(`Header ${isCompactHeader ? 'expanded' : 'compact'}`);
+            break;
+        }
       }
-      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
-        e.preventDefault();
-        openModal();
+      
+      if (e.altKey) {
+        switch (e.key) {
+          case 'r':
+            e.preventDefault();
+            handleQuickAction('recent');
+            break;
+          case 'p':
+            e.preventDefault();
+            handleQuickAction('popular');
+            break;
+        }
       }
-      if ((e.ctrlKey || e.metaKey) && e.key === 'g') {
-        e.preventDefault();
-        const modes: ViewMode[] = ['compact', 'grid', 'list', 'dense'];
-        const currentIndex = modes.indexOf(viewMode);
-        const nextMode = modes[(currentIndex + 1) % modes.length];
-        setViewMode(nextMode);
-        toast.success(`Switched to ${nextMode} view`);
-      }
-      if ((e.ctrlKey || e.metaKey) && e.key === 'h') {
-        e.preventDefault();
-        setIsCompactHeader(!isCompactHeader);
-        toast.success(`Header ${isCompactHeader ? 'expanded' : 'compact'}`);
-      }
-      if (e.altKey && e.key === 'r') {
-        e.preventDefault();
-        handleQuickAction('recent');
-      }
-      if (e.altKey && e.key === 'p') {
-        e.preventDefault();
-        handleQuickAction('popular');
-      }
+      
       if (e.key === '?') {
         e.preventDefault();
         setShowShortcuts(true);
       }
+      
       if (e.key === 'Escape') {
-        if (isModalOpen) closeModal();
-        else if (showShortcuts) setShowShortcuts(false);
-        else if (searchTerm) {
+        if (isModalOpen) {
+          closeModal();
+        } else if (showShortcuts) {
+          setShowShortcuts(false);
+        } else if (searchTerm) {
           setSearchTerm('');
           searchInputRef.current?.blur();
         }
@@ -227,45 +251,81 @@ const Index = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [viewMode, isCompactHeader, isModalOpen, showShortcuts, searchTerm]);
+  }, [viewMode, isModalOpen, searchTerm, isCompactHeader, showShortcuts]);
+
+  useEffect(() => {
+    if (sortBy === 'custom') return; // Don't sort if we are in custom mode
+
+    setLinksData(prevLinks => {
+      const sorted = [...prevLinks];
+      switch (sortBy) {
+        case 'clicks':
+          return sorted.sort((a, b) => (b.clicks || 0) - (a.clicks || 0));
+        case 'recent':
+          return sorted.sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime());
+        case 'name':
+           return sorted.sort((a, b) => a.name.localeCompare(b.name));
+        default:
+          return prevLinks;
+      }
+    });
+  }, [sortBy]);
 
   const handleQuickAction = (action: string) => {
-    setQuickFilter(prev => (prev === action ? 'all' : action));
-    if (action === 'favorites') {
-      setSortBy('favorites');
-      toast.success('Showing favorite links');
-    } else if (action === 'recent') {
-      setSortBy('recent');
-      toast.success('Showing recent links');
-    } else if (action === 'popular') {
-      setSortBy('clicks');
-      toast.success('Showing popular links');
-    } else {
-      setSortBy('custom');
-      setQuickFilter('all');
+    setQuickFilter(action);
+    switch (action) {
+      case 'recent':
+        setSortBy('recent');
+        toast.success('Showing recent links');
+        break;
+      case 'popular':
+        setSortBy('clicks');
+        toast.success('Showing popular links');
+        break;
+      default:
+        setSortBy('name');
+        setQuickFilter('all');
     }
   };
 
   const handleLinkClick = (link: LinkData) => {
     setClickedLink(link.key);
-    setLinksData(prev => prev.map(l => l.key === link.key ? { ...l, clicks: (l.clicks || 0) + 1, lastClicked: new Date().toISOString() } : l));
+    
+    setLinksData(prev => prev.map(l => 
+      l.key === link.key ? { 
+        ...l, 
+        clicks: (l.clicks || 0) + 1,
+        lastClicked: new Date().toISOString()
+      } : l
+    ));
+
     setTimeout(() => setClickedLink(null), 200);
+    
     const url = link.url || link.defaultUrl;
     if (url) {
       window.open(url, '_blank');
     }
-    toast.success(`Opening ${link.name}...`, { duration: 2000 });
+    
+    toast.success(`Opening ${link.name}...`, {
+      duration: 2000,
+      action: {
+        label: 'Undo',
+        onClick: () => toast.info('Link opening cancelled')
+      }
+    });
   };
 
   const filteredLinks = linksData.filter(link => {
     if (!showPrivateLinks && link.isPrivate) return false;
     if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
-    if (quickFilter === 'favorites' && !link.isFavorite) return false;
+    
     if (quickFilter === 'recent') {
-      const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
-      return new Date(link.lastClicked || link.createdAt || '') > weekAgo;
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      if (new Date(link.createdAt || '') < weekAgo) return false;
     }
-    if (quickFilter === 'popular' && (link.clicks || 0) < 10) return false;
+    if (quickFilter === 'popular' && (link.clicks || 0) < 20) return false;
+    
     const searchLower = searchTerm.toLowerCase();
     return (
       link.name.toLowerCase().includes(searchLower) ||
@@ -274,19 +334,8 @@ const Index = () => {
     );
   });
 
-  const sortedLinks = React.useMemo(() => {
-    const links = [...filteredLinks];
-    switch (sortBy) {
-      case 'name': return links.sort((a, b) => a.name.localeCompare(b.name));
-      case 'clicks': return links.sort((a, b) => (b.clicks || 0) - (a.clicks || 0));
-      case 'recent': return links.sort((a, b) => new Date(b.lastClicked || b.createdAt || '').getTime() - new Date(a.lastClicked || a.createdAt || '').getTime());
-      case 'favorites': return links.sort((a, b) => (b.isFavorite ? 1 : 0) - (a.isFavorite ? 1 : 0));
-      default: return links;
-    }
-  }, [filteredLinks, sortBy]);
-
   const groupedLinks = categoryOrder.reduce((acc, category) => {
-    const linksForCategory = sortedLinks.filter(link => link.category === category);
+    const linksForCategory = filteredLinks.filter(link => link.category === category);
     if (linksForCategory.length > 0) {
       acc[category] = linksForCategory;
     }
@@ -306,7 +355,12 @@ const Index = () => {
     } else {
       setEditingLink(null);
       setIsNewLink(true);
-      setFormData({ name: '', url: '', category: presetCategory || 'custom', isPrivate: false });
+      setFormData({
+        name: '',
+        url: '',
+        category: presetCategory || 'custom',
+        isPrivate: false
+      });
     }
     setIsModalOpen(true);
   };
@@ -323,8 +377,11 @@ const Index = () => {
       toast.error('Please fill in both name and URL');
       return;
     }
+
     setIsLoading(true);
+
     await new Promise(resolve => setTimeout(resolve, 500));
+
     let url = formData.url.trim();
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       url = 'https://' + url;
@@ -338,16 +395,21 @@ const Index = () => {
         category: formData.category,
         isPrivate: formData.isPrivate,
         clicks: 0,
-        createdAt: new Date().toISOString(),
-        isFavorite: false,
+        createdAt: new Date().toISOString()
       };
       setLinksData(prev => [...prev, newLink]);
       if (!categoryOrder.includes(formData.category)) {
         setCategoryOrder(prev => [...prev, formData.category]);
       }
-      toast.success(`${formData.name} added successfully!`);
+      toast.success(`${formData.name} added successfully!`, {
+        description: 'Your new link is ready to use',
+        action: {
+          label: 'View',
+          onClick: () => window.open(url, '_blank')
+        }
+      });
     } else if (editingLink) {
-      setLinksData(prev => prev.map(link =>
+      setLinksData(prev => prev.map(link => 
         link.key === editingLink.key
           ? { ...link, name: formData.name.trim(), url: url, category: formData.category, isPrivate: formData.isPrivate }
           : link
@@ -357,6 +419,7 @@ const Index = () => {
       }
       toast.success(`${formData.name} updated successfully!`);
     }
+
     setIsLoading(false);
     closeModal();
   };
@@ -364,26 +427,40 @@ const Index = () => {
   const handleDeleteLink = (linkKey: string) => {
     const linkToDelete = linksData.find((link) => link.key === linkKey);
     if (linkToDelete) {
-      setRecentlyDeleted(prev => [...prev, { ...linkToDelete, deletedAt: Date.now() }]);
-      setLinksData(prev => prev.filter(link => link.key !== linkKey));
+      const newRecentlyDeleted = [
+        ...recentlyDeleted,
+        { ...linkToDelete, deletedAt: Date.now() },
+      ];
+      setRecentlyDeleted(newRecentlyDeleted);
+      setLinksData((prev) => prev.filter((link) => link.key !== linkKey));
+
       toast.success(`${linkToDelete.name} deleted`, {
-        action: { label: "Undo", onClick: () => handleRestoreLink(linkKey) },
+        action: {
+          label: "Undo",
+          onClick: () => handleRestoreLink(linkKey),
+        },
       });
     }
   };
 
   const handleRestoreLink = (linkKey: string) => {
-    const linkToRestore = recentlyDeleted.find(link => link.key === linkKey);
+    const linkToRestore = recentlyDeleted.find((link) => link.key === linkKey);
     if (linkToRestore) {
       const { deletedAt, ...originalLink } = linkToRestore;
-      setLinksData(prev => [...prev, originalLink]);
-      setRecentlyDeleted(prev => prev.filter(link => link.key !== linkKey));
+      setLinksData((prev) => [...prev, originalLink]);
+      setRecentlyDeleted((prev) => prev.filter((link) => link.key !== linkKey));
       toast.success(`${linkToRestore.name} restored`);
     }
   };
 
   const handleToggleFavorite = (linkKey: string) => {
-    setLinksData(prev => prev.map(link => link.key === linkKey ? { ...link, isFavorite: !link.isFavorite } : link));
+    setLinksData((prev) => 
+      prev.map((link) => 
+        link.key === linkKey 
+          ? { ...link, isFavorite: !link.isFavorite }
+          : link
+      )
+    );
     const link = linksData.find(l => l.key === linkKey);
     if (link) {
       toast.success(`${link.name} ${link.isFavorite ? 'removed from' : 'added to'} favorites`);
@@ -393,57 +470,81 @@ const Index = () => {
   const handleDragStart = (key: string) => {
     setDraggedItem(key);
   };
+
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };
+
   const handleDrop = (e: React.DragEvent, targetCategory: string) => {
     e.preventDefault();
+
     const dragData = e.dataTransfer.getData('application/json');
     if (dragData) {
       const parsed = JSON.parse(dragData);
       if (parsed.type === 'link' && parsed.key) {
         setSortBy('custom');
-        setLinksData(prev => prev.map(link => link.key === parsed.key ? { ...link, category: targetCategory } : link));
+        setLinksData(prev => prev.map(link =>
+          link.key === parsed.key ? { ...link, category: targetCategory } : link
+        ));
         toast.success('Link moved to new category!');
       }
     }
   };
+  
   const handleDropUrl = async (url: string, targetCategory: string) => {
     try {
       const urlObj = new URL(url);
       const domain = urlObj.hostname.replace('www.', '');
       const name = domain.charAt(0).toUpperCase() + domain.slice(1);
+
       const newLink: LinkData = {
-        key: `dropped_${Date.now()}`, name, url, category: targetCategory, clicks: 0, createdAt: new Date().toISOString(), isFavorite: false
+        key: `dropped_${Date.now()}`,
+        name: name,
+        url: url,
+        category: targetCategory,
+        isPrivate: false,
+        clicks: 0,
+        createdAt: new Date().toISOString()
       };
+      
       setSortBy('custom');
       setLinksData(prev => [...prev, newLink]);
-      toast.success(`${name} added to ${categoryLabels[targetCategory as keyof typeof categoryLabels] || targetCategory}!`);
+      toast.success(`${name} added to ${categoryLabels[targetCategory as keyof typeof categoryLabels] || targetCategory}!`, {
+        description: 'Link created from dropped URL',
+        action: {
+          label: 'View',
+          onClick: () => window.open(url, '_blank')
+        }
+      });
     } catch (error) {
       toast.error('Invalid URL dropped');
     }
   };
+
   const handleReorderLinks = (draggedKey: string, targetKey: string) => {
     setSortBy('custom');
     setLinksData(prev => {
-      const newLinks = [...prev];
-      const draggedIndex = newLinks.findIndex(l => l.key === draggedKey);
-      const targetIndex = newLinks.findIndex(l => l.key === targetKey);
-      if (draggedIndex > -1 && targetIndex > -1) {
-        const [draggedItem] = newLinks.splice(draggedIndex, 1);
-        newLinks.splice(targetIndex, 0, draggedItem);
-      }
-      return newLinks;
+        const newLinks = [...prev];
+        const draggedIndex = newLinks.findIndex(l => l.key === draggedKey);
+        const targetIndex = newLinks.findIndex(l => l.key === targetKey);
+
+        if (draggedIndex > -1 && targetIndex > -1) {
+            const [draggedItem] = newLinks.splice(draggedIndex, 1);
+            newLinks.splice(targetIndex, 0, draggedItem);
+        }
+        return newLinks;
     });
     toast.success('Link reordered!');
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 bg-background`}>
         <div className="text-center space-y-4">
           <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full mx-auto"></div>
-          <p className="text-lg text-foreground">Loading your links...</p>
+          <p className={`text-lg text-foreground`}>
+            Loading your links...
+          </p>
         </div>
       </div>
     );
