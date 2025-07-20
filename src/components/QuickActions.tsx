@@ -3,7 +3,7 @@ import { Heart, Clock, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface QuickActionsProps {
-  isDarkMode: boolean;
+  
   onQuickAction: (action: string) => void;
   favoriteCount: number;
   recentCount: number;
@@ -11,7 +11,6 @@ interface QuickActionsProps {
 }
 
 export const QuickActions: React.FC<QuickActionsProps> = ({
-  isDarkMode,
   onQuickAction,
   favoriteCount,
   recentCount,
@@ -47,11 +46,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
             variant="ghost"
             size="sm"
             onClick={() => onQuickAction(action.id)}
-            className={`text-sm font-medium transition-all duration-200 hover:scale-105 ${
-              isDarkMode 
-                ? 'text-slate-300 hover:text-white hover:bg-white/10' 
-                : 'text-slate-600 hover:text-slate-800 hover:bg-black/10'
-            }`}
+            className="text-sm font-medium transition-all duration-200 hover:scale-105 text-slate-300 hover:text-white hover:bg-white/10"
           >
             <action.icon className="w-4 h-4 mr-1" />
             {action.label}
