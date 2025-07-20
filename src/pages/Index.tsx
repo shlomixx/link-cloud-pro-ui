@@ -14,6 +14,7 @@ const Index = () => {
   const [editingLink, setEditingLink] = useState<LinkData | null>(null);
   const [isNewLink, setIsNewLink] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('compact');
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [sortBy, setSortBy] = useState<SortBy>('custom');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showPrivateLinks, setShowPrivateLinks] = useState(true);
@@ -168,6 +169,7 @@ const Index = () => {
       if (savedSettings) {
         try {
           const settings = JSON.parse(savedSettings);
+          setIsDarkMode(settings.isDarkMode ?? true);
           setViewMode(settings.viewMode ?? 'compact');
           setSortBy(settings.sortBy ?? 'custom');
           setShowPrivateLinks(settings.showPrivateLinks ?? true);
@@ -185,10 +187,16 @@ const Index = () => {
   }, [linksData]);
 
   useEffect(() => {
-    const settings = { viewMode, sortBy, showPrivateLinks, isCompactHeader };
+    const settings = { isDarkMode, viewMode, sortBy, showPrivateLinks, isCompactHeader };
     localStorage.setItem('linkRouterSettings', JSON.stringify(settings));
-    document.documentElement.classList.add('dark');
-  }, [viewMode, sortBy, showPrivateLinks, isCompactHeader]);
+    
+    document.documentElement.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode, viewMode, sortBy, showPrivateLinks, isCompactHeader]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -210,6 +218,11 @@ const Index = () => {
             const nextMode = modes[(currentIndex + 1) % modes.length];
             setViewMode(nextMode);
             toast.success(`Switched to ${nextMode} view`);
+            break;
+          case 'd':
+            e.preventDefault();
+            setIsDarkMode(!isDarkMode);
+            toast.success(`Switched to ${isDarkMode ? 'light' : 'dark'} mode`);
             break;
           case 'h':
             e.preventDefault();
@@ -251,7 +264,7 @@ const Index = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [viewMode, isModalOpen, searchTerm, isCompactHeader, showShortcuts]);
+  }, [viewMode, isDarkMode, isModalOpen, searchTerm, isCompactHeader, showShortcuts]);
 
   useEffect(() => {
     if (sortBy === 'custom') return; // Don't sort if we are in custom mode
@@ -537,6 +550,55 @@ const Index = () => {
     toast.success('Link reordered!');
   };
 
+  const exportData = () => {
+    const dataStr = JSON.stringify({ linksData, categoryOrder }, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'link-router-data.json';
+    link.click();
+    URL.revokeObjectURL(url);
+    toast.success('Data exported successfully!');
+  };
+
+  const importData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target?.result as string);
+          if (Array.isArray(imported)) { // Legacy format
+            setLinksData(imported);
+            setCategoryOrder(Array.from(new Set(imported.map((link: LinkData) => link.category))));
+          } else { // New format
+            setLinksData(imported.linksData);
+            setCategoryOrder(imported.categoryOrder);
+          }
+          toast.success('Data imported successfully!');
+        } catch (error) {
+          toast.error('Invalid file format');
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const copyLinkUrl = (url: string, name: string) => {
+    navigator.clipboard.writeText(url);
+    toast.success(`${name} link copied to clipboard!`);
+  };
+
+  const categories = Array.from(new Set(linksData.map(link => link.category)));
+  const totalClicks = linksData.reduce((sum, link) => sum + (link.clicks || 0), 0);
+  const recentLinks = linksData.filter(link => {
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    return new Date(link.createdAt || '') > weekAgo;
+  });
+  const popularLinks = linksData.filter(link => (link.clicks || 0) > 20);
+
   if (isLoading) {
     return (
       <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 bg-background`}>
@@ -555,6 +617,8 @@ const Index = () => {
       <AppHeader
         viewMode={viewMode}
         onViewModeChange={(mode) => setViewMode(mode as ViewMode)}
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
         showPrivateLinks={showPrivateLinks}
         onTogglePrivateLinks={() => setShowPrivateLinks(!showPrivateLinks)}
         onExportData={exportData}
@@ -580,7 +644,7 @@ const Index = () => {
                 categoryLabels={categoryLabels}
                 categoryColors={categoryColors}
                 viewMode={viewMode}
-                isDarkMode={true}
+                isDarkMode={isDarkMode}
                 draggedItem={draggedItem}
                 hoveredLink={hoveredLink}
                 clickedLink={clickedLink}
@@ -665,13 +729,14 @@ const Index = () => {
           }
         }}
         isLoading={isLoading}
-        isDarkMode={true}
+        isDarkMode={isDarkMode}
         categoryLabels={categoryLabels}
       />
 
       <KeyboardShortcuts
         isOpen={showShortcuts}
         onClose={() => setShowShortcuts(false)}
+        isDarkMode={isDarkMode}
       />
     </div>
   );

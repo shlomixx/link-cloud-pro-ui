@@ -7,16 +7,19 @@ import { Badge } from '@/components/ui/badge';
 interface KeyboardShortcutsProps {
   isOpen: boolean;
   onClose: () => void;
+  isDarkMode: boolean;
 }
 
 export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
   isOpen,
   onClose,
+  isDarkMode
 }) => {
   const shortcuts = [
     { key: 'Ctrl/Cmd + K', action: 'Focus search' },
     { key: 'Ctrl/Cmd + N', action: 'Add new link' },
     { key: 'Ctrl/Cmd + G', action: 'Switch view mode' },
+    { key: 'Ctrl/Cmd + D', action: 'Toggle dark mode' },
     { key: 'Ctrl/Cmd + H', action: 'Toggle compact header' },
     { key: 'Alt + F', action: 'Show favorites' },
     { key: 'Alt + R', action: 'Show recent links' },
@@ -27,7 +30,11 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md bg-slate-900/95 border-slate-700 text-white backdrop-blur-sm">
+      <DialogContent className={`max-w-md ${
+        isDarkMode 
+          ? 'bg-slate-900/95 border-slate-700 text-white backdrop-blur-sm' 
+          : 'bg-white/95 border-slate-200 text-slate-800 backdrop-blur-sm'
+      }`}>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Keyboard className="w-5 h-5" />
@@ -38,12 +45,16 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
         <div className="space-y-3 max-h-96 overflow-y-auto">
           {shortcuts.map((shortcut, index) => (
             <div key={index} className="flex items-center justify-between py-2">
-              <span className="text-sm text-slate-300">
+              <span className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
                 {shortcut.action}
               </span>
               <Badge 
                 variant="outline" 
-                className="font-mono text-xs border-slate-600 text-slate-300"
+                className={`font-mono text-xs ${
+                  isDarkMode 
+                    ? 'border-slate-600 text-slate-300' 
+                    : 'border-slate-300 text-slate-600'
+                }`}
               >
                 {shortcut.key}
               </Badge>
@@ -55,7 +66,11 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
           <Button 
             variant="outline" 
             onClick={onClose}
-            className="border-slate-600 text-white hover:bg-slate-800/50"
+            className={`${
+              isDarkMode 
+                ? 'border-slate-600 text-white hover:bg-slate-800/50' 
+                : 'border-slate-300 text-slate-800 hover:bg-slate-100/50'
+            }`}
           >
             <X className="w-4 h-4 mr-2" />
             Close

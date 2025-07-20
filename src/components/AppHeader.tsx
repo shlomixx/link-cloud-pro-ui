@@ -2,6 +2,8 @@ import React from 'react';
 import {
   Grid,
   List,
+  Moon,
+  Sun,
   Zap,
   Settings,
   Download,
@@ -29,6 +31,8 @@ import { ViewMode } from '@/types';
 interface AppHeaderProps {
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
+  isDarkMode: boolean;
+  onToggleDarkMode: () => void;
   showPrivateLinks: boolean;
   onTogglePrivateLinks: () => void;
   onExportData: () => void;
@@ -56,7 +60,7 @@ export function AppHeader(props: AppHeaderProps) {
         <div className="w-10 flex justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="ghost" className="rounded-full" aria-label="Settings">
+              <Button size="icon" variant="ghost" className="rounded-full">
                 <Settings className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
@@ -101,6 +105,17 @@ export function AppHeader(props: AppHeaderProps) {
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
 
+              <DropdownMenuItem
+                onClick={props.onToggleDarkMode}
+                className="rounded-md"
+              >
+                {props.isDarkMode ? (
+                  <Sun className="mr-2 h-4 w-4" />
+                ) : (
+                  <Moon className="mr-2 h-4 w-4" />
+                )}
+                <span>{props.isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
+              </DropdownMenuItem>
               <DropdownMenuCheckboxItem
                 checked={props.showPrivateLinks}
                 onCheckedChange={props.onTogglePrivateLinks}
