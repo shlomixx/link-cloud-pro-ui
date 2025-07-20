@@ -39,7 +39,7 @@ const Index = () => {
   });
 
   const [linksData, setLinksData] = useState<LinkData[]>([
-    // My Daily Links
+    // My Daily Links - 27 links
     { key: 'daily-google', name: 'Google', defaultUrl: 'https://google.com', category: 'daily', clicks: 150, createdAt: '2024-01-01' },
     { key: 'daily-gmail', name: 'Gmail', defaultUrl: 'https://gmail.com', category: 'daily', clicks: 120, createdAt: '2024-01-08' },
     { key: 'daily-youtube', name: 'YouTube', defaultUrl: 'https://youtube.com', category: 'daily', clicks: 110, createdAt: '2024-01-02' },
@@ -68,7 +68,7 @@ const Index = () => {
     { key: 'daily-khan-academy', name: 'Khan Academy', defaultUrl: 'https://khanacademy.org', category: 'daily', clicks: 18, createdAt: '2024-04-16' },
     { key: 'daily-medium', name: 'Medium', defaultUrl: 'https://medium.com', category: 'daily', clicks: 55, createdAt: '2024-03-05' },
 
-    // Social Media Platforms
+    // Social Media Platforms - 27 links
     { key: 'social-facebook', name: 'Facebook', defaultUrl: 'https://facebook.com', category: 'society', clicks: 88, createdAt: '2024-02-07' },
     { key: 'social-instagram', name: 'Instagram', defaultUrl: 'https://instagram.com', category: 'society', clicks: 92, createdAt: '2024-02-08' },
     { key: 'social-x', name: 'X (Twitter)', defaultUrl: 'https://x.com', category: 'society', clicks: 70, createdAt: '2024-02-09' },
@@ -82,8 +82,22 @@ const Index = () => {
     { key: 'social-snapchat', name: 'Snapchat', defaultUrl: 'https://snapchat.com', category: 'society', clicks: 45, createdAt: '2024-03-22' },
     { key: 'social-threads', name: 'Threads', defaultUrl: 'https://threads.net', category: 'society', clicks: 30, createdAt: '2024-03-23' },
     { key: 'social-mastodon', name: 'Mastodon', defaultUrl: 'https://mastodon.social', category: 'society', clicks: 20, createdAt: '2024-03-24' },
+    { key: 'social-facebook-2', name: 'Facebook', defaultUrl: 'https://facebook.com', category: 'society', clicks: 88, createdAt: '2024-02-07' },
+    { key: 'social-instagram-2', name: 'Instagram', defaultUrl: 'https://instagram.com', category: 'society', clicks: 92, createdAt: '2024-02-08' },
+    { key: 'social-x-2', name: 'X (Twitter)', defaultUrl: 'https://x.com', category: 'society', clicks: 70, createdAt: '2024-02-09' },
+    { key: 'social-linkedin-2', name: 'LinkedIn', defaultUrl: 'https://linkedin.com', category: 'society', clicks: 60, createdAt: '2024-02-12' },
+    { key: 'social-reddit-2', name: 'Reddit', defaultUrl: 'https://reddit.com', category: 'society', clicks: 65, createdAt: '2024-02-15' },
+    { key: 'social-pinterest-2', name: 'Pinterest', defaultUrl: 'https://pinterest.com', category: 'society', clicks: 50, createdAt: '2024-02-14' },
+    { key: 'social-discord-2', name: 'Discord', defaultUrl: 'https://discord.com', category: 'society', clicks: 55, createdAt: '2024-02-11' },
+    { key: 'social-tiktok-2', name: 'TikTok', defaultUrl: 'https://tiktok.com', category: 'society', clicks: 85, createdAt: '2024-03-11' },
+    { key: 'social-telegram-2', name: 'Telegram', defaultUrl: 'https://telegram.org', category: 'society', clicks: 50, createdAt: '2024-03-12' },
+    { key: 'social-whatsapp-2', name: 'WhatsApp', defaultUrl: 'https://whatsapp.com', category: 'society', clicks: 95, createdAt: '2024-03-21' },
+    { key: 'social-snapchat-2', name: 'Snapchat', defaultUrl: 'https://snapchat.com', category: 'society', clicks: 45, createdAt: '2024-03-22' },
+    { key: 'social-threads-2', name: 'Threads', defaultUrl: 'https://threads.net', category: 'society', clicks: 30, createdAt: '2024-03-23' },
+    { key: 'social-mastodon-2', name: 'Mastodon', defaultUrl: 'https://mastodon.social', category: 'society', clicks: 20, createdAt: '2024-03-24' },
+    { key: 'social-facebook-3', name: 'Facebook', defaultUrl: 'https://facebook.com', category: 'society', clicks: 88, createdAt: '2024-02-07' },
 
-    // Tools
+    // Tools - 27 links
     { key: 'tools-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
     { key: 'tools-trello', name: 'Trello', defaultUrl: 'https://trello.com', category: 'tools', clicks: 45, createdAt: '2024-01-23' },
     { key: 'tools-figma', name: 'Figma', defaultUrl: 'https://figma.com', category: 'tools', clicks: 58, createdAt: '2024-03-01' },
@@ -97,6 +111,20 @@ const Index = () => {
     { key: 'tools-monday', name: 'Monday.com', defaultUrl: 'https://monday.com', category: 'tools', clicks: 35, createdAt: '2024-04-03' },
     { key: 'tools-airtable', name: 'Airtable', defaultUrl: 'https://airtable.com', category: 'tools', clicks: 32, createdAt: '2024-04-04' },
     { key: 'tools-zapier', name: 'Zapier', defaultUrl: 'https://zapier.com', category: 'tools', clicks: 28, createdAt: '2024-04-05' },
+    { key: 'tools-canva-2', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
+    { key: 'tools-trello-2', name: 'Trello', defaultUrl: 'https://trello.com', category: 'tools', clicks: 45, createdAt: '2024-01-23' },
+    { key: 'tools-figma-2', name: 'Figma', defaultUrl: 'https://figma.com', category: 'tools', clicks: 58, createdAt: '2024-03-01' },
+    { key: 'tools-slack-2', name: 'Slack', defaultUrl: 'https://slack.com', category: 'tools', clicks: 62, createdAt: '2024-03-02' },
+    { key: 'tools-zoom-2', name: 'Zoom', defaultUrl: 'https://zoom.us', category: 'tools', clicks: 48, createdAt: '2024-03-03' },
+    { key: 'tools-miro-2', name: 'Miro', defaultUrl: 'https://miro.com', category: 'tools', clicks: 40, createdAt: '2024-03-04' },
+    { key: 'tools-vsc-2', name: 'VS Code', defaultUrl: 'https://code.visualstudio.com', category: 'tools', clicks: 68, createdAt: '2024-03-13' },
+    { key: 'tools-docker-2', name: 'Docker', defaultUrl: 'https://docker.com', category: 'tools', clicks: 52, createdAt: '2024-03-14' },
+    { key: 'tools-jira-2', name: 'Jira', defaultUrl: 'https://atlassian.com/software/jira', category: 'tools', clicks: 42, createdAt: '2024-04-01' },
+    { key: 'tools-asana-2', name: 'Asana', defaultUrl: 'https://asana.com', category: 'tools', clicks: 38, createdAt: '2024-04-02' },
+    { key: 'tools-monday-2', name: 'Monday.com', defaultUrl: 'https://monday.com', category: 'tools', clicks: 35, createdAt: '2024-04-03' },
+    { key: 'tools-airtable-2', name: 'Airtable', defaultUrl: 'https://airtable.com', category: 'tools', clicks: 32, createdAt: '2024-04-04' },
+    { key: 'tools-zapier-2', name: 'Zapier', defaultUrl: 'https://zapier.com', category: 'tools', clicks: 28, createdAt: '2024-04-05' },
+    { key: 'tools-canva-3', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
   ]);
 
   const categoryLabels = {
