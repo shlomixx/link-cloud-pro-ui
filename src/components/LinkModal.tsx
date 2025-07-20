@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -38,7 +37,6 @@ interface LinkModalProps {
   onSave: () => void;
   onDelete: () => void;
   isLoading: boolean;
-  isDarkMode: boolean;
   categoryLabels: Record<string, string>;
 }
 
@@ -51,21 +49,16 @@ export const LinkModal: React.FC<LinkModalProps> = ({
   onSave,
   onDelete,
   isLoading,
-  isDarkMode,
   categoryLabels
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={`max-w-md transition-all duration-300 ${
-        isDarkMode 
-          ? 'bg-slate-900/95 border-slate-700 text-white backdrop-blur-sm' 
-          : 'bg-white/95 border-slate-200 text-slate-800 backdrop-blur-sm'
-      }`}>
+      <DialogContent className="max-w-md transition-all duration-300 bg-slate-900/95 border-slate-700 text-white backdrop-blur-sm">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">
             {isNewLink ? 'Add New Link' : 'Edit Link'}
           </DialogTitle>
-          <DialogDescription className={`${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+          <DialogDescription className="text-slate-400">
             {isNewLink 
               ? 'Create a new link for your collection'
               : 'Update your link details'
@@ -74,16 +67,14 @@ export const LinkModal: React.FC<LinkModalProps> = ({
         </DialogHeader>
         
         <Tabs defaultValue="basic" className="w-full">
-          <TabsList className={`grid w-full grid-cols-2 ${
-            isDarkMode ? 'bg-slate-800/50' : 'bg-slate-100/50'
-          }`}>
+          <TabsList className="grid w-full grid-cols-2 bg-slate-800/50">
             <TabsTrigger value="basic" className="transition-all duration-300">Basic Info</TabsTrigger>
             <TabsTrigger value="advanced" className="transition-all duration-300">Advanced</TabsTrigger>
           </TabsList>
           
           <TabsContent value="basic" className="space-y-4 mt-4">
             <div>
-              <Label htmlFor="name" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              <Label htmlFor="name" className="text-slate-300">
                 Link Name
               </Label>
               <Input
@@ -91,16 +82,12 @@ export const LinkModal: React.FC<LinkModalProps> = ({
                 value={formData.name}
                 onChange={(e) => onFormDataChange({ ...formData, name: e.target.value })}
                 placeholder="e.g., Google"
-                className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                  isDarkMode 
-                    ? 'bg-slate-800/50 border-slate-600 text-white focus:border-purple-500' 
-                    : 'bg-slate-50/50 border-slate-300 text-slate-800 focus:border-purple-500'
-                }`}
+                className="mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 bg-slate-800/50 border-slate-600 text-white focus:border-purple-500"
               />
             </div>
             
             <div>
-              <Label htmlFor="url" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              <Label htmlFor="url" className="text-slate-300">
                 URL
               </Label>
               <Input
@@ -108,36 +95,24 @@ export const LinkModal: React.FC<LinkModalProps> = ({
                 value={formData.url}
                 onChange={(e) => onFormDataChange({ ...formData, url: e.target.value })}
                 placeholder="https://example.com"
-                className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                  isDarkMode 
-                    ? 'bg-slate-800/50 border-slate-600 text-white focus:border-purple-500' 
-                    : 'bg-slate-50/50 border-slate-300 text-slate-800 focus:border-purple-500'
-                }`}
+                className="mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 bg-slate-800/50 border-slate-600 text-white focus:border-purple-500"
               />
             </div>
             
             <div>
-              <Label htmlFor="category" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              <Label htmlFor="category" className="text-slate-300">
                 Category
               </Label>
               <Select
                 value={formData.category}
                 onValueChange={(value) => onFormDataChange({ ...formData, category: value })}
               >
-                <SelectTrigger className={`mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 ${
-                  isDarkMode 
-                    ? 'bg-slate-800/50 border-slate-600 text-white focus:border-purple-500' 
-                    : 'bg-slate-50/50 border-slate-300 text-slate-800 focus:border-purple-500'
-                }`}>
+                <SelectTrigger className="mt-1 transition-all duration-300 focus:ring-2 focus:ring-purple-500/50 bg-slate-800/50 border-slate-600 text-white focus:border-purple-500">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className={`z-50 ${
-                  isDarkMode ? 'bg-slate-800/95 border-slate-600 backdrop-blur-sm' : 'bg-white/95 border-slate-200 backdrop-blur-sm'
-                }`}>
+                <SelectContent className="z-50 bg-slate-800/95 border-slate-600 backdrop-blur-sm">
                   {Object.entries(categoryLabels).map(([key, label]) => (
-                    <SelectItem key={key} value={key} className={`transition-all duration-300 ${
-                      isDarkMode ? 'text-white focus:bg-slate-700/50' : 'text-slate-800 focus:bg-slate-100/50'
-                    }`}>
+                    <SelectItem key={key} value={key} className="transition-all duration-300 text-white focus:bg-slate-700/50">
                       {label}
                     </SelectItem>
                   ))}
@@ -153,11 +128,11 @@ export const LinkModal: React.FC<LinkModalProps> = ({
                 checked={formData.isPrivate}
                 onCheckedChange={(checked) => onFormDataChange({ ...formData, isPrivate: checked })}
               />
-              <Label htmlFor="private" className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              <Label htmlFor="private" className="text-slate-300">
                 Private Link
               </Label>
             </div>
-            <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+            <p className="text-sm text-slate-400">
               Private links are only visible when "Show Private Links" is enabled.
             </p>
           </TabsContent>
@@ -187,11 +162,7 @@ export const LinkModal: React.FC<LinkModalProps> = ({
               variant="outline" 
               onClick={onClose} 
               disabled={isLoading}
-              className={`transition-all duration-300 hover:scale-105 ${
-                isDarkMode 
-                  ? 'border-slate-600 text-white hover:bg-slate-800/50' 
-                  : 'border-slate-300 text-slate-800 hover:bg-slate-100/50'
-              }`}
+              className="transition-all duration-300 hover:scale-105 border-slate-600 text-white hover:bg-slate-800/50"
             >
               Cancel
             </Button>

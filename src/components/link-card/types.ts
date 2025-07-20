@@ -14,7 +14,7 @@ export interface LinkData {
 export interface BaseLinkCardProps {
   link: LinkData;
   viewMode: 'grid' | 'list' | 'compact' | 'dense';
-  isDarkMode: boolean;
+  
   hoveredLink: string | null;
   clickedLink: string | null;
   categories?: string[];

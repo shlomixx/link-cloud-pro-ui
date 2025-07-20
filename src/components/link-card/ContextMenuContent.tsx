@@ -5,7 +5,7 @@ import { LinkData } from './types';
 
 interface ContextMenuProps {
   link: LinkData;
-  isDarkMode: boolean;
+  
   categories: string[];
   onEdit: () => void;
   onCopyUrl: () => void;
@@ -16,7 +16,7 @@ interface ContextMenuProps {
 
 export const LinkCardContextMenu: React.FC<ContextMenuProps> = ({
   link,
-  isDarkMode,
+  
   categories,
   onEdit,
   onCopyUrl,
@@ -31,7 +31,7 @@ export const LinkCardContextMenu: React.FC<ContextMenuProps> = ({
   };
 
   return (
-    <ContextMenuContent className={isDarkMode ? 'bg-slate-900/95 border-slate-700' : 'bg-white/95 border-slate-200'}>
+    <ContextMenuContent className="bg-slate-900/95 border-slate-700">
       <ContextMenuItem onClick={handleContextMenuClick(onEdit)}>
         <Edit className="w-4 h-4 mr-2" />
         עריכה

@@ -10,7 +10,6 @@ import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 export const DenseView: React.FC<BaseLinkCardProps> = ({
   link,
-  isDarkMode,
   hoveredLink,
   clickedLink,
   categories = [],
@@ -63,10 +62,7 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
                 className={`
                   group relative flex flex-col items-center gap-1 p-1 rounded cursor-pointer
                   transition-all duration-200 hover:scale-110
-                  ${isDarkMode 
-                    ? 'hover:bg-white/10' 
-                    : 'hover:bg-black/10'
-                  }
+                  hover:bg-white/10
                   ${isClicked ? 'scale-95' : ''}
                   ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
                 `}
@@ -92,16 +88,14 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
                   className="w-7 h-7 rounded"
                   onError={handleFaviconError}
                 />
-                <span className={`text-sm font-medium text-center max-w-[70px] leading-tight truncate ${
-                  isDarkMode ? 'text-white' : 'text-slate-800'
-                }`}>
+                <span className="text-sm font-medium text-center max-w-[70px] leading-tight truncate text-white">
                   {link.name}
                 </span>
               </div>
             </ContextMenuTrigger>
             <LinkCardContextMenu
               link={link}
-              isDarkMode={isDarkMode}
+              
               categories={categories}
               onEdit={onEdit}
               onCopyUrl={onCopyUrl}

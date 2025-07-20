@@ -21,7 +21,7 @@ interface CategorySectionProps {
   categoryLabels: Record<string, string>;
   categoryColors: Record<string, string>;
   viewMode: 'grid' | 'list' | 'compact' | 'dense';
-  isDarkMode: boolean;
+  
   draggedItem: string | null;
   hoveredLink: string | null;
   clickedLink: string | null;
@@ -47,7 +47,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   categoryLabels,
   categoryColors,
   viewMode,
-  isDarkMode,
+  
   draggedItem,
   hoveredLink,
   clickedLink,
@@ -258,7 +258,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               <LinkCard
                 link={link}
                 viewMode={viewMode}
-                isDarkMode={isDarkMode}
                 hoveredLink={hoveredLink}
                 clickedLink={clickedLink}
                 onMouseEnter={() => onMouseEnter(link.key)}
@@ -299,7 +298,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               <LinkCard
                 link={link}
                 viewMode={viewMode}
-                isDarkMode={isDarkMode}
+                
                 hoveredLink={hoveredLink}
                 clickedLink={clickedLink}
                 onMouseEnter={() => onMouseEnter(link.key)}

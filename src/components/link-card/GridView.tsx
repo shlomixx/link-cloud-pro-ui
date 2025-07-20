@@ -9,7 +9,6 @@ import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 export const GridView: React.FC<BaseLinkCardProps> = ({
   link,
-  isDarkMode,
   hoveredLink,
   clickedLink,
   categories = [],
@@ -59,10 +58,7 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           className={`
             group relative flex flex-col items-center gap-3 p-6 rounded-xl cursor-pointer
             transition-all duration-300 hover:scale-[1.05] hover:shadow-2xl
-            ${isDarkMode 
-              ? 'bg-slate-800/20 hover:bg-slate-700/30' 
-              : 'bg-white/20 hover:bg-white/30'
-            }
+            bg-slate-800/20 hover:bg-slate-700/30
             backdrop-blur-sm
             ${isClicked ? 'scale-95' : ''}
             ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
@@ -87,7 +83,7 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           <div className="relative">
             <div className={`
               w-16 h-16 rounded-2xl flex items-center justify-center
-              ${isDarkMode ? 'bg-slate-700/50' : 'bg-white/50'}
+              bg-slate-700/50
               backdrop-blur-sm transition-all duration-300 group-hover:scale-110
             `}>
               <img
@@ -100,9 +96,7 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           </div>
           
           <div className="w-full text-center">
-            <h3 className={`font-semibold text-base truncate ${
-              isDarkMode ? 'text-white' : 'text-slate-800'
-            }`}>
+            <h3 className="font-semibold text-base truncate text-white">
               {link.name}
               {link.isPrivate && <span className="ml-1 text-yellow-500">🔒</span>}
             </h3>
@@ -111,7 +105,7 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
       </ContextMenuTrigger>
       <LinkCardContextMenu
         link={link}
-        isDarkMode={isDarkMode}
+        
         categories={categories}
         onEdit={onEdit}
         onCopyUrl={onCopyUrl}

@@ -9,7 +9,6 @@ import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 export const ListView: React.FC<BaseLinkCardProps> = ({
   link,
-  isDarkMode,
   hoveredLink,
   clickedLink,
   categories = [],
@@ -59,10 +58,7 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
           className={`
             group flex items-center gap-6 p-5 rounded-xl cursor-pointer w-full
             transition-all duration-300 hover:scale-[1.02] hover:shadow-xl
-            ${isDarkMode 
-              ? 'bg-slate-800/20 hover:bg-slate-700/30' 
-              : 'bg-white/20 hover:bg-white/30'
-            }
+            bg-slate-800/20 hover:bg-slate-700/30
             backdrop-blur-sm
             ${isClicked ? 'scale-[0.98]' : ''}
             ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
@@ -86,7 +82,7 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
           <div className="flex items-center gap-6 flex-1">
             <div className={`
               w-14 h-14 rounded-2xl flex items-center justify-center
-              ${isDarkMode ? 'bg-slate-700/50' : 'bg-white/50'}
+              bg-slate-700/50
               backdrop-blur-sm
             `}>
               <img
@@ -98,9 +94,7 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3">
-                <h3 className={`font-semibold text-lg ${
-                  isDarkMode ? 'text-white' : 'text-slate-800'
-                }`}>
+                <h3 className="font-semibold text-lg text-white">
                   {link.name}
                 </h3>
                 {link.isPrivate && <span className="text-yellow-500">🔒</span>}
@@ -113,10 +107,7 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
               size="sm"
               className={`
                 px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105
-                ${isDarkMode 
-                  ? 'bg-slate-700/50 hover:bg-slate-600/60 text-white' 
-                  : 'bg-white/50 hover:bg-white/70 text-slate-800'
-                }
+                bg-slate-700/50 hover:bg-slate-600/60 text-white
                 backdrop-blur-sm
               `}
             >
@@ -127,7 +118,7 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
       </ContextMenuTrigger>
       <LinkCardContextMenu
         link={link}
-        isDarkMode={isDarkMode}
+        
         categories={categories}
         onEdit={onEdit}
         onCopyUrl={onCopyUrl}

@@ -9,7 +9,6 @@ import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 export const CompactView: React.FC<BaseLinkCardProps> = ({
   link,
-  isDarkMode,
   hoveredLink,
   clickedLink,
   categories = [],
@@ -103,7 +102,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
       </ContextMenuTrigger>
       <LinkCardContextMenu
         link={link}
-        isDarkMode={isDarkMode}
+        
         categories={categories}
         onEdit={onEdit}
         onCopyUrl={onCopyUrl}
