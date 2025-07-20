@@ -241,7 +241,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         onDrop={handleDrop}
       >
         <div className="flex items-center justify-between mb-4 px-1">
-          <h2 className="text-3xl font-normal text-white tracking-wide">
+          <h2 className="text-4xl font-normal text-white tracking-wide">
             {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
           </h2>
           <div className="h-px flex-1 bg-gradient-to-r from-white/20 via-white/10 to-transparent ml-8" />
