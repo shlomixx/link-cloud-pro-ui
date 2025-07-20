@@ -617,15 +617,10 @@ const Index = () => {
       <AppHeader
         viewMode={viewMode}
         onViewModeChange={(mode) => setViewMode(mode as ViewMode)}
-        isDarkMode={isDarkMode}
-        onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
         showPrivateLinks={showPrivateLinks}
         onTogglePrivateLinks={() => setShowPrivateLinks(!showPrivateLinks)}
-        onExportData={exportData}
-        onImportData={() => fileInputRef.current?.click()}
         onAddLink={() => openModal()}
         onShowShortcuts={() => setShowShortcuts(true)}
-        fileInputRef={fileInputRef}
         linkSize={linkSize}
         onLinkSizeChange={setLinkSize}
       />

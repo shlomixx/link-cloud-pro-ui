@@ -2,12 +2,8 @@ import React from 'react';
 import {
   Grid,
   List,
-  Moon,
-  Sun,
   Zap,
   Settings,
-  Download,
-  Upload,
   Eye,
   Keyboard,
   Plus,
@@ -31,15 +27,10 @@ import { ViewMode } from '@/types';
 interface AppHeaderProps {
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
-  isDarkMode: boolean;
-  onToggleDarkMode: () => void;
   showPrivateLinks: boolean;
   onTogglePrivateLinks: () => void;
-  onExportData: () => void;
-  onImportData: () => void;
   onAddLink: () => void;
   onShowShortcuts: () => void;
-  fileInputRef: React.RefObject<HTMLInputElement>;
   linkSize: number;
   onLinkSizeChange: (size: number) => void;
 }
@@ -105,17 +96,6 @@ export function AppHeader(props: AppHeaderProps) {
                 </DropdownMenuSubContent>
               </DropdownMenuSub>
 
-              <DropdownMenuItem
-                onClick={props.onToggleDarkMode}
-                className="rounded-md"
-              >
-                {props.isDarkMode ? (
-                  <Sun className="mr-2 h-4 w-4" />
-                ) : (
-                  <Moon className="mr-2 h-4 w-4" />
-                )}
-                <span>{props.isDarkMode ? 'Light Mode' : 'Dark Mode'}</span>
-              </DropdownMenuItem>
               <DropdownMenuCheckboxItem
                 checked={props.showPrivateLinks}
                 onCheckedChange={props.onTogglePrivateLinks}
@@ -137,19 +117,6 @@ export function AppHeader(props: AppHeaderProps) {
                 />
               </div>
 
-              <DropdownMenuSeparator className="bg-slate-700/50" />
-
-              <DropdownMenuItem onClick={props.onExportData} className="rounded-md">
-                <Download className="mr-2 h-4 w-4" />
-                Export Data
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => props.fileInputRef.current?.click()}
-                className="rounded-md"
-              >
-                <Upload className="mr-2 h-4 w-4" />
-                Import Data
-              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={props.onShowShortcuts}
                 className="rounded-md"
