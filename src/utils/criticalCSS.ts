@@ -8,7 +8,10 @@ export const inlineCriticalCSS = () => {
     body {
       margin: 0;
       font-family: "Gaegu", system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+      min-height: 100vh;
+    }
+    
+    #root {
       min-height: 100vh;
     }
     
