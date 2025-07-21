@@ -86,6 +86,8 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
                   src={getFaviconUrl(link.url || link.defaultUrl || '')}
                   alt=""
                   className="w-7 h-7 rounded"
+                  loading="lazy"
+                  decoding="async"
                   onError={handleFaviconError}
                 />
                 <span className="text-sm font-medium text-center max-w-[70px] leading-tight truncate text-white">

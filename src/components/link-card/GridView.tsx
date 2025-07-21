@@ -90,6 +90,8 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
                 className="w-10 h-10 rounded-lg"
+                loading="lazy"
+                decoding="async"
                 onError={handleFaviconError}
               />
             </div>

@@ -89,6 +89,8 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
                 className="w-8 h-8 rounded-lg"
+                loading="lazy"
+                decoding="async"
                 onError={handleFaviconError}
               />
             </div>

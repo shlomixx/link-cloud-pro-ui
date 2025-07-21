@@ -8,14 +8,6 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    headers: {
-      'Cache-Control': 'public, max-age=31536000',
-    },
-  },
-  preview: {
-    headers: {
-      'Cache-Control': 'public, max-age=31536000',
-    },
   },
   plugins: [
     react(),
@@ -30,12 +22,13 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
+        // Better caching strategy
         manualChunks: {
-          // Separate vendor chunks for better caching
           'react-vendor': ['react', 'react-dom'],
-          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-context-menu', '@radix-ui/react-select'],
-          'utils-vendor': ['lucide-react', 'sonner', 'clsx', 'tailwind-merge'],
-          'react-window': ['react-window']
+          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-context-menu', '@radix-ui/react-select', '@radix-ui/react-dropdown-menu'],
+          'utils-vendor': ['lucide-react', 'sonner', 'clsx', 'tailwind-merge', 'class-variance-authority'],
+          'react-window': ['react-window'],
+          'query-vendor': ['@tanstack/react-query']
         },
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name?.split('.') || [];
@@ -52,24 +45,30 @@ export default defineConfig(({ mode }) => ({
         entryFileNames: 'assets/js/[name]-[hash].js'
       }
     },
-    // Enable minification and tree-shaking
-    minify: 'esbuild',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn']
+      }
+    },
     target: 'esnext',
-    // Optimize chunk size warnings
     chunkSizeWarningLimit: 1000,
-    // Enable CSS code splitting
     cssCodeSplit: true,
-    // Enable sourcemaps for production debugging
-    sourcemap: false
+    sourcemap: false,
+    // Enable compression
+    reportCompressedSize: false
   },
-  // Optimize dependencies
   optimizeDeps: {
     include: [
       'react',
       'react-dom',
-      'react-window',
       'lucide-react',
-      'sonner'
-    ]
+      'sonner',
+      'clsx',
+      'tailwind-merge'
+    ],
+    exclude: ['react-window']
   }
 }));

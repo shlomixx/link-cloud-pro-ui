@@ -75,7 +75,7 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
     min-height: 100vh;
-    font-family: 'Gaegu', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: 'Gaegu', system-ui, -apple-system, sans-serif;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
@@ -83,6 +83,11 @@ All colors MUST be HSL.
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+  }
+
+  /* Reduce font weights to improve loading */
+  .font-light {
+    font-weight: 400;
   }
 
   /* Mobile-style smooth scrolling for all elements */

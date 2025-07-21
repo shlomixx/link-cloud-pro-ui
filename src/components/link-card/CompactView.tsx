@@ -89,6 +89,8 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
                 className="rounded-lg"
+                loading="lazy"
+                decoding="async"
                 style={{ width: `${iconSize}px`, height: `${iconSize}px`}}
                 onError={handleFaviconError}
               />

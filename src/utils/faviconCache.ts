@@ -101,7 +101,8 @@ class FaviconCacheManager {
 
       try {
         const domain = new URL(url).hostname;
-        const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+        // Use smaller favicon size for better performance
+        const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
         
         // Preload the image
         const img = new Image();
@@ -147,7 +148,8 @@ export const getFaviconUrl = (url: string): string => {
   
   try {
     const domain = new URL(url).hostname;
-    const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+    // Use smaller favicon size for better performance
+    const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
     
     // Cache asynchronously
     faviconCache.preloadFavicon(url).catch(() => {

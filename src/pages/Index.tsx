@@ -4,11 +4,13 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
-import { LazyLinkModal } from '@/components/LazyLinkModal';
-import { LazyKeyboardShortcuts } from '@/components/LazyKeyboardShortcuts';
 import { LinkData, FormData, ViewMode, SortBy } from '@/types';
 import { useFaviconPreloader } from '@/hooks/useFaviconPreloader';
 import { debounce } from '@/utils/performanceOptimizations';
+
+// Lazy load heavy components
+const LazyLinkModal = React.lazy(() => import('@/components/LazyLinkModal').then(module => ({ default: module.LazyLinkModal })));
+const LazyKeyboardShortcuts = React.lazy(() => import('@/components/LazyKeyboardShortcuts').then(module => ({ default: module.LazyKeyboardShortcuts })));
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -684,27 +686,29 @@ const Index = () => {
       </main>
 
 
-      <LazyLinkModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        isNewLink={isNewLink}
-        formData={formData}
-        onFormDataChange={setFormData}
-        onSave={handleSave}
-        onDelete={() => {
-          if (editingLink) {
-            handleDeleteLink(editingLink.key);
-            closeModal();
-          }
-        }}
-        isLoading={isLoading}
-        categoryLabels={categoryLabels}
-      />
+      <React.Suspense fallback={<div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full"></div></div>}>
+        <LazyLinkModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          isNewLink={isNewLink}
+          formData={formData}
+          onFormDataChange={setFormData}
+          onSave={handleSave}
+          onDelete={() => {
+            if (editingLink) {
+              handleDeleteLink(editingLink.key);
+              closeModal();
+            }
+          }}
+          isLoading={isLoading}
+          categoryLabels={categoryLabels}
+        />
 
-      <LazyKeyboardShortcuts
-        isOpen={showShortcuts}
-        onClose={() => setShowShortcuts(false)}
-      />
+        <LazyKeyboardShortcuts
+          isOpen={showShortcuts}
+          onClose={() => setShowShortcuts(false)}
+        />
+      </React.Suspense>
     </div>
   );
 };
