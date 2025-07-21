@@ -120,8 +120,8 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
     );
   };
 
-  // Only virtualize if we have many links (>50)
-  if (links.length <= 50) {
+  // Only virtualize if we have many links (>20) to reduce DOM size
+  if (links.length <= 20) {
     return (
       <div className={`grid gap-2 ${
         viewMode === 'grid' ? 'grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12' :

@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import { viteSingleFile } from "vite-plugin-singlefile"; // <-- ייבוא חדש
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -12,7 +11,6 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    viteSingleFile(), // <-- הוספת התוסף החדש
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
@@ -24,7 +22,10 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        // אין צורך ב-manualChunks כאשר משתמשים ב-vite-plugin-singlefile
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          ui: ['lucide-react', '@radix-ui/react-slot']
+        }
       }
     },
     minify: 'terser',
@@ -36,7 +37,7 @@ export default defineConfig(({ mode }) => ({
       }
     },
     target: 'esnext',
-    // אין צורך ב-cssCodeSplit כאשר הכל מוטמע
+    cssCodeSplit: true,
   },
   optimizeDeps: {
     include: [
