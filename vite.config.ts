@@ -22,27 +22,9 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          // Vendor chunks
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'vendor-react';
-            }
-            if (id.includes('@radix-ui') || id.includes('lucide-react')) {
-              return 'vendor-ui';
-            }
-            if (id.includes('react-window') || id.includes('react-virtualized')) {
-              return 'vendor-virtual';
-            }
-            return 'vendor';
-          }
-          // Component chunks
-          if (id.includes('/components/ui/')) {
-            return 'ui-components';
-          }
-          if (id.includes('/components/link-card/')) {
-            return 'link-components';
-          }
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          ui: ['lucide-react', '@radix-ui/react-slot']
         }
       }
     },
@@ -56,8 +38,6 @@ export default defineConfig(({ mode }) => ({
     },
     target: 'esnext',
     cssCodeSplit: true,
-    sourcemap: false,
-    chunkSizeWarningLimit: 1000,
   },
   optimizeDeps: {
     include: [

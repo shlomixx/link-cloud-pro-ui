@@ -583,7 +583,18 @@ const Index = () => {
   });
   const popularLinks = linksData.filter(link => (link.clicks || 0) > 20);
 
-  // Loading state removed to fix display issue
+  if (isLoading) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 bg-background`}>
+        <div className="text-center space-y-4">
+          <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full mx-auto"></div>
+          <p className={`text-lg text-foreground`}>
+            Loading your links...
+          </p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className={`min-h-screen transition-all duration-500 bg-background`}>
