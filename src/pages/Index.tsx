@@ -182,10 +182,18 @@ const Index = () => {
       try {
         const settings = JSON.parse(savedSettings);
         
-        setSortBy(settings.sortBy ?? 'custom');
-        setIsCompactHeader(settings.isCompactHeader ?? false);
+        // Clean up old settings that no longer exist
+        if (settings.viewMode || settings.showPrivateLinks !== undefined) {
+          // Clear old settings format
+          localStorage.removeItem('linkRouterSettings');
+        } else {
+          setSortBy(settings.sortBy ?? 'custom');
+          setIsCompactHeader(settings.isCompactHeader ?? false);
+        }
       } catch (error) {
         console.error('Error loading settings:', error);
+        // Clear corrupted settings
+        localStorage.removeItem('linkRouterSettings');
       }
     }
   }, []);
