@@ -18,11 +18,11 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<LinkData | null>(null);
   const [isNewLink, setIsNewLink] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>('compact');
+  const viewMode: ViewMode = 'compact'; // Fixed to compact view
   
   const [sortBy, setSortBy] = useState<SortBy>('custom');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [showPrivateLinks, setShowPrivateLinks] = useState(true);
+  const showPrivateLinks = true; // Always show private links
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [clickedLink, setClickedLink] = useState<string | null>(null);
@@ -186,9 +186,7 @@ const Index = () => {
       try {
         const settings = JSON.parse(savedSettings);
         
-        setViewMode(settings.viewMode ?? 'compact');
         setSortBy(settings.sortBy ?? 'custom');
-        setShowPrivateLinks(settings.showPrivateLinks ?? true);
         setIsCompactHeader(settings.isCompactHeader ?? false);
       } catch (error) {
         console.error('Error loading settings:', error);
@@ -201,12 +199,12 @@ const Index = () => {
   }, [linksData]);
 
   useEffect(() => {
-    const settings = { viewMode, sortBy, showPrivateLinks, isCompactHeader };
+    const settings = { sortBy, isCompactHeader };
     localStorage.setItem('linkRouterSettings', JSON.stringify(settings));
     
     document.documentElement.style.transition = 'background-color 0.3s ease, color 0.3s ease';
     document.documentElement.classList.add('dark');
-  }, [viewMode, sortBy, showPrivateLinks, isCompactHeader]);
+  }, [sortBy, isCompactHeader]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -220,14 +218,6 @@ const Index = () => {
           case 'n':
             e.preventDefault();
             openModal();
-            break;
-          case 'g':
-            e.preventDefault();
-            const modes: ViewMode[] = ['compact', 'grid', 'list', 'dense'];
-            const currentIndex = modes.indexOf(viewMode);
-            const nextMode = modes[(currentIndex + 1) % modes.length];
-            setViewMode(nextMode);
-            toast.success(`Switched to ${nextMode} view`);
             break;
           case 'h':
             e.preventDefault();
@@ -570,16 +560,12 @@ const Index = () => {
   
   return (
     <div className={`min-h-screen transition-all duration-500 bg-background`}>
-      <AppHeader
-        viewMode={viewMode}
-        onViewModeChange={(mode) => setViewMode(mode as ViewMode)}
-        showPrivateLinks={showPrivateLinks}
-        onTogglePrivateLinks={() => setShowPrivateLinks(!showPrivateLinks)}
-        onAddLink={() => openModal()}
-        onShowShortcuts={() => setShowShortcuts(true)}
-        linkSize={linkSize}
-        onLinkSizeChange={setLinkSize}
-      />
+        <AppHeader
+          onAddLink={() => openModal()}
+          onShowShortcuts={() => setShowShortcuts(true)}
+          linkSize={linkSize}
+          onLinkSizeChange={setLinkSize}
+        />
 
       <main className="container mx-auto px-6 py-2">
         <div className="space-y-2">

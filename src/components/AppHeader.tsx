@@ -1,10 +1,6 @@
 import React from 'react';
 import {
-  Grid,
-  List,
-  Zap,
   Settings,
-  Eye,
   Keyboard,
   Plus,
 } from 'lucide-react';
@@ -17,18 +13,9 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-  DropdownMenuCheckboxItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ViewMode } from '@/types';
 
 interface AppHeaderProps {
-  viewMode: ViewMode;
-  onViewModeChange: (mode: ViewMode) => void;
-  showPrivateLinks: boolean;
-  onTogglePrivateLinks: () => void;
   onAddLink: () => void;
   onShowShortcuts: () => void;
   linkSize: number;
@@ -66,43 +53,6 @@ export function AppHeader(props: AppHeaderProps) {
                 <Plus className="mr-2 h-4 w-4" />
                 <span>Add New Link</span>
               </DropdownMenuItem>
-
-              <DropdownMenuSeparator className="bg-slate-700/50" />
-
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger className="rounded-md">
-                  <Grid className="mr-2 h-4 w-4" />
-                  <span>View Mode</span>
-                </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent className="rounded-xl border-slate-700/50 bg-slate-900/80 p-1 backdrop-blur-xl">
-                  <DropdownMenuItem
-                    onClick={() => props.onViewModeChange('compact')}
-                    className="rounded-md"
-                  >
-                    <Zap className="mr-2 h-4 w-4" /> Compact
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => props.onViewModeChange('grid')}
-                    className="rounded-md"
-                  >
-                    <Grid className="mr-2 h-4 w-4" /> Grid
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => props.onViewModeChange('list')}
-                    className="rounded-md"
-                  >
-                    <List className="mr-2 h-4 w-4" /> List
-                  </DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
-
-              <DropdownMenuCheckboxItem
-                checked={props.showPrivateLinks}
-                onCheckedChange={props.onTogglePrivateLinks}
-                className="rounded-md"
-              >
-                <Eye className="mr-2 h-4 w-4" /> Show Private Links
-              </DropdownMenuCheckboxItem>
 
               <DropdownMenuSeparator className="bg-slate-700/50" />
               
