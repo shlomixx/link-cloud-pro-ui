@@ -10,7 +10,6 @@ interface LazyLinkModalProps {
     name: string;
     url: string;
     category: string;
-    isPrivate: boolean;
   };
   onFormDataChange: (data: any) => void;
   onSave: () => void;

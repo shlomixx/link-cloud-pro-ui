@@ -35,8 +35,7 @@ const Index = () => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     url: '',
-    category: 'custom',
-    isPrivate: false
+    category: 'custom'
   });
 
   const [linksData, setLinksData] = useState<LinkData[]>([
@@ -354,8 +353,7 @@ const Index = () => {
       setFormData({
         name: link.name,
         url: link.url || link.defaultUrl || '',
-        category: link.category,
-        isPrivate: link.isPrivate || false
+        category: link.category
       });
     } else {
       setEditingLink(null);
@@ -363,8 +361,7 @@ const Index = () => {
       setFormData({
         name: '',
         url: '',
-        category: presetCategory || 'custom',
-        isPrivate: false
+        category: presetCategory || 'custom'
       });
     }
     setIsModalOpen(true);
@@ -374,7 +371,7 @@ const Index = () => {
     setIsModalOpen(false);
     setEditingLink(null);
     setIsNewLink(false);
-    setFormData({ name: '', url: '', category: 'custom', isPrivate: false });
+    setFormData({ name: '', url: '', category: 'custom' });
   };
 
   const handleSave = async () => {
@@ -396,7 +393,6 @@ const Index = () => {
         name: formData.name.trim(),
         url: url,
         category: formData.category,
-        isPrivate: formData.isPrivate,
         clicks: 0,
         createdAt: new Date().toISOString()
       };
@@ -414,7 +410,7 @@ const Index = () => {
     } else if (editingLink) {
       setLinksData(prev => prev.map(link => 
         link.key === editingLink.key
-          ? { ...link, name: formData.name.trim(), url: url, category: formData.category, isPrivate: formData.isPrivate }
+          ? { ...link, name: formData.name.trim(), url: url, category: formData.category }
           : link
       ));
       if (!categoryOrder.includes(formData.category)) {
@@ -504,7 +500,6 @@ const Index = () => {
         name: name,
         url: url,
         category: targetCategory,
-        isPrivate: false,
         clicks: 0,
         createdAt: new Date().toISOString()
       };

@@ -100,7 +100,6 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           <div className="w-full text-center">
             <h3 className="font-semibold text-base truncate text-white">
               {link.name}
-              {link.isPrivate && <span className="ml-1 text-yellow-500">🔒</span>}
             </h3>
           </div>
         </div>

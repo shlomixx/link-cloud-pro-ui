@@ -9,7 +9,6 @@ interface LinkData {
   url?: string;
   defaultUrl?: string;
   category: string;
-  isPrivate?: boolean;
   clicks?: number;
   createdAt?: string;
   lastClicked?: string;

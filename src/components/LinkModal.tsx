@@ -14,7 +14,7 @@ interface LinkData {
   url?: string;
   defaultUrl?: string;
   category: string;
-  isPrivate?: boolean;
+  
   clicks?: number;
   createdAt?: string;
   isFavorite?: boolean;
@@ -25,7 +25,6 @@ interface FormData {
   name: string;
   url: string;
   category: string;
-  isPrivate: boolean;
 }
 
 interface LinkModalProps {
@@ -122,19 +121,6 @@ export const LinkModal: React.FC<LinkModalProps> = ({
           </TabsContent>
           
           <TabsContent value="advanced" className="space-y-4 mt-4">
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="private"
-                checked={formData.isPrivate}
-                onCheckedChange={(checked) => onFormDataChange({ ...formData, isPrivate: checked })}
-              />
-              <Label htmlFor="private" className="text-slate-300">
-                Private Link
-              </Label>
-            </div>
-            <p className="text-sm text-slate-400">
-              Private links are only visible when "Show Private Links" is enabled.
-            </p>
           </TabsContent>
         </Tabs>
         

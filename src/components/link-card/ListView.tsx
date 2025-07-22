@@ -99,7 +99,6 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
                 <h3 className="font-semibold text-lg text-white">
                   {link.name}
                 </h3>
-                {link.isPrivate && <span className="text-yellow-500">🔒</span>}
               </div>
             </div>
           </div>
