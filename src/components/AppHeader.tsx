@@ -31,7 +31,7 @@ export function AppHeader(props: AppHeaderProps) {
         
         {/* Centered Title with updated font and color */}
         <h1 className="text-4xl font-normal text-white tracking-wide text-center flex-grow">
-          All Your Favorite Links in One Place
+          Link Router Pro
         </h1>
         
         {/* Menu Button */}
