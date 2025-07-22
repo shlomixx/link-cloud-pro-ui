@@ -17,17 +17,22 @@
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
     
+    <!-- DNS prefetch for popular domains -->
+    <link rel="dns-prefetch" href="//chatgpt.com">
+    <link rel="dns-prefetch" href="//gemini.google.com">
+    <link rel="dns-prefetch" href="//claude.ai">
+    <link rel="dns-prefetch" href="//gmail.com">
+    <link rel="dns-prefetch" href="//youtube.com">
+    <link rel="dns-prefetch" href="//facebook.com">
+    <link rel="dns-prefetch" href="//instagram.com">
+    <link rel="dns-prefetch" href="//twitter.com">
+    <link rel="dns-prefetch" href="//linkedin.com">
+    
+    <!-- Font preloading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <link rel="preconnect" href="https://www.google.com">
-    <link rel="preconnect" href="https://t0.gstatic.com">
-    <link rel="preconnect" href="https://t1.gstatic.com">
-    <link rel="preconnect" href="https://t2.gstatic.com">
-    <link rel="preconnect" href="https://t3.gstatic.com">
-    
-    <!-- Optimized font loading - immediate load instead of lazy -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap&subset=latin">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap"></noscript>
     
     <!-- Inline critical CSS to prevent white screen -->
     <style>
@@ -78,7 +83,7 @@
   <body>
     <div id="root">
       <!-- Loading fallback that will be replaced by React -->
-      <div class="loading-fallback">
+      <div id="loading-fallback" class="loading-fallback">
         <div class="loading-spinner"></div>
       </div>
     </div>
