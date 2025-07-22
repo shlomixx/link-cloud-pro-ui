@@ -26,7 +26,6 @@ const Index = () => {
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [clickedLink, setClickedLink] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isCompactHeader, setIsCompactHeader] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [quickFilter, setQuickFilter] = useState<string>('all');
@@ -159,52 +158,41 @@ const Index = () => {
   // Preload favicons for better performance
   useFaviconPreloader(linksData);
 
+  // Simplified loading mechanism - load data immediately without loading state
   useEffect(() => {
-    setIsLoading(true);
     const saved = localStorage.getItem('linkRouterData');
     const savedSettings = localStorage.getItem('linkRouterSettings');
     
-    // Use requestIdleCallback for non-critical loading
-    const loadData = () => {
-      const preferredOrder = ['daily', 'society', 'tools'];
-      if (saved) {
-        try {
-          const loadedData = JSON.parse(saved);
-          let loadedLinks = Array.isArray(loadedData) ? loadedData : loadedData.linksData;
-          setLinksData(loadedLinks);
-          const allCategories = Array.from(new Set(loadedLinks.map((link: LinkData) => link.category))) as string[];
-          const remainingCategories = allCategories.filter((c: string) => !preferredOrder.includes(c));
-          setCategoryOrder([...preferredOrder, ...remainingCategories]);
-        } catch (error) {
-          console.error('Error loading saved links:', error);
-          toast.error('Failed to load saved links');
-        }
-      } else {
-        const allCategories = Array.from(new Set(linksData.map(link => link.category)));
-        const remainingCategories = allCategories.filter(c => !preferredOrder.includes(c));
+    const preferredOrder = ['daily', 'society', 'tools'];
+    if (saved) {
+      try {
+        const loadedData = JSON.parse(saved);
+        let loadedLinks = Array.isArray(loadedData) ? loadedData : loadedData.linksData;
+        setLinksData(loadedLinks);
+        const allCategories = Array.from(new Set(loadedLinks.map((link: LinkData) => link.category))) as string[];
+        const remainingCategories = allCategories.filter((c: string) => !preferredOrder.includes(c));
         setCategoryOrder([...preferredOrder, ...remainingCategories]);
+      } catch (error) {
+        console.error('Error loading saved links:', error);
+        toast.error('Failed to load saved links');
       }
-      
-      if (savedSettings) {
-        try {
-          const settings = JSON.parse(savedSettings);
-          
-          setViewMode(settings.viewMode ?? 'compact');
-          setSortBy(settings.sortBy ?? 'custom');
-          setShowPrivateLinks(settings.showPrivateLinks ?? true);
-          setIsCompactHeader(settings.isCompactHeader ?? false);
-        } catch (error) {
-          console.error('Error loading settings:', error);
-        }
-      }
-      setIsLoading(false);
-    };
-
-    // Use requestIdleCallback if available, otherwise setTimeout
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(loadData);
     } else {
-      setTimeout(loadData, 100);
+      const allCategories = Array.from(new Set(linksData.map(link => link.category)));
+      const remainingCategories = allCategories.filter(c => !preferredOrder.includes(c));
+      setCategoryOrder([...preferredOrder, ...remainingCategories]);
+    }
+    
+    if (savedSettings) {
+      try {
+        const settings = JSON.parse(savedSettings);
+        
+        setViewMode(settings.viewMode ?? 'compact');
+        setSortBy(settings.sortBy ?? 'custom');
+        setShowPrivateLinks(settings.showPrivateLinks ?? true);
+        setIsCompactHeader(settings.isCompactHeader ?? false);
+      } catch (error) {
+        console.error('Error loading settings:', error);
+      }
     }
   }, []);
 
@@ -409,8 +397,6 @@ const Index = () => {
       return;
     }
 
-    setIsLoading(true);
-
     await new Promise(resolve => setTimeout(resolve, 500));
 
     let url = formData.url.trim();
@@ -451,7 +437,6 @@ const Index = () => {
       toast.success(`${formData.name} updated successfully!`);
     }
 
-    setIsLoading(false);
     closeModal();
   };
 
@@ -582,19 +567,6 @@ const Index = () => {
     return new Date(link.createdAt || '') > weekAgo;
   });
   const popularLinks = linksData.filter(link => (link.clicks || 0) > 20);
-
-  if (isLoading) {
-    return (
-      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 bg-background`}>
-        <div className="text-center space-y-4">
-          <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full mx-auto"></div>
-          <p className={`text-lg text-foreground`}>
-            Loading your links...
-          </p>
-        </div>
-      </div>
-    );
-  }
   
   return (
     <div className={`min-h-screen transition-all duration-500 bg-background`}>
@@ -700,7 +672,7 @@ const Index = () => {
               closeModal();
             }
           }}
-          isLoading={isLoading}
+          isLoading={false}
           categoryLabels={categoryLabels}
         />
 
