@@ -9,14 +9,8 @@ import { useFaviconPreloader } from '@/hooks/useFaviconPreloader';
 import { debounce } from '@/utils/performanceOptimizations';
 
 // Lazy load heavy components
-const LazyLinkModal = React.lazy(async () => {
-  const module = await import('@/components/LazyLinkModal');
-  return { default: module.LazyLinkModal };
-});
-const LazyKeyboardShortcuts = React.lazy(async () => {
-  const module = await import('@/components/LazyKeyboardShortcuts');
-  return { default: module.LazyKeyboardShortcuts };
-});
+const LazyLinkModal = React.lazy(() => import('@/components/LazyLinkModal').then(module => ({ default: module.LazyLinkModal })));
+const LazyKeyboardShortcuts = React.lazy(() => import('@/components/LazyKeyboardShortcuts').then(module => ({ default: module.LazyKeyboardShortcuts })));
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
