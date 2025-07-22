@@ -13,7 +13,7 @@ export interface LinkData {
 
 export interface BaseLinkCardProps {
   link: LinkData;
-  viewMode: 'grid' | 'list' | 'compact' | 'dense';
+  
   
   hoveredLink: string | null;
   clickedLink: string | null;

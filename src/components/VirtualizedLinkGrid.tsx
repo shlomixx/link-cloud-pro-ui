@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { FixedSizeGrid as Grid } from 'react-window';
-import { LinkData, ViewMode } from '@/types';
+import { LinkData } from '@/types';
 import { LinkCard } from '@/components/LinkCard';
 
 interface VirtualizedLinkGridProps {
   links: LinkData[];
-  viewMode: ViewMode;
+  
   onLinkClick: (link: LinkData) => void;
   onMouseEnter: (linkKey: string) => void;
   onMouseLeave: (linkKey: string) => void;
@@ -24,7 +24,6 @@ interface VirtualizedLinkGridProps {
 
 export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
   links,
-  viewMode,
   onLinkClick,
   onMouseEnter,
   onMouseLeave,
@@ -43,21 +42,8 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
   const { columnCount, rowCount, itemData } = useMemo(() => {
     // Calculate grid dimensions based on viewport and view mode
     const containerWidth = window.innerWidth - 64; // Account for padding
-    let itemWidth: number;
-    
-    switch (viewMode) {
-      case 'grid':
-        itemWidth = linkSize + 16; // Link size + gap
-        break;
-      case 'compact':
-        itemWidth = Math.max(100, linkSize * 0.8);
-        break;
-      case 'dense':
-        itemWidth = Math.max(80, linkSize * 0.6);
-        break;
-      default:
-        itemWidth = 200;
-    }
+    // Fixed to compact view
+    const itemWidth = Math.max(100, linkSize * 0.8);
     
     const cols = Math.max(1, Math.floor(containerWidth / itemWidth));
     const rows = Math.ceil(links.length / cols);
@@ -68,7 +54,6 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
       itemData: {
         links,
         columnCount: cols,
-        viewMode,
         onLinkClick,
         onMouseEnter,
         onMouseLeave,
@@ -85,7 +70,7 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
         onChangeCategory
       }
     };
-  }, [links, viewMode, linkSize, onLinkClick, onMouseEnter, onMouseLeave, onToggleFavorite, onEditLink, onCopyLink, onDeleteLink, onDragStart, onAdd, categories, hoveredLink, clickedLink, onChangeCategory]);
+  }, [links, linkSize, onLinkClick, onMouseEnter, onMouseLeave, onToggleFavorite, onEditLink, onCopyLink, onDeleteLink, onDragStart, onAdd, categories, hoveredLink, clickedLink, onChangeCategory]);
 
   const Cell = ({ columnIndex, rowIndex, style, data }: any) => {
     const { links, columnCount } = data;
@@ -99,7 +84,6 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
         <div className="p-1">
           <LinkCard
             link={link}
-            viewMode={data.viewMode}
             hoveredLink={data.hoveredLink}
             clickedLink={data.clickedLink}
             categories={data.categories}
@@ -123,17 +107,12 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
   // Only virtualize if we have many links (>20) to reduce DOM size
   if (links.length <= 20) {
     return (
-      <div className={`grid gap-2 ${
-        viewMode === 'grid' ? 'grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12' :
-        viewMode === 'compact' ? 'grid-cols-5 sm:grid-cols-7 md:grid-cols-9 lg:grid-cols-11 xl:grid-cols-13' :
-        viewMode === 'dense' ? 'grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14' :
-        'grid-cols-1'
-      }`}>
+      <div className="grid gap-2 grid-cols-5 sm:grid-cols-7 md:grid-cols-9 lg:grid-cols-11 xl:grid-cols-13">
         {links.map((link) => (
           <LinkCard
             key={link.key}
             link={link}
-            viewMode={viewMode}
+            
             hoveredLink={hoveredLink}
             clickedLink={clickedLink}
             categories={categories}
@@ -154,7 +133,7 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
     );
   }
 
-  const itemHeight = viewMode === 'dense' ? 60 : viewMode === 'compact' ? 80 : 100;
+  const itemHeight = 80; // Fixed to compact height
   const containerHeight = Math.min(600, rowCount * itemHeight); // Max height to prevent excessive scrolling
 
   return (

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
-import { LinkData, FormData, ViewMode, SortBy } from '@/types';
+import { LinkData, FormData, SortBy } from '@/types';
 import { useFaviconPreloader } from '@/hooks/useFaviconPreloader';
 import { debounce } from '@/utils/performanceOptimizations';
 
@@ -18,11 +18,8 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<LinkData | null>(null);
   const [isNewLink, setIsNewLink] = useState(false);
-  const viewMode: ViewMode = 'compact'; // Fixed to compact view
-  
   const [sortBy, setSortBy] = useState<SortBy>('custom');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const showPrivateLinks = true; // Always show private links
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [clickedLink, setClickedLink] = useState<string | null>(null);
@@ -260,7 +257,7 @@ const Index = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [viewMode, isModalOpen, searchTerm, isCompactHeader, showShortcuts]);
+  }, [isModalOpen, searchTerm, isCompactHeader, showShortcuts]);
 
   useEffect(() => {
     if (sortBy === 'custom') return; // Don't sort if we are in custom mode
@@ -325,7 +322,6 @@ const Index = () => {
   };
 
   const filteredLinks = linksData.filter(link => {
-    if (!showPrivateLinks && link.isPrivate) return false;
     if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
     
     if (quickFilter === 'recent') {
@@ -580,7 +576,6 @@ const Index = () => {
                 links={links}
                 categoryLabels={categoryLabels}
                 categoryColors={categoryColors}
-                viewMode={viewMode}
                 draggedItem={draggedItem}
                 hoveredLink={hoveredLink}
                 clickedLink={clickedLink}

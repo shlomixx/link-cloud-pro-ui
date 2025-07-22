@@ -20,7 +20,7 @@ interface CategorySectionProps {
   links: LinkData[];
   categoryLabels: Record<string, string>;
   categoryColors: Record<string, string>;
-  viewMode: 'grid' | 'list' | 'compact' | 'dense';
+  
   
   draggedItem: string | null;
   hoveredLink: string | null;
@@ -46,7 +46,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   links,
   categoryLabels,
   categoryColors,
-  viewMode,
+  
   
   draggedItem,
   hoveredLink,
@@ -71,33 +71,11 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
 
   const getGridClasses = () => {
-    switch (viewMode) {
-      case 'dense':
-        return 'grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16 gap-1';
-      case 'compact':
-        return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-2';
-      case 'grid':
-        return 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-3';
-      case 'list':
-        return 'flex flex-col gap-1';
-      default:
-        return 'grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-2';
-    }
+    return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-2';
   };
 
   const getMobileGridClasses = () => {
-    switch (viewMode) {
-      case 'dense':
-        return 'grid grid-cols-5 gap-1 px-6 py-2';
-      case 'compact':
-        return 'grid grid-cols-5 gap-1 px-6 py-2';
-      case 'grid':
-        return 'grid grid-cols-5 gap-1 px-6 py-2';
-      case 'list':
-        return 'flex flex-col gap-1 px-6 py-2';
-      default:
-        return 'grid grid-cols-5 gap-1 px-6 py-2';
-    }
+    return 'grid grid-cols-5 gap-1 px-6 py-2';
   };
 
   const getMobileSeparator = () => {
@@ -257,7 +235,6 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
             >
               <LinkCard
                 link={link}
-                viewMode={viewMode}
                 hoveredLink={hoveredLink}
                 clickedLink={clickedLink}
                 onMouseEnter={() => onMouseEnter(link.key)}
@@ -297,7 +274,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
             >
               <LinkCard
                 link={link}
-                viewMode={viewMode}
+                
                 
                 hoveredLink={hoveredLink}
                 clickedLink={clickedLink}

@@ -12,18 +12,6 @@ export type { LinkData } from './link-card/types';
 interface LinkCardProps extends BaseLinkCardProps {}
 
 export const LinkCard: React.FC<LinkCardProps> = (props) => {
-  const { viewMode } = props;
-
-  switch (viewMode) {
-    case 'dense':
-      return <DenseView {...props} />;
-    case 'compact':
-      return <CompactView {...props} />;
-    case 'grid':
-      return <GridView {...props} />;
-    case 'list':
-      return <ListView {...props} />;
-    default:
-      return <CompactView {...props} />;
-  }
+  // Fixed to compact view
+  return <CompactView {...props} />;
 };
