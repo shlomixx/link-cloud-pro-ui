@@ -72,7 +72,19 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
     };
   }, [links, linkSize, onLinkClick, onMouseEnter, onMouseLeave, onToggleFavorite, onEditLink, onCopyLink, onDeleteLink, onDragStart, onAdd, categories, hoveredLink, clickedLink, onChangeCategory]);
 
-  const Cell = ({ columnIndex, rowIndex, style, data }: any) => {
+interface CellData {
+  links: LinkData[];
+  columnCount: number;
+}
+
+interface CellProps {
+  columnIndex: number;
+  rowIndex: number;
+  style: React.CSSProperties;
+  data: CellData;
+}
+
+  const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
     const { links, columnCount } = data;
     const linkIndex = rowIndex * columnCount + columnIndex;
     const link = links[linkIndex];
