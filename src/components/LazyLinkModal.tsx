@@ -11,7 +11,7 @@ interface LazyLinkModalProps {
     url: string;
     category: string;
   };
-  onFormDataChange: (data: any) => void;
+  onFormDataChange: (data: unknown) => void;
   onSave: () => void;
   onDelete: () => void;
   isLoading: boolean;
@@ -36,3 +36,10 @@ export const LazyLinkModal: React.FC<LazyLinkModalProps> = (props) => {
     </Suspense>
   );
 };
+
+// Simplified version for when no modal is needed
+export const SimpleLazyLinkModal: React.FC = () => {
+  return null;
+};
+
+export default SimpleLazyLinkModal;

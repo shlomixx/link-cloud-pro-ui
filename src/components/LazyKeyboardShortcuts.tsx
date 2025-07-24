@@ -25,3 +25,10 @@ export const LazyKeyboardShortcuts: React.FC<LazyKeyboardShortcutsProps> = (prop
     </Suspense>
   );
 };
+
+// Simplified version for when no shortcuts are needed
+export const SimpleKeyboardShortcuts: React.FC = () => {
+  return null;
+};
+
+export default SimpleKeyboardShortcuts;
