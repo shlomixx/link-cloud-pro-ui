@@ -1,7 +1,32 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, CSSProperties } from 'react';
 import { FixedSizeGrid as Grid } from 'react-window';
 import { LinkData } from '@/types';
 import { LinkCard } from '@/components/LinkCard';
+
+interface CellData {
+  links: LinkData[];
+  columnCount: number;
+  hoveredLink: string | null;
+  clickedLink: string | null;
+  categories: Array<[string, LinkData[]]>;
+  onMouseEnter: (linkKey: string) => void;
+  onMouseLeave: (linkKey: string) => void;
+  onLinkClick: (link: LinkData) => void;
+  onToggleFavorite: (e: React.MouseEvent, linkKey: string) => void;
+  onEditLink: (link: LinkData) => void;
+  onCopyLink: (link: LinkData) => void;
+  onDeleteLink: (linkKey: string) => void;
+  onDragStart: (e: React.DragEvent, link: LinkData) => void;
+  onAdd: () => void;
+  onChangeCategory: (linkKey: string, newCategory: string) => void;
+}
+
+interface CellProps {
+  columnIndex: number;
+  rowIndex: number;
+  style: CSSProperties;
+  data: CellData;
+}
 
 interface VirtualizedLinkGridProps {
   links: LinkData[];
@@ -72,7 +97,7 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
     };
   }, [links, linkSize, onLinkClick, onMouseEnter, onMouseLeave, onToggleFavorite, onEditLink, onCopyLink, onDeleteLink, onDragStart, onAdd, categories, hoveredLink, clickedLink, onChangeCategory]);
 
-  const Cell = ({ columnIndex, rowIndex, style, data }: any) => {
+  const Cell = ({ columnIndex, rowIndex, style, data }: CellProps) => {
     const { links, columnCount } = data;
     const linkIndex = rowIndex * columnCount + columnIndex;
     const link = links[linkIndex];

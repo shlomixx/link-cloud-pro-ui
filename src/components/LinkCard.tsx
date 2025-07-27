@@ -9,9 +9,7 @@ import { ListView } from './link-card/ListView';
 // Re-export types for backward compatibility
 export type { LinkData } from './link-card/types';
 
-interface LinkCardProps extends BaseLinkCardProps {}
-
-export const LinkCard: React.FC<LinkCardProps> = (props) => {
+export const LinkCard: React.FC<BaseLinkCardProps> = (props) => {
   // Fixed to compact view
   return <CompactView {...props} />;
 };

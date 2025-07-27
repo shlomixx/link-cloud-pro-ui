@@ -1,4 +1,5 @@
 import React, { lazy, Suspense } from 'react';
+import type { FormData } from '@/types';
 
 const LinkModal = lazy(() => import('./LinkModal').then(module => ({ default: module.LinkModal })));
 
@@ -11,7 +12,7 @@ interface LazyLinkModalProps {
     url: string;
     category: string;
   };
-  onFormDataChange: (data: any) => void;
+  onFormDataChange: (data: FormData) => void;
   onSave: () => void;
   onDelete: () => void;
   isLoading: boolean;
