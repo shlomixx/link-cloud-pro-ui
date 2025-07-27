@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import ImageDescriptionTool from '@/components/ImageDescriptionTool';
 
 function Index() {
   return (
@@ -8,9 +8,7 @@ function Index() {
           Link Cloud Pro - Image Description Tool
         </h1>
         
-        <div className="text-center text-gray-400">
-          <p>Upload an image to get an AI-powered description.</p>
-        </div>
+        <ImageDescriptionTool />
       </div>
     </div>
   );
