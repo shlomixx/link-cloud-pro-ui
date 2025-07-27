@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Settings,
   Keyboard,
   Plus,
+  FolderPlus,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,15 +17,35 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 interface AppHeaderProps {
   onAddLink: () => void;
   onShowShortcuts: () => void;
+  onAddCategory: (categoryName: string) => void;
   linkSize: number;
   onLinkSizeChange: (size: number) => void;
 }
 
 export function AppHeader(props: AppHeaderProps) {
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+
+  const handleAddCategory = () => {
+    if (newCategoryName.trim()) {
+      props.onAddCategory(newCategoryName.trim());
+      setNewCategoryName('');
+      setIsAddCategoryOpen(false);
+    }
+  };
   return (
     <header className="pt-16 pb-8">
       <div className="container mx-auto flex items-center justify-between">
@@ -53,6 +76,58 @@ export function AppHeader(props: AppHeaderProps) {
                 <Plus className="mr-2 h-4 w-4" />
                 <span>Add New Link</span>
               </DropdownMenuItem>
+
+              <Dialog open={isAddCategoryOpen} onOpenChange={setIsAddCategoryOpen}>
+                <DialogTrigger asChild>
+                  <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="rounded-md">
+                    <FolderPlus className="mr-2 h-4 w-4" />
+                    <span>Add New Category</span>
+                  </DropdownMenuItem>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Add New Category</DialogTitle>
+                    <DialogDescription>
+                      Create a new category to organize your links.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="category-name" className="text-right">
+                        Name
+                      </Label>
+                      <Input
+                        id="category-name"
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        placeholder="Enter category name"
+                        className="col-span-3"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            handleAddCategory();
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={() => setIsAddCategoryOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      type="button" 
+                      onClick={handleAddCategory}
+                      disabled={!newCategoryName.trim()}
+                    >
+                      Add Category
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
 
               <DropdownMenuSeparator className="bg-slate-700/50" />
               

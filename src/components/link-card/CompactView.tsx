@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, GripVertical, Plus, X } from 'lucide-react';
+import { Star, GripVertical, Plus, X, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
@@ -27,6 +27,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
   const isClicked = clickedLink === link.key;
   const isDesktop = useIsDesktop();
   const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleMouseEnter = () => {
     onMouseEnter();
@@ -38,7 +39,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
     setIsHovered(false);
   };
 
-  const handleAdd = onAdd ? onAdd : () => console.log('Add action triggered');
+  const handleAdd = onAdd ? () => onAdd(link.category) : () => console.log('Add action triggered for category:', link.category);
 
   const containerSize = linkSize;
   const iconContainerSize = containerSize * 0.7;
@@ -51,40 +52,37 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={onLinkClick}
-          {...(isDesktop ? { 
-            draggable: "true",
-            onDragStart: (e: React.DragEvent) => {
-              e.stopPropagation();
-              e.dataTransfer.setData('application/json', JSON.stringify({ type: 'link', key: link.key }));
-              e.dataTransfer.effectAllowed = 'move';
-              onDragStart?.();
-            }
-          } : {})}
           className={`
-            group relative flex flex-col items-center gap-2 p-3 cursor-pointer
-            transition-all duration-300 hover:scale-105 hover:translate-y-[-2px]
-            ${isClicked ? 'scale-95' : ''}
-            ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
+            group relative flex flex-col items-center gap-4 p-5 cursor-pointer rounded-2xl
+            ${isDragging ? 'opacity-50' : ''}
           `}
           style={{ minWidth: `${containerSize}px`, maxWidth: `${containerSize}px` }}
         >
           {isHovered && (
-             <div className="absolute top-0 left-0 flex flex-col gap-0.5 z-20">
+            <div className="absolute -top-2 -right-2 z-20 opacity-0 group-hover:opacity-100 transition-all duration-200">
               <Button
                 size="icon"
                 variant="ghost"
-                className="h-5 w-5"
+                className="h-7 w-7 bg-gradient-to-br from-slate-600/80 to-slate-700/80 hover:from-slate-500/90 hover:to-slate-600/90 rounded-full shadow-lg backdrop-blur-sm"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onDelete?.();
+                  e.preventDefault();
+                  // Trigger context menu programmatically
+                  const contextMenuEvent = new MouseEvent('contextmenu', {
+                    bubbles: true,
+                    cancelable: true,
+                    clientX: e.clientX,
+                    clientY: e.clientY
+                  });
+                  e.currentTarget.parentElement?.parentElement?.dispatchEvent(contextMenuEvent);
                 }}
               >
-                <X className="h-3 w-3" />
+                <MoreVertical className="h-3.5 w-3.5 text-white drop-shadow-sm" />
               </Button>
             </div>
           )}
           <div className="relative">
-            <div className="rounded-xl flex items-center justify-center transition-all duration-300" style={{ width: `${iconContainerSize}px`, height: `${iconContainerSize}px`}}>
+            <div className="rounded-xl flex items-center justify-center" style={{ width: `${iconContainerSize}px`, height: `${iconContainerSize}px`}}>
               <img
                 src={getFaviconUrl(link.url || link.defaultUrl || '')}
                 alt=""
@@ -97,7 +95,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             </div>
           </div>
           
-          <span className="text-white/90 text-base text-center truncate w-full font-medium group-hover:text-white transition-all duration-200">
+          <span className="text-white/90 text-base text-center truncate w-full font-medium">
             {link.name}
           </span>
         </div>

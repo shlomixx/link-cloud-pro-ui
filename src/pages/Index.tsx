@@ -26,7 +26,6 @@ const Index = () => {
   const [isNewLink, setIsNewLink] = useState(false);
   const [sortBy, setSortBy] = useState<SortBy>('custom');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [clickedLink, setClickedLink] = useState<string | null>(null);
   const [isCompactHeader, setIsCompactHeader] = useState(false);
@@ -133,19 +132,19 @@ const Index = () => {
     { key: 'tools-canva-3', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
   ]);
 
-  const categoryLabels = {
+  const [categoryLabels, setCategoryLabels] = useState({
     daily: 'My Daily Links',
     society: 'Social Media Platforms',
     tools: 'Productivity Tools',
     custom: 'Custom Links'
-  };
+  });
 
-  const categoryColors = {
-    daily: 'from-blue-500 to-cyan-500',
-    society: 'from-green-500 to-emerald-500',
-    tools: 'from-gray-600 to-gray-800',
-    custom: 'from-slate-600 to-gray-700'
-  };
+  const [categoryColors, setCategoryColors] = useState({
+    daily: 'from-blue-400 to-blue-600',
+    society: 'from-emerald-400 to-emerald-600',
+    tools: 'from-violet-400 to-violet-600',
+    custom: 'from-slate-400 to-slate-600'
+  });
 
   // Debounced search to improve performance
   const debouncedSetSearch = useMemo(
@@ -164,8 +163,25 @@ const Index = () => {
   useEffect(() => {
     const saved = localStorage.getItem('linkRouterData');
     const savedSettings = localStorage.getItem('linkRouterSettings');
+    const savedCategories = localStorage.getItem('linkRouterCategories');
     
     const preferredOrder = ['daily', 'society', 'tools'];
+    
+    // Load categories first
+    if (savedCategories) {
+      try {
+        const categoriesData = JSON.parse(savedCategories);
+        if (categoriesData.labels) {
+          setCategoryLabels(categoriesData.labels);
+        }
+        if (categoriesData.colors) {
+          setCategoryColors(categoriesData.colors);
+        }
+      } catch (error) {
+        console.error('Error loading saved categories:', error);
+      }
+    }
+    
     if (saved) {
       try {
         const loadedData = JSON.parse(saved);
@@ -207,6 +223,15 @@ const Index = () => {
   useEffect(() => {
     localStorage.setItem('linkRouterData', JSON.stringify(linksData));
   }, [linksData]);
+
+  // Save categories when they change
+  useEffect(() => {
+    const categoriesData = {
+      labels: categoryLabels,
+      colors: categoryColors
+    };
+    localStorage.setItem('linkRouterCategories', JSON.stringify(categoriesData));
+  }, [categoryLabels, categoryColors]);
 
   useEffect(() => {
     const settings = { sortBy, isCompactHeader };
@@ -354,11 +379,20 @@ const Index = () => {
 
   const groupedLinks = categoryOrder.reduce((acc, category) => {
     const linksForCategory = filteredLinks.filter(link => link.category === category);
-    if (linksForCategory.length > 0) {
+    // Always include category if it exists in categoryLabels, even if empty
+    if (categoryLabels[category as keyof typeof categoryLabels]) {
       acc[category] = linksForCategory;
     }
     return acc;
   }, {} as Record<string, LinkData[]>);
+
+  // Also include any new categories that might not be in categoryOrder yet
+  Object.keys(categoryLabels).forEach(category => {
+    if (!groupedLinks[category]) {
+      const linksForCategory = filteredLinks.filter(link => link.category === category);
+      groupedLinks[category] = linksForCategory;
+    }
+  });
 
   const openModal = (link?: LinkData, presetCategory?: string) => {
     if (link) {
@@ -436,6 +470,39 @@ const Index = () => {
     closeModal();
   };
 
+  const handleAddCategory = (categoryName: string) => {
+    // Create a unique category key from the name
+    const categoryKey = categoryName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    
+    // Check if category already exists
+    if (categoryLabels[categoryKey as keyof typeof categoryLabels]) {
+      toast.error('Category already exists!');
+      return;
+    }
+
+    // Add new category to labels
+    setCategoryLabels(prev => ({
+      ...prev,
+      [categoryKey]: categoryName
+    }));
+
+    // Add new category to colors (using a default color)
+    setCategoryColors(prev => ({
+      ...prev,
+      [categoryKey]: 'from-purple-500 to-pink-500'
+    }));
+
+    // Add category to order at the end if not already there
+    setCategoryOrder(prev => {
+      if (!prev.includes(categoryKey)) {
+        return [...prev, categoryKey];
+      }
+      return prev;
+    });
+
+    toast.success(`Category "${categoryName}" added successfully!`);
+  };
+
   const handleDeleteLink = (linkKey: string) => {
     const linkToDelete = linksData.find((link) => link.key === linkKey);
     if (linkToDelete) {
@@ -479,70 +546,27 @@ const Index = () => {
     }
   };
 
-  const handleDragStart = (key: string) => {
-    setDraggedItem(key);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: React.DragEvent, targetCategory: string) => {
-    e.preventDefault();
-
-    const dragData = e.dataTransfer.getData('application/json');
-    if (dragData) {
-      const parsed = JSON.parse(dragData);
-      if (parsed.type === 'link' && parsed.key) {
-        setSortBy('custom');
-        setLinksData(prev => prev.map(link =>
-          link.key === parsed.key ? { ...link, category: targetCategory } : link
-        ));
-        toast.success('Link moved to new category!');
-      }
-    }
-  };
-  
-  const handleDropUrl = async (url: string, targetCategory: string) => {
-    try {
-      const urlObj = new URL(url);
-      const domain = urlObj.hostname.replace('www.', '');
-      const name = domain.charAt(0).toUpperCase() + domain.slice(1);
-
-      const newLink: LinkData = {
-        key: `dropped_${Date.now()}`,
-        name: name,
-        url: url,
-        category: targetCategory,
-        clicks: 0,
-        createdAt: new Date().toISOString()
-      };
-      
-      setSortBy('custom');
-      setLinksData(prev => [...prev, newLink]);
-      toast.success(`${name} added to ${categoryLabels[targetCategory as keyof typeof categoryLabels] || targetCategory}!`, {
-        description: 'Link created from dropped URL',
-        action: {
-          label: 'View',
-          onClick: () => window.open(url, '_blank')
-        }
-      });
-    } catch (error) {
-      toast.error('Invalid URL dropped');
-    }
-  };
-
-  const handleReorderLinks = (draggedKey: string, targetKey: string) => {
+  const handleReorderLinks = (sourceIndex: number, destinationIndex: number, category: string) => {
     setSortBy('custom');
     setLinksData(prev => {
         const newLinks = [...prev];
-        const draggedIndex = newLinks.findIndex(l => l.key === draggedKey);
-        const targetIndex = newLinks.findIndex(l => l.key === targetKey);
-
-        if (draggedIndex > -1 && targetIndex > -1) {
-            const [draggedItem] = newLinks.splice(draggedIndex, 1);
-            newLinks.splice(targetIndex, 0, draggedItem);
+        const categoryLinks = newLinks.filter(link => link.category === category);
+        const otherLinks = newLinks.filter(link => link.category !== category);
+        
+        // Find the actual indices in the full array
+        const sourceLink = categoryLinks[sourceIndex];
+        const destinationLink = categoryLinks[destinationIndex];
+        
+        if (sourceLink && destinationLink) {
+          const fullSourceIndex = newLinks.findIndex(l => l.key === sourceLink.key);
+          const fullDestinationIndex = newLinks.findIndex(l => l.key === destinationLink.key);
+          
+          if (fullSourceIndex > -1 && fullDestinationIndex > -1) {
+            const [draggedItem] = newLinks.splice(fullSourceIndex, 1);
+            newLinks.splice(fullDestinationIndex, 0, draggedItem);
+          }
         }
+        
         return newLinks;
     });
     toast.success('Link reordered!');
@@ -567,37 +591,32 @@ const Index = () => {
     <div className={`min-h-screen transition-all duration-500 bg-background`}>
         <AppHeader
           onAddLink={() => openModal()}
+          onAddCategory={handleAddCategory}
           onShowShortcuts={() => setShowShortcuts(true)}
           linkSize={linkSize}
           onLinkSizeChange={setLinkSize}
         />
 
-      <main className="container mx-auto px-6 py-2">
-        <div className="space-y-2">
+      <main className="container mx-auto px-6 py-10">
+        <div className="space-y-12">
           {Object.entries(groupedLinks).map(([category, links], index) => (
             <div
               key={category}
               className="animate-slide-up"
-              style={{ animationDelay: `${index * 100}ms` }}
             >
               <CategorySection
                 category={category}
                 links={links}
                 categoryLabels={categoryLabels}
                 categoryColors={categoryColors}
-                draggedItem={draggedItem}
                 hoveredLink={hoveredLink}
                 clickedLink={clickedLink}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
                 onLinkClick={handleLinkClick}
                 onEditLink={openModal}
                 onCopyUrl={copyLinkUrl}
                 onMouseEnter={setHoveredLink}
                 onMouseLeave={() => setHoveredLink(null)}
-                onDragStart={handleDragStart}
                 onAddLink={(category) => openModal(undefined, category)}
-                onDropUrl={handleDropUrl}
                 onReorderLinks={handleReorderLinks}
                 onDeleteLink={handleDeleteLink}
                 onToggleFavorite={handleToggleFavorite}

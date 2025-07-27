@@ -14,7 +14,7 @@ interface VirtualizedLinkGridProps {
   onCopyLink: (link: LinkData) => void;
   onDeleteLink: (linkKey: string) => void;
   onDragStart: (linkKey: string) => void;
-  onAdd: () => void;
+  onAdd: (category: string) => void;
   categories: string[];
   hoveredLink: string | null;
   clickedLink: string | null;
@@ -94,7 +94,7 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
             onEdit={() => data.onEditLink(link)}
             onCopyUrl={() => data.onCopyLink(link)}
             onDelete={() => data.onDeleteLink(link.key)}
-            onAdd={data.onAdd}
+            onAdd={() => onAdd && onAdd(link.category)}
             onChangeCategory={(newCategory) => data.onChangeCategory(link.key, newCategory)}
             onDragStart={() => data.onDragStart?.(link.key)}
             linkSize={data.linkSize}
@@ -123,7 +123,7 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
             onEdit={() => onEditLink(link)}
             onCopyUrl={() => onCopyLink(link)}
             onDelete={() => onDeleteLink(link.key)}
-            onAdd={onAdd}
+            onAdd={() => onAdd && onAdd(link.category)}
             onChangeCategory={(newCategory) => onChangeCategory(link.key, newCategory)}
             onDragStart={() => onDragStart?.(link.key)}
             linkSize={linkSize}

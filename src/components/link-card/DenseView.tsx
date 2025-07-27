@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, GripVertical, Plus, X } from 'lucide-react';
+import { Star, GripVertical, Plus, X, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -24,9 +24,9 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
   onDragStart,
   onAdd,
 }) => {
-  const isClicked = clickedLink === link.key;
   const isDesktop = useIsDesktop();
   const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleMouseEnter = () => {
     onMouseEnter();
@@ -38,7 +38,7 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
     setIsHovered(false);
   };
   
-  const handleAdd = onAdd ? onAdd : () => console.log('Add action triggered');
+  const handleAdd = onAdd ? () => onAdd(link.category) : () => console.log('Add action triggered for category:', link.category);
 
   return (
     <TooltipProvider>
@@ -50,47 +50,45 @@ export const DenseView: React.FC<BaseLinkCardProps> = ({
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onClick={onLinkClick}
-                {...(isDesktop ? { 
-                  draggable: "true",
-                  onDragStart: (e: React.DragEvent) => {
-                    e.stopPropagation();
-                    e.dataTransfer.setData('application/json', JSON.stringify({ type: 'link', key: link.key }));
-                    e.dataTransfer.effectAllowed = 'move';
-                    onDragStart?.();
-                  }
-                } : {})}
                 className={`
-                  group relative flex flex-col items-center gap-1 p-1 rounded cursor-pointer
-                  transition-all duration-200 hover:scale-110
-                  hover:bg-white/10
-                  ${isClicked ? 'scale-95' : ''}
-                  ${isDesktop ? 'cursor-grab active:cursor-grabbing' : ''}
+                  group relative flex flex-col items-center gap-3 p-4 rounded-2xl cursor-pointer
+                  ${isDragging ? 'opacity-50' : ''}
                 `}
               >
                 {isHovered && (
-                  <div className="absolute top-0 left-0 flex flex-col gap-0.5 z-20">
+                  <div className="absolute -top-2 -right-2 z-20 opacity-0 group-hover:opacity-100 transition-all duration-200">
                     <Button
                       size="icon"
                       variant="ghost"
-                      className="h-4 w-4"
+                      className="h-7 w-7 bg-gradient-to-br from-slate-600/80 to-slate-700/80 hover:from-slate-500/90 hover:to-slate-600/90 rounded-full shadow-lg backdrop-blur-sm"
                       onClick={(e) => {
                         e.stopPropagation();
-                        onDelete?.();
+                        e.preventDefault();
+                        // Trigger context menu programmatically
+                        const contextMenuEvent = new MouseEvent('contextmenu', {
+                          bubbles: true,
+                          cancelable: true,
+                          clientX: e.clientX,
+                          clientY: e.clientY
+                        });
+                        e.currentTarget.parentElement?.parentElement?.dispatchEvent(contextMenuEvent);
                       }}
                     >
-                      <X className="h-2.5 w-2.5" />
+                      <MoreVertical className="h-3.5 w-3.5 text-white drop-shadow-sm" />
                     </Button>
                   </div>
                 )}
-                <img
-                  src={getFaviconUrl(link.url || link.defaultUrl || '')}
-                  alt=""
-                  className="w-7 h-7 rounded"
-                  loading="lazy"
-                  decoding="async"
-                  onError={handleFaviconError}
-                />
-                <span className="text-sm font-medium text-center max-w-[70px] leading-tight truncate text-white">
+                <div className="relative">
+                  <img
+                    src={getFaviconUrl(link.url || link.defaultUrl || '')}
+                    alt=""
+                    className="w-10 h-10 rounded-xl shadow-sm"
+                    loading="lazy"
+                    decoding="async"
+                    onError={handleFaviconError}
+                  />
+                </div>
+                <span className="text-xs font-semibold text-center max-w-[90px] leading-tight truncate text-slate-100">
                   {link.name}
                 </span>
               </div>

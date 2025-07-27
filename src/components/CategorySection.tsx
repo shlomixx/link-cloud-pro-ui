@@ -2,6 +2,7 @@ import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
 import { Button } from '@/components/ui/button';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 interface LinkData {
   key: string;
@@ -19,24 +20,17 @@ interface CategorySectionProps {
   links: LinkData[];
   categoryLabels: Record<string, string>;
   categoryColors: Record<string, string>;
-  
-  
-  draggedItem: string | null;
   hoveredLink: string | null;
   clickedLink: string | null;
-  onDragOver: (e: React.DragEvent) => void;
-  onDrop: (e: React.DragEvent, category: string) => void;
   onLinkClick: (link: LinkData) => void;
   onEditLink: (link: LinkData) => void;
   onCopyUrl: (url: string, name: string) => void;
   onMouseEnter: (linkKey: string) => void;
   onMouseLeave: () => void;
-  onDragStart: (linkKey: string) => void;
   onAddLink: (category: string) => void;
-  onDropUrl: (url: string, category: string) => void;
-  onReorderLinks: (draggedKey: string, targetKey: string, category: string) => void;
   onDeleteLink: (linkKey: string) => void;
   onToggleFavorite: (linkKey: string) => void;
+  onReorderLinks: (sourceIndex: number, destinationIndex: number, category: string) => void;
   linkSize: number;
 }
 
@@ -45,253 +39,193 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   links,
   categoryLabels,
   categoryColors,
-  
-  
-  draggedItem,
   hoveredLink,
   clickedLink,
-  onDragOver,
-  onDrop,
   onLinkClick,
   onEditLink,
   onCopyUrl,
   onMouseEnter,
   onMouseLeave,
-  onDragStart,
   onAddLink,
-  onDropUrl,
-  onReorderLinks,
   onDeleteLink,
   onToggleFavorite,
+  onReorderLinks,
   linkSize
 }) => {
-  const [isHoveringCategory, setIsHoveringCategory] = React.useState(false);
-  const [isDragOverCategory, setIsDragOverCategory] = React.useState(false);
-  const [dragOverIndex, setDragOverIndex] = React.useState<number | null>(null);
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const sourceIndex = result.source.index;
+    const destinationIndex = result.destination.index;
+
+    if (sourceIndex !== destinationIndex) {
+      onReorderLinks(sourceIndex, destinationIndex, category);
+    }
+  };
 
   const getGridClasses = () => {
-    return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-2';
+    return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-6';
   };
 
   const getMobileGridClasses = () => {
-    return 'grid grid-cols-5 gap-1 px-6 py-2';
+    return 'grid grid-cols-5 gap-4 px-4 py-3';
   };
 
-  const getMobileSeparator = () => {
+  const getDesktopSeparator = () => (
+    <div className="mb-8">
+      <div className="flex items-center gap-4 mb-6">
+        <div className={`w-1.5 h-6 rounded-full bg-gradient-to-b ${categoryColors[category]} shadow-sm`}></div>
+        <h2 className="text-sm font-bold text-slate-200 uppercase tracking-[0.1em] drop-shadow-sm">
+          {categoryLabels[category] || category}
+        </h2>
+        <div className="flex-1 h-px bg-gradient-to-r from-slate-700/60 to-transparent"></div>
+      </div>
+    </div>
+  );
+
+  const getMobileSeparator = () => (
+    <div className="mb-6">
+      <div className="flex items-center gap-3 mb-4">
+        <div className={`w-1 h-4 rounded-full bg-gradient-to-b ${categoryColors[category]} shadow-sm`}></div>
+        <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider drop-shadow-sm">
+          {categoryLabels[category] || category}
+        </h3>
+        <div className="flex-1 h-px bg-gradient-to-r from-slate-700/40 to-transparent"></div>
+      </div>
+    </div>
+  );
+
+  const renderAddButton = () => (
+    <div 
+      className="group cursor-pointer" 
+      onClick={() => onAddLink(category)}
+    >
+      <div className="flex flex-col items-center justify-center h-20 w-20 rounded-2xl border-2 border-dashed border-slate-600/60 hover:border-slate-500/80 bg-gradient-to-br from-slate-900/20 to-slate-800/30 hover:from-slate-800/40 hover:to-slate-700/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-xl backdrop-blur-sm">
+        <Plus className="h-6 w-6 text-slate-400 group-hover:text-slate-200 transition-all duration-300 drop-shadow-sm" />
+        <span className="text-xs text-slate-500 group-hover:text-slate-300 mt-1.5 font-medium transition-all duration-300">Add Link</span>
+      </div>
+    </div>
+  );
+
+  if (links.length === 0) {
     return (
-      <div className="relative flex items-center py-1">
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-        <div className="px-4">
-          <span className="text-white text-xl font-semibold uppercase tracking-wide">
-            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-          </span>
+      <div className="animate-fade-in">
+        {/* Desktop Layout */}
+        <div className="hidden md:block mb-12">
+          {getDesktopSeparator()}
+          <div className={getGridClasses()}>
+            {renderAddButton()}
+          </div>
         </div>
-        <div className="flex-1 h-px bg-gradient-to-l from-transparent via-white/20 to-transparent" />
+
+        {/* Mobile Layout */}
+        <div className="md:hidden mb-10">
+          <div className="mx-4 mb-4">
+            {getMobileSeparator()}
+          </div>
+          <div className={getMobileGridClasses()}>
+            {renderAddButton()}
+          </div>
+        </div>
       </div>
     );
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOverCategory(true);
-    onDragOver(e);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOverCategory(false);
-    setDragOverIndex(null);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOverCategory(false);
-    setDragOverIndex(null);
-    
-    try {
-      const internalData = e.dataTransfer.getData('application/json');
-      if (internalData) {
-        const parsed = JSON.parse(internalData);
-        if (parsed.type === 'link' && parsed.key) {
-          onDrop(e, category);
-          return;
-        }
-      }
-    } catch (error) {
-      // Not internal drag data, continue
-    }
-    
-    const url = e.dataTransfer.getData('text/uri-list') || e.dataTransfer.getData('text/plain');
-    
-    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-      onDropUrl(url, category);
-    } else {
-      onDrop(e, category);
-    }
-  };
-
-  const handleLinkDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    try {
-      const dragData = e.dataTransfer.getData('application/json');
-      if (dragData) {
-        const parsed = JSON.parse(dragData);
-        if (parsed.type === 'link' && parsed.key) {
-          const draggedLink = links.find(link => link.key === parsed.key);
-          if (draggedLink && draggedLink.category === category) {
-            setDragOverIndex(index);
-          }
-        }
-      }
-    } catch (error) {
-      if (draggedItem) {
-        const draggedLink = links.find(link => link.key === draggedItem);
-        if (draggedLink && draggedLink.category === category) {
-          setDragOverIndex(index);
-        }
-      }
-    }
-  };
-
-  const handleLinkDrop = (e: React.DragEvent, targetIndex: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragOverIndex(null);
-    
-    try {
-      const dragData = e.dataTransfer.getData('application/json');
-      if (dragData) {
-        const parsed = JSON.parse(dragData);
-        
-        if (parsed.type === 'link' && parsed.key) {
-          const draggedLink = links.find(link => link.key === parsed.key);
-          const targetLink = links[targetIndex];
-          
-          if (draggedLink && targetLink && draggedLink.category === category && targetLink.category === category) {
-            onReorderLinks(parsed.key, targetLink.key, category);
-            return;
-          }
-        }
-      }
-    } catch (error) {
-      // Fallback for old drag method
-    }
-    
-    if (draggedItem) {
-      const draggedLink = links.find(link => link.key === draggedItem);
-      const targetLink = links[targetIndex];
-      
-      if (draggedLink && targetLink && draggedLink.category === category && targetLink.category === category) {
-        onReorderLinks(draggedItem, targetLink.key, category);
-        return;
-      }
-    }
-    
-    handleDrop(e);
-  };
-
-  const renderAddButton = () => {
-    return (
-      <Button
-        onClick={() => onAddLink(category)}
-        variant="ghost"
-        className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg h-full cursor-pointer hover:bg-white/5 transition-colors duration-200"
-      >
-        <Plus className="w-5 h-5 text-white" />
-        <span className="text-xs text-white/50 hover:text-white/70">Add</span>
-      </Button>
-    );
-  };
+  }
 
   return (
-    <>
-      {/* Desktop Layout - Minimalist Design */}
-      <div 
-        className="hidden md:block mb-8 animate-slide-up"
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        <div className="flex items-center justify-between mb-4 px-1">
-          <h2 className="text-3xl font-normal text-white tracking-wide">
-            {categoryLabels[category] || category.charAt(0).toUpperCase() + category.slice(1)}
-          </h2>
-          <div className="h-px flex-1 bg-gradient-to-r from-white/20 via-white/10 to-transparent ml-8" />
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <div className="animate-fade-in">
+        {/* Desktop Layout */}
+        <div className="hidden md:block mb-12">
+          {getDesktopSeparator()}
+          <Droppable droppableId={`category-${category}`} direction="horizontal">
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className={`${getGridClasses()} ${snapshot.isDraggingOver ? 'bg-gradient-to-br from-slate-800/40 to-slate-900/60 rounded-2xl p-6 border-2 border-dashed border-slate-600/60 backdrop-blur-sm' : ''} transition-all duration-300`}
+              >
+                {links.map((link, index) => (
+                  <Draggable key={link.key} draggableId={link.key} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className={`${snapshot.isDragging ? 'z-50 rotate-3 scale-110 drop-shadow-2xl' : ''} transition-all duration-300 ease-out`}
+                      >
+                        <LinkCard
+                          link={link}
+                          hoveredLink={hoveredLink}
+                          clickedLink={clickedLink}
+                          onMouseEnter={() => onMouseEnter(link.key)}
+                          onMouseLeave={onMouseLeave}
+                          onLinkClick={() => onLinkClick(link)}
+                          onToggleFavorite={(e) => {e.stopPropagation(); onToggleFavorite(link.key);}}
+                          onEdit={() => onEditLink(link)}
+                          onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+                          onDelete={() => onDeleteLink(link.key)}
+                          onAdd={(category) => onAddLink(category)}
+                          linkSize={linkSize}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+                {renderAddButton()}
+              </div>
+            )}
+          </Droppable>
         </div>
 
-        <div className={`${getGridClasses()} min-h-[120px] relative`}>
-          {links.map((link, index) => (
-            <div
-              key={link.key}
-              onDragOver={(e) => handleLinkDragOver(e, index)}
-              onDrop={(e) => handleLinkDrop(e, index)}
-              className={`relative ${dragOverIndex === index ? 'ring-2 ring-blue-400 rounded-lg' : ''}`}
-            >
-              <LinkCard
-                link={link}
-                hoveredLink={hoveredLink}
-                clickedLink={clickedLink}
-                onMouseEnter={() => onMouseEnter(link.key)}
-                onMouseLeave={onMouseLeave}
-                onLinkClick={() => onLinkClick(link)}
-                onToggleFavorite={(e) => {e.stopPropagation(); onToggleFavorite(link.key);}}
-                onEdit={() => onEditLink(link)}
-                onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
-                onDragStart={() => onDragStart(link.key)}
-                onDelete={() => onDeleteLink(link.key)}
-                linkSize={linkSize}
-              />
-            </div>
-          ))}
-          {renderAddButton()}
+        {/* Mobile Layout */}
+        <div className="md:hidden mb-10">
+          <div className="mx-4 mb-4">
+            {getMobileSeparator()}
+          </div>
+          <Droppable droppableId={`category-mobile-${category}`} direction="horizontal">
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className={`${getMobileGridClasses()} ${snapshot.isDraggingOver ? 'bg-gradient-to-br from-slate-800/40 to-slate-900/60 rounded-xl p-4 border-2 border-dashed border-slate-600/60 backdrop-blur-sm' : ''} transition-all duration-300`}
+              >
+                {links.map((link, index) => (
+                  <Draggable key={link.key} draggableId={`mobile-${link.key}`} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className={`${snapshot.isDragging ? 'z-50 rotate-2 scale-110 drop-shadow-2xl' : ''} transition-all duration-300 ease-out`}
+                      >
+                        <LinkCard
+                          link={link}
+                          hoveredLink={hoveredLink}
+                          clickedLink={clickedLink}
+                          onMouseEnter={() => onMouseEnter(link.key)}
+                          onMouseLeave={onMouseLeave}
+                          onLinkClick={() => onLinkClick(link)}
+                          onToggleFavorite={(e) => {e.stopPropagation(); onToggleFavorite(link.key);}}
+                          onEdit={() => onEditLink(link)}
+                          onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
+                          onDelete={() => onDeleteLink(link.key)}
+                          onAdd={(category) => onAddLink(category)}
+                          linkSize={linkSize}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+                {renderAddButton()}
+              </div>
+            )}
+          </Droppable>
         </div>
       </div>
-
-      {/* Mobile Layout */}
-      <div 
-        className="md:hidden mb-8 animate-fade-in"
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        <div className="mx-4 mb-4">
-          {getMobileSeparator()}
-        </div>
-
-        <div className={`${getMobileGridClasses()} relative`}>
-          {links.map((link, index) => (
-            <div
-              key={link.key}
-              onDragOver={(e) => handleLinkDragOver(e, index)}
-              onDrop={(e) => handleLinkDrop(e, index)}
-              className={`relative ${dragOverIndex === index ? 'ring-2 ring-blue-400 rounded-lg' : ''}`}
-            >
-              <LinkCard
-                link={link}
-                
-                
-                hoveredLink={hoveredLink}
-                clickedLink={clickedLink}
-                onMouseEnter={() => onMouseEnter(link.key)}
-                onMouseLeave={onMouseLeave}
-                onLinkClick={() => onLinkClick(link)}
-                onToggleFavorite={(e) => {e.stopPropagation(); onToggleFavorite(link.key);}}
-                onEdit={() => onEditLink(link)}
-                onCopyUrl={() => onCopyUrl(link.url || link.defaultUrl || '', link.name)}
-                onDragStart={() => onDragStart(link.key)}
-                onDelete={() => onDeleteLink(link.key)}
-                linkSize={linkSize}
-              />
-            </div>
-          ))}
-          {renderAddButton()}
-        </div>
-      </div>
-    </>
+    </DragDropContext>
   );
 };
