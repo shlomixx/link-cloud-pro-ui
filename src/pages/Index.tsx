@@ -20,7 +20,7 @@ function Index() {
 
   const categories = useMemo(() => {
     // ... לוגיקת יצירת הקטגוריות נשארת זהה
-    const-cats = {};
+    const cats = {};
     filteredLinks.forEach(link => {
       if (!cats[link.category]) {
         cats[link.category] = [];
