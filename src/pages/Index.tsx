@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import useLinks from '@/hooks/useLinks';
 import useFilter from '@/hooks/useFilter';
-import LazyLinkModal from '@/components/LazyLinkModal';
-import LazyKeyboardShortcuts from '@/components/LazyKeyboardShortcuts';
-import LazyCategorySection from '@/components/LazyCategorySection'; // <-- תיקון: ייבוא הקומפוננטה החדשה
+import { LazyLinkModal } from '@/components/LazyLinkModal';
+import { LazyKeyboardShortcuts } from '@/components/LazyKeyboardShortcuts';
+import LazyCategorySection from '@/components/LazyCategorySection';
 
 function Index() {
   const { data: links, isLoading } = useLinks();
@@ -20,7 +20,7 @@ function Index() {
 
   const categories = useMemo(() => {
     // ... לוגיקת יצירת הקטגוריות נשארת זהה
-    const-cats = {};
+    const cats = {};
     filteredLinks.forEach(link => {
       if (!cats[link.category]) {
         cats[link.category] = [];
@@ -53,8 +53,21 @@ function Index() {
         />
       ))}
 
-      <LazyLinkModal />
-      <LazyKeyboardShortcuts />
+      <LazyLinkModal 
+        isOpen={false}
+        onClose={() => {}}
+        isNewLink={false}
+        formData={{ name: '', url: '', category: '' }}
+        onFormDataChange={() => {}}
+        onSave={() => {}}
+        onDelete={() => {}}
+        isLoading={false}
+        categoryLabels={{}}
+      />
+      <LazyKeyboardShortcuts 
+        isOpen={false}
+        onClose={() => {}}
+      />
     </div>
   );
 }
