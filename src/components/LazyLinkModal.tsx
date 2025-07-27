@@ -1,25 +1,40 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 
 const LinkModal = lazy(() => import('./LinkModal').then(module => ({ default: module.LinkModal })));
 
-interface LazyLinkModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  isNewLink: boolean;
-  formData: {
-    name: string;
-    url: string;
-    category: string;
-  };
-  onFormDataChange: (data: any) => void;
-  onSave: () => void;
-  onDelete: () => void;
-  isLoading: boolean;
-  categoryLabels: Record<string, string>;
-}
+export const LazyLinkModal: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isNewLink, setIsNewLink] = useState(true);
+  const [formData, setFormData] = useState({
+    name: '',
+    url: '',
+    category: '',
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
-export const LazyLinkModal: React.FC<LazyLinkModalProps> = (props) => {
-  if (!props.isOpen) return null;
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleSave = () => {
+    setIsLoading(true);
+    // Mock save operation
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsOpen(false);
+    }, 1000);
+  };
+
+  const handleDelete = () => {
+    setIsLoading(true);
+    // Mock delete operation
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsOpen(false);
+    }, 1000);
+  };
+
+  if (!isOpen) return null;
 
   return (
     <Suspense fallback={
@@ -32,7 +47,17 @@ export const LazyLinkModal: React.FC<LazyLinkModalProps> = (props) => {
         </div>
       </div>
     }>
-      <LinkModal {...props} />
+      <LinkModal
+        isOpen={isOpen}
+        onClose={handleClose}
+        isNewLink={isNewLink}
+        formData={formData}
+        onFormDataChange={setFormData}
+        onSave={handleSave}
+        onDelete={handleDelete}
+        isLoading={isLoading}
+        categoryLabels={{}}
+      />
     </Suspense>
   );
 };

@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import useLinks from '@/hooks/useLinks';
 import useFilter from '@/hooks/useFilter';
-import LazyLinkModal from '@/components/LazyLinkModal';
-import LazyKeyboardShortcuts from '@/components/LazyKeyboardShortcuts';
-import LazyCategorySection from '@/components/LazyCategorySection'; // <-- תיקון: ייבוא הקומפוננטה החדשה
+import { LazyLinkModal } from '@/components/LazyLinkModal';
+import { LazyKeyboardShortcuts } from '@/components/LazyKeyboardShortcuts';
+import { LazyCategorySection } from '@/components/LazyCategorySection';
 
 function Index() {
   const { data: links, isLoading } = useLinks();

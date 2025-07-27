@@ -1,14 +1,30 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 
 const KeyboardShortcuts = lazy(() => import('./KeyboardShortcuts').then(module => ({ default: module.KeyboardShortcuts })));
 
-interface LazyKeyboardShortcutsProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+export const LazyKeyboardShortcuts: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-export const LazyKeyboardShortcuts: React.FC<LazyKeyboardShortcutsProps> = (props) => {
-  if (!props.isOpen) return null;
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  // Listen for keyboard shortcut to open (e.g., '?' key)
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === '?' && !event.metaKey && !event.ctrlKey) {
+        setIsOpen(true);
+      }
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
+  if (!isOpen) return null;
 
   return (
     <Suspense fallback={
@@ -21,7 +37,10 @@ export const LazyKeyboardShortcuts: React.FC<LazyKeyboardShortcutsProps> = (prop
         </div>
       </div>
     }>
-      <KeyboardShortcuts {...props} />
+      <KeyboardShortcuts
+        isOpen={isOpen}
+        onClose={handleClose}
+      />
     </Suspense>
   );
 };
