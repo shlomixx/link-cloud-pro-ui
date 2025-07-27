@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Star, GripVertical, Plus, X, MoreVertical } from 'lucide-react';
+import { MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
 import { getFaviconUrl, handleFaviconError } from './utils';
 import { LinkCardContextMenu } from './ContextMenuContent';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 export const CompactView: React.FC<BaseLinkCardProps> = ({
   link,
@@ -24,10 +23,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
   onAdd,
   linkSize = 90, // Default size
 }) => {
-  const isClicked = clickedLink === link.key;
-  const isDesktop = useIsDesktop();
   const [isHovered, setIsHovered] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
 
   const handleMouseEnter = () => {
     onMouseEnter();
@@ -37,11 +33,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
   const handleMouseLeave = () => {
     onMouseLeave();
     setIsHovered(false);
-  };
-
-  const handleAdd = onAdd ? () => onAdd(link.category) : () => console.log('Add action triggered for category:', link.category);
-
-  const containerSize = linkSize;
+  };  const containerSize = linkSize;
   const iconContainerSize = containerSize * 0.7;
   const iconSize = iconContainerSize * 0.7;
 
@@ -54,7 +46,6 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           onClick={onLinkClick}
           className={`
             group relative flex flex-col items-center gap-4 p-5 cursor-pointer rounded-2xl
-            ${isDragging ? 'opacity-50' : ''}
           `}
           style={{ minWidth: `${containerSize}px`, maxWidth: `${containerSize}px` }}
         >

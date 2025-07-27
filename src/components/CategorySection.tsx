@@ -2,7 +2,7 @@ import React from 'react';
 import { Plus } from 'lucide-react';
 import { LinkCard } from './LinkCard';
 import { Button } from '@/components/ui/button';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 
 interface LinkData {
   key: string;
@@ -31,7 +31,9 @@ interface CategorySectionProps {
   onDeleteLink: (linkKey: string) => void;
   onToggleFavorite: (linkKey: string) => void;
   onReorderLinks: (sourceIndex: number, destinationIndex: number, category: string) => void;
+  onMoveLinkBetweenCategories?: (linkKey: string, sourceCategory: string, destinationCategory: string, destinationIndex: number) => void;
   linkSize: number;
+  isDragDisabled?: boolean;
 }
 
 export const CategorySection: React.FC<CategorySectionProps> = ({
@@ -50,21 +52,10 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   onDeleteLink,
   onToggleFavorite,
   onReorderLinks,
-  linkSize
+  onMoveLinkBetweenCategories,
+  linkSize,
+  isDragDisabled = false
 }) => {
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return;
-    }
-
-    const sourceIndex = result.source.index;
-    const destinationIndex = result.destination.index;
-
-    if (sourceIndex !== destinationIndex) {
-      onReorderLinks(sourceIndex, destinationIndex, category);
-    }
-  };
-
   const getGridClasses = () => {
     return 'grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-14 gap-6';
   };
@@ -134,8 +125,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
   }
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="animate-fade-in">
+    <div className="animate-fade-in">
         {/* Desktop Layout */}
         <div className="hidden md:block mb-12">
           {getDesktopSeparator()}
@@ -144,7 +134,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className={`${getGridClasses()} ${snapshot.isDraggingOver ? 'bg-gradient-to-br from-slate-800/40 to-slate-900/60 rounded-2xl p-6 border-2 border-dashed border-slate-600/60 backdrop-blur-sm' : ''} transition-all duration-300`}
+                className={getGridClasses()}
               >
                 {links.map((link, index) => (
                   <Draggable key={link.key} draggableId={link.key} index={index}>
@@ -153,7 +143,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`${snapshot.isDragging ? 'z-50 rotate-3 scale-110 drop-shadow-2xl' : ''} transition-all duration-300 ease-out`}
+                        className={`${snapshot.isDragging ? 'z-50 drop-shadow-2xl' : ''}`}
                       >
                         <LinkCard
                           link={link}
@@ -190,7 +180,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className={`${getMobileGridClasses()} ${snapshot.isDraggingOver ? 'bg-gradient-to-br from-slate-800/40 to-slate-900/60 rounded-xl p-4 border-2 border-dashed border-slate-600/60 backdrop-blur-sm' : ''} transition-all duration-300`}
+                className={getMobileGridClasses()}
               >
                 {links.map((link, index) => (
                   <Draggable key={link.key} draggableId={`mobile-${link.key}`} index={index}>
@@ -199,7 +189,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`${snapshot.isDragging ? 'z-50 rotate-2 scale-110 drop-shadow-2xl' : ''} transition-all duration-300 ease-out`}
+                        className={`${snapshot.isDragging ? 'z-50 drop-shadow-2xl' : ''}`}
                       >
                         <LinkCard
                           link={link}
@@ -226,6 +216,5 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
           </Droppable>
         </div>
       </div>
-    </DragDropContext>
   );
 };

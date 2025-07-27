@@ -360,4 +360,29 @@ All colors MUST be HSL.
   .transition-bounce {
     transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
+
+  /* Fix for react-beautiful-dnd */
+  [data-rfd-drag-handle-draggable-id] {
+    transform: none !important;
+  }
+  
+  [data-rfd-draggable-context-id] {
+    transform: none !important;
+  }
+  
+  /* Ensure drag handles are properly positioned */
+  [data-rfd-drag-handle-context-id] {
+    position: relative;
+  }
+
+  /* Disable all transforms during drag */
+  [data-rfd-drag-handle-draggable-id] * {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Make sure dragged items stay close to cursor */
+  [data-rfd-drag-handle-draggable-id]:active {
+    transform: none !important;
+  }
 }

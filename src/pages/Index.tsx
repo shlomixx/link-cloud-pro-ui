@@ -7,12 +7,14 @@ import { CategorySection } from '@/components/CategorySection';
 import { LinkData, FormData, SortBy } from '@/types';
 import { useFaviconPreloader } from '@/hooks/useFaviconPreloader';
 import { debounce } from '@/utils/performanceOptimizations';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
 // Lazy load heavy components
 const LazyLinkModal = React.lazy(async () => {
   const module = await import('@/components/LazyLinkModal');
   return { default: module.LazyLinkModal };
 });
+
 const LazyKeyboardShortcuts = React.lazy(async () => {
   const module = await import('@/components/LazyKeyboardShortcuts');
   return { default: module.LazyKeyboardShortcuts };
@@ -572,6 +574,86 @@ const Index = () => {
     toast.success('Link reordered!');
   };
 
+  // New function to handle dragging between categories
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const { source, destination } = result;
+    const sourceDroppableId = source.droppableId;
+    const destinationDroppableId = destination.droppableId;
+
+    // Extract category from droppableId (format: "category-desktop-categoryName" or "category-mobile-categoryName")
+    const extractCategory = (droppableId: string) => {
+      const parts = droppableId.split('-');
+      if (parts.length >= 3) {
+        return parts.slice(2).join('-'); // Handle categories with dashes
+      }
+      return parts[parts.length - 1];
+    };
+
+    const sourceCategory = extractCategory(sourceDroppableId);
+    const destinationCategory = extractCategory(destinationDroppableId);
+
+    // Get the dragged link
+    const draggedLinkId = result.draggableId.replace('mobile-', ''); // Remove mobile prefix if exists
+    
+    if (sourceCategory === destinationCategory) {
+      // Same category - use existing reorder function
+      handleReorderLinks(source.index, destination.index, sourceCategory);
+    } else {
+      // Different category - move link between categories
+      setSortBy('custom');
+      setLinksData(prev => {
+        const newLinks = [...prev];
+        const draggedLink = newLinks.find(link => link.key === draggedLinkId);
+        
+        if (draggedLink) {
+          // Remove from source
+          const linkIndex = newLinks.findIndex(link => link.key === draggedLinkId);
+          newLinks.splice(linkIndex, 1);
+          
+          // Update category
+          const updatedLink = { ...draggedLink, category: destinationCategory };
+          
+          // Find insertion point in destination category
+          const destinationCategoryLinks = newLinks.filter(link => link.category === destinationCategory);
+          const insertIndex = Math.min(destination.index, destinationCategoryLinks.length);
+          
+          // Find the actual index in the full array to insert at
+          if (destinationCategoryLinks.length === 0) {
+            // Empty category - add at the end
+            newLinks.push(updatedLink);
+          } else if (insertIndex === 0) {
+            // Insert at beginning of category
+            const firstCategoryLinkIndex = newLinks.findIndex(link => link.category === destinationCategory);
+            newLinks.splice(firstCategoryLinkIndex, 0, updatedLink);
+          } else if (insertIndex >= destinationCategoryLinks.length) {
+            // Insert at end of category
+            const lastCategoryLinkIndex = newLinks.map((link, idx) => ({ link, idx }))
+              .filter(({ link }) => link.category === destinationCategory)
+              .pop()?.idx;
+            if (lastCategoryLinkIndex !== undefined) {
+              newLinks.splice(lastCategoryLinkIndex + 1, 0, updatedLink);
+            } else {
+              newLinks.push(updatedLink);
+            }
+          } else {
+            // Insert in middle of category
+            const targetCategoryLink = destinationCategoryLinks[insertIndex];
+            const targetIndex = newLinks.findIndex(link => link.key === targetCategoryLink.key);
+            newLinks.splice(targetIndex, 0, updatedLink);
+          }
+        }
+        
+        return newLinks;
+      });
+      
+      toast.success(`Link moved to ${categoryLabels[destinationCategory] || destinationCategory}!`);
+    }
+  };
+
 
   const copyLinkUrl = (url: string, name: string) => {
     navigator.clipboard.writeText(url);
@@ -597,31 +679,33 @@ const Index = () => {
           onLinkSizeChange={setLinkSize}
         />
 
-      <main className="container mx-auto px-6 py-10">
-        <div className="space-y-12">
-          {Object.entries(groupedLinks).map(([category, links], index) => (
-            <div
-              key={category}
-              className="animate-slide-up"
-            >
-              <CategorySection
-                category={category}
-                links={links}
-                categoryLabels={categoryLabels}
-                categoryColors={categoryColors}
-                hoveredLink={hoveredLink}
-                clickedLink={clickedLink}
-                onLinkClick={handleLinkClick}
-                onEditLink={openModal}
-                onCopyUrl={copyLinkUrl}
-                onMouseEnter={setHoveredLink}
-                onMouseLeave={() => setHoveredLink(null)}
-                onAddLink={(category) => openModal(undefined, category)}
-                onReorderLinks={handleReorderLinks}
-                onDeleteLink={handleDeleteLink}
-                onToggleFavorite={handleToggleFavorite}
-                linkSize={linkSize}
-              />
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <main className="container mx-auto px-6 py-10">
+          <div className="space-y-12">
+            {Object.entries(groupedLinks).map(([category, links], index) => (
+              <div
+                key={category}
+                className="animate-slide-up"
+              >
+                <CategorySection
+                  category={category}
+                  links={links}
+                  categoryLabels={categoryLabels}
+                  categoryColors={categoryColors}
+                  hoveredLink={hoveredLink}
+                  clickedLink={clickedLink}
+                  onLinkClick={handleLinkClick}
+                  onEditLink={openModal}
+                  onCopyUrl={copyLinkUrl}
+                  onMouseEnter={setHoveredLink}
+                  onMouseLeave={() => setHoveredLink(null)}
+                  onAddLink={(category) => openModal(undefined, category)}
+                  onReorderLinks={handleReorderLinks}
+                  onDeleteLink={handleDeleteLink}
+                  onToggleFavorite={handleToggleFavorite}
+                  linkSize={linkSize}
+                  isDragDisabled={false}
+                />
             </div>
           ))}
         </div>
@@ -664,7 +748,8 @@ const Index = () => {
             </div>
           </div>
         )}
-      </main>
+        </main>
+      </DragDropContext>
 
 
       <React.Suspense fallback={<div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full"></div></div>}>

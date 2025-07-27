@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Star, GripVertical, Plus, X, MoreVertical } from 'lucide-react';
+import { MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
 import { getFaviconUrl, handleFaviconError } from './utils';
 import { LinkCardContextMenu } from './ContextMenuContent';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 export const GridView: React.FC<BaseLinkCardProps> = ({
   link,
@@ -23,10 +22,7 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
   onDragStart,
   onAdd,
 }) => {
-  const isClicked = clickedLink === link.key;
-  const isDesktop = useIsDesktop();
   const [isHovered, setIsHovered] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
 
   const handleMouseEnter = () => {
     onMouseEnter();
@@ -36,11 +32,7 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
   const handleMouseLeave = () => {
     onMouseLeave();
     setIsHovered(false);
-  };
-
-  const handleAdd = onAdd ? () => onAdd(link.category) : () => console.log('Add action triggered for category:', link.category);
-
-  return (
+  };  return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <div
@@ -49,7 +41,6 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           onClick={onLinkClick}
           className={`
             group relative flex flex-col items-center gap-4 p-6 rounded-2xl cursor-pointer
-            ${isDragging ? 'opacity-50' : ''}
           `}
         >
           {isHovered && (

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Star, ExternalLink, GripVertical, Plus, X, MoreVertical } from 'lucide-react';
+import { MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
 import { getFaviconUrl, handleFaviconError } from './utils';
 import { LinkCardContextMenu } from './ContextMenuContent';
-import { useIsDesktop } from '@/hooks/use-is-desktop';
 
 export const ListView: React.FC<BaseLinkCardProps> = ({
   link,
@@ -23,10 +22,7 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
   onDragStart,
   onAdd,
 }) => {
-  const isClicked = clickedLink === link.key;
-  const isDesktop = useIsDesktop();
   const [isHovered, setIsHovered] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
 
   const handleMouseEnter = () => {
     onMouseEnter();
@@ -38,8 +34,6 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
     setIsHovered(false);
   };
 
-  const handleAdd = onAdd ? () => onAdd(link.category) : () => console.log('Add action triggered for category:', link.category);
-
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
@@ -50,7 +44,6 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
           className={`
             group flex items-center gap-6 p-6 rounded-2xl cursor-pointer w-full
             backdrop-blur-sm
-            ${isDragging ? 'opacity-50' : ''}
           `}
         >
           {isHovered && (
@@ -97,26 +90,15 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
                   {link.name}
                 </h3>
               </div>
+              <p className="text-sm text-slate-300 mt-1 opacity-70">
+                {link.url || link.defaultUrl}
+              </p>
             </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <Button
-              size="sm"
-              className={`
-                px-6 py-3 rounded-xl transition-all duration-300 hover:scale-105
-                bg-slate-700/50 hover:bg-slate-600/60 text-white
-                backdrop-blur-sm
-              `}
-            >
-              <ExternalLink className="w-5 h-5" />
-            </Button>
           </div>
         </div>
       </ContextMenuTrigger>
       <LinkCardContextMenu
         link={link}
-        
         categories={categories}
         onEdit={onEdit}
         onCopyUrl={onCopyUrl}
