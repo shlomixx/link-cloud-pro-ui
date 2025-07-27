@@ -8,6 +8,7 @@ function Index() {
           Link Cloud Pro - Image Description Tool
         </h1>
         
+        {/* Use the main component for production */}
         <ImageDescriptionTool />
       </div>
     </div>

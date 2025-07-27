@@ -4,7 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 
-interface ImageDescriptionToolProps {}
+interface ImageDescriptionToolProps {
+  // Component props would be defined here if needed
+}
 
 export const ImageDescriptionTool: React.FC<ImageDescriptionToolProps> = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
