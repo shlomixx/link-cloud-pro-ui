@@ -12,6 +12,6 @@ export type { LinkData } from './link-card/types';
 interface LinkCardProps extends BaseLinkCardProps {}
 
 export const LinkCard: React.FC<LinkCardProps> = (props) => {
-  // Fixed to compact view
+  // Use CompactView with improved name visibility
   return <CompactView {...props} />;
 };

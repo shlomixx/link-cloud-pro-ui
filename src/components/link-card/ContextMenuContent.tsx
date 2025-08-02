@@ -34,17 +34,17 @@ export const LinkCardContextMenu: React.FC<ContextMenuProps> = ({
     <ContextMenuContent className="bg-slate-900/95 border-slate-700">
       <ContextMenuItem onClick={handleContextMenuClick(onEdit)}>
         <Edit className="w-4 h-4 mr-2" />
-        עריכה
+        Edit
       </ContextMenuItem>
       <ContextMenuItem onClick={handleContextMenuClick(onCopyUrl)}>
         <Copy className="w-4 h-4 mr-2" />
-        העתק URL
+        Copy URL
       </ContextMenuItem>
       {categories.length > 0 && onChangeCategory && (
         <ContextMenuSub>
           <ContextMenuSubTrigger>
             <Edit className="w-4 h-4 mr-2" />
-            שנה קטגוריה
+            Change Category
           </ContextMenuSubTrigger>
           <ContextMenuSubContent>
             {categories.filter(cat => cat !== link.category).map((category) => (
@@ -61,7 +61,7 @@ export const LinkCardContextMenu: React.FC<ContextMenuProps> = ({
       <ContextMenuSeparator />
       <ContextMenuItem onClick={handleContextMenuClick(onDelete || (() => {}))} className="text-red-600">
         <Trash2 className="w-4 h-4 mr-2" />
-        מחק
+        Delete
       </ContextMenuItem>
     </ContextMenuContent>
   );

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
@@ -40,15 +39,13 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           onMouseLeave={handleMouseLeave}
           onClick={onLinkClick}
           className={`
-            group relative flex flex-col items-center gap-4 p-6 rounded-2xl cursor-pointer
+            group relative flex flex-col items-center justify-center gap-3 p-5 rounded-2xl cursor-pointer
           `}
         >
           {isHovered && (
-            <div className="absolute -top-2 -right-2 z-20 opacity-0 group-hover:opacity-100 transition-all duration-200">
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-7 w-7 bg-gradient-to-br from-slate-600/80 to-slate-700/80 hover:from-slate-500/90 hover:to-slate-600/90 rounded-full shadow-lg backdrop-blur-sm"
+            <div className="absolute -top-2 -left-2 z-20 opacity-0 group-hover:opacity-100 transition-all duration-200">
+              <button
+                className="p-2 hover:bg-black/5 rounded-full transition-all duration-200"
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
@@ -62,33 +59,40 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
                   e.currentTarget.parentElement?.parentElement?.dispatchEvent(contextMenuEvent);
                 }}
               >
-                <MoreVertical className="h-3.5 w-3.5 text-white drop-shadow-sm" />
-              </Button>
+                {/* Google-style three dots vertical */}
+                <div className="flex flex-col gap-0.5">
+                  <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                  <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                  <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                </div>
+              </button>
             </div>
           )}
 
-          <div className="relative">
-            <div className={`
-              w-16 h-16 rounded-2xl flex items-center justify-center
-              bg-slate-700/50
-              backdrop-blur-sm
-            `}>
-              <img
-                src={getFaviconUrl(link.url || link.defaultUrl || '')}
-                alt=""
-                className="w-10 h-10 rounded-lg"
-                loading="lazy"
-                decoding="async"
-                onError={handleFaviconError}
-              />
+          {/* Use figure/figcaption for proper semantic structure */}
+          <figure className="flex flex-col items-center justify-center gap-2 m-0">
+            <div className="relative">
+              <div className={`
+                w-16 h-16 rounded-2xl flex items-center justify-center
+                bg-slate-700/50
+                backdrop-blur-sm
+              `}>
+                <img
+                  src={getFaviconUrl(link.url || link.defaultUrl || '')}
+                  alt=""
+                  className="w-10 h-10 rounded-lg"
+                  loading="lazy"
+                  decoding="async"
+                  onError={handleFaviconError}
+                />
+              </div>
             </div>
-          </div>
-          
-          <div className="w-full text-center">
-            <h3 className="font-semibold text-base truncate text-white">
-              {link.name}
-            </h3>
-          </div>
+            <figcaption className="w-full text-center">
+              <h3 className="font-semibold text-sm text-white bg-black/20 backdrop-blur-sm rounded-md px-2 py-1 shadow-sm text-center max-w-full truncate inline-block">
+                {link.name}
+              </h3>
+            </figcaption>
+          </figure>
         </div>
       </ContextMenuTrigger>
       <LinkCardContextMenu

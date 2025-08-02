@@ -8,6 +8,7 @@ import { LinkData, FormData, SortBy } from '@/types';
 import { useFaviconPreloader } from '@/hooks/useFaviconPreloader';
 import { debounce } from '@/utils/performanceOptimizations';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { parseDroppableId, ITEMS_PER_ROW } from '@/components/CategorySection/utils';
 
 // Lazy load heavy components
 const LazyLinkModal = React.lazy(async () => {
@@ -505,6 +506,28 @@ const Index = () => {
     toast.success(`Category "${categoryName}" added successfully!`);
   };
 
+  const handleEditCategoryName = (oldCategory: string, newCategoryName: string) => {
+    // Check if the category exists
+    if (!categoryLabels[oldCategory]) {
+      toast.error('Category not found!');
+      return;
+    }
+
+    // Update category label
+    setCategoryLabels(prev => ({
+      ...prev,
+      [oldCategory]: newCategoryName
+    }));
+
+    toast.success(`Category renamed to "${newCategoryName}" successfully!`);
+
+    // Save changes to local storage
+    localStorage.setItem('categoryLabels', JSON.stringify({
+      ...categoryLabels,
+      [oldCategory]: newCategoryName
+    }));
+  };
+
   const handleDeleteLink = (linkKey: string) => {
     const linkToDelete = linksData.find((link) => link.key === linkKey);
     if (linkToDelete) {
@@ -581,27 +604,35 @@ const Index = () => {
     }
 
     const { source, destination } = result;
-    const sourceDroppableId = source.droppableId;
-    const destinationDroppableId = destination.droppableId;
+    
+    // Parse source and destination droppable IDs
+    const sourceInfo = parseDroppableId(source.droppableId);
+    const destInfo = parseDroppableId(destination.droppableId);
 
-    // Extract category from droppableId (format: "category-desktop-categoryName" or "category-mobile-categoryName")
-    const extractCategory = (droppableId: string) => {
-      const parts = droppableId.split('-');
-      if (parts.length >= 3) {
-        return parts.slice(2).join('-'); // Handle categories with dashes
-      }
-      return parts[parts.length - 1];
-    };
-
-    const sourceCategory = extractCategory(sourceDroppableId);
-    const destinationCategory = extractCategory(destinationDroppableId);
+    if (!sourceInfo.isValid || !destInfo.isValid) {
+      console.error('Invalid droppable ID format');
+      return;
+    }
 
     // Get the dragged link
     const draggedLinkId = result.draggableId.replace('mobile-', ''); // Remove mobile prefix if exists
     
-    if (sourceCategory === destinationCategory) {
-      // Same category - use existing reorder function
-      handleReorderLinks(source.index, destination.index, sourceCategory);
+    if (sourceInfo.category === destInfo.category) {
+      // Same category - convert row-based positions to category-relative indices
+      const itemsPerRow = sourceInfo.isMobile ? ITEMS_PER_ROW.mobile : ITEMS_PER_ROW.desktop;
+      
+      // Calculate position within the category (not global position)
+      const sourcePositionInCategory = sourceInfo.rowIndex * itemsPerRow + source.index;
+      const destPositionInCategory = destInfo.rowIndex * itemsPerRow + destination.index;
+      
+      // Make sure indices are within bounds of the category
+      const categoryLinks = linksData.filter(link => link.category === sourceInfo.category);
+      const maxIndex = categoryLinks.length - 1;
+      const sourceLocalIndex = Math.min(sourcePositionInCategory, maxIndex);
+      const destLocalIndex = Math.min(destPositionInCategory, maxIndex);
+      
+      // Use existing reorder function
+      handleReorderLinks(sourceLocalIndex, destLocalIndex, sourceInfo.category);
     } else {
       // Different category - move link between categories
       setSortBy('custom');
@@ -615,11 +646,15 @@ const Index = () => {
           newLinks.splice(linkIndex, 1);
           
           // Update category
-          const updatedLink = { ...draggedLink, category: destinationCategory };
+          const updatedLink = { ...draggedLink, category: destInfo.category };
+          
+          // Calculate destination position within the category
+          const destItemsPerRow = destInfo.isMobile ? ITEMS_PER_ROW.mobile : ITEMS_PER_ROW.desktop;
+          const destPositionInCategory = destInfo.rowIndex * destItemsPerRow + destination.index;
           
           // Find insertion point in destination category
-          const destinationCategoryLinks = newLinks.filter(link => link.category === destinationCategory);
-          const insertIndex = Math.min(destination.index, destinationCategoryLinks.length);
+          const destinationCategoryLinks = newLinks.filter(link => link.category === destInfo.category);
+          const insertIndex = Math.min(destPositionInCategory, destinationCategoryLinks.length);
           
           // Find the actual index in the full array to insert at
           if (destinationCategoryLinks.length === 0) {
@@ -627,12 +662,12 @@ const Index = () => {
             newLinks.push(updatedLink);
           } else if (insertIndex === 0) {
             // Insert at beginning of category
-            const firstCategoryLinkIndex = newLinks.findIndex(link => link.category === destinationCategory);
+            const firstCategoryLinkIndex = newLinks.findIndex(link => link.category === destInfo.category);
             newLinks.splice(firstCategoryLinkIndex, 0, updatedLink);
           } else if (insertIndex >= destinationCategoryLinks.length) {
             // Insert at end of category
             const lastCategoryLinkIndex = newLinks.map((link, idx) => ({ link, idx }))
-              .filter(({ link }) => link.category === destinationCategory)
+              .filter(({ link }) => link.category === destInfo.category)
               .pop()?.idx;
             if (lastCategoryLinkIndex !== undefined) {
               newLinks.splice(lastCategoryLinkIndex + 1, 0, updatedLink);
@@ -650,7 +685,7 @@ const Index = () => {
         return newLinks;
       });
       
-      toast.success(`Link moved to ${categoryLabels[destinationCategory] || destinationCategory}!`);
+      toast.success(`Link moved to ${categoryLabels[destInfo.category] || destInfo.category}!`);
     }
   };
 
@@ -704,7 +739,6 @@ const Index = () => {
                   onDeleteLink={handleDeleteLink}
                   onToggleFavorite={handleToggleFavorite}
                   linkSize={linkSize}
-                  isDragDisabled={false}
                 />
             </div>
           ))}

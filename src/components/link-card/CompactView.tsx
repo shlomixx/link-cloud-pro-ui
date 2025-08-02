@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
@@ -45,16 +44,14 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           onMouseLeave={handleMouseLeave}
           onClick={onLinkClick}
           className={`
-            group relative flex flex-col items-center gap-4 p-5 cursor-pointer rounded-2xl
+            group relative flex flex-col items-center justify-center gap-3 p-4 cursor-pointer rounded-2xl
           `}
           style={{ minWidth: `${containerSize}px`, maxWidth: `${containerSize}px` }}
         >
           {isHovered && (
-            <div className="absolute -top-2 -right-2 z-20 opacity-0 group-hover:opacity-100 transition-all duration-200">
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-7 w-7 bg-gradient-to-br from-slate-600/80 to-slate-700/80 hover:from-slate-500/90 hover:to-slate-600/90 rounded-full shadow-lg backdrop-blur-sm"
+            <div className="absolute -top-2 -left-2 z-20 opacity-0 group-hover:opacity-100 transition-all duration-200">
+              <button
+                className="p-2 hover:bg-black/5 rounded-full transition-all duration-200"
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
@@ -68,27 +65,37 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
                   e.currentTarget.parentElement?.parentElement?.dispatchEvent(contextMenuEvent);
                 }}
               >
-                <MoreVertical className="h-3.5 w-3.5 text-white drop-shadow-sm" />
-              </Button>
+                {/* Google-style three dots vertical */}
+                <div className="flex flex-col gap-0.5">
+                  <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                  <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                  <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+                </div>
+              </button>
             </div>
           )}
-          <div className="relative">
-            <div className="rounded-xl flex items-center justify-center" style={{ width: `${iconContainerSize}px`, height: `${iconContainerSize}px`}}>
-              <img
-                src={getFaviconUrl(link.url || link.defaultUrl || '')}
-                alt=""
-                className="rounded-lg"
-                loading="lazy"
-                decoding="async"
-                style={{ width: `${iconSize}px`, height: `${iconSize}px`}}
-                onError={handleFaviconError}
-              />
-            </div>
-          </div>
           
-          <span className="text-white/90 text-base text-center truncate w-full font-medium">
-            {link.name}
-          </span>
+          {/* Use figure/figcaption for proper semantic structure */}
+          <figure className="flex flex-col items-center justify-center gap-2 m-0">
+            <div className="relative flex justify-center items-center">
+              <div className="rounded-xl flex items-center justify-center" style={{ width: `${iconContainerSize}px`, height: `${iconContainerSize}px`}}>
+                <img
+                  src={getFaviconUrl(link.url || link.defaultUrl || '')}
+                  alt=""
+                  className="rounded-lg object-contain"
+                  loading="lazy"
+                  decoding="async"
+                  style={{ width: `${iconSize}px`, height: `${iconSize}px`}}
+                  onError={handleFaviconError}
+                />
+              </div>
+            </div>
+            <figcaption className="w-full text-center">
+              <span className="text-white text-sm font-medium leading-tight text-center px-2 py-1 rounded-md bg-black/20 backdrop-blur-sm shadow-sm max-w-full truncate inline-block">
+                {link.name}
+              </span>
+            </figcaption>
+          </figure>
         </div>
       </ContextMenuTrigger>
       <LinkCardContextMenu
