@@ -21,7 +21,6 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
   const [editValue, setEditValue] = useState('');
 
   const styles = isMobile ? HEADER_STYLES.mobile : HEADER_STYLES.desktop;
-  const colorBarClass = `${styles.colorBar} bg-gradient-to-b ${categoryColors[category]}`;
 
   const handleStartEdit = () => {
     setEditValue(categoryLabels[category] || category);
@@ -51,21 +50,20 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
   return (
     <div className={styles.container}>
       <div className={styles.flex}>
-        <div className={colorBarClass}></div>
         {isEditing ? (
           <div className="flex items-center gap-2 flex-1">
             <Input
               value={editValue}
               onChange={(e) => setEditValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="text-sm font-bold uppercase tracking-wider bg-transparent border-slate-600 text-white focus:border-purple-500"
+              className="text-sm font-bold uppercase tracking-wider bg-transparent border-white/20 text-foreground focus:border-white/40 focus-visible:ring-0 focus-visible:ring-offset-0"
               autoFocus
             />
             <Button
               size="sm"
               variant="ghost"
               onClick={handleSaveEdit}
-              className="h-6 w-6 p-0 hover:bg-green-500/20 text-green-400"
+              className="h-6 w-6 p-0 hover:bg-white/[0.06] text-muted-foreground hover:text-foreground"
             >
               <Check className="h-3 w-3" />
             </Button>
@@ -73,7 +71,7 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
               size="sm"
               variant="ghost"
               onClick={handleCancelEdit}
-              className="h-6 w-6 p-0 hover:bg-red-500/20 text-red-400"
+              className="h-6 w-6 p-0 hover:bg-white/[0.06] text-muted-foreground hover:text-foreground"
             >
               <X className="h-3 w-3" />
             </Button>
@@ -88,7 +86,7 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
                 size="sm"
                 variant="ghost"
                 onClick={handleStartEdit}
-                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-500/20 text-blue-400"
+                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/[0.06] text-muted-foreground hover:text-foreground"
               >
                 <Edit2 className="h-3 w-3" />
               </Button>
@@ -99,7 +97,7 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
                 size="sm"
                 variant="ghost"
                 onClick={() => onAddCategory(category)}
-                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-purple-500/20 text-purple-400"
+                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/[0.06] text-muted-foreground hover:text-foreground"
               >
                 <Plus className="h-3 w-3" />
               </Button>
@@ -115,7 +113,7 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
                     onDeleteCategory(category);
                   }
                 }}
-                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/20 text-red-400"
+                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/[0.06] text-muted-foreground hover:text-foreground"
               >
                 <Trash2 className="h-3 w-3" />
               </Button>
@@ -127,7 +125,7 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-amber-500/20 text-amber-400"
+                    className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/[0.06] text-muted-foreground hover:text-foreground"
                   >
                     <Sparkles className="h-3 w-3" />
                   </Button>
@@ -148,14 +146,13 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
               <button
                 {...(dragHandleProps as any)}
                 aria-label="Move category"
-                className={`h-6 w-6 p-0 ml-1 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-slate-200 ${dragHandleProps.className ?? ''}`}
+                className={`h-6 w-6 p-0 ml-1 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground ${dragHandleProps.className ?? ''}`}
               >
                 <GripVertical className="h-3 w-3" />
               </button>
             )}
           </div>
         )}
-        <div className={styles.separator}></div>
       </div>
     </div>
   );

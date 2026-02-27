@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Constants for CategorySection component
  * 
  * Centralized styling and layout configurations for consistency
@@ -13,7 +13,7 @@ export const GRID_CLASSES = {
   
   // Row-based flex layouts for drag zones
   row: 'flex items-start flex-wrap gap-2.5',
-  rowContainer: 'min-h-[112px] p-3 border-2 border-dashed border-transparent rounded-lg transition-colors duration-150'
+  rowContainer: 'min-h-[112px] p-3'
 } as const;
 
 // Layout container classes

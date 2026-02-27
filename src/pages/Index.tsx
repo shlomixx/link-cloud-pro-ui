@@ -4,12 +4,14 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
+import { LinkCloud } from '@/components/LinkCloud';
 import { LinkData, FormData, SortBy } from '@/types';
 import { AddCategoryModal } from '@/components/AddCategoryModal';
 import { useFaviconPreloader } from '@/hooks/useFaviconPreloader';
 import { debounce } from '@/utils/performanceOptimizations';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
 import { parseDroppableId, ITEMS_PER_ROW } from '@/components/CategorySection/utils';
+import { useNavigate } from 'react-router-dom';
 
 // Lazy load heavy components
 const LazyLinkModal = React.lazy(async () => {
@@ -22,7 +24,173 @@ const LazyKeyboardShortcuts = React.lazy(async () => {
   return { default: module.LazyKeyboardShortcuts };
 });
 
+const DEFAULT_LINKS: LinkData[] = [
+  // My Daily Links
+  { key: 'daily-chatgpt', name: 'ChatGPT', defaultUrl: 'https://chatgpt.com/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-gemini', name: 'Gemini', defaultUrl: 'https://gemini.google.com/app', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-claude', name: 'Claude', defaultUrl: 'https://claude.ai/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-perplexity', name: 'Perplexity', defaultUrl: 'https://www.perplexity.ai/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-gmail', name: 'Gmail', defaultUrl: 'https://gmail.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-yahoo', name: 'Yahoo', defaultUrl: 'https://yahoo.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-bing', name: 'Bing', defaultUrl: 'https://www.bing.com/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-wikipedia', name: 'Wikipedia', defaultUrl: 'https://wikipedia.org', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-paypal', name: 'PayPal', defaultUrl: 'https://paypal.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-aliexpress', name: 'AliExpress', defaultUrl: 'https://aliexpress.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-ebay', name: 'eBay', defaultUrl: 'https://ebay.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-amazon', name: 'Amazon', defaultUrl: 'https://www.amazon.com/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-walmart', name: 'Walmart', defaultUrl: 'https://walmart.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-etsy', name: 'Etsy', defaultUrl: 'https://etsy.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-grammarly', name: 'Grammarly', defaultUrl: 'https://grammarly.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-midjourney', name: 'Midjourney', defaultUrl: 'https://midjourney.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-leonardo', name: 'Leonardo', defaultUrl: 'https://leonardo.ai/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-netflix', name: 'Netflix', defaultUrl: 'https://netflix.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-office', name: 'Office', defaultUrl: 'https://office.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-spotify', name: 'Spotify', defaultUrl: 'https://spotify.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-ticketmaster', name: 'Ticketmaster', defaultUrl: 'https://ticketmaster.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-soundcloud', name: 'SoundCloud', defaultUrl: 'https://soundcloud.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-nytimes', name: 'NY Times', defaultUrl: 'https://nytimes.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-cnn', name: 'CNN', defaultUrl: 'https://cnn.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-imdb', name: 'IMDb', defaultUrl: 'https://imdb.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-foxnews', name: 'Fox News', defaultUrl: 'https://foxnews.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google', name: 'Google', defaultUrl: 'https://google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-drive', name: 'Google Drive', defaultUrl: 'https://drive.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-calendar', name: 'Google Calendar', defaultUrl: 'https://calendar.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-maps', name: 'Google Maps', defaultUrl: 'https://maps.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-photos', name: 'Google Photos', defaultUrl: 'https://photos.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-translate', name: 'Google Translate', defaultUrl: 'https://translate.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-news', name: 'Google News', defaultUrl: 'https://news.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-keep', name: 'Google Keep', defaultUrl: 'https://keep.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-meet', name: 'Google Meet', defaultUrl: 'https://meet.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-chat', name: 'Google Chat', defaultUrl: 'https://chat.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-docs', name: 'Google Docs', defaultUrl: 'https://docs.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-sheets', name: 'Google Sheets', defaultUrl: 'https://sheets.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-slides', name: 'Google Slides', defaultUrl: 'https://slides.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-youtube-music', name: 'YouTube Music', defaultUrl: 'https://music.youtube.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-apple-icloud', name: 'iCloud', defaultUrl: 'https://www.icloud.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-dropbox', name: 'Dropbox', defaultUrl: 'https://dropbox.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-google-play', name: 'Google Play', defaultUrl: 'https://play.google.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-app-store', name: 'App Store', defaultUrl: 'https://www.apple.com/app-store/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-airbnb', name: 'Airbnb', defaultUrl: 'https://airbnb.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-booking', name: 'Booking', defaultUrl: 'https://booking.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-uber', name: 'Uber', defaultUrl: 'https://uber.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-waze', name: 'Waze', defaultUrl: 'https://waze.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'daily-weather', name: 'Weather', defaultUrl: 'https://weather.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+
+  // Social Media Platforms
+  { key: 'social-facebook', name: 'Facebook', defaultUrl: 'https://facebook.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-youtube', name: 'YouTube', defaultUrl: 'https://youtube.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-whatsapp', name: 'Whatsapp', defaultUrl: 'https://whatsapp.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-instagram', name: 'Instagram', defaultUrl: 'https://instagram.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-snapchat', name: 'Snapchat', defaultUrl: 'https://snapchat.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-twitter', name: 'Twitter (X)', defaultUrl: 'https://twitter.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-linkedin', name: 'LinkedIn', defaultUrl: 'https://linkedin.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-pinterest', name: 'Pinterest', defaultUrl: 'https://pinterest.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-threads', name: 'Threads', defaultUrl: 'https://threads.net', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-telegram', name: 'Telegram', defaultUrl: 'https://telegram.org', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-myspace', name: 'MySpace', defaultUrl: 'https://myspace.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-reddit', name: 'Reddit', defaultUrl: 'https://reddit.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-tumblr', name: 'Tumblr', defaultUrl: 'https://tumblr.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-mastodon', name: 'Mastodon', defaultUrl: 'https://mastodon.social', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-nextdoor', name: 'Nextdoor', defaultUrl: 'https://nextdoor.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-twitch', name: 'Twitch', defaultUrl: 'https://twitch.tv', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-wechat', name: 'WeChat', defaultUrl: 'https://wechat.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-line', name: 'Line', defaultUrl: 'https://line.me', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-blogger', name: 'Blogger', defaultUrl: 'https://blogger.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-discord', name: 'Discord', defaultUrl: 'https://discord.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-yelp', name: 'Yelp', defaultUrl: 'https://yelp.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-medium', name: 'Medium', defaultUrl: 'https://medium.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-dribble', name: 'Dribble', defaultUrl: 'https://dribbble.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-vine', name: 'Vine', defaultUrl: 'https://vine.co', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-tiktok', name: 'TikTok', defaultUrl: 'https://tiktok.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-tagged', name: 'Tagged', defaultUrl: 'https://tagged.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-meetup', name: 'Meetup', defaultUrl: 'https://meetup.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-messenger', name: 'Messenger', defaultUrl: 'https://messenger.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-signal', name: 'Signal', defaultUrl: 'https://signal.org', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-skype', name: 'Skype', defaultUrl: 'https://skype.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-viber', name: 'Viber', defaultUrl: 'https://www.viber.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-quora', name: 'Quora', defaultUrl: 'https://www.quora.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'social-stackexchange', name: 'Stack Exchange', defaultUrl: 'https://stackexchange.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+
+  // Tools
+  { key: 'tools-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
+  { key: 'tools-trello', name: 'Trello', defaultUrl: 'https://trello.com', category: 'tools', clicks: 45, createdAt: '2024-01-23' },
+  { key: 'tools-figma', name: 'Figma', defaultUrl: 'https://figma.com', category: 'tools', clicks: 58, createdAt: '2024-03-01' },
+  { key: 'tools-slack', name: 'Slack', defaultUrl: 'https://slack.com', category: 'tools', clicks: 62, createdAt: '2024-03-02' },
+  { key: 'tools-zoom', name: 'Zoom', defaultUrl: 'https://zoom.us', category: 'tools', clicks: 48, createdAt: '2024-03-03' },
+  { key: 'tools-miro', name: 'Miro', defaultUrl: 'https://miro.com', category: 'tools', clicks: 40, createdAt: '2024-03-04' },
+  { key: 'tools-vsc', name: 'VS Code', defaultUrl: 'https://code.visualstudio.com', category: 'tools', clicks: 68, createdAt: '2024-03-13' },
+  { key: 'tools-docker', name: 'Docker', defaultUrl: 'https://docker.com', category: 'tools', clicks: 52, createdAt: '2024-03-14' },
+  { key: 'tools-jira', name: 'Jira', defaultUrl: 'https://atlassian.com/software/jira', category: 'tools', clicks: 42, createdAt: '2024-04-01' },
+  { key: 'tools-asana', name: 'Asana', defaultUrl: 'https://asana.com', category: 'tools', clicks: 38, createdAt: '2024-04-02' },
+  { key: 'tools-monday', name: 'Monday.com', defaultUrl: 'https://monday.com', category: 'tools', clicks: 35, createdAt: '2024-04-03' },
+  { key: 'tools-airtable', name: 'Airtable', defaultUrl: 'https://airtable.com', category: 'tools', clicks: 32, createdAt: '2024-04-04' },
+  { key: 'tools-zapier', name: 'Zapier', defaultUrl: 'https://zapier.com', category: 'tools', clicks: 28, createdAt: '2024-04-05' },
+  { key: 'tools-notion', name: 'Notion', defaultUrl: 'https://notion.so', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-obsidian', name: 'Obsidian', defaultUrl: 'https://obsidian.md', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-github', name: 'GitHub', defaultUrl: 'https://github.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-gitlab', name: 'GitLab', defaultUrl: 'https://gitlab.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-bitbucket', name: 'Bitbucket', defaultUrl: 'https://bitbucket.org', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-stackoverflow', name: 'Stack Overflow', defaultUrl: 'https://stackoverflow.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-mdn', name: 'MDN Web Docs', defaultUrl: 'https://developer.mozilla.org', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-devdocs', name: 'DevDocs', defaultUrl: 'https://devdocs.io', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-webdev', name: 'web.dev', defaultUrl: 'https://web.dev', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-npm', name: 'npm', defaultUrl: 'https://npmjs.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-yarn', name: 'Yarn', defaultUrl: 'https://yarnpkg.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-pnpm', name: 'pnpm', defaultUrl: 'https://pnpm.io', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-pypi', name: 'PyPI', defaultUrl: 'https://pypi.org', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-deno', name: 'Deno', defaultUrl: 'https://deno.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-bun', name: 'Bun', defaultUrl: 'https://bun.sh', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-postman', name: 'Postman', defaultUrl: 'https://postman.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-insomnia', name: 'Insomnia', defaultUrl: 'https://insomnia.rest', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-vercel', name: 'Vercel', defaultUrl: 'https://vercel.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-netlify', name: 'Netlify', defaultUrl: 'https://netlify.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-cloudflare', name: 'Cloudflare', defaultUrl: 'https://cloudflare.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-aws', name: 'AWS', defaultUrl: 'https://aws.amazon.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-gcp', name: 'Google Cloud', defaultUrl: 'https://cloud.google.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-azure', name: 'Azure', defaultUrl: 'https://azure.microsoft.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-render', name: 'Render', defaultUrl: 'https://render.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-fly', name: 'Fly.io', defaultUrl: 'https://fly.io', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-railway', name: 'Railway', defaultUrl: 'https://railway.app', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-supabase', name: 'Supabase', defaultUrl: 'https://supabase.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-firebase', name: 'Firebase', defaultUrl: 'https://firebase.google.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-sentry', name: 'Sentry', defaultUrl: 'https://sentry.io', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-linear', name: 'Linear', defaultUrl: 'https://linear.app', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-clickup', name: 'ClickUp', defaultUrl: 'https://clickup.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-google-analytics', name: 'Google Analytics', defaultUrl: 'https://analytics.google.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-google-search-console', name: 'Search Console', defaultUrl: 'https://search.google.com/search-console', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-loom', name: 'Loom', defaultUrl: 'https://loom.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-calendly', name: 'Calendly', defaultUrl: 'https://calendly.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-typeform', name: 'Typeform', defaultUrl: 'https://typeform.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-google-forms', name: 'Google Forms', defaultUrl: 'https://forms.google.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-chatwoot', name: 'Chatwoot', defaultUrl: 'https://www.chatwoot.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-intercom', name: 'Intercom', defaultUrl: 'https://intercom.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-zendesk', name: 'Zendesk', defaultUrl: 'https://zendesk.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-figma-community', name: 'Figma Community', defaultUrl: 'https://www.figma.com/community', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-dribbble', name: 'Dribbble', defaultUrl: 'https://dribbble.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-behance', name: 'Behance', defaultUrl: 'https://behance.net', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-unsplash', name: 'Unsplash', defaultUrl: 'https://unsplash.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-pexels', name: 'Pexels', defaultUrl: 'https://pexels.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-google-fonts', name: 'Google Fonts', defaultUrl: 'https://fonts.google.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'tools-colorhunt', name: 'Color Hunt', defaultUrl: 'https://colorhunt.co', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+];
+
+const DEFAULT_CATEGORY_LABELS = {
+  daily: 'My Daily Links',
+  society: 'Social Media Platforms',
+  tools: 'Productivity Tools',
+  custom: 'Custom Links',
+};
+
+const DEFAULT_CATEGORY_COLORS = {
+  daily: 'from-blue-400 to-blue-600',
+  society: 'from-emerald-400 to-emerald-600',
+  tools: 'from-violet-400 to-violet-600',
+  custom: 'from-slate-400 to-slate-600',
+};
+
 const Index = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,94 +217,11 @@ const Index = () => {
     category: 'custom'
   });
 
-  const [linksData, setLinksData] = useState<LinkData[]>([
-    // My Daily Links
-    { key: 'daily-chatgpt', name: 'ChatGPT', defaultUrl: 'https://chatgpt.com/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-gemini', name: 'Gemini', defaultUrl: 'https://gemini.google.com/app', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-claude', name: 'Claude', defaultUrl: 'https://claude.ai/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-perplexity', name: 'Perplexity', defaultUrl: 'https://www.perplexity.ai/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-gmail', name: 'Gmail', defaultUrl: 'https://gmail.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-yahoo', name: 'Yahoo', defaultUrl: 'https://yahoo.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-bing', name: 'Bing', defaultUrl: 'https://www.bing.com/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-wikipedia', name: 'Wikipedia', defaultUrl: 'https://wikipedia.org', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-paypal', name: 'PayPal', defaultUrl: 'https://paypal.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-aliexpress', name: 'AliExpress', defaultUrl: 'https://aliexpress.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-ebay', name: 'eBay', defaultUrl: 'https://ebay.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-amazon', name: 'Amazon', defaultUrl: 'https://www.amazon.com/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-walmart', name: 'Walmart', defaultUrl: 'https://walmart.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-etsy', name: 'Etsy', defaultUrl: 'https://etsy.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-grammarly', name: 'Grammarly', defaultUrl: 'https://grammarly.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-midjourney', name: 'Midjourney', defaultUrl: 'https://midjourney.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-leonardo', name: 'Leonardo', defaultUrl: 'https://leonardo.ai/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-netflix', name: 'Netflix', defaultUrl: 'https://netflix.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-office', name: 'Office', defaultUrl: 'https://office.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-spotify', name: 'Spotify', defaultUrl: 'https://spotify.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-ticketmaster', name: 'Ticketmaster', defaultUrl: 'https://ticketmaster.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-soundcloud', name: 'SoundCloud', defaultUrl: 'https://soundcloud.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-nytimes', name: 'NY Times', defaultUrl: 'https://nytimes.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-cnn', name: 'CNN', defaultUrl: 'https://cnn.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-imdb', name: 'IMDb', defaultUrl: 'https://imdb.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-foxnews', name: 'Fox News', defaultUrl: 'https://foxnews.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+  const [linksData, setLinksData] = useState<LinkData[]>(DEFAULT_LINKS);
 
-    // Social Media Platforms
-    { key: 'social-facebook', name: 'Facebook', defaultUrl: 'https://facebook.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-youtube', name: 'YouTube', defaultUrl: 'https://youtube.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-whatsapp', name: 'Whatsapp', defaultUrl: 'https://whatsapp.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-instagram', name: 'Instagram', defaultUrl: 'https://instagram.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-snapchat', name: 'Snapchat', defaultUrl: 'https://snapchat.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-twitter', name: 'Twitter (X)', defaultUrl: 'https://twitter.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-linkedin', name: 'LinkedIn', defaultUrl: 'https://linkedin.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-pinterest', name: 'Pinterest', defaultUrl: 'https://pinterest.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-threads', name: 'Threads', defaultUrl: 'https://threads.net', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-telegram', name: 'Telegram', defaultUrl: 'https://telegram.org', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-myspace', name: 'MySpace', defaultUrl: 'https://myspace.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-reddit', name: 'Reddit', defaultUrl: 'https://reddit.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-tumblr', name: 'Tumblr', defaultUrl: 'https://tumblr.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-mastodon', name: 'Mastodon', defaultUrl: 'https://mastodon.social', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-nextdoor', name: 'Nextdoor', defaultUrl: 'https://nextdoor.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-twitch', name: 'Twitch', defaultUrl: 'https://twitch.tv', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-wechat', name: 'WeChat', defaultUrl: 'https://wechat.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-line', name: 'Line', defaultUrl: 'https://line.me', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-blogger', name: 'Blogger', defaultUrl: 'https://blogger.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-discord', name: 'Discord', defaultUrl: 'https://discord.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-yelp', name: 'Yelp', defaultUrl: 'https://yelp.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-medium', name: 'Medium', defaultUrl: 'https://medium.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-dribble', name: 'Dribble', defaultUrl: 'https://dribbble.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-vine', name: 'Vine', defaultUrl: 'https://vine.co', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-tiktok', name: 'TikTok', defaultUrl: 'https://tiktok.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-tagged', name: 'Tagged', defaultUrl: 'https://tagged.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'social-meetup', name: 'Meetup', defaultUrl: 'https://meetup.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  const [categoryLabels, setCategoryLabels] = useState(DEFAULT_CATEGORY_LABELS);
 
-    // Tools - 13 links
-    { key: 'tools-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
-    { key: 'tools-trello', name: 'Trello', defaultUrl: 'https://trello.com', category: 'tools', clicks: 45, createdAt: '2024-01-23' },
-    { key: 'tools-figma', name: 'Figma', defaultUrl: 'https://figma.com', category: 'tools', clicks: 58, createdAt: '2024-03-01' },
-    { key: 'tools-slack', name: 'Slack', defaultUrl: 'https://slack.com', category: 'tools', clicks: 62, createdAt: '2024-03-02' },
-    { key: 'tools-zoom', name: 'Zoom', defaultUrl: 'https://zoom.us', category: 'tools', clicks: 48, createdAt: '2024-03-03' },
-    { key: 'tools-miro', name: 'Miro', defaultUrl: 'https://miro.com', category: 'tools', clicks: 40, createdAt: '2024-03-04' },
-    { key: 'tools-vsc', name: 'VS Code', defaultUrl: 'https://code.visualstudio.com', category: 'tools', clicks: 68, createdAt: '2024-03-13' },
-    { key: 'tools-docker', name: 'Docker', defaultUrl: 'https://docker.com', category: 'tools', clicks: 52, createdAt: '2024-03-14' },
-    { key: 'tools-jira', name: 'Jira', defaultUrl: 'https://atlassian.com/software/jira', category: 'tools', clicks: 42, createdAt: '2024-04-01' },
-    { key: 'tools-asana', name: 'Asana', defaultUrl: 'https://asana.com', category: 'tools', clicks: 38, createdAt: '2024-04-02' },
-    { key: 'tools-monday', name: 'Monday.com', defaultUrl: 'https://monday.com', category: 'tools', clicks: 35, createdAt: '2024-04-03' },
-    { key: 'tools-airtable', name: 'Airtable', defaultUrl: 'https://airtable.com', category: 'tools', clicks: 32, createdAt: '2024-04-04' },
-    { key: 'tools-zapier', name: 'Zapier', defaultUrl: 'https://zapier.com', category: 'tools', clicks: 28, createdAt: '2024-04-05' },
-  ]);
-
-  const [categoryLabels, setCategoryLabels] = useState({
-    daily: 'My Daily Links',
-    society: 'Social Media Platforms',
-    tools: 'Productivity Tools',
-    custom: 'Custom Links'
-  });
-
-  const [categoryColors, setCategoryColors] = useState({
-    daily: 'from-blue-400 to-blue-600',
-    society: 'from-emerald-400 to-emerald-600',
-    tools: 'from-violet-400 to-violet-600',
-    custom: 'from-slate-400 to-slate-600'
-  });
+  const [categoryColors, setCategoryColors] = useState(DEFAULT_CATEGORY_COLORS);
 
   // Debounced search to improve performance
   const debouncedSetSearch = useMemo(
@@ -158,6 +243,8 @@ const Index = () => {
     const savedCategories = localStorage.getItem('linkRouterCategories');
     
     const preferredOrder = ['daily', 'society', 'tools'];
+    const seedVersionKey = 'linkRouterSeedVersion';
+    const seedVersion = '2026-02-27-01';
     
     // Load categories first
     if (savedCategories) {
@@ -178,6 +265,26 @@ const Index = () => {
       try {
         const loadedData = JSON.parse(saved);
         let loadedLinks = Array.isArray(loadedData) ? loadedData : loadedData.linksData;
+
+        // One-time seed: merge new default links into existing saved data.
+        // This ensures users who already have localStorage data still receive new curated links,
+        // without wiping their personal collection.
+        try {
+          const currentSeed = localStorage.getItem(seedVersionKey);
+          if (currentSeed !== seedVersion) {
+            const existingKeys = new Set(
+              (loadedLinks as LinkData[]).map((l) => l?.key).filter(Boolean)
+            );
+            const extras = DEFAULT_LINKS.filter((l) => !existingKeys.has(l.key));
+            if (extras.length > 0) {
+              loadedLinks = [...loadedLinks, ...extras];
+            }
+            localStorage.setItem(seedVersionKey, seedVersion);
+          }
+        } catch (seedErr) {
+          console.warn('Seed merge skipped:', seedErr);
+        }
+
         setLinksData(loadedLinks);
         const allCategories = Array.from(new Set(loadedLinks.map((link: LinkData) => link.category))) as string[];
         const remainingCategories = allCategories.filter((c: string) => !preferredOrder.includes(c));
@@ -374,6 +481,24 @@ const Index = () => {
     if (quickFilter === 'popular' && (link.clicks || 0) < 20) return false;
     
     const searchLower = debouncedSearchTerm.toLowerCase();
+    return (
+      link.name.toLowerCase().includes(searchLower) ||
+      (link.url || link.defaultUrl || '').toLowerCase().includes(searchLower) ||
+      link.category.toLowerCase().includes(searchLower)
+    );
+  });
+
+  const cloudLinks = linksData.filter(link => {
+    if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
+    if (quickFilter === 'recent') {
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      if (new Date(link.createdAt || '') < weekAgo) return false;
+    }
+    if (quickFilter === 'popular' && (link.clicks || 0) < 20) return false;
+
+    const searchLower = searchTerm.toLowerCase();
+    if (!searchLower) return true;
     return (
       link.name.toLowerCase().includes(searchLower) ||
       (link.url || link.defaultUrl || '').toLowerCase().includes(searchLower) ||
@@ -825,6 +950,41 @@ const Index = () => {
     return new Date(link.createdAt || '') > weekAgo;
   });
   const popularLinks = linksData.filter(link => (link.clicks || 0) > 20);
+
+  const applyCuratedLinksPack = () => {
+    setLinksData((prev) => {
+      const existingKeys = new Set(prev.map((l) => l.key));
+      const extras = DEFAULT_LINKS.filter((l) => !existingKeys.has(l.key));
+      const next = extras.length > 0 ? [...prev, ...extras] : prev;
+      toast.success(extras.length > 0 ? `Added ${extras.length} curated links` : 'Curated links already applied');
+      try {
+        localStorage.setItem('linkRouterSeedVersion', '2026-02-27-01');
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
+  const resetLocalData = () => {
+    if (!window.confirm('Reset local data? This will remove your saved links and settings from this browser.')) {
+      return;
+    }
+    try {
+      localStorage.removeItem('linkRouterData');
+      localStorage.removeItem('linkRouterSettings');
+      localStorage.removeItem('linkRouterCategories');
+      localStorage.removeItem('categoryOrder');
+      localStorage.removeItem('linkRouterSeedVersion');
+    } catch {
+      // ignore
+    }
+    setLinksData(DEFAULT_LINKS);
+    setCategoryLabels(DEFAULT_CATEGORY_LABELS);
+    setCategoryColors(DEFAULT_CATEGORY_COLORS);
+    setCategoryOrder(['daily', 'society', 'tools']);
+    toast.success('Local data reset');
+  };
   
   return (
     <div className={`min-h-screen transition-all duration-500 bg-background`}>
@@ -832,18 +992,42 @@ const Index = () => {
           onAddLink={() => openModal()}
           onAddCategory={() => openAddCategoryModal(null)}
           onShowShortcuts={() => setShowShortcuts(true)}
-          searchTerm={searchTerm}
-          onSearchTermChange={setSearchTerm}
-          searchInputRef={searchInputRef}
           linkSize={linkSize}
           onLinkSizeChange={setLinkSize}
+          onApplyCuratedLinks={applyCuratedLinksPack}
+          onResetLocalData={resetLocalData}
         />
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-10 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="pb-[calc(1.5rem+env(safe-area-inset-bottom))] focus:outline-none"
+        >
+          <LinkCloud
+            links={cloudLinks}
+            searchTerm={searchTerm}
+            onSearchTermChange={(v) => setSearchTerm(v)}
+            searchInputRef={searchInputRef}
+            onSubmit={() => {
+              const q = searchTerm.trim();
+              if (!q) return;
+              navigate(`/search?q=${encodeURIComponent(q)}`);
+            }}
+            onLinkClick={handleLinkClick}
+          />
+
+          {/* Clear separation: categories start only after scrolling */}
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="py-10 sm:py-14">
+              <div className="h-px w-full bg-border/60" />
+            </div>
+          </div>
+
           <Droppable droppableId="categories" type="CATEGORY">
             {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-12">
+              <div className="container mx-auto px-4 sm:px-6" id="categories">
+                <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-12">
                 {Object.entries(groupedLinks).map(([category, links], index) => (
                   <Draggable key={category} draggableId={`category-${category}`} index={index}>
                     {(prov, snapshot) => (
@@ -882,6 +1066,7 @@ const Index = () => {
                   </Draggable>
                 ))}
                 {provided.placeholder}
+                </div>
               </div>
             )}
           </Droppable>

@@ -50,8 +50,8 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           tabIndex={0}
           aria-label={link.name}
           className={`
-            group relative flex flex-col items-center justify-center gap-3 p-5 rounded-2xl cursor-pointer
-            transition-smooth hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
+            group relative flex flex-col items-center justify-center gap-3 p-5 cursor-pointer
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50
           `}
         >
           {isHovered && (
@@ -84,11 +84,7 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           {/* Use figure/figcaption for proper semantic structure */}
           <figure className="flex flex-col items-center justify-center gap-2 m-0">
             <div className="relative">
-              <div className={`
-                w-16 h-16 rounded-2xl flex items-center justify-center
-                bg-slate-700/50
-                backdrop-blur-sm
-              `}>
+              <div className="w-16 h-16 flex items-center justify-center transition-transform duration-150 group-hover:scale-110">
                 <img
                   src={getFaviconUrl(link.url || link.defaultUrl || '')}
                   alt=""
@@ -100,7 +96,7 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
               </div>
             </div>
             <figcaption className="w-full text-center">
-              <h3 className="font-semibold text-sm text-white bg-black/20 backdrop-blur-sm rounded-md px-2 py-1 shadow-sm text-center max-w-full truncate inline-block">
+              <h3 className="font-semibold text-sm text-foreground/90 text-center max-w-full truncate inline-block">
                 {link.name}
               </h3>
             </figcaption>

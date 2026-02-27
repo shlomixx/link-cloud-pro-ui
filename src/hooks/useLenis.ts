@@ -11,9 +11,8 @@ function prefersReducedMotion() {
 
 export function useLenis() {
   useEffect(() => {
-    // Keep enabled even if OS prefers reduced motion (user requested smooth scrolling).
-    // If you want to respect reduced motion, uncomment:
-    // if (prefersReducedMotion()) return;
+    // Respect reduced motion for accessibility.
+    if (prefersReducedMotion()) return;
 
     const lenis = new Lenis({
       // Inertia / momentum feel: duration + easing (no `lerp`)

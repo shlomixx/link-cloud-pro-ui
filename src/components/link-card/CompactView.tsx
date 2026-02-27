@@ -55,8 +55,8 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           tabIndex={0}
           aria-label={link.name}
           className={`
-            group relative flex flex-col items-center justify-center gap-3 p-4 cursor-pointer rounded-2xl
-            transition-smooth hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
+            group relative flex flex-col items-center justify-center gap-3 p-4 cursor-pointer
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50
           `}
           style={{ minWidth: `${containerSize}px`, maxWidth: `${containerSize}px` }}
         >
@@ -103,7 +103,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
               </div>
             </div>
             <figcaption className="w-full text-center">
-              <span className="text-white text-base font-medium leading-tight text-center px-2 py-1 rounded-md bg-black/20 backdrop-blur-sm shadow-sm max-w-full truncate inline-block">
+              <span className="text-foreground/90 text-base font-medium leading-tight text-center max-w-full truncate inline-block">
                 {link.name}
               </span>
             </figcaption>

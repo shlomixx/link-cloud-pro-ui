@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Settings,
   Keyboard,
   Plus,
   FolderPlus,
-  X,
+  RotateCcw,
+  Sparkles,
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
@@ -33,17 +33,42 @@ interface AppHeaderProps {
   onAddLink: () => void;
   onShowShortcuts: () => void;
   onAddCategory: (categoryName: string) => void;
-  searchTerm: string;
-  onSearchTermChange: (value: string) => void;
-  searchInputRef?: React.RefObject<HTMLInputElement>;
   linkSize: number;
   onLinkSizeChange: (size: number) => void;
+  onApplyCuratedLinks?: () => void;
+  onResetLocalData?: () => void;
 }
 
 export function AppHeader(props: AppHeaderProps) {
-  const navigate = useNavigate();
+  const headerRef = useRef<HTMLElement | null>(null);
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+
+    const setVar = () => {
+      document.documentElement.style.setProperty(
+        "--app-header-h",
+        `${el.offsetHeight}px`
+      );
+    };
+
+    setVar();
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => setVar());
+      ro.observe(el);
+    }
+
+    window.addEventListener("resize", setVar);
+    return () => {
+      window.removeEventListener("resize", setVar);
+      ro?.disconnect();
+    };
+  }, []);
 
   const handleAddCategory = () => {
     if (newCategoryName.trim()) {
@@ -53,21 +78,10 @@ export function AppHeader(props: AppHeaderProps) {
     }
   };
   return (
-    <header className="pt-6 sm:pt-10 pb-4 sm:pb-6">
+    <header ref={headerRef} className="pt-3 sm:pt-4 pb-2 sm:pb-3">
       <div className="container mx-auto">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
-          {/* Left spacer (keeps title perfectly centered) */}
-          <div className="w-10" />
-
-          {/* Centered Title */}
-          <div className="flex flex-col items-center text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight text-foreground">
-              All Your Favorite Links in One Place
-            </h1>
-          </div>
-
-          {/* Menu Button (right) */}
-          <div className="w-10 justify-self-end flex justify-end">
+        <div className="flex items-center justify-end">
+          <div className="flex justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="ghost" className="rounded-full">
@@ -151,6 +165,24 @@ export function AppHeader(props: AppHeaderProps) {
                 />
               </div>
 
+              {(props.onApplyCuratedLinks || props.onResetLocalData) && (
+                <>
+                  <DropdownMenuSeparator className="bg-slate-700/50" />
+                  {props.onApplyCuratedLinks && (
+                    <DropdownMenuItem onClick={props.onApplyCuratedLinks} className="rounded-md">
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      <span>Apply curated links pack</span>
+                    </DropdownMenuItem>
+                  )}
+                  {props.onResetLocalData && (
+                    <DropdownMenuItem onClick={props.onResetLocalData} className="rounded-md">
+                      <RotateCcw className="mr-2 h-4 w-4" />
+                      <span>Reset local data</span>
+                    </DropdownMenuItem>
+                  )}
+                </>
+              )}
+
               <DropdownMenuItem
                 onClick={props.onShowShortcuts}
                 className="rounded-md"
@@ -161,46 +193,6 @@ export function AppHeader(props: AppHeaderProps) {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        </div>
-
-        {/* Search */}
-        <div className="mt-4 flex justify-center">
-          <div className="w-full max-w-xl">
-            <form
-              className="relative"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const query = props.searchTerm.trim();
-                if (!query) return;
-                navigate(`/search?q=${encodeURIComponent(query)}`);
-              }}
-            >
-              <Input
-                ref={props.searchInputRef}
-                type="search"
-                inputMode="search"
-                enterKeyHint="search"
-                autoComplete="off"
-                placeholder="Search…"
-                value={props.searchTerm}
-                onChange={(e) => props.onSearchTermChange(e.target.value)}
-                className="h-11 rounded-full border-white/10 bg-white/5 px-4 pr-11 text-foreground placeholder:text-muted-foreground/80 backdrop-blur-sm focus-visible:ring-2 focus-visible:ring-ring/50"
-                aria-label="Search"
-              />
-              {props.searchTerm.trim().length > 0 && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => props.onSearchTermChange('')}
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-white/10"
-                  aria-label="Clear search"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
-            </form>
-          </div>
         </div>
       </div>
     </header>

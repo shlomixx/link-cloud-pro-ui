@@ -112,7 +112,11 @@ export default function SearchResults() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 sm:px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="container mx-auto px-4 sm:px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] focus:outline-none"
+      >
         {!cx && (
           <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm text-muted-foreground">
             Missing <code>VITE_GOOGLE_CSE_ID</code>. Add it to{" "}
