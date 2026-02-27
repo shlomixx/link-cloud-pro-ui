@@ -832,12 +832,15 @@ const Index = () => {
           onAddLink={() => openModal()}
           onAddCategory={() => openAddCategoryModal(null)}
           onShowShortcuts={() => setShowShortcuts(true)}
+          searchTerm={searchTerm}
+          onSearchTermChange={setSearchTerm}
+          searchInputRef={searchInputRef}
           linkSize={linkSize}
           onLinkSizeChange={setLinkSize}
         />
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <main className="container mx-auto px-6 py-10">
+        <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-10 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
           <Droppable droppableId="categories" type="CATEGORY">
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-12">

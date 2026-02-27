@@ -31,15 +31,27 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
   const handleMouseLeave = () => {
     onMouseLeave();
     setIsHovered(false);
-  };  return (
+  };
+  
+  return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <div
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={onLinkClick}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onLinkClick();
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label={link.name}
           className={`
             group relative flex flex-col items-center justify-center gap-3 p-5 rounded-2xl cursor-pointer
+            transition-smooth hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
           `}
         >
           {isHovered && (

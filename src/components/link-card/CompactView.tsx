@@ -32,7 +32,9 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
   const handleMouseLeave = () => {
     onMouseLeave();
     setIsHovered(false);
-  };  const containerSize = linkSize;
+  };
+  
+  const containerSize = linkSize;
   const iconContainerSize = containerSize * 0.7;
   const iconSize = iconContainerSize * 0.7;
 
@@ -43,8 +45,18 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={onLinkClick}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onLinkClick();
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label={link.name}
           className={`
             group relative flex flex-col items-center justify-center gap-3 p-4 cursor-pointer rounded-2xl
+            transition-smooth hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
           `}
           style={{ minWidth: `${containerSize}px`, maxWidth: `${containerSize}px` }}
         >

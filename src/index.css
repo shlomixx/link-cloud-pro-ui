@@ -79,11 +79,17 @@ All colors MUST be HSL.
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     scroll-padding-top: 2rem;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    font-size: 22px;
+    font-size: 18px;
+  }
+
+  @media (max-width: 640px) {
+    html {
+      font-size: 16px;
+    }
   }
 
   body {
@@ -104,17 +110,14 @@ All colors MUST be HSL.
     font-weight: 400;
   }
 
-  /* Mobile-style smooth scrolling for all elements */
+  /* Mobile-style scrolling helpers (avoid forcing smooth behavior via CSS) */
   * {
-    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Enhanced scroll performance with mobile-like behavior */
   .scroll-container, body, html {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    scroll-behavior: smooth;
   }
 
   /* Custom scrollbar styling */

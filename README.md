@@ -60,6 +60,35 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Google Programmable Search Engine (CSE)
+
+This project can show Google search results inside the app using **Google Programmable Search Engine (CSE)**.
+
+### 1) Create a CSE and get your ID (cx)
+
+- Go to `https://programmablesearchengine.google.com/`
+- Create a new search engine
+- Copy the **Search engine ID** (also called **cx**)
+
+### 2) Configure environment variables
+
+Create a file named `.env.local` in the project root:
+
+```sh
+VITE_GOOGLE_CSE_ID="<YOUR_CSE_ID>"
+# Optional: "resultsOnly" or "standard"
+VITE_GOOGLE_CSE_MODE="resultsOnly"
+```
+
+Then restart the dev server.
+
+### 3) Use it in the app
+
+- Type a query in the header search box and press Enter.
+- The app navigates to: `/search?q=...` and renders Google results via the official embed script:
+  - Script: `https://cse.google.com/cse.js?cx=<CSE_ID>`
+  - Container: `<div class="gcse-searchresults-only"></div>`
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/0cf4e6c0-3ca3-418d-96e9-d8c003d92296) and click on Share -> Publish.

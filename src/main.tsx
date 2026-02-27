@@ -2,6 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
+import 'lenis/dist/lenis.css'
 
 // Remove loading fallback once app is ready
 const removeLoadingFallback = () => {

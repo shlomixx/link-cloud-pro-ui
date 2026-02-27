@@ -4,7 +4,9 @@ import {
   Keyboard,
   Plus,
   FolderPlus,
+  X,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
@@ -31,11 +33,15 @@ interface AppHeaderProps {
   onAddLink: () => void;
   onShowShortcuts: () => void;
   onAddCategory: (categoryName: string) => void;
+  searchTerm: string;
+  onSearchTermChange: (value: string) => void;
+  searchInputRef?: React.RefObject<HTMLInputElement>;
   linkSize: number;
   onLinkSizeChange: (size: number) => void;
 }
 
 export function AppHeader(props: AppHeaderProps) {
+  const navigate = useNavigate();
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
 
@@ -47,18 +53,21 @@ export function AppHeader(props: AppHeaderProps) {
     }
   };
   return (
-    <header className="pt-16 pb-8">
-      <div className="container mx-auto flex items-center justify-between">
-        {/* Spacer to keep title centered */}
-        <div className="w-10"></div>
-        
-        {/* Centered Title with updated font and color */}
-        <h1 className="text-4xl font-normal text-white tracking-wide text-center flex-grow">
-          All Your Favorite Links in One Place
-        </h1>
-        
-        {/* Menu Button */}
-        <div className="w-10 flex justify-end">
+    <header className="pt-6 sm:pt-10 pb-4 sm:pb-6">
+      <div className="container mx-auto">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+          {/* Left spacer (keeps title perfectly centered) */}
+          <div className="w-10" />
+
+          {/* Centered Title */}
+          <div className="flex flex-col items-center text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight text-foreground">
+              All Your Favorite Links in One Place
+            </h1>
+          </div>
+
+          {/* Menu Button (right) */}
+          <div className="w-10 justify-self-end flex justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="ghost" className="rounded-full">
@@ -151,6 +160,47 @@ export function AppHeader(props: AppHeaderProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+        </div>
+        </div>
+
+        {/* Search */}
+        <div className="mt-4 flex justify-center">
+          <div className="w-full max-w-xl">
+            <form
+              className="relative"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const query = props.searchTerm.trim();
+                if (!query) return;
+                navigate(`/search?q=${encodeURIComponent(query)}`);
+              }}
+            >
+              <Input
+                ref={props.searchInputRef}
+                type="search"
+                inputMode="search"
+                enterKeyHint="search"
+                autoComplete="off"
+                placeholder="Search…"
+                value={props.searchTerm}
+                onChange={(e) => props.onSearchTermChange(e.target.value)}
+                className="h-11 rounded-full border-white/10 bg-white/5 px-4 pr-11 text-foreground placeholder:text-muted-foreground/80 backdrop-blur-sm focus-visible:ring-2 focus-visible:ring-ring/50"
+                aria-label="Search"
+              />
+              {props.searchTerm.trim().length > 0 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => props.onSearchTermChange('')}
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-white/10"
+                  aria-label="Clear search"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+            </form>
+          </div>
         </div>
       </div>
     </header>
