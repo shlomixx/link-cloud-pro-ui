@@ -20,7 +20,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
   onChangeCategory,
   onDragStart,
   onAdd,
-  linkSize = 90, // Default size
+  linkSize = 100, // Default size
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -91,7 +91,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
               </div>
             </div>
             <figcaption className="w-full text-center">
-              <span className="text-white text-sm font-medium leading-tight text-center px-2 py-1 rounded-md bg-black/20 backdrop-blur-sm shadow-sm max-w-full truncate inline-block">
+              <span className="text-white text-base font-medium leading-tight text-center px-2 py-1 rounded-md bg-black/20 backdrop-blur-sm shadow-sm max-w-full truncate inline-block">
                 {link.name}
               </span>
             </figcaption>
@@ -104,7 +104,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
         categories={categories}
         onEdit={onEdit}
         onCopyUrl={onCopyUrl}
-        onToggleFavorite={() => onToggleFavorite({} as React.MouseEvent)}
+        onToggleFavorite={() => onToggleFavorite(link.key)}
         onChangeCategory={onChangeCategory}
         onDelete={onDelete}
       />

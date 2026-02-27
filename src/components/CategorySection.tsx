@@ -47,6 +47,10 @@ export const CategorySection: React.FC<CategorySectionProps> = memo(({
   onToggleFavorite,
   onReorderLinks,
   onEditCategoryName,
+  onDeleteCategory,
+  onAddCategory,
+  onAddPredefinedCategory,
+  dragHandleProps,
   linkSize
 }) => {
   // Performance monitoring
@@ -72,7 +76,11 @@ export const CategorySection: React.FC<CategorySectionProps> = memo(({
     categoryLabels,
     categoryColors,
     onAddLink,
+    onDeleteCategory,
+    onAddCategory,
+    onAddPredefinedCategory,
     onEditCategoryName,
+    dragHandleProps,
     linkItemProps,
     links
   };
@@ -102,7 +110,11 @@ const DesktopLayout: React.FC<LayoutProps> = memo(({
   categoryLabels, 
   categoryColors, 
   onAddLink,
-  onEditCategoryName, 
+  onDeleteCategory,
+  onAddCategory,
+  onAddPredefinedCategory,
+  onEditCategoryName,
+  dragHandleProps, 
   links, 
   linkItemProps 
 }) => {
@@ -116,6 +128,10 @@ const DesktopLayout: React.FC<LayoutProps> = memo(({
         categoryColors={categoryColors}
         categoryLabels={categoryLabels}
         onEditCategoryName={onEditCategoryName}
+        onDeleteCategory={onDeleteCategory}
+        onAddCategory={onAddCategory}
+        onAddPredefinedCategory={onAddPredefinedCategory}
+        dragHandleProps={dragHandleProps}
       />
       
       <div className={LAYOUT_CLASSES.categoryContainer}>
@@ -152,7 +168,11 @@ const MobileLayout: React.FC<LayoutProps> = memo(({
   categoryLabels, 
   categoryColors, 
   onAddLink,
-  onEditCategoryName, 
+  onDeleteCategory,
+  onAddCategory,
+  onAddPredefinedCategory,
+  onEditCategoryName,
+  dragHandleProps, 
   links, 
   linkItemProps 
 }) => {
@@ -167,7 +187,11 @@ const MobileLayout: React.FC<LayoutProps> = memo(({
           categoryColors={categoryColors}
           categoryLabels={categoryLabels}
           onEditCategoryName={onEditCategoryName}
+          onDeleteCategory={onDeleteCategory}
+          onAddCategory={onAddCategory}
+          onAddPredefinedCategory={onAddPredefinedCategory}
           isMobile={true}
+          dragHandleProps={dragHandleProps}
         />
       </div>
       

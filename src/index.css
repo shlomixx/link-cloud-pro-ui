@@ -83,7 +83,7 @@ All colors MUST be HSL.
     scroll-padding-top: 2rem;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    font-size: 20px;
+    font-size: 22px;
   }
 
   body {

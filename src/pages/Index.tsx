@@ -5,9 +5,10 @@ import { toast } from 'sonner';
 import { AppHeader } from '@/components/AppHeader';
 import { CategorySection } from '@/components/CategorySection';
 import { LinkData, FormData, SortBy } from '@/types';
+import { AddCategoryModal } from '@/components/AddCategoryModal';
 import { useFaviconPreloader } from '@/hooks/useFaviconPreloader';
 import { debounce } from '@/utils/performanceOptimizations';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
 import { parseDroppableId, ITEMS_PER_ROW } from '@/components/CategorySection/utils';
 
 // Lazy load heavy components
@@ -25,6 +26,8 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
+  const [addingToCategory, setAddingToCategory] = useState<string | null>(null);
   const [editingLink, setEditingLink] = useState<LinkData | null>(null);
   const [isNewLink, setIsNewLink] = useState(false);
   const [sortBy, setSortBy] = useState<SortBy>('custom');
@@ -68,7 +71,7 @@ const Index = () => {
     { key: 'daily-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
     { key: 'daily-netflix', name: 'Netflix', defaultUrl: 'https://netflix.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
     { key: 'daily-office', name: 'Office', defaultUrl: 'https://office.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-    { key: 'daily-spotify', name: 'Spotify', defaultUrl: 'spotify.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
+    { key: 'daily-spotify', name: 'Spotify', defaultUrl: 'https://spotify.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
     { key: 'daily-ticketmaster', name: 'Ticketmaster', defaultUrl: 'https://ticketmaster.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
     { key: 'daily-soundcloud', name: 'SoundCloud', defaultUrl: 'https://soundcloud.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
     { key: 'daily-nytimes', name: 'NY Times', defaultUrl: 'https://nytimes.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
@@ -105,7 +108,7 @@ const Index = () => {
     { key: 'social-tagged', name: 'Tagged', defaultUrl: 'https://tagged.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
     { key: 'social-meetup', name: 'Meetup', defaultUrl: 'https://meetup.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
 
-    // Tools - 27 links
+    // Tools - 13 links
     { key: 'tools-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
     { key: 'tools-trello', name: 'Trello', defaultUrl: 'https://trello.com', category: 'tools', clicks: 45, createdAt: '2024-01-23' },
     { key: 'tools-figma', name: 'Figma', defaultUrl: 'https://figma.com', category: 'tools', clicks: 58, createdAt: '2024-03-01' },
@@ -119,20 +122,6 @@ const Index = () => {
     { key: 'tools-monday', name: 'Monday.com', defaultUrl: 'https://monday.com', category: 'tools', clicks: 35, createdAt: '2024-04-03' },
     { key: 'tools-airtable', name: 'Airtable', defaultUrl: 'https://airtable.com', category: 'tools', clicks: 32, createdAt: '2024-04-04' },
     { key: 'tools-zapier', name: 'Zapier', defaultUrl: 'https://zapier.com', category: 'tools', clicks: 28, createdAt: '2024-04-05' },
-    { key: 'tools-canva-2', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
-    { key: 'tools-trello-2', name: 'Trello', defaultUrl: 'https://trello.com', category: 'tools', clicks: 45, createdAt: '2024-01-23' },
-    { key: 'tools-figma-2', name: 'Figma', defaultUrl: 'https://figma.com', category: 'tools', clicks: 58, createdAt: '2024-03-01' },
-    { key: 'tools-slack-2', name: 'Slack', defaultUrl: 'https://slack.com', category: 'tools', clicks: 62, createdAt: '2024-03-02' },
-    { key: 'tools-zoom-2', name: 'Zoom', defaultUrl: 'https://zoom.us', category: 'tools', clicks: 48, createdAt: '2024-03-03' },
-    { key: 'tools-miro-2', name: 'Miro', defaultUrl: 'https://miro.com', category: 'tools', clicks: 40, createdAt: '2024-03-04' },
-    { key: 'tools-vsc-2', name: 'VS Code', defaultUrl: 'https://code.visualstudio.com', category: 'tools', clicks: 68, createdAt: '2024-03-13' },
-    { key: 'tools-docker-2', name: 'Docker', defaultUrl: 'https://docker.com', category: 'tools', clicks: 52, createdAt: '2024-03-14' },
-    { key: 'tools-jira-2', name: 'Jira', defaultUrl: 'https://atlassian.com/software/jira', category: 'tools', clicks: 42, createdAt: '2024-04-01' },
-    { key: 'tools-asana-2', name: 'Asana', defaultUrl: 'https://asana.com', category: 'tools', clicks: 38, createdAt: '2024-04-02' },
-    { key: 'tools-monday-2', name: 'Monday.com', defaultUrl: 'https://monday.com', category: 'tools', clicks: 35, createdAt: '2024-04-03' },
-    { key: 'tools-airtable-2', name: 'Airtable', defaultUrl: 'https://airtable.com', category: 'tools', clicks: 32, createdAt: '2024-04-04' },
-    { key: 'tools-zapier-2', name: 'Zapier', defaultUrl: 'https://zapier.com', category: 'tools', clicks: 28, createdAt: '2024-04-05' },
-    { key: 'tools-canva-3', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
   ]);
 
   const [categoryLabels, setCategoryLabels] = useState({
@@ -185,7 +174,7 @@ const Index = () => {
       }
     }
     
-    if (saved) {
+  if (saved) {
       try {
         const loadedData = JSON.parse(saved);
         let loadedLinks = Array.isArray(loadedData) ? loadedData : loadedData.linksData;
@@ -201,6 +190,18 @@ const Index = () => {
       const allCategories = Array.from(new Set(linksData.map(link => link.category)));
       const remainingCategories = allCategories.filter(c => !preferredOrder.includes(c));
       setCategoryOrder([...preferredOrder, ...remainingCategories]);
+    }
+    // Try to restore user-defined category order if present
+    const savedOrder = localStorage.getItem('categoryOrder');
+    if (savedOrder) {
+      try {
+        const parsed = JSON.parse(savedOrder);
+        if (Array.isArray(parsed)) {
+          setCategoryOrder(parsed);
+        }
+      } catch (err) {
+        console.warn('Invalid categoryOrder in localStorage');
+      }
     }
     
     if (savedSettings) {
@@ -425,6 +426,16 @@ const Index = () => {
     setFormData({ name: '', url: '', category: 'custom' });
   };
 
+  const openAddCategoryModal = (category: string | null) => {
+    setAddingToCategory(category);
+    setIsAddCategoryModalOpen(true);
+  };
+
+  const closeAddCategoryModal = () => {
+    setAddingToCategory(null);
+    setIsAddCategoryModalOpen(false);
+  };
+
   const handleSave = async () => {
     if (!formData.name.trim() || !formData.url.trim()) {
       toast.error('Please fill in both name and URL');
@@ -521,11 +532,101 @@ const Index = () => {
 
     toast.success(`Category renamed to "${newCategoryName}" successfully!`);
 
-    // Save changes to local storage
-    localStorage.setItem('categoryLabels', JSON.stringify({
-      ...categoryLabels,
-      [oldCategory]: newCategoryName
-    }));
+  };
+
+  const handleDeleteCategory = (category: string) => {
+    const label = categoryLabels[category as keyof typeof categoryLabels] || category;
+    
+    // Remove all links in this category
+    setLinksData(prev => prev.filter(link => link.category !== category));
+
+    // Remove category label and color
+    setCategoryLabels(prev => {
+      const { [category]: _removed, ...rest } = prev;
+      return rest;
+    });
+
+    setCategoryColors(prev => {
+      const { [category]: _removed, ...rest } = prev;
+      return rest;
+    });
+
+    // Remove from order
+    setCategoryOrder(prev => prev.filter(c => c !== category));
+
+    toast.success(`Category "${label}" and all its links were deleted`);
+  };
+
+  const handleAddPredefinedCategory = (template: 'adults' | 'news') => {
+    if (template === 'adults') {
+      const categoryKey = 'adults';
+
+      if (categoryLabels[categoryKey as keyof typeof categoryLabels]) {
+        toast.error('Adults category already exists!');
+        return;
+      }
+
+      const now = new Date().toISOString();
+
+      const adultLinks: LinkData[] = [
+        { key: 'adults-pornhub', name: 'PornHub', defaultUrl: 'https://www.pornhub.com', category: categoryKey, clicks: 0, createdAt: now },
+        { key: 'adults-xvideos', name: 'XVideos', defaultUrl: 'https://www.xvideos.com', category: categoryKey, clicks: 0, createdAt: now },
+        { key: 'adults-xhamster', name: 'xHamster', defaultUrl: 'https://xhamster.com', category: categoryKey, clicks: 0, createdAt: now },
+        { key: 'adults-xnxx', name: 'XNXX', defaultUrl: 'https://www.xnxx.com', category: categoryKey, clicks: 0, createdAt: now },
+        { key: 'adults-redtube', name: 'RedTube', defaultUrl: 'https://www.redtube.com', category: categoryKey, clicks: 0, createdAt: now },
+        { key: 'adults-youporn', name: 'YouPorn', defaultUrl: 'https://www.youporn.com', category: categoryKey, clicks: 0, createdAt: now },
+      ];
+
+      setCategoryLabels(prev => ({
+        ...prev,
+        [categoryKey]: 'Adults',
+      }));
+
+      setCategoryColors(prev => ({
+        ...prev,
+        [categoryKey]: 'from-rose-500 to-red-700',
+      }));
+
+      setCategoryOrder(prev => (prev.includes(categoryKey) ? prev : [...prev, categoryKey]));
+      setLinksData(prev => [...prev, ...adultLinks]);
+
+      toast.success('Adults category added with predefined links');
+      return;
+    }
+
+    if (template === 'news') {
+      const categoryKey = 'news';
+
+      if (categoryLabels[categoryKey as keyof typeof categoryLabels]) {
+        toast.error('News category already exists!');
+        return;
+      }
+
+      const now = new Date().toISOString();
+
+      const newsLinks: LinkData[] = [
+        { key: 'news-bbc', name: 'BBC News', defaultUrl: 'https://www.bbc.com/news', category: categoryKey, clicks: 0, createdAt: now },
+        { key: 'news-guardian', name: 'The Guardian', defaultUrl: 'https://www.theguardian.com', category: categoryKey, clicks: 0, createdAt: now },
+        { key: 'news-reuters', name: 'Reuters', defaultUrl: 'https://www.reuters.com', category: categoryKey, clicks: 0, createdAt: now },
+        { key: 'news-ap', name: 'AP News', defaultUrl: 'https://apnews.com', category: categoryKey, clicks: 0, createdAt: now },
+        { key: 'news-aljazeera', name: 'Al Jazeera', defaultUrl: 'https://www.aljazeera.com', category: categoryKey, clicks: 0, createdAt: now },
+      ];
+
+      setCategoryLabels(prev => ({
+        ...prev,
+        [categoryKey]: 'News',
+      }));
+
+      setCategoryColors(prev => ({
+        ...prev,
+        [categoryKey]: 'from-sky-500 to-indigo-600',
+      }));
+
+      setCategoryOrder(prev => (prev.includes(categoryKey) ? prev : [...prev, categoryKey]));
+      setLinksData(prev => [...prev, ...newsLinks]);
+
+      toast.success('News category added with predefined links');
+    }
   };
 
   const handleDeleteLink = (linkKey: string) => {
@@ -582,6 +683,7 @@ const Index = () => {
         const sourceLink = categoryLinks[sourceIndex];
         const destinationLink = categoryLinks[destinationIndex];
         
+                console.log('DRAG DEBUG:', { sourceIndex, destinationIndex, category, sourceLink: sourceLink?.name, destLink: destinationLink?.name, categoryLinksCount: categoryLinks.length });
         if (sourceLink && destinationLink) {
           const fullSourceIndex = newLinks.findIndex(l => l.key === sourceLink.key);
           const fullDestinationIndex = newLinks.findIndex(l => l.key === destinationLink.key);
@@ -603,11 +705,31 @@ const Index = () => {
       return;
     }
 
+    // If we're dragging categories (outer list), handle separately
+    if (result.type === 'CATEGORY') {
+      const sourceIndex = result.source.index;
+      const destIndex = result.destination.index;
+      if (sourceIndex === destIndex) return;
+      const nextOrder = Array.from(categoryOrder);
+      const [moved] = nextOrder.splice(sourceIndex, 1);
+      nextOrder.splice(destIndex, 0, moved);
+      setCategoryOrder(nextOrder);
+      try {
+        localStorage.setItem('categoryOrder', JSON.stringify(nextOrder));
+      } catch (err) {
+        console.warn('Failed to persist category order', err);
+      }
+      toast.success('Category order updated');
+      return;
+    }
+
     const { source, destination } = result;
+        console.log('DRAGEND RAW:', { source, destination, draggableId: result.draggableId });
     
     // Parse source and destination droppable IDs
     const sourceInfo = parseDroppableId(source.droppableId);
     const destInfo = parseDroppableId(destination.droppableId);
+        console.log('DRAGEND PARSED:', { sourceInfo, destInfo, itemsPerRow: sourceInfo?.isMobile ? 5 : 12 });
 
     if (!sourceInfo.isValid || !destInfo.isValid) {
       console.error('Invalid droppable ID format');
@@ -708,7 +830,7 @@ const Index = () => {
     <div className={`min-h-screen transition-all duration-500 bg-background`}>
         <AppHeader
           onAddLink={() => openModal()}
-          onAddCategory={handleAddCategory}
+          onAddCategory={() => openAddCategoryModal(null)}
           onShowShortcuts={() => setShowShortcuts(true)}
           linkSize={linkSize}
           onLinkSizeChange={setLinkSize}
@@ -716,37 +838,54 @@ const Index = () => {
 
       <DragDropContext onDragEnd={handleDragEnd}>
         <main className="container mx-auto px-6 py-10">
-          <div className="space-y-12">
-            {Object.entries(groupedLinks).map(([category, links], index) => (
-              <div
-                key={category}
-                className="animate-slide-up"
-              >
-                <CategorySection
-                  category={category}
-                  links={links}
-                  categoryLabels={categoryLabels}
-                  categoryColors={categoryColors}
-                  hoveredLink={hoveredLink}
-                  clickedLink={clickedLink}
-                  onLinkClick={handleLinkClick}
-                  onEditLink={openModal}
-                  onCopyUrl={copyLinkUrl}
-                  onMouseEnter={setHoveredLink}
-                  onMouseLeave={() => setHoveredLink(null)}
-                  onAddLink={(category) => openModal(undefined, category)}
-                  onReorderLinks={handleReorderLinks}
-                  onDeleteLink={handleDeleteLink}
-                  onToggleFavorite={handleToggleFavorite}
-                  linkSize={linkSize}
-                />
-            </div>
-          ))}
-        </div>
+          <Droppable droppableId="categories" type="CATEGORY">
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-12">
+                {Object.entries(groupedLinks).map(([category, links], index) => (
+                  <Draggable key={category} draggableId={`category-${category}`} index={index}>
+                    {(prov, snapshot) => (
+                      <div
+                        ref={prov.innerRef}
+                        {...prov.draggableProps}
+                        className={`animate-slide-up transition-transform duration-150 ${snapshot.isDragging ? 'scale-105 shadow-2xl z-50 opacity-95' : ''}`}
+                      >
+                        <div className={`${snapshot.isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}>
+                          <CategorySection
+                            category={category}
+                            links={links}
+                            categoryLabels={categoryLabels}
+                            categoryColors={categoryColors}
+                            hoveredLink={hoveredLink}
+                            clickedLink={clickedLink}
+                            onLinkClick={handleLinkClick}
+                            onEditLink={openModal}
+                            onCopyUrl={copyLinkUrl}
+                            onMouseEnter={setHoveredLink}
+                            onMouseLeave={() => setHoveredLink(null)}
+                            onAddLink={(category) => openModal(undefined, category)}
+                            onAddCategory={openAddCategoryModal}
+                          onDeleteCategory={handleDeleteCategory}
+                          onAddPredefinedCategory={handleAddPredefinedCategory}
+                            dragHandleProps={prov.dragHandleProps}
+                            onReorderLinks={handleReorderLinks}
+                            onDeleteLink={handleDeleteLink}
+                            onToggleFavorite={handleToggleFavorite}
+                            onEditCategoryName={handleEditCategoryName}
+                            linkSize={linkSize}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
         
         {Object.keys(groupedLinks).length === 0 && (
           <div className="text-center py-20 animate-fade-in">
-            <div className="text-6xl mb-6 animate-bounce">🔗</div>
+            <div className="text-6xl mb-6 animate-bounce">נ”—</div>
             <h3 className={`text-2xl font-bold mb-3 transition-colors duration-300 text-foreground`}>
               {debouncedSearchTerm || quickFilter !== 'all' ? 'No links found' : 'Your link collection awaits'}
             </h3>
@@ -802,6 +941,13 @@ const Index = () => {
           }}
           isLoading={false}
           categoryLabels={categoryLabels}
+        />
+
+        <AddCategoryModal
+          isOpen={isAddCategoryModalOpen}
+          onClose={closeAddCategoryModal}
+          onAddCategory={handleAddCategory}
+          isLoading={false}
         />
 
         <LazyKeyboardShortcuts

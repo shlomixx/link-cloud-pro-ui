@@ -7,6 +7,10 @@ export interface LayoutProps {
   categoryColors: Record<string, string>;
   onAddLink: (category: string) => void;
   onEditCategoryName?: (oldCategory: string, newCategory: string) => void;
+  onDeleteCategory?: (category: string) => void;
+  onAddCategory?: (category: string | null) => void;
+  onAddPredefinedCategory?: (template: 'adults' | 'news') => void;
+  dragHandleProps?: any;
   links: LinkData[];
   linkItemProps: LinkItemProps;
 }

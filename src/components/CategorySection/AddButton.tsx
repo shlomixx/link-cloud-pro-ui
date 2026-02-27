@@ -10,7 +10,6 @@ export const AddButton: React.FC<AddButtonProps> = React.memo(({ onAddLink, cate
   >
     <div className={ADD_BUTTON_STYLES.button}>
       <Plus className={ADD_BUTTON_STYLES.icon} />
-      <span className={ADD_BUTTON_STYLES.text}>Add Link</span>
     </div>
   </div>
 ));

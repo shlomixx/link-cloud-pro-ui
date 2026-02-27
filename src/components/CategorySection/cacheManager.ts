@@ -92,8 +92,8 @@ export const cachedChunkLinksIntoRows = (
   itemsPerRow: number
 ): LinkData[][] => {
   // Create cache key based on links hash and itemsPerRow
-  const linksHash = links.map(link => `${link.key}-${link.category}`).join('|');
-  const cacheKey = `${linksHash}-${itemsPerRow}`;
+      const linksHash = links.map((link, i) => `${i}:${link.key}`).join('|')
+          const cacheKey = `${linksHash}-${itemsPerRow}`;
   
   // Try to get from cache first
   const cached = rowChunkCache.get(cacheKey);

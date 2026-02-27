@@ -27,6 +27,10 @@ export interface CategorySectionProps {
   onToggleFavorite: (linkKey: string) => void;
   onReorderLinks: (sourceIndex: number, destinationIndex: number, category: string) => void;
   onEditCategoryName?: (oldCategory: string, newCategory: string) => void;
+  onAddCategory?: (category: string | null) => void;
+  onDeleteCategory?: (category: string) => void;
+  onAddPredefinedCategory?: (template: 'adults' | 'news') => void;
+  dragHandleProps?: any;
   linkSize: number;
 }
 
@@ -36,6 +40,10 @@ export interface CategoryHeaderProps {
   categoryLabels: Record<string, string>;
   isMobile?: boolean;
   onEditCategoryName?: (oldCategory: string, newCategory: string) => void;
+  onAddCategory?: (category: string | null) => void;
+  onDeleteCategory?: (category: string) => void;
+  onAddPredefinedCategory?: (template: 'adults' | 'news') => void;
+  dragHandleProps?: any;
 }
 
 export interface AddButtonProps {

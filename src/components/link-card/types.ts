@@ -20,7 +20,7 @@ export interface BaseLinkCardProps {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   onLinkClick: () => void;
-  onToggleFavorite: (e: React.MouseEvent) => void;
+    onToggleFavorite: (linkKey: string) => void;
   onEdit: () => void;
   onCopyUrl: () => void;
   onDelete?: () => void;
