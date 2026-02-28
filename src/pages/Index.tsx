@@ -193,6 +193,7 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [cloudCategory, setCloudCategory] = useState<string>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
   const [addingToCategory, setAddingToCategory] = useState<string | null>(null);
@@ -985,6 +986,84 @@ const Index = () => {
     setCategoryOrder(['daily', 'society', 'tools']);
     toast.success('Local data reset');
   };
+
+  const ensureCategoryExists = (key: string, label: string, color: string) => {
+    setCategoryLabels((prev) => (prev[key as keyof typeof prev] ? prev : { ...prev, [key]: label }));
+    setCategoryColors((prev) => (prev[key as keyof typeof prev] ? prev : { ...prev, [key]: color }));
+    setCategoryOrder((prev) => (prev.includes(key) ? prev : [key, ...prev]));
+  };
+
+  const addTemplateCategory = (template: 'adults' | 'ai') => {
+    const now = new Date().toISOString();
+
+    if (template === 'adults') {
+      ensureCategoryExists('adults', 'Adults (18+)', 'from-slate-500 to-slate-700');
+      const adultLinks: LinkData[] = [
+        { key: 'adults-pornhub', name: 'PornHub', defaultUrl: 'https://www.pornhub.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-xvideos', name: 'XVideos', defaultUrl: 'https://www.xvideos.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-xhamster', name: 'xHamster', defaultUrl: 'https://xhamster.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-xnxx', name: 'XNXX', defaultUrl: 'https://www.xnxx.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-eporner', name: 'Eporner', defaultUrl: 'https://www.eporner.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-hqporner', name: 'HQPorner', defaultUrl: 'https://hqporner.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-beeg', name: 'Beeg', defaultUrl: 'https://beeg.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-youporn', name: 'YouPorn', defaultUrl: 'https://www.youporn.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-redtube', name: 'RedTube', defaultUrl: 'https://www.redtube.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-spankbang', name: 'SpankBang', defaultUrl: 'https://spankbang.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-motherless', name: 'Motherless', defaultUrl: 'https://motherless.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-porntrex', name: 'PornTrex', defaultUrl: 'https://www.porntrex.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-youjizz', name: 'YouJizz', defaultUrl: 'https://www.youjizz.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-tube8', name: 'Tube8', defaultUrl: 'https://www.tube8.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-txxx', name: 'TXXX', defaultUrl: 'https://www.txxx.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-porndig', name: 'PornDig', defaultUrl: 'https://www.porndig.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-cumlouder', name: 'CumLouder', defaultUrl: 'https://www.cumlouder.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-porndoe', name: 'PornDoe', defaultUrl: 'https://www.porndoe.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-okxxx', name: 'OK.xxx', defaultUrl: 'https://ok.xxx', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-porn00', name: 'Porn00', defaultUrl: 'https://porn00.org', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-pornhits', name: 'PornHits', defaultUrl: 'https://www.pornhits.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-porngo', name: 'PornGo', defaultUrl: 'https://www.porngo.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-whoreshub', name: 'WhoresHub', defaultUrl: 'https://whoreshub.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-pornhd3x', name: 'PornHD3X', defaultUrl: 'https://pornhd3x.tv', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-xxxfiles', name: 'XXXFiles', defaultUrl: 'https://www.xxxfiles.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-pornktube', name: 'PornKTube', defaultUrl: 'https://www.pornktube.com', category: 'adults', clicks: 0, createdAt: now },
+        { key: 'adults-tnaflix', name: 'TNAFlix', defaultUrl: 'https://www.tnaflix.com', category: 'adults', clicks: 0, createdAt: now },
+      ];
+
+      setLinksData((prev) => {
+        const existingKeys = new Set(prev.map((l) => l.key));
+        const extras = adultLinks.filter((l) => !existingKeys.has(l.key));
+        if (extras.length > 0) toast.success(`Adults: added ${extras.length} links`);
+        return extras.length > 0 ? [...prev, ...extras] : prev;
+      });
+      return;
+    }
+
+    if (template === 'ai') {
+      ensureCategoryExists('ai', 'AI', 'from-slate-500 to-slate-700');
+      const aiLinks: LinkData[] = [
+        { key: 'ai-chatgpt', name: 'ChatGPT', defaultUrl: 'https://chatgpt.com/', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-claude', name: 'Claude', defaultUrl: 'https://claude.ai/', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-gemini', name: 'Gemini', defaultUrl: 'https://gemini.google.com/app', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-perplexity', name: 'Perplexity', defaultUrl: 'https://www.perplexity.ai/', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-openai-platform', name: 'OpenAI Platform', defaultUrl: 'https://platform.openai.com', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-anthropic-console', name: 'Anthropic Console', defaultUrl: 'https://console.anthropic.com', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-google-ai-studio', name: 'Google AI Studio', defaultUrl: 'https://aistudio.google.com', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-huggingface', name: 'Hugging Face', defaultUrl: 'https://huggingface.co', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-replicate', name: 'Replicate', defaultUrl: 'https://replicate.com', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-ollama', name: 'Ollama', defaultUrl: 'https://ollama.com', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-lmstudio', name: 'LM Studio', defaultUrl: 'https://lmstudio.ai', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-kaggle', name: 'Kaggle', defaultUrl: 'https://kaggle.com', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-arxiv', name: 'arXiv', defaultUrl: 'https://arxiv.org', category: 'ai', clicks: 0, createdAt: now },
+        { key: 'ai-paperswithcode', name: 'Papers with Code', defaultUrl: 'https://paperswithcode.com', category: 'ai', clicks: 0, createdAt: now },
+      ];
+
+      setLinksData((prev) => {
+        const existingKeys = new Set(prev.map((l) => l.key));
+        const extras = aiLinks.filter((l) => !existingKeys.has(l.key));
+        if (extras.length > 0) toast.success(`AI: added ${extras.length} links`);
+        return extras.length > 0 ? [...prev, ...extras] : prev;
+      });
+    }
+  };
   
   return (
     <div className={`min-h-screen transition-all duration-500 bg-background`}>
@@ -1015,6 +1094,9 @@ const Index = () => {
               navigate(`/search?q=${encodeURIComponent(q)}`);
             }}
             onLinkClick={handleLinkClick}
+            selectedCategory={cloudCategory}
+            onSelectedCategoryChange={setCloudCategory}
+            onAddTemplateCategory={addTemplateCategory}
           />
 
           {/* Clear separation: categories start only after scrolling */}
