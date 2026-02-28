@@ -78,22 +78,26 @@ export function AppHeader(props: AppHeaderProps) {
     }
   };
   return (
-    <header ref={headerRef} className="pt-3 sm:pt-4 pb-2 sm:pb-3">
+    <header ref={headerRef} className="sticky top-0 z-50 pt-3 sm:pt-4 pb-2 sm:pb-3 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="container mx-auto">
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-between">
+          {/* Fandom-style brandmark */}
+          <a href="/" className="text-xl sm:text-2xl font-bold tracking-tight text-foreground hover:text-primary transition-colors" aria-label="pokilo home">
+            pokilo
+          </a>
           <div className="flex justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="ghost" className="rounded-full">
+              <Button size="icon" variant="ghost" className="rounded-full hover:bg-muted">
                 <Settings className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className={`w-64 rounded-xl border-slate-700/50 bg-slate-900/80 p-2 backdrop-blur-xl`}
+              className="w-64 rounded-xl border-border bg-card p-2 shadow-xl"
             >
-              <DropdownMenuLabel>Settings</DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-slate-700/50" />
+              <DropdownMenuLabel className="text-muted-foreground text-xs uppercase tracking-wider">Settings</DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-border" />
 
               <DropdownMenuItem onClick={props.onAddLink} className="rounded-md">
                 <Plus className="mr-2 h-4 w-4" />
@@ -152,9 +156,9 @@ export function AppHeader(props: AppHeaderProps) {
                 </DialogContent>
               </Dialog>
 
-              <DropdownMenuSeparator className="bg-slate-700/50" />
+              <DropdownMenuSeparator className="bg-border" />
               
-              <DropdownMenuLabel>Link Size: {props.linkSize}px</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-muted-foreground text-xs">Link Size: {props.linkSize}px</DropdownMenuLabel>
               <div className="p-2">
                 <Slider
                   defaultValue={[props.linkSize]}
@@ -167,7 +171,7 @@ export function AppHeader(props: AppHeaderProps) {
 
               {(props.onApplyCuratedLinks || props.onResetLocalData) && (
                 <>
-                  <DropdownMenuSeparator className="bg-slate-700/50" />
+                  <DropdownMenuSeparator className="bg-border" />
                   {props.onApplyCuratedLinks && (
                     <DropdownMenuItem onClick={props.onApplyCuratedLinks} className="rounded-md">
                       <Sparkles className="mr-2 h-4 w-4" />

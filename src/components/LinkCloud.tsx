@@ -201,7 +201,7 @@ export function LinkCloud({
               placeholder="Search…"
               value={searchTerm}
               onChange={(e) => onSearchTermChange(e.target.value)}
-              className="h-14 sm:h-16 w-full rounded-full border border-white/15 bg-white/[0.04] px-6 pr-14 text-lg text-foreground placeholder:text-muted-foreground/70 shadow-sm backdrop-blur-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-white/35"
+              className="h-14 sm:h-16 w-full rounded-full border border-border bg-card px-6 pr-14 text-lg text-foreground placeholder:text-muted-foreground/60 shadow-sm focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary"
               aria-label="Search"
             />
             {searchTerm.trim().length > 0 && (
@@ -210,7 +210,7 @@ export function LinkCloud({
                 variant="ghost"
                 size="icon"
                 onClick={() => onSearchTermChange("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full text-muted-foreground hover:text-foreground hover:bg-white/[0.06]"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted"
                 aria-label="Clear search"
               >
                 <X className="h-5 w-5" />
@@ -224,39 +224,26 @@ export function LinkCloud({
           role="group"
           aria-label="Quick categories"
         >
-          <Button
-            type="button"
-            variant="ghost"
-            className="h-8 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-white/[0.06]"
-            aria-pressed={selectedCategory === "all"}
-            onClick={() => onSelectedCategoryChange("all")}
-          >
-            All
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            className="h-8 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-white/[0.06]"
-            aria-pressed={selectedCategory === "ai"}
-            onClick={() => {
-              onAddTemplateCategory("ai");
-              onSelectedCategoryChange("ai");
-            }}
-          >
-            AI
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            className="h-8 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-white/[0.06]"
-            aria-pressed={selectedCategory === "adults"}
-            onClick={() => {
-              onAddTemplateCategory("adults");
-              onSelectedCategoryChange("adults");
-            }}
-          >
-            Adults (18+)
-          </Button>
+          {["all", "ai", "adults"].map((cat) => (
+            <Button
+              key={cat}
+              type="button"
+              variant="ghost"
+              className={`h-8 rounded-full px-4 text-xs font-medium border transition-colors
+                ${selectedCategory === cat
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border text-muted-foreground hover:text-foreground hover:bg-muted hover:border-muted-foreground/40"
+                }`}
+              aria-pressed={selectedCategory === cat}
+              onClick={() => {
+                if (cat === "ai") onAddTemplateCategory("ai");
+                if (cat === "adults") onAddTemplateCategory("adults");
+                onSelectedCategoryChange(cat);
+              }}
+            >
+              {cat === "all" ? "All" : cat === "ai" ? "AI" : "Adults (18+)"}
+            </Button>
+          ))}
         </div>
 
         <div className="mt-6 sm:mt-8">
@@ -266,7 +253,7 @@ export function LinkCloud({
                 key={link.key}
                 type="button"
                 onClick={() => onLinkClick(link)}
-                className="group flex flex-col items-center gap-2 rounded-2xl px-2 py-2.5 transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                className="group flex flex-col items-center gap-2 rounded-xl px-2 py-2.5 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
                 aria-label={link.name}
                 title={link.name}
               >
@@ -278,7 +265,7 @@ export function LinkCloud({
                   decoding="async"
                   onError={handleFaviconError}
                 />
-                <span className="w-full truncate text-[13px] sm:text-sm leading-tight text-muted-foreground group-hover:text-foreground">
+                <span className="w-full truncate text-[12px] sm:text-[13px] leading-tight text-muted-foreground group-hover:text-primary">
                   {link.name}
                 </span>
               </button>

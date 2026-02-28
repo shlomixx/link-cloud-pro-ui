@@ -9,67 +9,62 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 20%;
-    --card: 329 3% 98%;
+    --foreground: 240 10% 12%;
+    --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 5%;
     --primary: 336 78% 57%; /* Mapped from --color-primary */
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 4.8% 91%;
-    --secondary-foreground: 240 7% 10%;
-    --muted: 0 0% 92%;
-    --muted-foreground: 0 0% 36%;
-    --accent: 0 0% 96.1%;
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 7% 12%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 38%;
+    --accent: 240 5% 96%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 72% 40%;
     --destructive-foreground: 0 0% 100%;
     --success: 123 38% 37%;
     --success-foreground: 123 38% 30%;
     --info: 199 92% 36%;
-    --border: 240 6% 84%;
-    --input: 240 6% 84%;
+    --border: 240 6% 88%;
+    --input: 240 6% 88%;
     --ring: 240 10% 3.9%;
     --radius: 0.5rem;
-    
-    /* Essential gradient variables */
-    --gradient-primary: linear-gradient(135deg, hsl(336 78% 57%), hsl(280 100% 70%));
-    --gradient-secondary: linear-gradient(135deg, hsl(240 100% 70%), hsl(200 100% 70%));
-    --gradient-accent: linear-gradient(135deg, hsl(280 100% 70%), hsl(320 100% 70%));
-    --gradient-card: linear-gradient(135deg, hsla(240 10% 3.9% / 0.8), hsla(240 10% 3.9% / 0.6));
-    --gradient-hover: linear-gradient(135deg, hsl(336 78% 67%), hsl(280 100% 80%));
   }
 
   .dark {
-    --background: 20 14% 4%; /* #0C0A09 */
-    --foreground: 0 0% 99%;   /* #FCFCFC */
-    --card: 212 19% 15%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 5%;
-    --popover-foreground: 240 10% 85%;
-    --primary: 336 78% 57%; /* Mapped from --color-primary */
+    /* Fandom-inspired dark palette */
+    /* Background: #1D1F23 deep dark navy */
+    --background: 222 13% 13%;
+    /* Foreground: near white */
+    --foreground: 0 0% 96%;
+    /* Card: slightly lighter surface #26282E */
+    --card: 222 11% 17%;
+    --card-foreground: 0 0% 96%;
+    --popover: 222 13% 10%;
+    --popover-foreground: 0 0% 92%;
+    /* Primary: Fandom cyan-blue #00B4D8 */
+    --primary: 192 100% 42%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 212 12% 27%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 90% 60%;
+    /* Secondary surface */
+    --secondary: 222 11% 21%;
+    --secondary-foreground: 0 0% 92%;
+    /* Muted: #3A3C42 */
+    --muted: 222 8% 24%;
+    --muted-foreground: 220 9% 60%;
+    /* Accent: slightly brighter surface */
+    --accent: 222 11% 21%;
+    --accent-foreground: 0 0% 96%;
+    --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 100%;
-    --success: 123 38% 57%;
-    --success-foreground: 123 38% 88%;
-    --info: 199 92% 56%;
-    --border: 240 3.7% 30%;
-    --input: 240 3.7% 30%;
-    --ring: 240 4.9% 83.9%;
-    
-    /* Dark mode gradient variables */
-    --gradient-primary: linear-gradient(135deg, hsl(336 78% 57%), hsl(280 100% 60%));
-    --gradient-secondary: linear-gradient(135deg, hsl(240 100% 60%), hsl(200 100% 60%));
-    --gradient-accent: linear-gradient(135deg, hsl(280 100% 60%), hsl(320 100% 60%));
-    --gradient-card: linear-gradient(135deg, hsla(212 19% 15% / 0.8), hsla(212 19% 15% / 0.6));
-    --gradient-hover: linear-gradient(135deg, hsl(336 78% 67%), hsl(280 100% 70%));
+    --success: 142 70% 45%;
+    --success-foreground: 142 70% 88%;
+    --info: 192 100% 42%;
+    /* Border: #35373E */
+    --border: 222 8% 22%;
+    --input: 222 8% 22%;
+    --ring: 192 100% 42%;
   }
 }
 
@@ -135,85 +130,11 @@ All colors MUST be HSL.
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--border) / 0.8);
+    background: hsl(192 100% 42% / 0.6);
   }
 }
 
 @layer components {
-  /* Enhanced gradient utilities */
-  .gradient-primary {
-    background: var(--gradient-primary);
-  }
-  
-  .gradient-secondary {
-    background: var(--gradient-secondary);
-  }
-  
-  .gradient-accent {
-    background: var(--gradient-accent);
-  }
-  
-  .gradient-card {
-    background: var(--gradient-card);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-  
-  .gradient-hover {
-    background: var(--gradient-hover);
-  }
-  
-  .gradient-text {
-    background: linear-gradient(90deg, #d8b4fe, #a5b4fc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .gradient-text-secondary {
-    background: var(--gradient-secondary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .gradient-text-accent {
-    background: var(--gradient-accent);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Enhanced button styles with gradients */
-  .btn-gradient {
-    background: var(--gradient-primary);
-    color: white;
-    border: none;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-  }
-  
-  .btn-gradient:hover {
-    background: var(--gradient-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px hsla(200 100% 50% / 0.4);
-  }
-
-  /* Card enhancements */
-  .card-gradient {
-    background: var(--gradient-card);
-    border: 1px solid hsla(0 0% 100% / 0.1);
-    box-shadow: 0 8px 32px hsla(0 0% 0% / 0.2);
-  }
-  
-  .card-gradient:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 48px hsla(0 0% 0% / 0.3);
-    border: 1px solid hsla(0 0% 100% / 0.2);
-    transition: all 0.3s ease;
-  }
-
   /* Typography enhancements */
   .text-enhanced {
     font-weight: 600;
