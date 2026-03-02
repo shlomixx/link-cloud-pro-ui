@@ -76,13 +76,13 @@ export function LinkCloud({
   const inlinePills = pillOptions.slice(0, MAX_INLINE_PILLS);
   const overflowPills = pillOptions.slice(MAX_INLINE_PILLS);
   return (
-    <section className="bg-white">
+    <section className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
       <div
         ref={containerRef}
         className="w-full mx-auto px-4 sm:px-6 pt-3 sm:pt-4 pb-3 border-b border-transparent"
       >
         <div className="w-full max-w-3xl mx-auto">
-          <div className="mb-4 flex justify-center">
+          <div className="mb-2 flex justify-center">
             <div className="flex items-center gap-2">
               <div className="h-9 w-9 rounded-2xl bg-gradient-to-tr from-blue-500 to-pink-500 shadow-sm flex items-center justify-center">
                 <span className="text-white text-lg font-semibold leading-none">p</span>
@@ -130,7 +130,7 @@ export function LinkCloud({
           </form>
         </div>
 
-        <div className="mt-6 w-full max-w-7xl mx-auto relative">
+        <div className="mt-3 w-full max-w-7xl mx-auto relative">
           {hasOverflow && (
             <>
               <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent" />
