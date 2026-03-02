@@ -32,6 +32,8 @@ export interface CategorySectionProps {
   onAddPredefinedCategory?: (template: 'adults' | 'news') => void;
   dragHandleProps?: any;
   linkSize: number;
+  /** When false, the category title is not shown on the left (used when categories are in the pills row only). */
+  showCategoryHeader?: boolean;
 }
 
 export interface CategoryHeaderProps {

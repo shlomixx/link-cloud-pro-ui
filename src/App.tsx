@@ -21,11 +21,12 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+  // Enable smooth scrolling with Lenis (native-friendly)
   useLenis();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
+      <ThemeProvider attribute="class" defaultTheme="light" forcedTheme="light">
         <TooltipProvider>
           <Sonner />
           <BrowserRouter>
@@ -37,7 +38,7 @@ const App = () => {
             </a>
             <Suspense
               fallback={
-                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
+                <div className="min-h-screen bg-white flex items-center justify-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                 </div>
               }

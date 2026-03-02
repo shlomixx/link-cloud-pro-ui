@@ -1,299 +1,209 @@
-import React, { useMemo, useState } from "react";
-import { LinkData } from "@/types";
+import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
-import { getFaviconUrl, handleFaviconError } from "@/components/link-card/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { X, MoreHorizontal, Search } from "lucide-react";
 
 type Props = {
-  links: LinkData[];
   searchTerm: string;
   onSearchTermChange: (value: string) => void;
   searchInputRef?: React.RefObject<HTMLInputElement>;
   onSubmit: () => void;
-  onLinkClick: (link: LinkData) => void;
   selectedCategory: string;
   onSelectedCategoryChange: (category: string) => void;
-  onAddTemplateCategory: (template: "adults" | "ai") => void;
+  onAddTemplateCategory?: (template: "adults" | "ai") => void;
+  /** Category ids from data (e.g. keys of groupedLinks). Pills show "All" + these. */
+  categoryIds?: string[];
+  /** Display labels for category ids. */
+  categoryLabels?: Record<string, string>;
 };
 
-// Similarweb: Top 100 most visited websites in the USA (Dec 2025)
-// Source: https://similarweb.com/blog/research/market-research/most-visited-websites-usa
-const TOP_US_DOMAINS_DEC_2025 = [
-  "google.com",
-  "youtube.com",
-  "amazon.com",
-  "facebook.com",
-  "reddit.com",
-  "yahoo.com",
-  "bing.com",
-  "instagram.com",
-  "x.com",
-  "chatgpt.com",
-  "wikipedia.org",
-  "walmart.com",
-  "ebay.com",
-  "espn.com",
-  "linkedin.com",
-  "usps.com",
-  "tiktok.com",
-  "nytimes.com",
-  "office.com",
-  "weather.com",
-  "netflix.com",
-  "fandom.com",
-  "duckduckgo.com",
-  "temu.com",
-  "target.com",
-  "etsy.com",
-  "pinterest.com",
-  "live.com",
-  "zillow.com",
-  "instructure.com",
-  "cnn.com",
-  "paypal.com",
-  "microsoft.com",
-  "twitch.tv",
-  "xvideos.com",
-  "pornhub.com",
-  "xnxx.com",
-  "fedex.com",
-  "sharepoint.com",
-  "xhamster.com",
-  "roblox.com",
-  "gemini.google.com",
-  "chaturbate.com",
-  "foxnews.com",
-  "ups.com",
-  "aol.com",
-  "shop.app",
-  "chase.com",
-  "discord.com",
-  "homedepot.com",
-  "duosecurity.com",
-  "imdb.com",
-  "apple.com",
-  "office365.com",
-  "nextdoor.com",
-  "zoom.us",
-  "people.com",
-  "onlyfans.com",
-  "stripchat.com",
-  "msn.com",
-  "hbomax.com",
-  "indeed.com",
-  "bestbuy.com",
-  "spotify.com",
-  "narvar.com",
-  "quora.com",
-  "macys.com",
-  "canva.com",
-  "hulu.com",
-  "capitalone.com",
-  "citi.com",
-  "finance.yahoo.com",
-  "brave.com",
-  "peacocktv.com",
-  "usatoday.com",
-  "t-mobile.com",
-  "yelp.com",
-  "xfinity.com",
-  "lowes.com",
-  "att.com",
-  "accuweather.com",
-  "costco.com",
-  "bankofamerica.com",
-  "archiveofourown.org",
-  "bbc.com",
-  "craigslist.org",
-  "fidelity.com",
-  "okta.com",
-  "shopify.com",
-  "wellsfargo.com",
-  "kohls.com",
-  "allrecipes.com",
-  "clever.com",
-  "realtor.com",
-  "disneyplus.com",
-  "nypost.com",
-  "news.google.com",
-  "wayfair.com",
-  "cvs.com",
-  "doordash.com",
-] as const;
-
-const TOP_US_LINKS_DEC_2025: LinkData[] = TOP_US_DOMAINS_DEC_2025.map((domain, i) => ({
-  key: `us-top-${String(i + 1).padStart(3, "0")}-${domain.replace(/\./g, "-")}`,
-  name: domain,
-  defaultUrl: `https://${domain}`,
-  category: "top-us",
-  clicks: 0,
-  createdAt: "2025-12-01T00:00:00.000Z",
-}));
-
-function scoreLink(l: LinkData): number {
-  const fav = l.isFavorite ? 1 : 0;
-  const clicks = l.clicks ?? 0;
-  const last = l.lastClicked ? new Date(l.lastClicked).getTime() : 0;
-  const created = l.createdAt ? new Date(l.createdAt).getTime() : 0;
-  return fav * 1_000_000_000_000 + clicks * 1_000_000_000 + last + created / 10;
-}
-
 export function LinkCloud({
-  links,
   searchTerm,
   onSearchTermChange,
   searchInputRef,
   onSubmit,
-  onLinkClick,
   selectedCategory,
   onSelectedCategoryChange,
   onAddTemplateCategory,
+  categoryIds = [],
+  categoryLabels = {},
 }: Props) {
-  const q = searchTerm.trim().toLowerCase();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [hasOverflow, setHasOverflow] = useState(false);
 
-  const filtered = useMemo(() => {
-    const base =
-      selectedCategory === "all"
-        ? q
-          ? [...TOP_US_LINKS_DEC_2025, ...links]
-          : TOP_US_LINKS_DEC_2025
-        : links.filter((l) => l.category === selectedCategory);
-    if (!q) return base;
-    return base.filter((l) => {
-      const name = l.name?.toLowerCase() ?? "";
-      const url = (l.url || l.defaultUrl || "").toLowerCase();
-      const cat = (l.category || "").toLowerCase();
-      return name.includes(q) || url.includes(q) || cat.includes(q);
-    });
-  }, [links, q, selectedCategory]);
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const setVar = () =>
+      document.documentElement.style.setProperty("--linkcloud-h", `${el.offsetHeight}px`);
+    setVar();
+    const ro = new ResizeObserver(setVar);
+    ro.observe(el);
+    window.addEventListener("resize", setVar);
 
-  const quickLinks = useMemo(() => {
-    // Always show the top-100 US list by default.
-    if (selectedCategory === "all" && !q) return filtered.slice(0, 100);
+    const pillsScroller = el.querySelector("[data-pill-scroller]") as HTMLDivElement | null;
+    const checkOverflow = () => {
+      if (!pillsScroller) return;
+      setHasOverflow(pillsScroller.scrollWidth > pillsScroller.clientWidth + 8);
+    };
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
 
-    const base = filtered;
-    const sorted = [...base].sort((a, b) => {
-      const d = scoreLink(b) - scoreLink(a);
-      if (d !== 0) return d;
-      return a.name.localeCompare(b.name);
-    });
-    const limit = q ? 72 : 48;
-    return sorted.slice(0, limit);
-  }, [filtered, q, selectedCategory]);
+    return () => {
+      window.removeEventListener("resize", setVar);
+      window.removeEventListener("resize", checkOverflow);
+      ro.disconnect();
+    };
+  }, []);
 
+  const hasAi = categoryIds.includes("ai");
+  const hasAdults = categoryIds.includes("adults");
+  const pillOptions: { id: string; label: string }[] = [
+    { id: "all", label: "All" },
+    ...categoryIds.map((id) => ({ id, label: categoryLabels[id] || id })),
+    ...(!hasAi ? [{ id: "ai", label: "AI" }] : []),
+    ...(!hasAdults ? [{ id: "adults", label: "Adults (18+)" }] : []),
+  ];
+
+  const MAX_INLINE_PILLS = 8;
+  const inlinePills = pillOptions.slice(0, MAX_INLINE_PILLS);
+  const overflowPills = pillOptions.slice(MAX_INLINE_PILLS);
   return (
-    <section className="min-h-[calc(100svh-var(--app-header-h,0px))] flex items-center justify-center py-10 sm:py-14">
-      <div className="w-full max-w-5xl px-4 sm:px-6">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSubmit();
-          }}
-        >
-          <div className="relative">
-            <Input
-              ref={searchInputRef}
-              type="search"
-              inputMode="search"
-              enterKeyHint="search"
-              autoComplete="off"
-              placeholder="Search…"
-              value={searchTerm}
-              onChange={(e) => onSearchTermChange(e.target.value)}
-              className="h-14 sm:h-16 w-full rounded-full border border-white/15 bg-white/[0.04] px-6 pr-14 text-lg text-foreground placeholder:text-muted-foreground/70 shadow-sm backdrop-blur-sm focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-white/35"
-              aria-label="Search"
-            />
-            {searchTerm.trim().length > 0 && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => onSearchTermChange("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full text-muted-foreground hover:text-foreground hover:bg-white/[0.06]"
-                aria-label="Clear search"
-              >
-                <X className="h-5 w-5" />
-              </Button>
-            )}
+    <section className="bg-white">
+      <div
+        ref={containerRef}
+        className="w-full mx-auto px-4 sm:px-6 pt-3 sm:pt-4 pb-3 border-b border-transparent"
+      >
+        <div className="w-full max-w-3xl mx-auto">
+          <div className="mb-4 flex justify-center">
+            <div className="flex items-center gap-2">
+              <div className="h-9 w-9 rounded-2xl bg-gradient-to-tr from-blue-500 to-pink-500 shadow-sm flex items-center justify-center">
+                <span className="text-white text-lg font-semibold leading-none">p</span>
+              </div>
+              <div className="text-3xl sm:text-4xl font-semibold tracking-tight">
+                <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                  pokilo
+                </span>
+              </div>
+            </div>
           </div>
-        </form>
-
-        <div
-          className="mt-3 flex flex-wrap items-center justify-center gap-2"
-          role="group"
-          aria-label="Quick categories"
-        >
-          <Button
-            type="button"
-            variant="ghost"
-            className="h-8 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-white/[0.06]"
-            aria-pressed={selectedCategory === "all"}
-            onClick={() => onSelectedCategoryChange("all")}
-          >
-            All
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            className="h-8 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-white/[0.06]"
-            aria-pressed={selectedCategory === "ai"}
-            onClick={() => {
-              onAddTemplateCategory("ai");
-              onSelectedCategoryChange("ai");
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onSubmit();
             }}
           >
-            AI
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            className="h-8 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-white/[0.06]"
-            aria-pressed={selectedCategory === "adults"}
-            onClick={() => {
-              onAddTemplateCategory("adults");
-              onSelectedCategoryChange("adults");
-            }}
-          >
-            Adults (18+)
-          </Button>
+            <div className="relative">
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+              <Input
+                ref={searchInputRef}
+                type="search"
+                inputMode="search"
+                enterKeyHint="search"
+                autoComplete="off"
+                placeholder="Search…"
+                value={searchTerm}
+                onChange={(e) => onSearchTermChange(e.target.value)}
+                className="h-14 sm:h-16 w-full rounded-full border border-gray-200 bg-gray-50 pl-12 pr-14 text-lg text-gray-900 placeholder:text-gray-500 shadow-sm focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:border-blue-400 focus:bg-white"
+                aria-label="Search"
+              />
+              {searchTerm.trim().length > 0 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onSearchTermChange("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-200/80"
+                  aria-label="Clear search"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              )}
+            </div>
+          </form>
         </div>
 
-        <div className="mt-6 sm:mt-8">
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-5 sm:gap-4 md:grid-cols-7 lg:grid-cols-9 xl:grid-cols-10">
-            {quickLinks.map((link) => (
-              <button
-                key={link.key}
-                type="button"
-                onClick={() => onLinkClick(link)}
-                className="group flex flex-col items-center gap-2 rounded-2xl px-2 py-2.5 transition-colors hover:bg-white/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-                aria-label={link.name}
-                title={link.name}
+        <div className="mt-6 w-full max-w-7xl mx-auto relative">
+          {hasOverflow && (
+            <>
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent" />
+            </>
+          )}
+          <div
+            className="overflow-x-auto pb-2 no-scrollbar"
+            role="tablist"
+            aria-label="Filter by category"
+            data-pill-scroller
+          >
+            <div className="flex items-center gap-2 flex-nowrap pr-4">
+              {inlinePills.map(({ id, label }) => (
+              <motion.div
+                key={id}
+                layout
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
-                <img
-                  src={getFaviconUrl(link.url || link.defaultUrl || "")}
-                  alt=""
-                  className="h-9 w-9 sm:h-10 sm:w-10 rounded-md object-contain"
-                  loading="lazy"
-                  decoding="async"
-                  onError={handleFaviconError}
-                />
-                <span className="w-full truncate text-[13px] sm:text-sm leading-tight text-muted-foreground group-hover:text-foreground">
-                  {link.name}
-                </span>
-              </button>
-            ))}
-          </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  role="tab"
+                  aria-selected={selectedCategory === id}
+                  className={`h-8 rounded-full px-4 text-[13px] transition-colors border ${
+                    selectedCategory === id
+                      ? "border-blue-600 bg-blue-600 text-white hover:bg-blue-700 hover:text-white"
+                      : "border-gray-300 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                  }`}
+                  onClick={() => {
+                    if (id === "ai") onAddTemplateCategory?.("ai");
+                    if (id === "adults") onAddTemplateCategory?.("adults");
+                    onSelectedCategoryChange(id);
+                  }}
+                >
+                  {label}
+                </Button>
+              </motion.div>
+              ))}
 
-          <div className="mt-5 flex items-center justify-between gap-3 text-xs text-muted-foreground">
-            <span className="truncate">
-              {q
-                ? `Showing ${Math.min(quickLinks.length, filtered.length)} of ${filtered.length}`
-                : selectedCategory === "all"
-                  ? `Showing ${Math.min(quickLinks.length, 100)} of 100 (Top US sites)`
-                  : `Showing ${Math.min(quickLinks.length, filtered.length)} of ${filtered.length}`}
-            </span>
-            <span className="truncate">Press Enter to search Google results</span>
+              {overflowPills.length > 0 && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 rounded-full px-4 text-[13px] border border-gray-300 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    >
+                      <MoreHorizontal className="h-4 w-4 mr-1" />
+                      More ({overflowPills.length})
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-48">
+                    {overflowPills.map(({ id, label }) => (
+                      <DropdownMenuItem
+                        key={id}
+                        onClick={() => {
+                          if (id === "ai") onAddTemplateCategory?.("ai");
+                          if (id === "adults") onAddTemplateCategory?.("adults");
+                          onSelectedCategoryChange(id);
+                        }}
+                      >
+                        {label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           </div>
         </div>
       </div>

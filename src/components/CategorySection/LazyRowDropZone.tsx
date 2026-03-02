@@ -51,10 +51,10 @@ export const LazyRowDropZone: React.FC<LazyRowDropZoneProps> = memo(({
  * Skeleton component for loading state
  */
 const RowSkeleton: React.FC = memo(() => (
-  <div className="min-h-[120px] p-4 rounded-lg animate-pulse">
+  <div className="min-h-[120px] p-4 rounded-lg animate-pulse bg-white">
     <div className="flex gap-6">
       {Array.from({ length: 3 }, (_, i) => (
-        <div key={i} className="w-20 h-20 bg-slate-700/30 rounded-2xl" />
+        <div key={i} className="w-20 h-20 bg-gray-200 rounded-2xl" />
       ))}
     </div>
   </div>

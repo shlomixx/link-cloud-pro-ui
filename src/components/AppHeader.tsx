@@ -78,7 +78,7 @@ export function AppHeader(props: AppHeaderProps) {
     }
   };
   return (
-    <header ref={headerRef} className="pt-3 sm:pt-4 pb-2 sm:pb-3">
+    <header ref={headerRef} className="relative z-40 pt-3 sm:pt-4 pb-2 sm:pb-3">
       <div className="container mx-auto">
         <div className="flex items-center justify-end">
           <div className="flex justify-end">
@@ -90,10 +90,10 @@ export function AppHeader(props: AppHeaderProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className={`w-64 rounded-xl border-slate-700/50 bg-slate-900/80 p-2 backdrop-blur-xl`}
+              className="w-64 rounded-xl border border-gray-200 bg-white p-2 shadow-lg"
             >
               <DropdownMenuLabel>Settings</DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-slate-700/50" />
+              <DropdownMenuSeparator className="bg-gray-200" />
 
               <DropdownMenuItem onClick={props.onAddLink} className="rounded-md">
                 <Plus className="mr-2 h-4 w-4" />
@@ -152,7 +152,7 @@ export function AppHeader(props: AppHeaderProps) {
                 </DialogContent>
               </Dialog>
 
-              <DropdownMenuSeparator className="bg-slate-700/50" />
+              <DropdownMenuSeparator className="bg-gray-200" />
               
               <DropdownMenuLabel>Link Size: {props.linkSize}px</DropdownMenuLabel>
               <div className="p-2">
@@ -167,7 +167,7 @@ export function AppHeader(props: AppHeaderProps) {
 
               {(props.onApplyCuratedLinks || props.onResetLocalData) && (
                 <>
-                  <DropdownMenuSeparator className="bg-slate-700/50" />
+                  <DropdownMenuSeparator className="bg-gray-200" />
                   {props.onApplyCuratedLinks && (
                     <DropdownMenuItem onClick={props.onApplyCuratedLinks} className="rounded-md">
                       <Sparkles className="mr-2 h-4 w-4" />

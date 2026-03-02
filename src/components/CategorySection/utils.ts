@@ -9,7 +9,7 @@ import { LinkData } from './types';
 
 // Configuration for items per row
 export const ITEMS_PER_ROW = {
-  desktop: 12, // Optimal for wide screens
+  desktop: 10, // Fewer orphaned single-item rows on common screen widths
   mobile: 5    // Touch-friendly for mobile devices
 } as const;
 
@@ -85,6 +85,61 @@ export const getPositionInRow = (linkIndex: number, itemsPerRow: number): number
 export const hasRowCapacity = (row: LinkData[], itemsPerRow: number): boolean => {
   return row.length < itemsPerRow;
 };
+
+const DOMAIN_TO_SECTION: Record<string, string> = {
+  chatgpt: 'AI & Search',
+  claude: 'AI & Search',
+  gemini: 'AI & Search',
+  perplexity: 'AI & Search',
+  midjourney: 'AI & Search',
+  leonardo: 'AI & Search',
+  google: 'Google Workspace',
+  gmail: 'Google Workspace',
+  drive: 'Google Workspace',
+  calendar: 'Google Workspace',
+  maps: 'Google Workspace',
+  photos: 'Google Workspace',
+  translate: 'Google Workspace',
+  youtube: 'Media & Social',
+  spotify: 'Media & Social',
+  netflix: 'Media & Social',
+  soundcloud: 'Media & Social',
+  facebook: 'Media & Social',
+  instagram: 'Media & Social',
+  twitter: 'Media & Social',
+  reddit: 'Media & Social',
+  cnn: 'News & Knowledge',
+  nytimes: 'News & Knowledge',
+  foxnews: 'News & Knowledge',
+  wikipedia: 'News & Knowledge',
+  imdb: 'News & Knowledge',
+  amazon: 'Shopping & Services',
+  ebay: 'Shopping & Services',
+  walmart: 'Shopping & Services',
+  aliexpress: 'Shopping & Services',
+  paypal: 'Shopping & Services',
+  airbnb: 'Travel & Mobility',
+  booking: 'Travel & Mobility',
+  uber: 'Travel & Mobility',
+  waze: 'Travel & Mobility',
+  weather: 'Travel & Mobility',
+  app: 'Apps & Cloud',
+  apple: 'Apps & Cloud',
+  icloud: 'Apps & Cloud',
+  dropbox: 'Apps & Cloud',
+};
+
+export function getLinkSectionLabel(link: LinkData): string {
+  const raw = link.defaultUrl || link.url;
+  if (!raw) return 'General';
+  try {
+    const host = new URL(raw).hostname.replace(/^www\./, '');
+    const segment = host.split('.')[0]?.toLowerCase() ?? '';
+    return DOMAIN_TO_SECTION[segment] || 'General';
+  } catch {
+    return 'General';
+  }
+}
 
 /**
  * Extracts row information from a droppable ID

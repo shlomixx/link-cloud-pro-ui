@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
@@ -36,7 +37,7 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
-        <div
+        <motion.div
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={onLinkClick}
@@ -48,9 +49,15 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           }}
           role="button"
           tabIndex={0}
+          layout
+          whileHover={{ y: -4, scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 18 }}
           aria-label={link.name}
           className={`
-            group relative flex flex-col items-center justify-center gap-3 p-5 cursor-pointer
+            group relative flex flex-col items-center justify-center gap-3 p-5 cursor-pointer min-w-0
+            rounded-2xl transition-all duration-200 ease-out
+            hover:scale-105 hover:shadow-md hover:bg-gray-50/80
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50
           `}
         >
@@ -95,13 +102,13 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
                 />
               </div>
             </div>
-            <figcaption className="w-full text-center">
-              <h3 className="font-semibold text-sm text-foreground/90 text-center max-w-full truncate inline-block">
+            <figcaption className="w-full min-w-0 text-center overflow-hidden">
+              <h3 className="font-semibold text-sm text-foreground/90 block text-center truncate" title={link.name}>
                 {link.name}
               </h3>
             </figcaption>
           </figure>
-        </div>
+        </motion.div>
       </ContextMenuTrigger>
       <LinkCardContextMenu
         link={link}

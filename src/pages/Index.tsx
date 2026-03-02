@@ -12,6 +12,7 @@ import { debounce } from '@/utils/performanceOptimizations';
 import { DragDropContext, DropResult, Droppable, Draggable } from 'react-beautiful-dnd';
 import { parseDroppableId, ITEMS_PER_ROW } from '@/components/CategorySection/utils';
 import { useNavigate } from 'react-router-dom';
+import Fuse from 'fuse.js';
 
 // Lazy load heavy components
 const LazyLinkModal = React.lazy(async () => {
@@ -180,6 +181,26 @@ const DEFAULT_CATEGORY_LABELS = {
   society: 'Social Media Platforms',
   tools: 'Productivity Tools',
   custom: 'Custom Links',
+  extra1: 'Category 1',
+  extra2: 'Category 2',
+  extra3: 'Category 3',
+  extra4: 'Category 4',
+  extra5: 'Category 5',
+  extra6: 'Category 6',
+  extra7: 'Category 7',
+  extra8: 'Category 8',
+  extra9: 'Category 9',
+  extra10: 'Category 10',
+  extra11: 'Category 11',
+  extra12: 'Category 12',
+  extra13: 'Category 13',
+  extra14: 'Category 14',
+  extra15: 'Category 15',
+  extra16: 'Category 16',
+  extra17: 'Category 17',
+  extra18: 'Category 18',
+  extra19: 'Category 19',
+  extra20: 'Category 20',
 };
 
 const DEFAULT_CATEGORY_COLORS = {
@@ -187,6 +208,26 @@ const DEFAULT_CATEGORY_COLORS = {
   society: 'from-emerald-400 to-emerald-600',
   tools: 'from-violet-400 to-violet-600',
   custom: 'from-slate-400 to-slate-600',
+  extra1: 'from-gray-300 to-gray-500',
+  extra2: 'from-gray-300 to-gray-500',
+  extra3: 'from-gray-300 to-gray-500',
+  extra4: 'from-gray-300 to-gray-500',
+  extra5: 'from-gray-300 to-gray-500',
+  extra6: 'from-gray-300 to-gray-500',
+  extra7: 'from-gray-300 to-gray-500',
+  extra8: 'from-gray-300 to-gray-500',
+  extra9: 'from-gray-300 to-gray-500',
+  extra10: 'from-gray-300 to-gray-500',
+  extra11: 'from-gray-300 to-gray-500',
+  extra12: 'from-gray-300 to-gray-500',
+  extra13: 'from-gray-300 to-gray-500',
+  extra14: 'from-gray-300 to-gray-500',
+  extra15: 'from-gray-300 to-gray-500',
+  extra16: 'from-gray-300 to-gray-500',
+  extra17: 'from-gray-300 to-gray-500',
+  extra18: 'from-gray-300 to-gray-500',
+  extra19: 'from-gray-300 to-gray-500',
+  extra20: 'from-gray-300 to-gray-500',
 };
 
 const Index = () => {
@@ -208,6 +249,7 @@ const Index = () => {
   const [quickFilter, setQuickFilter] = useState<string>('all');
   
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const categorySectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [categoryOrder, setCategoryOrder] = useState<string[]>([]);
   const [recentlyDeleted, setRecentlyDeleted] = useState<Array<LinkData & { deletedAt: number }>>([]);
   const [linkSize, setLinkSize] = useState(80);
@@ -247,15 +289,21 @@ const Index = () => {
     const seedVersionKey = 'linkRouterSeedVersion';
     const seedVersion = '2026-02-27-01';
     
-    // Load categories first
+    // Load categories first, merging with defaults so new categories persist
     if (savedCategories) {
       try {
         const categoriesData = JSON.parse(savedCategories);
         if (categoriesData.labels) {
-          setCategoryLabels(categoriesData.labels);
+          setCategoryLabels({
+            ...DEFAULT_CATEGORY_LABELS,
+            ...categoriesData.labels,
+          });
         }
         if (categoriesData.colors) {
-          setCategoryColors(categoriesData.colors);
+          setCategoryColors({
+            ...DEFAULT_CATEGORY_COLORS,
+            ...categoriesData.colors,
+          });
         }
       } catch (error) {
         console.error('Error loading saved categories:', error);
@@ -350,7 +398,6 @@ const Index = () => {
     localStorage.setItem('linkRouterSettings', JSON.stringify(settings));
     
     document.documentElement.style.transition = 'background-color 0.3s ease, color 0.3s ease';
-    document.documentElement.classList.add('dark');
   }, [sortBy, isCompactHeader]);
 
   useEffect(() => {
@@ -471,23 +518,39 @@ const Index = () => {
     });
   };
 
-  const filteredLinks = linksData.filter(link => {
-    if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
-    
-    if (quickFilter === 'recent') {
-      const weekAgo = new Date();
-      weekAgo.setDate(weekAgo.getDate() - 7);
-      if (new Date(link.createdAt || '') < weekAgo) return false;
-    }
-    if (quickFilter === 'popular' && (link.clicks || 0) < 20) return false;
-    
-    const searchLower = debouncedSearchTerm.toLowerCase();
-    return (
-      link.name.toLowerCase().includes(searchLower) ||
-      (link.url || link.defaultUrl || '').toLowerCase().includes(searchLower) ||
-      link.category.toLowerCase().includes(searchLower)
-    );
-  });
+  const fuse = useMemo(() => {
+    return new Fuse(linksData, {
+      keys: ['name', 'url', 'defaultUrl', 'category'],
+      threshold: 0.3,
+      ignoreLocation: true,
+    });
+  }, [linksData]);
+
+  const filteredLinks = useMemo(() => {
+    // First, apply non-text filters (category, quickFilter)
+    const base = linksData.filter((link) => {
+      if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
+
+      if (quickFilter === 'recent') {
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+        if (new Date(link.createdAt || '') < weekAgo) return false;
+      }
+      if (quickFilter === 'popular' && (link.clicks || 0) < 20) return false;
+
+      return true;
+    });
+
+    const term = debouncedSearchTerm.trim();
+    if (!term) return base;
+
+    // Use Fuse for fuzzy search on the base set
+    const results = fuse.search(term);
+    const baseKeys = new Set(base.map((l) => l.key));
+    return results
+      .map((r) => r.item)
+      .filter((item) => baseKeys.has(item.key));
+  }, [linksData, selectedCategory, quickFilter, debouncedSearchTerm, fuse]);
 
   const cloudLinks = linksData.filter(link => {
     if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
@@ -509,18 +572,62 @@ const Index = () => {
 
   const groupedLinks = categoryOrder.reduce((acc, category) => {
     const linksForCategory = filteredLinks.filter(link => link.category === category);
-    // Always include category if it exists in categoryLabels, even if empty
-    if (categoryLabels[category as keyof typeof categoryLabels]) {
+    // Only include categories that have at least one link
+    if (categoryLabels[category as keyof typeof categoryLabels] && linksForCategory.length > 0) {
       acc[category] = linksForCategory;
     }
     return acc;
   }, {} as Record<string, LinkData[]>);
 
-  // Also include any new categories that might not be in categoryOrder yet
+  // Highlight category pill when its section is in view (scroll spy)
+  useEffect(() => {
+    if (cloudCategory !== 'all') {
+      // When user filtered to a single category, keep highlight there.
+      setSelectedCategory(cloudCategory);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let topMostEntry: IntersectionObserverEntry | null = null;
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          if (
+            !topMostEntry ||
+            entry.boundingClientRect.top < topMostEntry.boundingClientRect.top
+          ) {
+            topMostEntry = entry;
+          }
+        }
+
+        if (topMostEntry) {
+          const el = topMostEntry.target as HTMLElement;
+          const catId = el.dataset.categoryId;
+          if (catId && catId !== selectedCategory) {
+            setSelectedCategory(catId);
+          }
+        }
+      },
+      {
+        root: null,
+        threshold: 0.4,
+      }
+    );
+
+    Object.values(categorySectionRefs.current).forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [cloudCategory, groupedLinks, selectedCategory]);
+
+  // Also include any new categories that might not be in categoryOrder yet (only if they have links)
   Object.keys(categoryLabels).forEach(category => {
     if (!groupedLinks[category]) {
       const linksForCategory = filteredLinks.filter(link => link.category === category);
-      groupedLinks[category] = linksForCategory;
+      if (linksForCategory.length > 0) {
+        groupedLinks[category] = linksForCategory;
+      }
     }
   });
 
@@ -1066,55 +1173,68 @@ const Index = () => {
   };
   
   return (
-    <div className={`min-h-screen transition-all duration-500 bg-background`}>
-        <AppHeader
-          onAddLink={() => openModal()}
-          onAddCategory={() => openAddCategoryModal(null)}
-          onShowShortcuts={() => setShowShortcuts(true)}
-          linkSize={linkSize}
-          onLinkSizeChange={setLinkSize}
-          onApplyCuratedLinks={applyCuratedLinksPack}
-          onResetLocalData={resetLocalData}
-        />
-
+    <div className="min-h-screen transition-all duration-500 bg-white">
       <DragDropContext onDragEnd={handleDragEnd}>
         <main
           id="main-content"
           tabIndex={-1}
           className="pb-[calc(1.5rem+env(safe-area-inset-bottom))] focus:outline-none"
+          style={{
+            paddingTop: "calc(var(--app-header-h, 0px) + var(--linkcloud-h, 0px))",
+          }}
         >
-          <LinkCloud
-            links={cloudLinks}
-            searchTerm={searchTerm}
-            onSearchTermChange={(v) => setSearchTerm(v)}
-            searchInputRef={searchInputRef}
-            onSubmit={() => {
-              const q = searchTerm.trim();
-              if (!q) return;
-              navigate(`/search?q=${encodeURIComponent(q)}`);
-            }}
-            onLinkClick={handleLinkClick}
-            selectedCategory={cloudCategory}
-            onSelectedCategoryChange={setCloudCategory}
-            onAddTemplateCategory={addTemplateCategory}
-          />
-
-          {/* Clear separation: categories start only after scrolling */}
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="py-10 sm:py-14">
-              <div className="h-px w-full bg-border/60" />
-            </div>
+          <div className="fixed left-0 right-0 top-0 z-30 bg-white shadow-[0_6px_18px_rgba(15,23,42,0.04)]">
+            <AppHeader
+              onAddLink={() => openModal()}
+              onAddCategory={() => openAddCategoryModal(null)}
+              onShowShortcuts={() => setShowShortcuts(true)}
+              linkSize={linkSize}
+              onLinkSizeChange={setLinkSize}
+              onApplyCuratedLinks={applyCuratedLinksPack}
+              onResetLocalData={resetLocalData}
+            />
+            <LinkCloud
+              searchTerm={searchTerm}
+              onSearchTermChange={(v) => setSearchTerm(v)}
+              searchInputRef={searchInputRef}
+              onSubmit={() => {
+                const q = searchTerm.trim();
+                if (!q) return;
+                navigate(`/search?q=${encodeURIComponent(q)}`);
+              }}
+              selectedCategory={selectedCategory}
+              onSelectedCategoryChange={(cat) => {
+                setSelectedCategory(cat);
+                setCloudCategory(cat);
+              }}
+              onAddTemplateCategory={addTemplateCategory}
+              categoryIds={Object.keys(categoryLabels)}
+              categoryLabels={categoryLabels}
+            />
           </div>
 
           <Droppable droppableId="categories" type="CATEGORY">
-            {(provided) => (
-              <div className="container mx-auto px-4 sm:px-6" id="categories">
-                <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-12">
-                {Object.entries(groupedLinks).map(([category, links], index) => (
+            {(provided) => {
+              const entries =
+                cloudCategory === "all"
+                  ? Object.entries(groupedLinks)
+                  : Object.entries(groupedLinks).filter(([cat]) => cat === cloudCategory);
+              return (
+              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 mt-4" id="categories">
+                <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-7">
+                {entries.map(([category, links], index) => (
                   <Draggable key={category} draggableId={`category-${category}`} index={index}>
                     {(prov, snapshot) => (
                       <div
-                        ref={prov.innerRef}
+                        ref={(el) => {
+                          prov.innerRef(el);
+                          if (el) {
+                            categorySectionRefs.current[category] = el;
+                          } else {
+                            delete categorySectionRefs.current[category];
+                          }
+                        }}
+                        data-category-id={category}
                         {...prov.draggableProps}
                         className={`animate-slide-up transition-transform duration-150 ${snapshot.isDragging ? 'scale-105 shadow-2xl z-50 opacity-95' : ''}`}
                       >
@@ -1133,14 +1253,15 @@ const Index = () => {
                             onMouseLeave={() => setHoveredLink(null)}
                             onAddLink={(category) => openModal(undefined, category)}
                             onAddCategory={openAddCategoryModal}
-                          onDeleteCategory={handleDeleteCategory}
-                          onAddPredefinedCategory={handleAddPredefinedCategory}
+                            onDeleteCategory={handleDeleteCategory}
+                            onAddPredefinedCategory={handleAddPredefinedCategory}
                             dragHandleProps={prov.dragHandleProps}
                             onReorderLinks={handleReorderLinks}
                             onDeleteLink={handleDeleteLink}
                             onToggleFavorite={handleToggleFavorite}
                             onEditCategoryName={handleEditCategoryName}
                             linkSize={linkSize}
+                            showCategoryHeader={false}
                           />
                         </div>
                       </div>
@@ -1150,13 +1271,14 @@ const Index = () => {
                 {provided.placeholder}
                 </div>
               </div>
-            )}
+              );
+            }}
           </Droppable>
         
         {Object.keys(groupedLinks).length === 0 && (
           <div className="text-center py-20 animate-fade-in">
             <div className="text-6xl mb-6 animate-bounce">נ”—</div>
-            <h3 className={`text-2xl font-bold mb-3 transition-colors duration-300 text-foreground`}>
+            <h3 className="text-2xl font-bold mb-3 transition-colors duration-300 text-gray-900">
               {debouncedSearchTerm || quickFilter !== 'all' ? 'No links found' : 'Your link collection awaits'}
             </h3>
             <p className={`mb-8 text-lg transition-colors duration-300 text-muted-foreground`}>
@@ -1170,7 +1292,7 @@ const Index = () => {
             <div className="flex gap-3 justify-center">
               <Button 
                 onClick={() => openModal()} 
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-primary-foreground px-8 py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg"
               >
                 <Plus className="w-5 h-5 mr-2" />
                 {debouncedSearchTerm || quickFilter !== 'all' ? 'Add New Link' : 'Add Your First Link'}
@@ -1183,7 +1305,7 @@ const Index = () => {
                     setQuickFilter('all');
                     setSortBy('name');
                   }}
-                  className={`px-6 py-3 text-lg transition-all duration-300 hover:scale-105 border-foreground/20 text-foreground hover:bg-foreground/10`}
+                  className="px-6 py-3 text-lg transition-all duration-300 hover:scale-105 border border-gray-300 text-gray-800 hover:bg-gray-100"
                 >
                   Clear Filters
                 </Button>

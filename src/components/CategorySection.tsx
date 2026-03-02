@@ -7,7 +7,7 @@ import {
 } from './CategorySection/index';
 import { LayoutProps } from './CategorySection/layoutTypes';
 import { useCategorySectionProps, useOptimizedRows } from './CategorySection/hooks';
-import { ITEMS_PER_ROW } from './CategorySection/utils';
+import { ITEMS_PER_ROW, getLinkSectionLabel } from './CategorySection/utils';
 import { RowDropZone } from './CategorySection/RowDropZone';
 import { usePerformanceMonitor } from './CategorySection/performanceMonitor';
 
@@ -51,7 +51,8 @@ export const CategorySection: React.FC<CategorySectionProps> = memo(({
   onAddCategory,
   onAddPredefinedCategory,
   dragHandleProps,
-  linkSize
+  linkSize,
+  showCategoryHeader = true,
 }) => {
   // Performance monitoring
   const { markInteraction } = usePerformanceMonitor(`CategorySection-${category}`);
@@ -82,7 +83,8 @@ export const CategorySection: React.FC<CategorySectionProps> = memo(({
     onEditCategoryName,
     dragHandleProps,
     linkItemProps,
-    links
+    links,
+    showCategoryHeader,
   };
 
   return (
@@ -116,39 +118,55 @@ const DesktopLayout: React.FC<LayoutProps> = memo(({
   onEditCategoryName,
   dragHandleProps, 
   links, 
-  linkItemProps 
+  linkItemProps,
+  showCategoryHeader = true,
 }) => {
   const { markInteraction } = usePerformanceMonitor(`DesktopLayout-${category}`);
   const linkRows = useOptimizedRows(links, ITEMS_PER_ROW.desktop);
   
   return (
     <div className={LAYOUT_CLASSES.desktopContainer}>
-      <CategoryHeader 
-        category={category}
-        categoryColors={categoryColors}
-        categoryLabels={categoryLabels}
-        onEditCategoryName={onEditCategoryName}
-        onDeleteCategory={onDeleteCategory}
-        onAddCategory={onAddCategory}
-        onAddPredefinedCategory={onAddPredefinedCategory}
-        dragHandleProps={dragHandleProps}
-      />
+      {showCategoryHeader && (
+        <CategoryHeader 
+          category={category}
+          categoryColors={categoryColors}
+          categoryLabels={categoryLabels}
+          onEditCategoryName={onEditCategoryName}
+          onDeleteCategory={onDeleteCategory}
+          onAddCategory={onAddCategory}
+          onAddPredefinedCategory={onAddPredefinedCategory}
+          dragHandleProps={dragHandleProps}
+        />
+      )}
       
       <div className={LAYOUT_CLASSES.categoryContainer}>
-        {linkRows.map((rowLinks, rowIndex) => (
-          <RowDropZone
-            key={`desktop-row-${category}-${rowIndex}`}
-            rowId={`category-${category}-row-${rowIndex}`}
-            rowIndex={rowIndex}
-            links={rowLinks}
-            category={category}
-            onAddLink={onAddLink}
-            linkItemProps={linkItemProps}
-            isMobile={false}
-            isLastRow={rowIndex === linkRows.length - 1}
-            itemsPerRow={ITEMS_PER_ROW.desktop}
-          />
-        ))}
+        {linkRows.map((rowLinks, rowIndex) => {
+          const prevRow = linkRows[rowIndex - 1];
+          const lastOfPrev = prevRow?.[prevRow.length - 1];
+          const firstOfRow = rowLinks[0];
+          const groupLabel = firstOfRow ? getLinkSectionLabel(firstOfRow) : '';
+          const showLabel = !!firstOfRow && (!lastOfPrev || getLinkSectionLabel(lastOfPrev) !== groupLabel);
+          return (
+            <div key={`desktop-row-${category}-${rowIndex}`} className="space-y-1.5">
+              {showLabel && groupLabel && (
+                <div className="text-sm font-semibold text-gray-600 tracking-wide pt-1">
+                  {groupLabel}
+                </div>
+              )}
+              <RowDropZone
+                rowId={`category-${category}-row-${rowIndex}`}
+                rowIndex={rowIndex}
+                links={rowLinks}
+                category={category}
+                onAddLink={onAddLink}
+                linkItemProps={linkItemProps}
+                isMobile={false}
+                isLastRow={rowIndex === linkRows.length - 1}
+                itemsPerRow={ITEMS_PER_ROW.desktop}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -174,42 +192,58 @@ const MobileLayout: React.FC<LayoutProps> = memo(({
   onEditCategoryName,
   dragHandleProps, 
   links, 
-  linkItemProps 
+  linkItemProps,
+  showCategoryHeader = true,
 }) => {
   const { markInteraction } = usePerformanceMonitor(`MobileLayout-${category}`);
   const linkRows = useOptimizedRows(links, ITEMS_PER_ROW.mobile);
   
   return (
     <div className={LAYOUT_CLASSES.mobileContainer}>
-      <div className={LAYOUT_CLASSES.mobileWrapper}>
-        <CategoryHeader 
-          category={category}
-          categoryColors={categoryColors}
-          categoryLabels={categoryLabels}
-          onEditCategoryName={onEditCategoryName}
-          onDeleteCategory={onDeleteCategory}
-          onAddCategory={onAddCategory}
-          onAddPredefinedCategory={onAddPredefinedCategory}
-          isMobile={true}
-          dragHandleProps={dragHandleProps}
-        />
-      </div>
+      {showCategoryHeader && (
+        <div className={LAYOUT_CLASSES.mobileWrapper}>
+          <CategoryHeader 
+            category={category}
+            categoryColors={categoryColors}
+            categoryLabels={categoryLabels}
+            onEditCategoryName={onEditCategoryName}
+            onDeleteCategory={onDeleteCategory}
+            onAddCategory={onAddCategory}
+            onAddPredefinedCategory={onAddPredefinedCategory}
+            isMobile={true}
+            dragHandleProps={dragHandleProps}
+          />
+        </div>
+      )}
       
       <div className={LAYOUT_CLASSES.categoryContainer}>
-        {linkRows.map((rowLinks, rowIndex) => (
-          <RowDropZone
-            key={`mobile-row-${category}-${rowIndex}`}
-            rowId={`category-mobile-${category}-row-${rowIndex}`}
-            rowIndex={rowIndex}
-            links={rowLinks}
-            category={category}
-            onAddLink={onAddLink}
-            linkItemProps={linkItemProps}
-            isMobile={true}
-            isLastRow={rowIndex === linkRows.length - 1}
-            itemsPerRow={ITEMS_PER_ROW.mobile}
-          />
-        ))}
+        {linkRows.map((rowLinks, rowIndex) => {
+          const prevRow = linkRows[rowIndex - 1];
+          const lastOfPrev = prevRow?.[prevRow.length - 1];
+          const firstOfRow = rowLinks[0];
+          const groupLabel = firstOfRow ? getLinkSectionLabel(firstOfRow) : '';
+          const showLabel = !!firstOfRow && (!lastOfPrev || getLinkSectionLabel(lastOfPrev) !== groupLabel);
+          return (
+            <div key={`mobile-row-${category}-${rowIndex}`} className="space-y-1.5">
+              {showLabel && groupLabel && (
+                <div className="text-sm font-semibold text-gray-600 tracking-wide pt-1">
+                  {groupLabel}
+                </div>
+              )}
+              <RowDropZone
+                rowId={`category-mobile-${category}-row-${rowIndex}`}
+                rowIndex={rowIndex}
+                links={rowLinks}
+                category={category}
+                onAddLink={onAddLink}
+                linkItemProps={linkItemProps}
+                isMobile={true}
+                isLastRow={rowIndex === linkRows.length - 1}
+                itemsPerRow={ITEMS_PER_ROW.mobile}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

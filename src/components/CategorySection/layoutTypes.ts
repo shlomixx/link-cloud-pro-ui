@@ -13,6 +13,7 @@ export interface LayoutProps {
   dragHandleProps?: any;
   links: LinkData[];
   linkItemProps: LinkItemProps;
+  showCategoryHeader?: boolean;
 }
 
 export interface LinkItemProps {

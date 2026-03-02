@@ -56,9 +56,12 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           aria-label={link.name}
           className={`
             group relative flex flex-col items-center justify-center gap-3 p-4 cursor-pointer
+            rounded-2xl min-w-0
+            transition-all duration-200 ease-out
+            hover:scale-105 hover:shadow-md hover:bg-gray-50/80
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50
           `}
-          style={{ minWidth: `${containerSize}px`, maxWidth: `${containerSize}px` }}
+          style={{ minWidth: `${Math.max(containerSize, 100)}px`, maxWidth: `${Math.max(containerSize, 100)}px` }}
         >
           {isHovered && (
             <div className="absolute -top-2 -left-2 z-20 opacity-0 group-hover:opacity-100 transition-all duration-200">
@@ -102,8 +105,8 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
                 />
               </div>
             </div>
-            <figcaption className="w-full text-center">
-              <span className="text-foreground/90 text-base font-medium leading-tight text-center max-w-full truncate inline-block">
+            <figcaption className="w-full min-w-0 text-center overflow-hidden">
+              <span className="text-foreground/90 text-base font-medium leading-tight block text-center truncate" title={link.name}>
                 {link.name}
               </span>
             </figcaption>

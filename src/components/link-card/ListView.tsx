@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
@@ -36,10 +37,14 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
-        <div
+        <motion.div
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={onLinkClick}
+          layout
+          whileHover={{ y: -2, scale: 1.01 }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 20 }}
           className={`
             group flex items-center gap-6 p-6 rounded-2xl cursor-pointer w-full
             backdrop-blur-sm
@@ -74,7 +79,7 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
           <div className="flex items-center gap-6 flex-1">
             <div className={`
               w-14 h-14 rounded-2xl flex items-center justify-center
-              bg-slate-700/50
+              bg-gray-100
               backdrop-blur-sm
             `}>
               <img
@@ -88,16 +93,16 @@ export const ListView: React.FC<BaseLinkCardProps> = ({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3">
-                <h3 className="font-semibold text-lg text-white">
+                <h3 className="font-semibold text-lg text-gray-900">
                   {link.name}
                 </h3>
               </div>
-              <p className="text-sm text-slate-300 mt-1 opacity-70">
+              <p className="text-sm text-gray-600 mt-1 opacity-90">
                 {link.url || link.defaultUrl}
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </ContextMenuTrigger>
       <LinkCardContextMenu
         link={link}

@@ -31,33 +31,33 @@ export const LinkCardContextMenu: React.FC<ContextMenuProps> = ({
   };
 
   return (
-    <ContextMenuContent className="min-w-[190px] rounded-xl border border-slate-800 bg-slate-950/95 px-2 py-2 shadow-xl backdrop-blur-xl">
+    <ContextMenuContent className="min-w-[190px] rounded-xl border border-gray-200 bg-white px-2 py-2 shadow-lg">
       <ContextMenuItem
         onClick={handleContextMenuClick(onEdit)}
-        className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-slate-100 focus:bg-slate-800/80"
+        className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-gray-800 focus:bg-gray-100"
       >
         <Edit className="w-4 h-4" />
         <span>Edit</span>
       </ContextMenuItem>
       <ContextMenuItem
         onClick={handleContextMenuClick(onCopyUrl)}
-        className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-slate-100 focus:bg-slate-800/80"
+        className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-gray-800 focus:bg-gray-100"
       >
         <Copy className="w-4 h-4" />
         <span>Copy URL</span>
       </ContextMenuItem>
       {categories.length > 0 && onChangeCategory && (
         <ContextMenuSub>
-          <ContextMenuSubTrigger className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-slate-100 focus:bg-slate-800/80">
+          <ContextMenuSubTrigger className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-gray-800 focus:bg-gray-100">
             <Edit className="w-4 h-4" />
             <span>Change Category</span>
           </ContextMenuSubTrigger>
-          <ContextMenuSubContent className="rounded-xl border border-slate-800 bg-slate-950/95 px-1 py-1 shadow-xl backdrop-blur-xl">
+          <ContextMenuSubContent className="rounded-xl border border-gray-200 bg-white px-1 py-1 shadow-lg">
             {categories.filter(cat => cat !== link.category).map((category) => (
               <ContextMenuItem 
                 key={category} 
                 onClick={handleContextMenuClick(() => onChangeCategory(category))}
-                className="rounded-lg px-2 py-1.5 text-sm text-slate-100 focus:bg-slate-800/80"
+                className="rounded-lg px-2 py-1.5 text-sm text-gray-800 focus:bg-gray-100"
               >
                 {category}
               </ContextMenuItem>
@@ -65,7 +65,7 @@ export const LinkCardContextMenu: React.FC<ContextMenuProps> = ({
           </ContextMenuSubContent>
         </ContextMenuSub>
       )}
-      <ContextMenuSeparator className="my-1 bg-slate-800/80" />
+      <ContextMenuSeparator className="my-1 bg-gray-200" />
       <ContextMenuItem
         onClick={handleContextMenuClick(onDelete || (() => {}))}
         className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-red-400 focus:bg-red-500/10"
