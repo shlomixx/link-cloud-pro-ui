@@ -58,7 +58,7 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             group relative flex flex-col items-center justify-center gap-3 p-4 cursor-pointer
             rounded-2xl min-w-0
             transition-all duration-200 ease-out
-            hover:scale-105 hover:shadow-md hover:bg-gray-50/80
+            hover:scale-110 hover:shadow-lg hover:shadow-blue-100/50 hover:bg-white hover:-translate-y-1 active:scale-95
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50
           `}
           style={{ minWidth: `${Math.max(containerSize, 100)}px`, maxWidth: `${Math.max(containerSize, 100)}px` }}
