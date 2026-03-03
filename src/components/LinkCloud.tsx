@@ -111,7 +111,7 @@ export function LinkCloud({
                 placeholder="Search…"
                 value={searchTerm}
                 onChange={(e) => onSearchTermChange(e.target.value)}
-                className="h-14 sm:h-16 w-full rounded-full border border-gray-200 bg-gray-50 pl-12 pr-14 text-lg text-gray-900 placeholder:text-gray-500 shadow-sm focus-visible:ring-2 focus-visible:ring-blue-500/30 focus-visible:border-blue-400 focus:bg-white"
+                className="h-14 sm:h-16 w-full rounded-full border border-gray-200 bg-gray-50 pl-12 pr-14 text-lg text-gray-900 placeholder:text-gray-500 shadow-sm focus-visible:ring-2 focus-visible:ring-indigo-500/30 focus-visible:border-indigo-400 focus:bg-white"
                 aria-label="Search"
               />
               {searchTerm.trim().length > 0 && (
@@ -160,7 +160,7 @@ export function LinkCloud({
                   aria-selected={selectedCategory === id}
                   className={`h-8 rounded-full px-4 text-[13px] transition-colors border ${
                     selectedCategory === id
-                      ? "border-blue-600 bg-blue-600 text-white hover:bg-blue-700 hover:text-white"
+                      ? "border-indigo-600 bg-indigo-600 text-white hover:bg-indigo-700 hover:text-white"
                       : "border-gray-300 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                   }`}
                   onClick={() => {

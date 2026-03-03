@@ -78,7 +78,7 @@ export function AppHeader(props: AppHeaderProps) {
     }
   };
   return (
-    <header ref={headerRef} className="relative z-40 pt-3 sm:pt-4 pb-2 sm:pb-3">
+    <header ref={headerRef} className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-gray-200/60 pt-3 sm:pt-4 pb-2 sm:pb-3 shadow-sm">
       <div className="container mx-auto">
         <div className="flex items-center justify-end">
           <div className="flex justify-end">
