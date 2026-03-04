@@ -1,0 +1,32 @@
+[33mc7a44ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mux/pro-polish[m[33m, [m[1;33mtag: [m[1;33mbackup-2026-02-28[m[33m)[m HEAD@{0}: reset: moving to backup-2026-02-28
+[33ma8f2a91[m[33m ([m[1;31morigin/ux/pro-polish[m[33m)[m HEAD@{1}: checkout: moving from ux/pro-polish to ux/pro-polish
+[33ma8f2a91[m[33m ([m[1;31morigin/ux/pro-polish[m[33m)[m HEAD@{2}: commit: Add shared AppShell layout wrapper
+[33ma641578[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{3}: checkout: moving from main to ux/pro-polish
+[33ma641578[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{4}: reset: moving to origin/main
+[33m4a9d783[m HEAD@{5}: reset: moving to origin/main
+[33m97989e9[m HEAD@{6}: pull: Fast-forward
+[33m5f2bf8d[m HEAD@{7}: commit: UI/UX: fixed search bar, logo, sections, grid, hover, grouping
+[33mc7a44ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mux/pro-polish[m[33m, [m[1;33mtag: [m[1;33mbackup-2026-02-28[m[33m)[m HEAD@{8}: reset: moving to backup-2026-02-28
+[33me902927[m HEAD@{9}: checkout: moving from c7a44adee4125f997198c45a49d5dfb64df91369 to main
+[33mc7a44ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mux/pro-polish[m[33m, [m[1;33mtag: [m[1;33mbackup-2026-02-28[m[33m)[m HEAD@{10}: checkout: moving from main to backup-2026-02-28
+[33me902927[m HEAD@{11}: commit: style: refine Pokilo quick access UI
+[33md2c0067[m HEAD@{12}: pull: Fast-forward
+[33mb9aa6cd[m HEAD@{13}: reset: moving to HEAD
+[33mb9aa6cd[m HEAD@{14}: pull: Fast-forward
+[33m0fe14f2[m HEAD@{15}: reset: moving to HEAD
+[33m0fe14f2[m HEAD@{16}: pull: Fast-forward
+[33m2c5c2b0[m HEAD@{17}: commit: style: apply Fandom-inspired dark theme with cyan accent
+[33mc7a44ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mux/pro-polish[m[33m, [m[1;33mtag: [m[1;33mbackup-2026-02-28[m[33m)[m HEAD@{18}: reset: moving to backup-2026-02-28
+[33mc7a44ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mux/pro-polish[m[33m, [m[1;33mtag: [m[1;33mbackup-2026-02-28[m[33m)[m HEAD@{19}: checkout: moving from c7a44adee4125f997198c45a49d5dfb64df91369 to main
+[33mc7a44ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mux/pro-polish[m[33m, [m[1;33mtag: [m[1;33mbackup-2026-02-28[m[33m)[m HEAD@{20}: checkout: moving from main to backup-2026-02-28
+[33mc7a44ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mux/pro-polish[m[33m, [m[1;33mtag: [m[1;33mbackup-2026-02-28[m[33m)[m HEAD@{21}: commit: feat: default to top 100 US sites
+[33m163424b[m HEAD@{22}: commit: feat: redesign home quick-launch and improve accessibility
+[33mcee8f05[m HEAD@{23}: commit: feat: add Google CSE search route and mobile header search
+[33mb7202dc[m[33m ([m[1;33mtag: [m[1;33mshlomi[m[33m)[m HEAD@{24}: commit: backup: working version
+[33m4ed7ef7[m HEAD@{25}: checkout: moving from backup-before-restore- to main
+[33mf6b4c27[m[33m ([m[1;32mbackup-before-restore-[m[33m)[m HEAD@{26}: commit: WIP: backup before restoring previous changes
+[33m4ed7ef7[m HEAD@{27}: checkout: moving from main to backup-before-restore-
+[33m4ed7ef7[m HEAD@{28}: commit (merge): Your descriptive commit message here
+[33m53e845f[m HEAD@{29}: commit: שיפורים לגרירה: פינוי מקום ברור, הסרת אפקטים ויזואליים מיותרים, גרירה בין כל השורות
+[33maa21b1c[m HEAD@{30}: commit: Fix drag and drop issues and improve UI: Remove HTML drag events, fix hover effects, and update three-dot menu functionality
+[33m9708a5a[m HEAD@{31}: clone: from https://github.com/shlomixx/link-cloud-pro-ui.git

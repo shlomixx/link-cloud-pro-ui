@@ -55,10 +55,8 @@ export const GridView: React.FC<BaseLinkCardProps> = ({
           transition={{ type: 'spring', stiffness: 260, damping: 18 }}
           aria-label={link.name}
           className={`
-            group relative flex flex-col items-center justify-center gap-3 p-5 cursor-pointer min-w-0
-            rounded-2xl transition-all duration-200 ease-out
-            hover:scale-105 hover:shadow-md hover:bg-gray-50/80
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50
+            group relative flex flex-col items-center justify-center gap-3 p-5 cursor-pointer min-w-0 link-card
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
           `}
         >
           {isHovered && (

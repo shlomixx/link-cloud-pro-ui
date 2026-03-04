@@ -1,6 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { Input } from "@/components/ui/input";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,21 +6,72 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { X, MoreHorizontal, Search } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 
 type Props = {
   searchTerm: string;
   onSearchTermChange: (value: string) => void;
   searchInputRef?: React.RefObject<HTMLInputElement>;
   onSubmit: () => void;
-  selectedCategory: string;
-  onSelectedCategoryChange: (category: string) => void;
+  selectedCategory: string | null;
+  onSelectedCategoryChange: (category: string | null) => void;
   onAddTemplateCategory?: (template: "adults" | "ai") => void;
   /** Category ids from data (e.g. keys of groupedLinks). Pills show "All" + these. */
   categoryIds?: string[];
   /** Display labels for category ids. */
   categoryLabels?: Record<string, string>;
 };
+
+/* Custom geometric SVG logo mark — interlocking nodes/links */
+export function PokiLogoMark({ size = 22 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      style={{ flexShrink: 0 }}
+    >
+      {/* Node top-right */}
+      <circle cx="17" cy="6" r="3" fill="currentColor" opacity="0.9" />
+      {/* Node bottom-left */}
+      <circle cx="7" cy="18" r="3" fill="currentColor" opacity="0.9" />
+      {/* Node center */}
+      <circle cx="12" cy="12" r="2.5" fill="currentColor" opacity="0.6" />
+      {/* Link from center to top-right */}
+      <line x1="14.1" y1="10.1" x2="15.1" y2="8.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" opacity="0.7" />
+      {/* Link from center to bottom-left */}
+      <line x1="9.9" y1="13.9" x2="8.9" y2="15.9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" opacity="0.7" />
+      {/* Subtle arc connector */}
+      <path
+        d="M 7 15 Q 12 9 17 9"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.25"
+      />
+    </svg>
+  );
+}
+
+/* ── Fixed tab definitions ── */
+const INLINE_TABS = [
+  { id: "__all__", label: "All" },
+  { id: "ai-tools", label: "\u{1F916} AI Tools" },
+  { id: "google", label: "\u{1F4E7} Google Workspace" },
+  { id: "search", label: "\u{1F50D} Search & Browse" },
+  { id: "media", label: "\u{1F3AC} Media & Entertainment" },
+];
+
+const MORE_TABS = [
+  { id: "news", label: "\u{1F4F0} News" },
+  { id: "shopping", label: "\u{1F6D2} Shopping" },
+  { id: "travel", label: "\u{1F3E0} Travel & Services" },
+  { id: "apps", label: "\u{2601}\u{FE0F} Apps & Cloud" },
+];
 
 export function LinkCloud({
   searchTerm,
@@ -35,179 +84,162 @@ export function LinkCloud({
   categoryIds = [],
   categoryLabels = {},
 }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [hasOverflow, setHasOverflow] = useState(false);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const setVar = () =>
-      document.documentElement.style.setProperty("--linkcloud-h", `${el.offsetHeight}px`);
-    setVar();
-    const ro = new ResizeObserver(setVar);
-    ro.observe(el);
-    window.addEventListener("resize", setVar);
-
-    const pillsScroller = el.querySelector("[data-pill-scroller]") as HTMLDivElement | null;
-    const checkOverflow = () => {
-      if (!pillsScroller) return;
-      setHasOverflow(pillsScroller.scrollWidth > pillsScroller.clientWidth + 8);
-    };
-    checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-
-    return () => {
-      window.removeEventListener("resize", setVar);
-      window.removeEventListener("resize", checkOverflow);
-      ro.disconnect();
-    };
-  }, []);
-
+  // Build dynamic extra tabs: "adults" and "ai" template triggers
   const hasAi = categoryIds.includes("ai");
   const hasAdults = categoryIds.includes("adults");
-  const pillOptions: { id: string; label: string }[] = [
-    { id: "all", label: "All" },
-    ...categoryIds.map((id) => ({ id, label: categoryLabels[id] || id })),
+
+  // Extra dynamic pills that go in the MORE dropdown
+  const dynamicMore = [
+    ...MORE_TABS,
     ...(!hasAi ? [{ id: "ai", label: "AI" }] : []),
     ...(!hasAdults ? [{ id: "adults", label: "Adults (18+)" }] : []),
   ];
 
-  const MAX_INLINE_PILLS = 8;
-  const inlinePills = pillOptions.slice(0, MAX_INLINE_PILLS);
-  const overflowPills = pillOptions.slice(MAX_INLINE_PILLS);
+  // Check if currently selected tab is in the "MORE" dropdown (to highlight MORE button)
+  const moreIds = new Set(dynamicMore.map((t) => t.id));
+  const isMoreActive = moreIds.has(selectedCategory);
+
+  // Get display label for currently selected "more" tab
+  const activeMoreLabel = isMoreActive
+    ? dynamicMore.find((t) => t.id === selectedCategory)?.label || "More"
+    : null;
+
+  // Is ALL tab active? (selectedCategory === null)
+  const isAllActive = selectedCategory === null;
+
   return (
-    <section className="bg-white/95 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+    <section
+      className={`hero-section${isAllActive ? "" : " hero-section--compact"}`}
+      aria-label="Search and navigation"
+    >
+      {/* Greeting — only when ALL is active */}
+      {isAllActive && (
+        <>
+          <h1 className="hero-greeting">
+            Good night, <span className="hero-greeting-name">pokilo</span>
+          </h1>
+          <p className="hero-subtitle">What would you like to open?</p>
+        </>
+      )}
+
+      {/* Search bar — pill with floating shadow + magnifying glass icon */}
+      <div className="search-wrapper">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            onSubmit();
+          }}
+        >
+          <svg
+            className="search-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+          <input
+            ref={searchInputRef}
+            type="search"
+            inputMode="search"
+            enterKeyHint="search"
+            autoComplete="off"
+            placeholder="Search your links..."
+            value={searchTerm}
+            onChange={(e) => onSearchTermChange(e.target.value)}
+            className="hero-search"
+            aria-label="Search"
+          />
+          {searchTerm.trim().length > 0 && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => onSearchTermChange("")}
+              className="absolute right-7 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full text-[#9CA3AF] hover:text-[#6B6B6B] dark:hover:text-[#8B8B8B] hover:bg-black/5 dark:hover:bg-white/10 transition-all z-10"
+              aria-label="Clear search"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+        </form>
+      </div>
+
+      {/* Category tabs — centered pills, no container bg */}
       <div
-        ref={containerRef}
-        className="w-full mx-auto px-4 sm:px-6 pt-3 sm:pt-4 pb-3 border-b border-transparent"
+        className="hero-tabs"
+        role="tablist"
+        aria-label="Filter by category"
       >
-        <div className="w-full max-w-3xl mx-auto">
-          <div className="mb-2 flex justify-center">
-            <div className="flex items-center gap-2">
-              <div className="h-9 w-9 rounded-2xl bg-gradient-to-tr from-blue-500 to-pink-500 shadow-sm flex items-center justify-center">
-                <span className="text-white text-lg font-semibold leading-none">p</span>
-              </div>
-              <div className="text-3xl sm:text-4xl font-semibold tracking-tight">
-                <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                  pokilo
-                </span>
-              </div>
-            </div>
-          </div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              onSubmit();
+        {/* Inline tabs: ALL, AI Tools, Google Workspace, Search & Browse, Media */}
+        {INLINE_TABS.map(({ id, label }) => (
+          <Button
+            key={id}
+            type="button"
+            variant="ghost"
+            size="sm"
+            role="tab"
+            aria-selected={id === "__all__" ? selectedCategory === null || selectedCategory === "" : selectedCategory === id}
+            className={`category-pill flex-shrink-0 ${
+              (id === "__all__" ? selectedCategory === null || selectedCategory === "" : selectedCategory === id)
+                ? "active"
+                : ""
+            }`}
+            onClick={() => {
+              onSelectedCategoryChange(id === "__all__" ? null : id);
             }}
           >
-            <div className="relative">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
-              <Input
-                ref={searchInputRef}
-                type="search"
-                inputMode="search"
-                enterKeyHint="search"
-                autoComplete="off"
-                placeholder="Search…"
-                value={searchTerm}
-                onChange={(e) => onSearchTermChange(e.target.value)}
-                className="h-14 sm:h-16 w-full rounded-full border border-gray-200 bg-gray-50 pl-12 pr-14 text-lg text-gray-900 placeholder:text-gray-500 shadow-sm focus-visible:ring-2 focus-visible:ring-indigo-500/30 focus-visible:border-indigo-400 focus:bg-white"
-                aria-label="Search"
-              />
-              {searchTerm.trim().length > 0 && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onSearchTermChange("")}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-200/80"
-                  aria-label="Clear search"
-                >
-                  <X className="h-5 w-5" />
-                </Button>
-              )}
-            </div>
-          </form>
-        </div>
+            {label}
+          </Button>
+        ))}
 
-        <div className="mt-3 w-full max-w-7xl mx-auto relative">
-          {hasOverflow && (
-            <>
-              <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent" />
-              <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent" />
-            </>
-          )}
-          <div
-            className="overflow-x-auto pb-2 no-scrollbar"
-            role="tablist"
-            aria-label="Filter by category"
-            data-pill-scroller
+        {/* MORE dropdown — News, Shopping, Travel & Services, Apps & Cloud + dynamic extras */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className={`category-pill flex-shrink-0 gap-1 ${
+                isMoreActive
+                  ? "active"
+                  : ""
+              }`}
+            >
+              {activeMoreLabel || "More"}
+              <ChevronDown className="h-3 w-3 opacity-60" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="start"
+            className="w-52 rounded-xl shadow-xl border border-[#E9E9E7] dark:border-white/8 bg-white dark:bg-[#141416] p-1"
           >
-            <div className="flex items-center gap-2 flex-nowrap pr-4">
-              {inlinePills.map(({ id, label }) => (
-              <motion.div
+            {dynamicMore.map(({ id, label }) => (
+              <DropdownMenuItem
                 key={id}
-                layout
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className={`rounded-lg text-[13px] cursor-pointer ${
+                  selectedCategory === id
+                    ? "font-semibold text-[#6366f1] dark:text-[#818cf8] bg-[#F0F0EE] dark:bg-white/[0.06]"
+                    : "text-[#18181B] dark:text-[#FAFAFA]"
+                }`}
+                onClick={() => {
+                  if (id === "ai") onAddTemplateCategory?.("ai");
+                  if (id === "adults") onAddTemplateCategory?.("adults");
+                  onSelectedCategoryChange(id);
+                }}
               >
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  role="tab"
-                  aria-selected={selectedCategory === id}
-                  className={`h-8 rounded-full px-4 text-[13px] transition-colors border ${
-                    selectedCategory === id
-                      ? "border-indigo-600 bg-indigo-600 text-white hover:bg-indigo-700 hover:text-white"
-                      : "border-gray-300 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                  }`}
-                  onClick={() => {
-                    if (id === "ai") onAddTemplateCategory?.("ai");
-                    if (id === "adults") onAddTemplateCategory?.("adults");
-                    onSelectedCategoryChange(id);
-                  }}
-                >
-                  {label}
-                </Button>
-              </motion.div>
-              ))}
-
-              {overflowPills.length > 0 && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 rounded-full px-4 text-[13px] border border-gray-300 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                    >
-                      <MoreHorizontal className="h-4 w-4 mr-1" />
-                      More ({overflowPills.length})
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-48">
-                    {overflowPills.map(({ id, label }) => (
-                      <DropdownMenuItem
-                        key={id}
-                        onClick={() => {
-                          if (id === "ai") onAddTemplateCategory?.("ai");
-                          if (id === "adults") onAddTemplateCategory?.("adults");
-                          onSelectedCategoryChange(id);
-                        }}
-                      >
-                        {label}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </div>
-          </div>
-        </div>
+                {label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </section>
   );
 }
-

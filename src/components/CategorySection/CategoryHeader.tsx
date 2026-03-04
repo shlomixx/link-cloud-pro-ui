@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Edit2, Check, X, GripVertical, Plus, Trash2, Sparkles } from 'lucide-react';
 import { CategoryHeaderProps } from './types';
-import { HEADER_STYLES } from './constants';
+import { HEADER_STYLES, getCategoryAccentColor } from './constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
-export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({ 
-  category, 
-  categoryColors, 
-  categoryLabels, 
+export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
+  category,
+  categoryColors,
+  categoryLabels,
   isMobile = false,
   onEditCategoryName,
   onDeleteCategory,
@@ -21,6 +21,7 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
   const [editValue, setEditValue] = useState('');
 
   const styles = isMobile ? HEADER_STYLES.mobile : HEADER_STYLES.desktop;
+  const accentColor = getCategoryAccentColor(category);
 
   const handleStartEdit = () => {
     setEditValue(categoryLabels[category] || category);
@@ -51,19 +52,25 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
     <div className={styles.container}>
       <div className={styles.flex}>
         {isEditing ? (
-          <div className="flex items-center gap-2 flex-1">
+          <div className="flex items-center gap-1.5 flex-1">
+            {/* Colored accent bar — always visible even when editing */}
+            <div
+              className="flex-shrink-0 w-[3px] h-4 rounded-full"
+              style={{ backgroundColor: accentColor }}
+              aria-hidden="true"
+            />
             <Input
               value={editValue}
               onChange={(e) => setEditValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="text-sm font-bold uppercase tracking-wider bg-transparent border-gray-300 text-gray-900 focus:border-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500/20 focus-visible:ring-offset-0"
+              className="h-5 text-[11px] font-semibold uppercase tracking-[0.1em] bg-transparent border-[#E9E9E7] dark:border-white/10 text-[#9CA3AF] dark:text-[#4B5563] focus-visible:ring-1 focus-visible:ring-indigo-500/30 focus-visible:ring-offset-0 rounded-md px-2"
               autoFocus
             />
             <Button
               size="sm"
               variant="ghost"
               onClick={handleSaveEdit}
-              className="h-6 w-6 p-0 hover:bg-gray-100 text-gray-500 hover:text-gray-900"
+              className="h-5 w-5 p-0 rounded-md hover:bg-[#F0F0EE] dark:hover:bg-white/5 text-[#9CA3AF] hover:text-[#18181B] dark:hover:text-[#FAFAFA]"
             >
               <Check className="h-3 w-3" />
             </Button>
@@ -71,22 +78,25 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
               size="sm"
               variant="ghost"
               onClick={handleCancelEdit}
-              className="h-6 w-6 p-0 hover:bg-gray-100 text-gray-500 hover:text-gray-900"
+              className="h-5 w-5 p-0 rounded-md hover:bg-[#F0F0EE] dark:hover:bg-white/5 text-[#9CA3AF] hover:text-[#18181B] dark:hover:text-[#FAFAFA]"
             >
               <X className="h-3 w-3" />
             </Button>
           </div>
         ) : (
           <div className="flex items-center gap-2 flex-1 group">
-            <h2 className={styles.title}>
-              {categoryLabels[category] || category}
-            </h2>
+            <div className="flex-1">
+              <h2 className="category-section-title">
+                {categoryLabels[category] || category}
+              </h2>
+            </div>
+
             {onEditCategoryName && (
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={handleStartEdit}
-                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-100 text-gray-500 hover:text-gray-900"
+                className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity rounded-md hover:bg-[#F0F0EE] dark:hover:bg-white/5 text-[#C8C8C6] hover:text-[#18181B] dark:text-[#2A2A2C] dark:hover:text-[#FAFAFA]"
               >
                 <Edit2 className="h-3 w-3" />
               </Button>
@@ -97,7 +107,7 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
                 size="sm"
                 variant="ghost"
                 onClick={() => onAddCategory(category)}
-                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-100 text-gray-500 hover:text-gray-900"
+                className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity rounded-md hover:bg-[#F0F0EE] dark:hover:bg-white/5 text-[#C8C8C6] hover:text-[#18181B] dark:text-[#2A2A2C] dark:hover:text-[#FAFAFA]"
               >
                 <Plus className="h-3 w-3" />
               </Button>
@@ -113,7 +123,7 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
                     onDeleteCategory(category);
                   }
                 }}
-                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-100 text-gray-500 hover:text-gray-900"
+                className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity rounded-md hover:bg-[#F0F0EE] dark:hover:bg-white/5 text-[#C8C8C6] hover:text-red-500 dark:text-[#2A2A2C] dark:hover:text-red-400"
               >
                 <Trash2 className="h-3 w-3" />
               </Button>
@@ -125,28 +135,37 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-100 text-gray-500 hover:text-gray-900"
+                    className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity rounded-md hover:bg-[#F0F0EE] dark:hover:bg-white/5 text-[#C8C8C6] hover:text-[#18181B] dark:text-[#2A2A2C] dark:hover:text-[#FAFAFA]"
                   >
                     <Sparkles className="h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start">
-                  <DropdownMenuItem onClick={() => onAddPredefinedCategory('adults')}>
+                <DropdownMenuContent
+                  align="start"
+                  className="rounded-xl border border-[#E9E9E7] dark:border-white/8 bg-white dark:bg-[#141416] shadow-xl p-1"
+                >
+                  <DropdownMenuItem
+                    className="rounded-lg text-[13px] text-[#18181B] dark:text-[#FAFAFA] cursor-pointer"
+                    onClick={() => onAddPredefinedCategory('adults')}
+                  >
                     Add adults category (18+)
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onAddPredefinedCategory('news')}>
+                  <DropdownMenuItem
+                    className="rounded-lg text-[13px] text-[#18181B] dark:text-[#FAFAFA] cursor-pointer"
+                    onClick={() => onAddPredefinedCategory('news')}
+                  >
                     Add news category
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
 
-            {/* Drag handle - only render if dragHandleProps provided */}
+            {/* Drag handle */}
             {dragHandleProps && (
               <button
                 {...(dragHandleProps as any)}
                 aria-label="Move category"
-                className={`h-6 w-6 p-0 ml-1 opacity-0 group-hover:opacity-100 transition-opacity text-gray-500 hover:text-gray-900 ${dragHandleProps.className ?? ''}`}
+                className={`h-5 w-5 p-0 ml-0.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#C8C8C6] hover:text-[#18181B] dark:text-[#2A2A2C] dark:hover:text-[#FAFAFA] ${dragHandleProps.className ?? ''}`}
               >
                 <GripVertical className="h-3 w-3" />
               </button>

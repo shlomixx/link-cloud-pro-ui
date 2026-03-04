@@ -107,7 +107,7 @@ export const VirtualizedLinkGrid: React.FC<VirtualizedLinkGridProps> = ({
   // Only virtualize if we have many links (>20) to reduce DOM size
   if (links.length <= 20) {
     return (
-      <div className="grid gap-2 grid-cols-5 sm:grid-cols-7 md:grid-cols-9 lg:grid-cols-11 xl:grid-cols-13">
+      <div className="links-grid-container">
         {links.map((link) => (
           <LinkCard
             key={link.key}

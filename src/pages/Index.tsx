@@ -26,194 +26,110 @@ const LazyKeyboardShortcuts = React.lazy(async () => {
 });
 
 const DEFAULT_LINKS: LinkData[] = [
-  // My Daily Links
-  { key: 'daily-chatgpt', name: 'ChatGPT', defaultUrl: 'https://chatgpt.com/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-gemini', name: 'Gemini', defaultUrl: 'https://gemini.google.com/app', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-claude', name: 'Claude', defaultUrl: 'https://claude.ai/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-perplexity', name: 'Perplexity', defaultUrl: 'https://www.perplexity.ai/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-gmail', name: 'Gmail', defaultUrl: 'https://gmail.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-yahoo', name: 'Yahoo', defaultUrl: 'https://yahoo.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-bing', name: 'Bing', defaultUrl: 'https://www.bing.com/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-wikipedia', name: 'Wikipedia', defaultUrl: 'https://wikipedia.org', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-paypal', name: 'PayPal', defaultUrl: 'https://paypal.com', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-aliexpress', name: 'AliExpress', defaultUrl: 'https://aliexpress.com', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-ebay', name: 'eBay', defaultUrl: 'https://ebay.com', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-amazon', name: 'Amazon', defaultUrl: 'https://www.amazon.com/', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-walmart', name: 'Walmart', defaultUrl: 'https://walmart.com', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-etsy', name: 'Etsy', defaultUrl: 'https://etsy.com', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-grammarly', name: 'Grammarly', defaultUrl: 'https://grammarly.com', category: 'creative', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-midjourney', name: 'Midjourney', defaultUrl: 'https://midjourney.com', category: 'creative', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-leonardo', name: 'Leonardo', defaultUrl: 'https://leonardo.ai/', category: 'creative', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'creative', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-netflix', name: 'Netflix', defaultUrl: 'https://netflix.com', category: 'entertainment', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-office', name: 'Office', defaultUrl: 'https://office.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-spotify', name: 'Spotify', defaultUrl: 'https://spotify.com', category: 'entertainment', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-ticketmaster', name: 'Ticketmaster', defaultUrl: 'https://ticketmaster.com', category: 'entertainment', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-soundcloud', name: 'SoundCloud', defaultUrl: 'https://soundcloud.com', category: 'entertainment', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-nytimes', name: 'NY Times', defaultUrl: 'https://nytimes.com', category: 'news', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-cnn', name: 'CNN', defaultUrl: 'https://cnn.com', category: 'news', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-imdb', name: 'IMDb', defaultUrl: 'https://imdb.com', category: 'entertainment', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-foxnews', name: 'Fox News', defaultUrl: 'https://foxnews.com', category: 'news', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google', name: 'Google', defaultUrl: 'https://google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-drive', name: 'Google Drive', defaultUrl: 'https://drive.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-calendar', name: 'Google Calendar', defaultUrl: 'https://calendar.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-maps', name: 'Google Maps', defaultUrl: 'https://maps.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-photos', name: 'Google Photos', defaultUrl: 'https://photos.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-translate', name: 'Google Translate', defaultUrl: 'https://translate.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-news', name: 'Google News', defaultUrl: 'https://news.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-keep', name: 'Google Keep', defaultUrl: 'https://keep.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-meet', name: 'Google Meet', defaultUrl: 'https://meet.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-chat', name: 'Google Chat', defaultUrl: 'https://chat.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-docs', name: 'Google Docs', defaultUrl: 'https://docs.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-sheets', name: 'Google Sheets', defaultUrl: 'https://sheets.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-slides', name: 'Google Slides', defaultUrl: 'https://slides.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-youtube-music', name: 'YouTube Music', defaultUrl: 'https://music.youtube.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-apple-icloud', name: 'iCloud', defaultUrl: 'https://www.icloud.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-dropbox', name: 'Dropbox', defaultUrl: 'https://dropbox.com', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-google-play', name: 'Google Play', defaultUrl: 'https://play.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-app-store', name: 'App Store', defaultUrl: 'https://www.apple.com/app-store/', category: 'daily', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-airbnb', name: 'Airbnb', defaultUrl: 'https://airbnb.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-booking', name: 'Booking', defaultUrl: 'https://booking.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-uber', name: 'Uber', defaultUrl: 'https://uber.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-waze', name: 'Waze', defaultUrl: 'https://waze.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'daily-weather', name: 'Weather', defaultUrl: 'https://weather.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
+  // 🤖 AI Tools
+  { key: 'ai-chatgpt', name: 'ChatGPT', defaultUrl: 'https://chatgpt.com/', category: 'ai-tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'ai-claude', name: 'Claude', defaultUrl: 'https://claude.ai/', category: 'ai-tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'ai-gemini', name: 'Gemini', defaultUrl: 'https://gemini.google.com/app', category: 'ai-tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'ai-perplexity', name: 'Perplexity', defaultUrl: 'https://www.perplexity.ai/', category: 'ai-tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'ai-midjourney', name: 'Midjourney', defaultUrl: 'https://midjourney.com', category: 'ai-tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'ai-leonardo', name: 'Leonardo', defaultUrl: 'https://leonardo.ai/', category: 'ai-tools', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'ai-grammarly', name: 'Grammarly', defaultUrl: 'https://grammarly.com', category: 'ai-tools', clicks: 0, createdAt: new Date().toISOString() },
 
-  // Social Media Platforms
-  { key: 'social-facebook', name: 'Facebook', defaultUrl: 'https://facebook.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-youtube', name: 'YouTube', defaultUrl: 'https://youtube.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-whatsapp', name: 'Whatsapp', defaultUrl: 'https://whatsapp.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-instagram', name: 'Instagram', defaultUrl: 'https://instagram.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-snapchat', name: 'Snapchat', defaultUrl: 'https://snapchat.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-twitter', name: 'Twitter (X)', defaultUrl: 'https://twitter.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-linkedin', name: 'LinkedIn', defaultUrl: 'https://linkedin.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-pinterest', name: 'Pinterest', defaultUrl: 'https://pinterest.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-threads', name: 'Threads', defaultUrl: 'https://threads.net', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-telegram', name: 'Telegram', defaultUrl: 'https://telegram.org', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-myspace', name: 'MySpace', defaultUrl: 'https://myspace.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-reddit', name: 'Reddit', defaultUrl: 'https://reddit.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-tumblr', name: 'Tumblr', defaultUrl: 'https://tumblr.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-mastodon', name: 'Mastodon', defaultUrl: 'https://mastodon.social', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-nextdoor', name: 'Nextdoor', defaultUrl: 'https://nextdoor.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-twitch', name: 'Twitch', defaultUrl: 'https://twitch.tv', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-wechat', name: 'WeChat', defaultUrl: 'https://wechat.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-line', name: 'Line', defaultUrl: 'https://line.me', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-blogger', name: 'Blogger', defaultUrl: 'https://blogger.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-discord', name: 'Discord', defaultUrl: 'https://discord.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-yelp', name: 'Yelp', defaultUrl: 'https://yelp.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-medium', name: 'Medium', defaultUrl: 'https://medium.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-dribble', name: 'Dribble', defaultUrl: 'https://dribbble.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-vine', name: 'Vine', defaultUrl: 'https://vine.co', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-tiktok', name: 'TikTok', defaultUrl: 'https://tiktok.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-tagged', name: 'Tagged', defaultUrl: 'https://tagged.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-meetup', name: 'Meetup', defaultUrl: 'https://meetup.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-messenger', name: 'Messenger', defaultUrl: 'https://messenger.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-signal', name: 'Signal', defaultUrl: 'https://signal.org', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-skype', name: 'Skype', defaultUrl: 'https://skype.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-viber', name: 'Viber', defaultUrl: 'https://www.viber.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-quora', name: 'Quora', defaultUrl: 'https://www.quora.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'social-stackexchange', name: 'Stack Exchange', defaultUrl: 'https://stackexchange.com', category: 'society', clicks: 0, createdAt: new Date().toISOString() },
+  // 📧 Google Workspace
+  { key: 'gw-gmail', name: 'Gmail', defaultUrl: 'https://gmail.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'gw-drive', name: 'Google Drive', defaultUrl: 'https://drive.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'gw-docs', name: 'Google Docs', defaultUrl: 'https://docs.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'gw-sheets', name: 'Google Sheets', defaultUrl: 'https://sheets.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'gw-slides', name: 'Google Slides', defaultUrl: 'https://slides.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'gw-calendar', name: 'Google Calendar', defaultUrl: 'https://calendar.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'gw-keep', name: 'Google Keep', defaultUrl: 'https://keep.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'gw-chat', name: 'Google Chat', defaultUrl: 'https://chat.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'gw-meet', name: 'Google Meet', defaultUrl: 'https://meet.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'gw-photos', name: 'Google Photos', defaultUrl: 'https://photos.google.com', category: 'google', clicks: 0, createdAt: new Date().toISOString() },
 
-  // Tools
-  { key: 'tools-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'tools', clicks: 50, createdAt: '2024-01-20' },
-  { key: 'tools-trello', name: 'Trello', defaultUrl: 'https://trello.com', category: 'tools', clicks: 45, createdAt: '2024-01-23' },
-  { key: 'tools-figma', name: 'Figma', defaultUrl: 'https://figma.com', category: 'tools', clicks: 58, createdAt: '2024-03-01' },
-  { key: 'tools-slack', name: 'Slack', defaultUrl: 'https://slack.com', category: 'tools', clicks: 62, createdAt: '2024-03-02' },
-  { key: 'tools-zoom', name: 'Zoom', defaultUrl: 'https://zoom.us', category: 'tools', clicks: 48, createdAt: '2024-03-03' },
-  { key: 'tools-miro', name: 'Miro', defaultUrl: 'https://miro.com', category: 'tools', clicks: 40, createdAt: '2024-03-04' },
-  { key: 'tools-vsc', name: 'VS Code', defaultUrl: 'https://code.visualstudio.com', category: 'tools', clicks: 68, createdAt: '2024-03-13' },
-  { key: 'tools-docker', name: 'Docker', defaultUrl: 'https://docker.com', category: 'tools', clicks: 52, createdAt: '2024-03-14' },
-  { key: 'tools-jira', name: 'Jira', defaultUrl: 'https://atlassian.com/software/jira', category: 'tools', clicks: 42, createdAt: '2024-04-01' },
-  { key: 'tools-asana', name: 'Asana', defaultUrl: 'https://asana.com', category: 'tools', clicks: 38, createdAt: '2024-04-02' },
-  { key: 'tools-monday', name: 'Monday.com', defaultUrl: 'https://monday.com', category: 'tools', clicks: 35, createdAt: '2024-04-03' },
-  { key: 'tools-airtable', name: 'Airtable', defaultUrl: 'https://airtable.com', category: 'tools', clicks: 32, createdAt: '2024-04-04' },
-  { key: 'tools-zapier', name: 'Zapier', defaultUrl: 'https://zapier.com', category: 'tools', clicks: 28, createdAt: '2024-04-05' },
-  { key: 'tools-notion', name: 'Notion', defaultUrl: 'https://notion.so', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-obsidian', name: 'Obsidian', defaultUrl: 'https://obsidian.md', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-github', name: 'GitHub', defaultUrl: 'https://github.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-gitlab', name: 'GitLab', defaultUrl: 'https://gitlab.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-bitbucket', name: 'Bitbucket', defaultUrl: 'https://bitbucket.org', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-stackoverflow', name: 'Stack Overflow', defaultUrl: 'https://stackoverflow.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-mdn', name: 'MDN Web Docs', defaultUrl: 'https://developer.mozilla.org', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-devdocs', name: 'DevDocs', defaultUrl: 'https://devdocs.io', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-webdev', name: 'web.dev', defaultUrl: 'https://web.dev', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-npm', name: 'npm', defaultUrl: 'https://npmjs.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-yarn', name: 'Yarn', defaultUrl: 'https://yarnpkg.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-pnpm', name: 'pnpm', defaultUrl: 'https://pnpm.io', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-pypi', name: 'PyPI', defaultUrl: 'https://pypi.org', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-deno', name: 'Deno', defaultUrl: 'https://deno.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-bun', name: 'Bun', defaultUrl: 'https://bun.sh', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-postman', name: 'Postman', defaultUrl: 'https://postman.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-insomnia', name: 'Insomnia', defaultUrl: 'https://insomnia.rest', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-vercel', name: 'Vercel', defaultUrl: 'https://vercel.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-netlify', name: 'Netlify', defaultUrl: 'https://netlify.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-cloudflare', name: 'Cloudflare', defaultUrl: 'https://cloudflare.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-aws', name: 'AWS', defaultUrl: 'https://aws.amazon.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-gcp', name: 'Google Cloud', defaultUrl: 'https://cloud.google.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-azure', name: 'Azure', defaultUrl: 'https://azure.microsoft.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-render', name: 'Render', defaultUrl: 'https://render.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-fly', name: 'Fly.io', defaultUrl: 'https://fly.io', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-railway', name: 'Railway', defaultUrl: 'https://railway.app', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-supabase', name: 'Supabase', defaultUrl: 'https://supabase.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-firebase', name: 'Firebase', defaultUrl: 'https://firebase.google.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-sentry', name: 'Sentry', defaultUrl: 'https://sentry.io', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-linear', name: 'Linear', defaultUrl: 'https://linear.app', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-clickup', name: 'ClickUp', defaultUrl: 'https://clickup.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-google-analytics', name: 'Google Analytics', defaultUrl: 'https://analytics.google.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-google-search-console', name: 'Search Console', defaultUrl: 'https://search.google.com/search-console', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-loom', name: 'Loom', defaultUrl: 'https://loom.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-calendly', name: 'Calendly', defaultUrl: 'https://calendly.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-typeform', name: 'Typeform', defaultUrl: 'https://typeform.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-google-forms', name: 'Google Forms', defaultUrl: 'https://forms.google.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-chatwoot', name: 'Chatwoot', defaultUrl: 'https://www.chatwoot.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-intercom', name: 'Intercom', defaultUrl: 'https://intercom.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-zendesk', name: 'Zendesk', defaultUrl: 'https://zendesk.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-figma-community', name: 'Figma Community', defaultUrl: 'https://www.figma.com/community', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-dribbble', name: 'Dribbble', defaultUrl: 'https://dribbble.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-behance', name: 'Behance', defaultUrl: 'https://behance.net', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-unsplash', name: 'Unsplash', defaultUrl: 'https://unsplash.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-pexels', name: 'Pexels', defaultUrl: 'https://pexels.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-google-fonts', name: 'Google Fonts', defaultUrl: 'https://fonts.google.com', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
-  { key: 'tools-colorhunt', name: 'Color Hunt', defaultUrl: 'https://colorhunt.co', category: 'tools', clicks: 0, createdAt: new Date().toISOString() },
+  // 🔍 Search & Browse
+  { key: 'search-google', name: 'Google', defaultUrl: 'https://google.com', category: 'search', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'search-bing', name: 'Bing', defaultUrl: 'https://www.bing.com/', category: 'search', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'search-yahoo', name: 'Yahoo', defaultUrl: 'https://yahoo.com', category: 'search', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'search-wikipedia', name: 'Wikipedia', defaultUrl: 'https://wikipedia.org', category: 'search', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'search-maps', name: 'Google Maps', defaultUrl: 'https://maps.google.com', category: 'search', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'search-translate', name: 'Google Translate', defaultUrl: 'https://translate.google.com', category: 'search', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'search-gnews', name: 'Google News', defaultUrl: 'https://news.google.com', category: 'search', clicks: 0, createdAt: new Date().toISOString() },
+
+  // 🎬 Media & Entertainment
+  { key: 'media-netflix', name: 'Netflix', defaultUrl: 'https://netflix.com', category: 'media', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'media-spotify', name: 'Spotify', defaultUrl: 'https://spotify.com', category: 'media', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'media-ytmusic', name: 'YouTube Music', defaultUrl: 'https://music.youtube.com', category: 'media', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'media-soundcloud', name: 'SoundCloud', defaultUrl: 'https://soundcloud.com', category: 'media', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'media-imdb', name: 'IMDb', defaultUrl: 'https://imdb.com', category: 'media', clicks: 0, createdAt: new Date().toISOString() },
+
+  // 📰 News
+  { key: 'news-cnn', name: 'CNN', defaultUrl: 'https://cnn.com', category: 'news', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'news-fox', name: 'Fox News', defaultUrl: 'https://foxnews.com', category: 'news', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'news-nyt', name: 'NY Times', defaultUrl: 'https://nytimes.com', category: 'news', clicks: 0, createdAt: new Date().toISOString() },
+
+  // 🛒 Shopping
+  { key: 'shop-amazon', name: 'Amazon', defaultUrl: 'https://www.amazon.com/', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'shop-ebay', name: 'eBay', defaultUrl: 'https://ebay.com', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'shop-etsy', name: 'Etsy', defaultUrl: 'https://etsy.com', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'shop-aliexpress', name: 'AliExpress', defaultUrl: 'https://aliexpress.com', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'shop-walmart', name: 'Walmart', defaultUrl: 'https://walmart.com', category: 'shopping', clicks: 0, createdAt: new Date().toISOString() },
+
+  // 🏠 Travel & Services
+  { key: 'travel-airbnb', name: 'Airbnb', defaultUrl: 'https://airbnb.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'travel-booking', name: 'Booking', defaultUrl: 'https://booking.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'travel-uber', name: 'Uber', defaultUrl: 'https://uber.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'travel-waze', name: 'Waze', defaultUrl: 'https://waze.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'travel-weather', name: 'Weather', defaultUrl: 'https://weather.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'travel-ticketmaster', name: 'Ticketmaster', defaultUrl: 'https://ticketmaster.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'travel-paypal', name: 'PayPal', defaultUrl: 'https://paypal.com', category: 'travel', clicks: 0, createdAt: new Date().toISOString() },
+
+  // ☁️ Apps & Cloud
+  { key: 'apps-icloud', name: 'iCloud', defaultUrl: 'https://www.icloud.com', category: 'apps', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'apps-dropbox', name: 'Dropbox', defaultUrl: 'https://dropbox.com', category: 'apps', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'apps-gplay', name: 'Google Play', defaultUrl: 'https://play.google.com', category: 'apps', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'apps-appstore', name: 'App Store', defaultUrl: 'https://www.apple.com/app-store/', category: 'apps', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'apps-canva', name: 'Canva', defaultUrl: 'https://canva.com', category: 'apps', clicks: 0, createdAt: new Date().toISOString() },
+  { key: 'apps-office', name: 'Office', defaultUrl: 'https://office.com', category: 'apps', clicks: 0, createdAt: new Date().toISOString() },
 ];
 
-const DEFAULT_CATEGORY_LABELS = {
-    daily: 'Essentials',
-  society: 'Social Media Platforms',
-  tools: 'Productivity Tools',
-  custom: 'Custom Links',
-    shopping: 'Shopping',
-  google: 'Google Workspace',
-  entertainment: 'Entertainment',
-  news: 'News',
-  travel: 'Travel & Maps',
-  creative: 'Creative Tools',
+const DEFAULT_CATEGORY_LABELS: Record<string, string> = {
+  'ai-tools': '\u{1F916} AI Tools',
+  google: '\u{1F4E7} Google Workspace',
+  search: '\u{1F50D} Search & Browse',
+  media: '\u{1F3AC} Media & Entertainment',
+  news: '\u{1F4F0} News',
+  shopping: '\u{1F6D2} Shopping',
+  travel: '\u{1F3E0} Travel & Services',
+  apps: '\u{2601}\u{FE0F} Apps & Cloud',
+  custom: '\u{1F517} Custom Links',
 };
 
-const DEFAULT_CATEGORY_COLORS = {
-  daily: 'from-blue-400 to-blue-600',
-  society: 'from-emerald-400 to-emerald-600',
-  tools: 'from-violet-400 to-violet-600',
-  custom: 'from-slate-400 to-slate-600',
-    shopping: 'from-amber-400 to-amber-600',
+const DEFAULT_CATEGORY_COLORS: Record<string, string> = {
+  'ai-tools': 'from-violet-400 to-violet-600',
   google: 'from-blue-400 to-blue-600',
-  entertainment: 'from-rose-400 to-rose-600',
+  search: 'from-cyan-400 to-cyan-600',
+  media: 'from-rose-400 to-rose-600',
   news: 'from-sky-400 to-sky-600',
+  shopping: 'from-amber-400 to-amber-600',
   travel: 'from-teal-400 to-teal-600',
-  creative: 'from-fuchsia-400 to-fuchsia-600',
+  apps: 'from-indigo-400 to-indigo-600',
+  custom: 'from-gray-400 to-gray-600',
 };
 
 const Index = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-  const [cloudCategory, setCloudCategory] = useState<string>('all');
+  const [cloudCategory, setCloudCategory] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
   const [addingToCategory, setAddingToCategory] = useState<string | null>(null);
   const [editingLink, setEditingLink] = useState<LinkData | null>(null);
   const [isNewLink, setIsNewLink] = useState(false);
   const [sortBy, setSortBy] = useState<SortBy>('custom');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  // NOTE: selectedCategory removed — cloudCategory is the single source of truth
+  // for which tab is active AND which blocks are shown.
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [clickedLink, setClickedLink] = useState<string | null>(null);
   const [isCompactHeader, setIsCompactHeader] = useState(false);
@@ -257,9 +173,9 @@ const Index = () => {
     const savedSettings = localStorage.getItem('linkRouterSettings');
     const savedCategories = localStorage.getItem('linkRouterCategories');
     
-    const preferredOrder = ['daily', 'shopping', 'google', 'entertainment', 'news', 'travel', 'creative', 'society', 'tools'];
+    const preferredOrder = ['ai-tools', 'google', 'search', 'media', 'news', 'shopping', 'travel', 'apps'];
     const seedVersionKey = 'linkRouterSeedVersion';
-    const seedVersion = '2026-02-27-01';
+    const seedVersion = '2026-03-04-01';
     
     // Load categories first, merging with defaults so new categories persist
     if (savedCategories) {
@@ -288,8 +204,6 @@ const Index = () => {
         let loadedLinks = Array.isArray(loadedData) ? loadedData : loadedData.linksData;
 
         // One-time seed: merge new default links into existing saved data.
-        // This ensures users who already have localStorage data still receive new curated links,
-        // without wiping their personal collection.
         try {
           const currentSeed = localStorage.getItem(seedVersionKey);
           if (currentSeed !== seedVersion) {
@@ -478,7 +392,7 @@ const Index = () => {
     
     const url = link.url || link.defaultUrl;
     if (url) {
-      window.open(url, '_blank');
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
     
     toast.success(`Opening ${link.name}...`, {
@@ -501,7 +415,7 @@ const Index = () => {
   const filteredLinks = useMemo(() => {
     // First, apply non-text filters (category, quickFilter)
     const base = linksData.filter((link) => {
-      if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
+      if (cloudCategory !== null && link.category !== cloudCategory) return false;
 
       if (quickFilter === 'recent') {
         const weekAgo = new Date();
@@ -522,25 +436,7 @@ const Index = () => {
     return results
       .map((r) => r.item)
       .filter((item) => baseKeys.has(item.key));
-  }, [linksData, selectedCategory, quickFilter, debouncedSearchTerm, fuse]);
-
-  const cloudLinks = linksData.filter(link => {
-    if (selectedCategory !== 'all' && link.category !== selectedCategory) return false;
-    if (quickFilter === 'recent') {
-      const weekAgo = new Date();
-      weekAgo.setDate(weekAgo.getDate() - 7);
-      if (new Date(link.createdAt || '') < weekAgo) return false;
-    }
-    if (quickFilter === 'popular' && (link.clicks || 0) < 20) return false;
-
-    const searchLower = searchTerm.toLowerCase();
-    if (!searchLower) return true;
-    return (
-      link.name.toLowerCase().includes(searchLower) ||
-      (link.url || link.defaultUrl || '').toLowerCase().includes(searchLower) ||
-      link.category.toLowerCase().includes(searchLower)
-    );
-  });
+  }, [linksData, cloudCategory, quickFilter, debouncedSearchTerm, fuse]);
 
   const groupedLinks = categoryOrder.reduce((acc, category) => {
     const linksForCategory = filteredLinks.filter(link => link.category === category);
@@ -550,48 +446,6 @@ const Index = () => {
     }
     return acc;
   }, {} as Record<string, LinkData[]>);
-
-  // Highlight category pill when its section is in view (scroll spy)
-  useEffect(() => {
-    if (cloudCategory !== 'all') {
-      // When user filtered to a single category, keep highlight there.
-      setSelectedCategory(cloudCategory);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let topMostEntry: IntersectionObserverEntry | null = null;
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          if (
-            !topMostEntry ||
-            entry.boundingClientRect.top < topMostEntry.boundingClientRect.top
-          ) {
-            topMostEntry = entry;
-          }
-        }
-
-        if (topMostEntry) {
-          const el = topMostEntry.target as HTMLElement;
-          const catId = el.dataset.categoryId;
-          if (catId && catId !== selectedCategory) {
-            setSelectedCategory(catId);
-          }
-        }
-      },
-      {
-        root: null,
-        threshold: 0.4,
-      }
-    );
-
-    Object.values(categorySectionRefs.current).forEach((el) => {
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [cloudCategory, groupedLinks, selectedCategory]);
 
   // Also include any new categories that might not be in categoryOrder yet (only if they have links)
   Object.keys(categoryLabels).forEach(category => {
@@ -671,7 +525,7 @@ const Index = () => {
         description: 'Your new link is ready to use',
         action: {
           label: 'View',
-          onClick: () => window.open(url, '_blank')
+          onClick: () => window.open(url, '_blank', 'noopener,noreferrer')
         }
       });
     } else if (editingLink) {
@@ -1038,7 +892,7 @@ const Index = () => {
       const next = extras.length > 0 ? [...prev, ...extras] : prev;
       toast.success(extras.length > 0 ? `Added ${extras.length} curated links` : 'Curated links already applied');
       try {
-        localStorage.setItem('linkRouterSeedVersion', '2026-02-27-01');
+        localStorage.setItem('linkRouterSeedVersion', '2026-03-04-01');
       } catch {
         // ignore
       }
@@ -1062,7 +916,7 @@ const Index = () => {
     setLinksData(DEFAULT_LINKS);
     setCategoryLabels(DEFAULT_CATEGORY_LABELS);
     setCategoryColors(DEFAULT_CATEGORY_COLORS);
-    setCategoryOrder(['daily', 'shopping', 'google', 'entertainment', 'news', 'travel', 'creative', 'society', 'tools']);
+    setCategoryOrder(['ai-tools', 'google', 'search', 'media', 'news', 'shopping', 'travel', 'apps']);
     toast.success('Local data reset');
   };
 
@@ -1145,55 +999,54 @@ const Index = () => {
   };
   
   return (
-    <div className="min-h-screen transition-all duration-500 bg-white">
+    <div className="min-h-screen transition-colors duration-300 bg-[#FFFFFF] dark:bg-[#09090B]">
       <DragDropContext onDragEnd={handleDragEnd}>
+        {/* ── A. Fixed header bar — 56px, logo left, controls right ── */}
+        <AppHeader
+          onAddLink={() => openModal()}
+          onAddCategory={() => openAddCategoryModal(null)}
+          onShowShortcuts={() => setShowShortcuts(true)}
+          linkSize={linkSize}
+          onLinkSizeChange={setLinkSize}
+          onApplyCuratedLinks={applyCuratedLinksPack}
+          onResetLocalData={resetLocalData}
+        />
+
         <main
           id="main-content"
           tabIndex={-1}
-          className="pb-[calc(1.5rem+env(safe-area-inset-bottom))] focus:outline-none"
-          style={{
-            paddingTop: "calc(var(--app-header-h, 0px) + var(--linkcloud-h, 0px))",
-          }}
+          className="pb-[calc(4rem+env(safe-area-inset-bottom))] focus:outline-none"
         >
-          <div className="fixed left-0 right-0 top-0 z-30 bg-white shadow-[0_6px_18px_rgba(15,23,42,0.04)]">
-            <AppHeader
-              onAddLink={() => openModal()}
-              onAddCategory={() => openAddCategoryModal(null)}
-              onShowShortcuts={() => setShowShortcuts(true)}
-              linkSize={linkSize}
-              onLinkSizeChange={setLinkSize}
-              onApplyCuratedLinks={applyCuratedLinksPack}
-              onResetLocalData={resetLocalData}
-            />
-            <LinkCloud
-              searchTerm={searchTerm}
-              onSearchTermChange={(v) => setSearchTerm(v)}
-              searchInputRef={searchInputRef}
-              onSubmit={() => {
-                const q = searchTerm.trim();
-                if (!q) return;
-                navigate(`/search?q=${encodeURIComponent(q)}`);
-              }}
-              selectedCategory={selectedCategory}
-              onSelectedCategoryChange={(cat) => {
-                setSelectedCategory(cat);
-                setCloudCategory(cat);
-              }}
-              onAddTemplateCategory={addTemplateCategory}
-              categoryIds={Object.keys(categoryLabels)}
-              categoryLabels={categoryLabels}
-            />
-          </div>
+          {/* ── B. Hero section — greeting + search + tabs ── */}
+          <LinkCloud
+            searchTerm={searchTerm}
+            onSearchTermChange={(v) => setSearchTerm(v)}
+            searchInputRef={searchInputRef}
+            onSubmit={() => {
+              const q = searchTerm.trim();
+              if (!q) return;
+              navigate(`/search?q=${encodeURIComponent(q)}`);
+            }}
+            selectedCategory={cloudCategory}
+            onSelectedCategoryChange={(cat) => {
+              setCloudCategory(cat);
+            }}
+            onAddTemplateCategory={addTemplateCategory}
+            categoryIds={Object.keys(categoryLabels)}
+            categoryLabels={categoryLabels}
+          />
 
+          {/* ── E. Link grid — below hero ── */}
           <Droppable droppableId="categories" type="CATEGORY">
             {(provided) => {
               const entries =
-                cloudCategory === "all"
+                cloudCategory === null
                   ? Object.entries(groupedLinks)
                   : Object.entries(groupedLinks).filter(([cat]) => cat === cloudCategory);
+              const isAllView = cloudCategory === null;
               return (
-              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 mt-4" id="categories">
-                <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-7">
+              <div className="link-grid-area" id="categories">
+                <div ref={provided.innerRef} {...provided.droppableProps}>
                 {entries.map(([category, links], index) => (
                   <Draggable key={category} draggableId={`category-${category}`} index={index}>
                     {(prov, snapshot) => (
@@ -1208,9 +1061,17 @@ const Index = () => {
                         }}
                         data-category-id={category}
                         {...prov.draggableProps}
-                        className={`animate-slide-up transition-transform duration-150 ${snapshot.isDragging ? 'scale-105 shadow-2xl z-50 opacity-95' : ''}`}
+                        className={`section-block animate-slide-up transition-transform duration-150 ${snapshot.isDragging ? 'scale-[1.01] shadow-2xl z-50 opacity-95' : ''}`}
+                        style={{
+                          animationDelay: `${Math.min(index * 40, 300)}ms`,
+                          ...(prov.draggableProps.style ?? {}),
+                        }}
                       >
                         <div className={`${snapshot.isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}>
+                          {/* Section label — only in ALL view */}
+                          {isAllView && categoryLabels[category] && (
+                            <span className="section-label">{categoryLabels[category]}</span>
+                          )}
                           <CategorySection
                             category={category}
                             links={links}
@@ -1247,26 +1108,43 @@ const Index = () => {
             }}
           </Droppable>
         
+        {/* Empty state */}
         {Object.keys(groupedLinks).length === 0 && (
-          <div className="text-center py-20 animate-fade-in">
-            <div className="text-6xl mb-6 animate-bounce">נ”—</div>
-            <h3 className="text-2xl font-bold mb-3 transition-colors duration-300 text-gray-900">
+          <div className="flex flex-col items-center justify-center min-h-[30vh] text-center px-6 animate-fade-in">
+            <div className="mb-6 w-14 h-14 rounded-2xl bg-[#F0F0EE] dark:bg-white/[0.04] flex items-center justify-center">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-[#C8C8C6] dark:text-[#2A2A2C]"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="4" />
+                <line x1="12" y1="8" x2="12" y2="16" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+              </svg>
+            </div>
+            <h3 className="text-[15px] font-semibold text-[#18181B] dark:text-[#FAFAFA] mb-2 tracking-tight">
               {debouncedSearchTerm || quickFilter !== 'all' ? 'No links found' : 'Your link collection awaits'}
             </h3>
-            <p className={`mb-8 text-lg transition-colors duration-300 text-muted-foreground`}>
+            <p className="mb-7 text-[13px] text-[#9CA3AF] dark:text-[#4B5563] max-w-xs leading-relaxed">
               {debouncedSearchTerm 
-                ? `No links match "${debouncedSearchTerm}". Try adjusting your search terms.`
+                ? `No links match "${debouncedSearchTerm}". Try adjusting your search.`
                 : quickFilter !== 'all'
                 ? `No ${quickFilter} links found. Try a different filter.`
-                : 'Add your first link to start building your personal link hub'
+                : 'Add your first link to start building your personal link hub.'
               }
             </p>
-            <div className="flex gap-3 justify-center">
+            <div className="flex gap-2 justify-center">
               <Button 
                 onClick={() => openModal()} 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                className="h-9 bg-indigo-600 hover:bg-indigo-700 text-white px-4 text-[13px] font-medium rounded-xl transition-all duration-200"
               >
-                <Plus className="w-5 h-5 mr-2" />
+                <Plus className="w-3.5 h-3.5 mr-1.5" />
                 {debouncedSearchTerm || quickFilter !== 'all' ? 'Add New Link' : 'Add Your First Link'}
               </Button>
               {(debouncedSearchTerm || quickFilter !== 'all') && (
@@ -1277,7 +1155,7 @@ const Index = () => {
                     setQuickFilter('all');
                     setSortBy('name');
                   }}
-                  className="px-6 py-3 text-lg transition-all duration-300 hover:scale-105 border border-gray-300 text-gray-800 hover:bg-gray-100"
+                  className="h-9 px-4 text-[13px] font-medium rounded-xl border border-[#E9E9E7] dark:border-white/8 text-[#757575] dark:text-[#8C8C8C] hover:bg-[#F0F0EE] dark:hover:bg-white/5 transition-all duration-200"
                 >
                   Clear Filters
                 </Button>
@@ -1289,7 +1167,11 @@ const Index = () => {
       </DragDropContext>
 
 
-      <React.Suspense fallback={<div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full"></div></div>}>
+      <React.Suspense fallback={
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="animate-spin w-6 h-6 border-2 border-[#E9E9E7] border-t-[#18181B] dark:border-white/20 dark:border-t-white rounded-full" />
+        </div>
+      }>
         <LazyLinkModal
           isOpen={isModalOpen}
           onClose={closeModal}

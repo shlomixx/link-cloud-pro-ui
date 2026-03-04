@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+﻿import React from 'react';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { BaseLinkCardProps } from './types';
-import { getFaviconUrl, handleFaviconError } from './utils';
+import { getFaviconUrl, handleFaviconError, nameToColor } from './utils';
 import { LinkCardContextMenu } from './ContextMenuContent';
 
 export const CompactView: React.FC<BaseLinkCardProps> = ({
@@ -20,30 +19,17 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
   onChangeCategory,
   onDragStart,
   onAdd,
-  linkSize = 100, // Default size
+  linkSize = 100,
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseEnter = () => {
-    onMouseEnter();
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    onMouseLeave();
-    setIsHovered(false);
-  };
-  
-  const containerSize = linkSize;
-  const iconContainerSize = containerSize * 0.7;
-  const iconSize = iconContainerSize * 0.7;
+  const firstLetter = (link.name || '?').charAt(0).toUpperCase();
+  const fallbackColor = nameToColor(link.name || 'link');
 
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <div
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
           onClick={onLinkClick}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -54,68 +40,40 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
           role="button"
           tabIndex={0}
           aria-label={link.name}
-          className={`
-            group relative flex flex-col items-center justify-center gap-3 p-4 cursor-pointer
-            rounded-2xl min-w-0
-            transition-all duration-200 ease-out
-            hover:scale-110 hover:shadow-lg hover:shadow-blue-100/50 hover:bg-white hover:-translate-y-1 active:scale-95
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50
-          `}
-          style={{ minWidth: `${Math.max(containerSize, 100)}px`, maxWidth: `${Math.max(containerSize, 100)}px` }}
+          className="link-item group"
         >
-          {isHovered && (
-            <div className="absolute -top-2 -left-2 z-20 opacity-0 group-hover:opacity-100 transition-all duration-200">
-              <button
-                className="p-2 hover:bg-black/5 rounded-full transition-all duration-200"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  // Trigger context menu programmatically
-                  const contextMenuEvent = new MouseEvent('contextmenu', {
-                    bubbles: true,
-                    cancelable: true,
-                    clientX: e.clientX,
-                    clientY: e.clientY
-                  });
-                  e.currentTarget.parentElement?.parentElement?.dispatchEvent(contextMenuEvent);
+          <div className="card-inner">
+            <div className="link-favicon-wrapper">
+              <img
+                src={getFaviconUrl(link.url || link.defaultUrl || '')}
+                alt=""
+                className="link-favicon"
+                loading="lazy"
+                decoding="async"
+                onError={handleFaviconError}
+              />
+              <span
+                className="link-fallback"
+                style={{
+                  display: 'none',
+                  backgroundColor: fallbackColor,
                 }}
+                aria-hidden="true"
               >
-                {/* Google-style three dots vertical */}
-                <div className="flex flex-col gap-0.5">
-                  <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-                  <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-                  <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
-                </div>
-              </button>
-            </div>
-          )}
-          
-          {/* Use figure/figcaption for proper semantic structure */}
-          <figure className="flex flex-col items-center justify-center gap-2 m-0">
-            <div className="relative flex justify-center items-center">
-              <div className="rounded-xl flex items-center justify-center" style={{ width: `${iconContainerSize}px`, height: `${iconContainerSize}px`}}>
-                <img
-                  src={getFaviconUrl(link.url || link.defaultUrl || '')}
-                  alt=""
-                  className="rounded-lg object-contain"
-                  loading="lazy"
-                  decoding="async"
-                  style={{ width: `${iconSize}px`, height: `${iconSize}px`}}
-                  onError={handleFaviconError}
-                />
-              </div>
-            </div>
-            <figcaption className="w-full min-w-0 text-center overflow-hidden">
-              <span className="text-foreground/90 text-base font-medium leading-tight block text-center truncate" title={link.name}>
-                {link.name}
+                {firstLetter}
               </span>
-            </figcaption>
-          </figure>
+            </div>
+            <span
+              className="link-label text-[14px] font-medium text-[#4B5563] dark:text-[#9CA3AF] leading-tight truncate transition-colors duration-150 group-hover:text-[#1a1a1a] dark:group-hover:text-[#e5e5e5]"
+              title={link.name}
+            >
+              {link.name}
+            </span>
+          </div>
         </div>
       </ContextMenuTrigger>
       <LinkCardContextMenu
         link={link}
-        
         categories={categories}
         onEdit={onEdit}
         onCopyUrl={onCopyUrl}

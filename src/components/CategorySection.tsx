@@ -7,7 +7,7 @@ import {
 } from './CategorySection/index';
 import { LayoutProps } from './CategorySection/layoutTypes';
 import { useCategorySectionProps, useOptimizedRows } from './CategorySection/hooks';
-import { ITEMS_PER_ROW, getLinkSectionLabel } from './CategorySection/utils';
+import { ITEMS_PER_ROW } from './CategorySection/utils';
 import { RowDropZone } from './CategorySection/RowDropZone';
 import { usePerformanceMonitor } from './CategorySection/performanceMonitor';
 
@@ -141,18 +141,8 @@ const DesktopLayout: React.FC<LayoutProps> = memo(({
       
       <div className={LAYOUT_CLASSES.categoryContainer}>
         {linkRows.map((rowLinks, rowIndex) => {
-          const prevRow = linkRows[rowIndex - 1];
-          const lastOfPrev = prevRow?.[prevRow.length - 1];
-          const firstOfRow = rowLinks[0];
-          const groupLabel = firstOfRow ? getLinkSectionLabel(firstOfRow) : '';
-          const showLabel = !!firstOfRow && (!lastOfPrev || getLinkSectionLabel(lastOfPrev) !== groupLabel);
           return (
-            <div key={`desktop-row-${category}-${rowIndex}`} className="space-y-1.5">
-              {showLabel && groupLabel && (
-                <div className="text-sm font-semibold text-gray-600 tracking-wide pt-1">
-                  {groupLabel}
-                </div>
-              )}
+            <div key={`desktop-row-${category}-${rowIndex}`}>
               <RowDropZone
                 rowId={`category-${category}-row-${rowIndex}`}
                 rowIndex={rowIndex}
@@ -218,18 +208,8 @@ const MobileLayout: React.FC<LayoutProps> = memo(({
       
       <div className={LAYOUT_CLASSES.categoryContainer}>
         {linkRows.map((rowLinks, rowIndex) => {
-          const prevRow = linkRows[rowIndex - 1];
-          const lastOfPrev = prevRow?.[prevRow.length - 1];
-          const firstOfRow = rowLinks[0];
-          const groupLabel = firstOfRow ? getLinkSectionLabel(firstOfRow) : '';
-          const showLabel = !!firstOfRow && (!lastOfPrev || getLinkSectionLabel(lastOfPrev) !== groupLabel);
           return (
-            <div key={`mobile-row-${category}-${rowIndex}`} className="space-y-1.5">
-              {showLabel && groupLabel && (
-                <div className="text-sm font-semibold text-gray-600 tracking-wide pt-1">
-                  {groupLabel}
-                </div>
-              )}
+            <div key={`mobile-row-${category}-${rowIndex}`}>
               <RowDropZone
                 rowId={`category-mobile-${category}-row-${rowIndex}`}
                 rowIndex={rowIndex}
