@@ -1,0 +1,25 @@
+[33md2c0067[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m style: Google-inspired UI - colorful title, pill search, rounded categories, circular icons
+[33mb9aa6cd[m style: UI polish - search shadow, active category, card hovers
+[33mc9b0667[m style: rectangular search bar and categories with rounded-md, add 7 categories with horizontal scroll
+[33m18b559a[m style: redesign search bar to Yandex pill style
+[33m0fe14f2[m style: switch to Loom light theme with white background and blue accents
+[33mcc2c624[m style: update color theme to Loom blue palette
+[33m2c5c2b0[m style: apply Fandom-inspired dark theme with cyan accent
+[33mc7a44ad[m[33m ([m[1;33mtag: [m[1;33mbackup-2026-02-28[m[33m)[m feat: default to top 100 US sites
+[33m163424b[m feat: redesign home quick-launch and improve accessibility
+[33mcee8f05[m feat: add Google CSE search route and mobile header search
+[33mb7202dc[m[33m ([m[1;33mtag: [m[1;33mshlomi[m[33m)[m backup: working version
+[33m4ed7ef7[m Your descriptive commit message here
+[33m53e845f[m שיפורים לגרירה: פינוי מקום ברור, הסרת אפקטים ויזואליים מיותרים, גרירה בין כל השורות
+[33ma939303[m Fix: Resolve code errors
+[33maa21b1c[m Fix drag and drop issues and improve UI: Remove HTML drag events, fix hover effects, and update three-dot menu functionality
+[33m9708a5a[m Reverted to commit 0e6cf3ebf125d7fe33ba833b604fcf0392f6999d
+[33mc9fc6b4[m Reverted to commit 54d02ced70e3ed0792014567733037dcbf825672
+[33m6e5f4fe[m Update Index.tsx
+[33mdc4dc2e[m Code edited in Lovable Code Editor
+[33m3a05060[m Reverted to commit 54d02ced70e3ed0792014567733037dcbf825672
+[33m0e6cf3e[m Fix server configuration issues
+[33m54d02ce[m Improve site loading speed
+[33m13793fc[m Reverted to commit 2a8900934d44401b8b7c3ad926af66ceb163b6b1
+[33m4ecd5bd[m Fix loading screen display
+[33m2a89009[m Fix loading remnants

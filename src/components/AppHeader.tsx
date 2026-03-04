@@ -78,7 +78,7 @@ export function AppHeader(props: AppHeaderProps) {
     }
   };
   return (
-    <header ref={headerRef} className="sticky top-0 z-50 pt-3 sm:pt-4 pb-2 sm:pb-3 border-b border-border/60 bg-background/80 backdrop-blur-md">
+    <header ref={headerRef} className="sticky top-0 z-50 pt-3 sm:pt-4 pb-2 sm:pb-3  bg-background/80 backdrop-blur-md">
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
           {/* Fandom-style brandmark */}

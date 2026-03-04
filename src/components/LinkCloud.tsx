@@ -139,6 +139,49 @@ function scoreLink(l: LinkData): number {
   return fav * 1_000_000_000_000 + clicks * 1_000_000_000 + last + created / 10;
 }
 
+// Map draggable links to quick category tabs
+const DAILY_LINK_TO_TAB: Record<string, string> = {
+  'ChatGPT': 'ai', 'Gemini': 'ai', 'Midjourney': 'ai', 'Leonardo': 'ai',
+  'Perplexity': 'ai', 'Claude': 'ai',
+  'Amazon': 'shopping', 'Walmart': 'shopping', 'eBay': 'shopping',
+  'Etsy': 'shopping', 'AliExpress': 'shopping',
+  'Yahoo': 'news', 'NY Times': 'news', 'CNN': 'news',
+  'Fox News': 'news', 'Google News': 'news',
+  'Netflix': 'entertainment', 'SoundCloud': 'entertainment',
+  'IMDb': 'entertainment', 'Spotify': 'entertainment',
+  'Ticketmaster': 'entertainment', 'YouTube Music': 'entertainment',
+  'Grammarly': 'productivity', 'Office': 'productivity', 'Canva': 'productivity',
+  'Google': 'productivity', 'Google Drive': 'productivity', 'Wikipedia': 'productivity',
+  'Google Calendar': 'productivity', 'Google Maps': 'productivity',
+  'Google Photos': 'productivity', 'Gmail': 'productivity',
+  'Google Translate': 'productivity', 'Google Keep': 'productivity',
+  'Google Meet': 'productivity', 'Google Chat': 'productivity',
+  'Google Docs': 'productivity', 'Bing': 'productivity',
+  'Google Sheets': 'productivity', 'Google Slides': 'productivity',
+  'iCloud': 'productivity', 'Dropbox': 'productivity',
+  'Google Play': 'productivity', 'App Store': 'productivity',
+  'Weather': 'productivity', 'Waze': 'productivity',
+  'PayPal': 'finance',
+  'Airbnb': 'shopping', 'Booking': 'shopping', 'Uber': 'shopping',
+};
+
+const CATEGORY_TO_TAB: Record<string, string> = {
+  'society': 'social',
+  'tools': 'productivity',
+  'ai': 'ai',
+  'adults': 'adults',
+};
+
+function getLinkTabCategory(link: { name?: string; category?: string }): string {
+  if (link.category === 'daily' && link.name && DAILY_LINK_TO_TAB[link.name]) {
+    return DAILY_LINK_TO_TAB[link.name];
+  }
+  if (link.category && CATEGORY_TO_TAB[link.category]) {
+    return CATEGORY_TO_TAB[link.category];
+  }
+  return link.category || 'all';
+}
+
 export function LinkCloud({
   links,
   searchTerm,
@@ -158,7 +201,7 @@ export function LinkCloud({
         ? q
           ? [...TOP_US_LINKS_DEC_2025, ...links]
           : TOP_US_LINKS_DEC_2025
-        : links.filter((l) => l.category === selectedCategory);
+        : links.filter((l) => getLinkTabCategory(l) === selectedCategory);
     if (!q) return base;
     return base.filter((l) => {
       const name = l.name?.toLowerCase() ?? "";
@@ -183,7 +226,7 @@ export function LinkCloud({
   }, [filtered, q, selectedCategory]);
 
   return (
-    <section className="min-h-[calc(100svh-var(--app-header-h,0px))] flex items-center justify-center py-10 sm:py-14">
+    <section className="flex items-center justify-center py-4 sm:py-6 pb-0">
       <div className="w-full max-w-5xl px-4 sm:px-6">
         <form
           onSubmit={(e) => {
@@ -224,7 +267,7 @@ export function LinkCloud({
           role="group"
           aria-label="Quick categories"
         >
-          {["all", "ai", "adults"].map((cat) => (
+          {["all", "ai", "social", "shopping", "news", "entertainment", "productivity", "finance", "adults"].map((cat) => (
             <Button
               key={cat}
               type="button"
@@ -241,14 +284,14 @@ export function LinkCloud({
                 onSelectedCategoryChange(cat);
               }}
             >
-              {cat === "all" ? "All" : cat === "ai" ? "AI" : "Adults (18+)"}
+              {({all:"All",ai:"AI",social:"Social",shopping:"Shopping",news:"News",entertainment:"Entertainment",productivity:"Productivity",finance:"Finance",adults:"Adults (18+)"})[cat] || cat}
             </Button>
           ))}
         </div>
 
-        <div className="mt-6 sm:mt-8">
+        <div className="mt-6 sm:mt-8" style={{display: "none"}}>
           <div className="grid grid-cols-3 gap-3 sm:grid-cols-5 sm:gap-4 md:grid-cols-7 lg:grid-cols-9 xl:grid-cols-10">
-            {quickLinks.map((link) => (
+            {false && quickLinks.map((link) => (
               <button
                 key={link.key}
                 type="button"
@@ -272,7 +315,7 @@ export function LinkCloud({
             ))}
           </div>
 
-          <div className="mt-5 flex items-center justify-between gap-3 text-xs text-muted-foreground">
+          <div className="mt-5 flex items-center justify-between gap-3 text-xs text-muted-foreground" style={{display: "none"}}>
             <span className="truncate">
               {q
                 ? `Showing ${Math.min(quickLinks.length, filtered.length)} of ${filtered.length}`

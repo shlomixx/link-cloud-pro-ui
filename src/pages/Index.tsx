@@ -1101,16 +1101,16 @@ const Index = () => {
 
           {/* Clear separation: categories start only after scrolling */}
           <div className="container mx-auto px-4 sm:px-6">
-            <div className="py-10 sm:py-14">
-              <div className="h-px w-full bg-border/60" />
+            <div className="pt-2">
+              
             </div>
           </div>
 
           <Droppable droppableId="categories" type="CATEGORY">
             {(provided) => (
-              <div className="container mx-auto px-4 sm:px-6" id="categories">
+              <div className="container mx-auto px-4 sm:px-6" id="categories" data-active-tab={cloudCategory}>
                 <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-12">
-                {Object.entries(groupedLinks).map(([category, links], index) => (
+                {Object.entries(groupedLinks).filter(([cat]) => {if (cloudCategory === "all") return true;const m = {ai:["ai"],social:["society"],shopping:["daily"],news:["daily"],entertainment:["daily"],productivity:["tools"],finance:["daily"],adults:["adults"]};return m[cloudCategory]?.includes(cat);}).map(([category, links], index) => (
                   <Draggable key={category} draggableId={`category-${category}`} index={index}>
                     {(prov, snapshot) => (
                       <div

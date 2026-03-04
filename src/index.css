@@ -14,7 +14,7 @@ All colors MUST be HSL.
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 5%;
-    --primary: 336 78% 57%; /* Mapped from --color-primary */
+        --primary: 217 89% 61%; /* Google Blue #4285F4 */
     --primary-foreground: 0 0% 100%;
     --secondary: 240 5% 96%;
     --secondary-foreground: 240 7% 12%;
@@ -36,22 +36,22 @@ All colors MUST be HSL.
   .dark {
     /* Fandom-inspired dark palette */
     /* Background: #1D1F23 deep dark navy */
-    --background: 222 13% 13%;
+        --background: 0 0% 100%;
     /* Foreground: near white */
-    --foreground: 0 0% 96%;
+        --foreground: 240 10% 12%;
     /* Card: slightly lighter surface #26282E */
-    --card: 222 11% 17%;
-    --card-foreground: 0 0% 96%;
-    --popover: 222 13% 10%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 12%;
+        --popover: 0 0% 100%;
     --popover-foreground: 0 0% 92%;
-    /* Primary: Fandom cyan-blue #00B4D8 */
-    --primary: 192 100% 42%;
+            --popover-foreground: 240 10% 12%;
+        --primary: 217 89% 61%; /* Google Blue #4285F4 */
     --primary-foreground: 0 0% 100%;
-    /* Secondary surface */
+        --secondary: 240 5% 96%;
     --secondary: 222 11% 21%;
     --secondary-foreground: 0 0% 92%;
     /* Muted: #3A3C42 */
-    --muted: 222 8% 24%;
+            --muted: 240 5% 96%;
     --muted-foreground: 220 9% 60%;
     /* Accent: slightly brighter surface */
     --accent: 222 11% 21%;
@@ -310,3 +310,45 @@ All colors MUST be HSL.
     transform: none !important;
   }
 }
+
+
+/* Hide category section headers when a tab is active */
+[data-active-tab]:not([data-active-tab="all"]) h2 {
+  display: none;
+}
+[data-active-tab]:not([data-active-tab="all"]) h2 + div:has(button[aria-haspopup]) {
+  display: none;
+}
+/* Also hide move category button */
+[data-active-tab]:not([data-active-tab="all"]) button:has(+ button) {
+  /* keep visible */
+}
+
+/* Collapse gap between tabs and category links */
+#categories { margin-top: -40px !important; padding-top: 0 !important; }
+/* Hide category header toolbar when specific tab selected */
+[data-active-tab]:not([data-active-tab="all"]) [class*="category"] > div:first-child { display: none !important; }
+
+/* Hide all category headers and move buttons since tabs handle navigation */
+#categories h2 { display: none !important; }
+#categories [aria-haspopup="menu"] { display: none !important; }
+#categories button:has(+ button[aria-haspopup="menu"]) { display: none !important; }
+/* Hide top separator line */
+header { border-bottom: none !important; }
+nav { border-bottom: none !important; }
+.border-b { border-bottom: none !important; }
+
+/* Remove tab borders and match text to link labels */
+[aria-label="Quick categories"] button {
+  border: none !important;
+  font-size: 0.75rem !important;
+  font-weight: 400 !important;
+  color: hsl(var(--muted-foreground)) !important;
+}
+[aria-label="Quick categories"] button[aria-pressed="true"] {
+  font-weight: 500 !important;
+  color: hsl(var(--foreground)) !important;
+}
+[aria-label="Quick categories"] button[aria-pressed="true"] { background: transparent !important; box-shadow: none !important; }
+[aria-label="Quick categories"] button:hover { background: transparent !important; }
+[aria-label="Quick categories"] button { font-size: 0.875rem !important; color: hsl(var(--foreground)) !important; }
