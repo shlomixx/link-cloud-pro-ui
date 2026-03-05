@@ -1,3 +1,4 @@
+import { trackVisit } from '../RecentlyVisited';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';

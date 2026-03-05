@@ -1,3 +1,4 @@
+import { DarkModeToggle } from './DarkModeToggle';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Settings,
@@ -41,6 +42,28 @@ interface AppHeaderProps {
 
 export function AppHeader(props: AppHeaderProps) {
   const headerRef = useRef<HTMLElement | null>(null);
+  const [weather, setWeather] = useState('');
+  const [currentTime, setCurrentTime] = useState(new Date());
+  React.useEffect(() => {
+    const t = setInterval(() => setCurrentTime(new Date()), 60000);
+    return () => clearInterval(t);
+  }, []);
+  const h = currentTime.getHours();
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  const timeDisplay = currentTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+
+  // Fetch weather for Rishon LeZion
+  React.useEffect(() => {
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=31.97&longitude=34.79&current_weather=true')
+      .then(r => r.json())
+      .then(d => {
+        const wc = d.current_weather?.weathercode ?? 0;
+        const t = Math.round(d.current_weather?.temperature ?? 0);
+        const icon = wc === 0 ? '☀️' : wc <= 2 ? '⛅' : wc <= 3 ? '☁️' : wc <= 67 ? '🌧️' : wc <= 77 ? '❄️' : '⛈️';
+        setWeather(icon + ' ' + t + '°');
+      }).catch(() => {});
+  }, []);
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
 
@@ -85,8 +108,13 @@ export function AppHeader(props: AppHeaderProps) {
           <a href="/" className="text-xl sm:text-2xl font-bold tracking-tight text-foreground hover:text-primary transition-colors" aria-label="pokilo home">
             pokilo
           </a>
-          <div className="flex justify-end">
-          <DropdownMenu>
+          <div className="pokilo-greeting hidden sm:flex">
+            <span className="greet-text">{greet}</span>
+            <span className="greet-sub">{timeDisplay}{weather ? ` · ${weather}` : ""}</span>
+          </div>
+          <div className="flex justify-end items-center">
+          <DarkModeToggle />
+            <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="ghost" className="rounded-full hover:bg-muted">
                 <Settings className="h-5 w-5" />

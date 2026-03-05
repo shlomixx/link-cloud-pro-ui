@@ -3,6 +3,7 @@ import { LinkData } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { SearchChip } from './SearchChip';
 import { getFaviconUrl, handleFaviconError } from "@/components/link-card/utils";
 
 type Props = {
@@ -211,6 +212,10 @@ export function LinkCloud({
     });
   }, [links, q, selectedCategory]);
 
+    const [categoryFontSize, setCategoryFontSize] = useState(13);
+  const [categoryOpacity, setCategoryOpacity] = useState(0.55);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+
   const quickLinks = useMemo(() => {
     // Always show the top-100 US list by default.
     if (selectedCategory === "all" && !q) return filtered.slice(0, 100);
@@ -226,7 +231,7 @@ export function LinkCloud({
   }, [filtered, q, selectedCategory]);
 
   return (
-    <section className="flex items-center justify-center py-4 sm:py-6 pb-0">
+    <section className="flex items-center justify-center pt-24 sm:pt-28 pb-0">
       <div className="w-full max-w-5xl px-4 sm:px-6">
         <form
           onSubmit={(e) => {
@@ -244,7 +249,8 @@ export function LinkCloud({
               placeholder="Search…"
               value={searchTerm}
               onChange={(e) => onSearchTermChange(e.target.value)}
-              className="h-14 sm:h-16 w-full rounded-full border border-border bg-card px-6 pr-14 text-lg text-foreground placeholder:text-muted-foreground/60 shadow-sm focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary"
+              className="h-14 sm:h-16 w-full rounded-md border-2 border-border bg-card px-6 pr-14 text-base text-foreground placeholder:text-muted-foreground/60 shadow-sm focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary"
+                  style={{opacity: categoryOpacity, fontSize: categoryFontSize + 'px'}}
               aria-label="Search"
             />
             {searchTerm.trim().length > 0 && (
@@ -261,35 +267,68 @@ export function LinkCloud({
             )}
           </div>
         </form>
+              <SearchChip query={searchTerm} links={filtered} onClear={() => onSearchTermChange('')} />
 
         <div
-          className="mt-3 flex flex-wrap items-center justify-center gap-2"
+          className="mt-3 flex flex-wrap items-center justify-center gap-1.5 bg-muted/50 rounded-xl p-1.5 border border-border/50"
           role="group"
           aria-label="Quick categories"
         >
-          {["all", "ai", "social", "shopping", "news", "entertainment", "productivity", "finance", "adults"].map((cat) => (
-            <Button
-              key={cat}
-              type="button"
-              variant="ghost"
-              className={`h-8 rounded-full px-4 text-xs font-medium border transition-colors
-                ${selectedCategory === cat
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "border-border text-muted-foreground hover:text-foreground hover:bg-muted hover:border-muted-foreground/40"
-                }`}
-              aria-pressed={selectedCategory === cat}
-              onClick={() => {
-                if (cat === "ai") onAddTemplateCategory("ai");
-                if (cat === "adults") onAddTemplateCategory("adults");
-                onSelectedCategoryChange(cat);
-              }}
-            >
-              {({all:"All",ai:"AI",social:"Social",shopping:"Shopping",news:"News",entertainment:"Entertainment",productivity:"Productivity",finance:"Finance",adults:"Adults (18+)"})[cat] || cat}
-            </Button>
-          ))}
+          <div className="flex items-center gap-4 px-2 mb-2">
+              <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Size</span>
+                <input type="range" min={10} max={20} step={1} value={categoryFontSize} onChange={(e) => setCategoryFontSize(Number(e.target.value))} className="w-20 h-1 accent-primary" />
+                <span className="w-8 text-center font-mono" style={{opacity: categoryOpacity}}>{categoryFontSize}px</span>
+              </label>
+              <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Opacity</span>
+                <input type="range" min={0.2} max={1} step={0.05} value={categoryOpacity} onChange={(e) => setCategoryOpacity(Number(e.target.value))} className="w-20 h-1 accent-primary" />
+                <span className="w-8 text-center font-mono" style={{opacity: categoryOpacity}}>{Math.round(categoryOpacity * 100)}%</span>
+              </label>
+            </div>
+            <div className="flex items-center justify-between bg-muted/50 rounded-xl p-1.5 border border-border/50" role="tablist" aria-label="Quick categories" style={{opacity: categoryOpacity}}>
+              <Button
+                variant="default"
+                size="sm"
+                className="text-xs px-3 py-1 rounded-lg capitalize font-medium"
+                style={{fontSize: categoryFontSize + 'px'}}
+              >
+                {selectedCategory === "all" ? "All" : selectedCategory}
+              </Button>
+              <div className="relative"
+                onMouseEnter={() => setShowCategoryDropdown(true)}
+                onMouseLeave={() => setShowCategoryDropdown(false)}
+              >
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs px-3 py-1 rounded-lg"
+                  style={{fontSize: categoryFontSize + 'px'}}
+                  onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                >
+                  More ▾
+                </Button>
+                {showCategoryDropdown && (
+                  <div className="absolute right-0 top-full mt-1 z-50 bg-popover border border-border rounded-lg shadow-lg p-1.5 flex flex-col gap-0.5 min-w-[140px]">
+                    {["all", "ai", "social", "shopping", "news", "entertainment", "productivity", "finance", "adults"].filter(cat => cat !== selectedCategory).map((cat) => (
+                      <Button
+                        key={cat}
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => { onSelectedCategoryChange(cat); setShowCategoryDropdown(false); }}
+                        className="text-xs px-3 py-1 rounded-lg capitalize w-full justify-start"
+                        style={{fontSize: categoryFontSize + 'px'}}
+                      >
+                        {cat === "all" ? "All" : cat}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
         </div>
 
-        <div className="mt-6 sm:mt-8" style={{display: "none"}}>
+        <div className="mt-10 sm:mt-12" style={{display: "none"}}>
           <div className="grid grid-cols-3 gap-3 sm:grid-cols-5 sm:gap-4 md:grid-cols-7 lg:grid-cols-9 xl:grid-cols-10">
             {false && quickLinks.map((link) => (
               <button
@@ -308,7 +347,7 @@ export function LinkCloud({
                   decoding="async"
                   onError={handleFaviconError}
                 />
-                <span className="w-full truncate text-[12px] sm:text-[13px] leading-tight text-muted-foreground group-hover:text-primary">
+                <span className="w-full truncate text-[13px] sm:text-[14px] leading-tight text-muted-foreground group-hover:text-primary">
                   {link.name}
                 </span>
               </button>

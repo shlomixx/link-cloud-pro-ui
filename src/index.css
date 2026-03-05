@@ -93,6 +93,7 @@ All colors MUST be HSL.
     font-family: 'Gaegu', system-ui, -apple-system, sans-serif;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     font-optical-sizing: auto;
+    letter-spacing: 0.01em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
@@ -352,3 +353,433 @@ nav { border-bottom: none !important; }
 [aria-label="Quick categories"] button[aria-pressed="true"] { background: transparent !important; box-shadow: none !important; }
 [aria-label="Quick categories"] button:hover { background: transparent !important; }
 [aria-label="Quick categories"] button { font-size: 0.875rem !important; color: hsl(var(--foreground)) !important; }
+[role="group"][aria-label="Quick categories"] button[aria-pressed="true"], [role="group"][aria-label="Quick categories"] button { border: none !important; background: none !important; background-color: transparent !important; box-shadow: none !important; outline: none !important; }
+
+
+/* ===== POKILO UI ENHANCEMENTS v2 ===== */
+
+/* Subtle background gradient */
+#root {
+  background: linear-gradient(180deg, #f8faff 0%, #f0f4fd 50%, #eaeef8 100%);
+  min-height: 100vh;
+}
+
+/* Card hover lift */
+figure {
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s cubic-bezier(0.4,0,0.2,1);
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+figure:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 12px 28px -4px rgba(0,0,0,0.12), 0 4px 10px -2px rgba(0,0,0,0.06);
+  z-index: 10;
+}
+
+figure:active {
+  transform: translateY(-2px) scale(1.01);
+  transition-duration: 0.1s;
+}
+
+/* Icon brightness on hover */
+figure:hover img {
+  filter: brightness(1.1);
+  transition: filter 0.25s ease;
+}
+
+/* Label fade on hover */
+figcaption {
+  font-weight: 500 !important;
+  letter-spacing: -0.01em;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+figure:hover figcaption {
+  opacity: 1;
+  color: #4f46e5;
+}
+
+/* Search bar glow */
+input[type="search"]:focus {
+  box-shadow: 0 4px 24px rgba(99,102,241,0.12), 0 0 0 3px rgba(99,102,241,0.08) !important;
+  border-color: #818cf8 !important;
+}
+
+/* Active category tab gradient */
+button[aria-pressed="true"] {
+  background: linear-gradient(135deg, #6366f1, #818cf8) !important;
+  color: white !important;
+  box-shadow: 0 3px 12px rgba(99,102,241,0.35) !important;
+  font-weight: 600 !important;
+}
+
+/* Card appear animation */
+@keyframes cardAppear {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+figure {
+  animation: cardAppear 0.35s cubic-bezier(0.4,0,0.2,1) backwards;
+}
+
+/* Main content max width */
+main {
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+/* Header blur */
+header, nav {
+  backdrop-filter: blur(10px);
+}
+
+/* Hide scrollbar on category tabs */
+[aria-label="Quick categories"] {
+  scrollbar-width: none;
+}
+[aria-label="Quick categories"]::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== FIX: Labels ארוכים */
+figcaption {
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+/* Ripple effect בלחיצה על קארד */
+@keyframes ripple {
+  from { transform: scale(0); opacity: 0.4; }
+  to   { transform: scale(3); opacity: 0; }
+}
+
+figure {
+  overflow: hidden;
+}
+
+figure::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+figure:active::after {
+  opacity: 1;
+  transition: opacity 0s;
+}
+
+/* Active tab — Indigo pill */
+button[aria-pressed="true"] {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(79,70,229,0.4) !important;
+  font-weight: 700 !important;
+  border-radius: 20px !important;
+}
+
+/* Tab hover */
+nav button:not([aria-pressed="true"]):hover {
+  background: rgba(79,70,229,0.07) !important;
+  border-radius: 20px !important;
+  color: #4f46e5 !important;
+}
+
+/* Greeting area */
+.pokilo-greeting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.pokilo-greeting .greet-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e1b4b;
+  letter-spacing: -0.02em;
+}
+
+.pokilo-greeting .greet-sub {
+  font-size: 0.72rem;
+  color: #6b7280;
+  letter-spacing: 0.03em;
+}
+
+/* ===== TOOLTIP on truncated labels ===== */
+figure[title] {
+  position: relative;
+}
+figure[title]:hover::before {
+  content: attr(title);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15,15,25,0.85);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* ===== DARK MODE ===== */
+[data-theme="dark"] {
+  --background: 222 47% 8%;
+  --foreground: 210 40% 92%;
+  --muted: 222 47% 12%;
+  --muted-foreground: 215 20% 55%;
+  --border: 222 47% 16%;
+  --card: 222 47% 10%;
+}
+[data-theme="dark"] #root {
+  background: linear-gradient(180deg, #0d1117 0%, #0f1623 50%, #111827 100%);
+}
+[data-theme="dark"] figure:hover {
+  box-shadow: 0 12px 28px -4px rgba(0,0,0,0.5), 0 4px 10px -2px rgba(99,102,241,0.15);
+}
+
+/* Dark mode toggle button */
+.dark-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid hsl(var(--border));
+  background: hsl(var(--background));
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  margin-left: 8px;
+}
+.dark-toggle:hover {
+  background: hsl(var(--muted));
+  transform: rotate(20deg);
+}
+
+/* ===== RECENTLY VISITED row ===== */
+.recently-visited-row {
+  padding: 8px 0 0;
+  margin-bottom: 4px;
+}
+.recently-visited-row h4 {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  margin: 0 0 10px 4px;
+}
+.recently-visited-row .rv-items {
+  display: flex;
+  gap: 12px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.recently-visited-row .rv-items::-webkit-scrollbar { display: none; }
+.rv-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  min-width: 64px;
+  padding: 8px 4px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border: 1.5px solid transparent;
+}
+.rv-item:hover {
+  background: rgba(99,102,241,0.06);
+  border-color: rgba(99,102,241,0.15);
+  transform: translateY(-3px);
+}
+.rv-item img {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+.rv-item span {
+  font-size: 0.65rem;
+  color: #6b7280;
+  font-weight: 500;
+  max-width: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* ===== SEARCH CHIP ===== */
+.search-chip-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  animation: chipIn 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes chipIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.search-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.chip-link {
+  border-color: rgba(34,197,94,0.4);
+  color: #15803d;
+  background: rgba(240,253,244,0.9);
+}
+
+.chip-link:hover {
+  background: rgba(220,252,231,0.95);
+  border-color: rgba(34,197,94,0.7);
+  box-shadow: 0 3px 12px rgba(34,197,94,0.15);
+  transform: translateY(-1px);
+}
+
+.chip-google {
+  border-color: rgba(99,102,241,0.35);
+  color: #4338ca;
+  background: rgba(238,242,255,0.9);
+}
+
+.chip-google:hover {
+  background: rgba(224,231,255,0.95);
+  border-color: rgba(99,102,241,0.6);
+  box-shadow: 0 3px 12px rgba(99,102,241,0.15);
+  transform: translateY(-1px);
+}
+
+.search-chip kbd {
+  font-size: 0.65rem;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.1);
+  color: inherit;
+  font-family: inherit;
+  margin-left: 2px;
+  opacity: 0.7;
+}
+
+.search-chip strong {
+  font-weight: 700;
+}
+
+/* Typography refinements */
+/* Consistent vertical rhythm for link labels */
+#categories span.truncate {
+  line-height: 1.3;
+}
+
+/* Tighten greeting text spacing */
+header .tracking-tight {
+  letter-spacing: -0.01em;
+}
+
+/* Search placeholder refinement */
+input[type="search"]::placeholder {
+  letter-spacing: 0.02em;
+  opacity: 0.45;
+}
+
+
+/* Category tabs typography */
+[aria-label="Quick categories"] button {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif !important;
+  letter-spacing: -0.01em;
+}
+
+/* Search box - free/organic design */
+input[type="search"] {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 1.5px solid hsl(var(--border) / 0.4) !important;
+  border-radius: 8px !important;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  max-width: 480px !important;
+  margin: 0 auto !important;
+  display: block !important;
+  height: 3rem !important;
+  font-size: 1.05rem !important;
+  transition: border-color 0.2s ease;
+}
+
+input[type="search"]:focus {
+  border-color: hsl(var(--foreground) / 0.5) !important;
+  outline: none !important;
+  box-shadow: none !important;
+  ring: none !important;
+}
+
+input[type="search"]::placeholder {
+  text-align: center;
+}
+
+/* Categories - floating chips style */
+[aria-label="Quick categories"] {
+  justify-content: center !important;
+  gap: 6px !important;
+  margin-top: 16px !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+[aria-label="Quick categories"] button {
+  border-radius: 20px !important;
+  padding: 4px 14px !important;
+  height: auto !important;
+  font-size: 0.82rem !important;
+  font-weight: 400 !important;
+  opacity: 0.55;
+  transition: all 0.2s ease;
+  border: none !important;
+  background: transparent !important;
+}
+
+[aria-label="Quick categories"] button:hover {
+  opacity: 0.85;
+}
+
+[aria-label="Quick categories"] button[aria-pressed="true"] {
+  opacity: 1;
+  font-weight: 500 !important;
+  background: hsl(var(--foreground) / 0.07) !important;
+}

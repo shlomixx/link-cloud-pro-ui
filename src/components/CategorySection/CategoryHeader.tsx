@@ -20,6 +20,7 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = React.memo(({
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState('');
 
+  return null;
   const styles = isMobile ? HEADER_STYLES.mobile : HEADER_STYLES.desktop;
 
   const handleStartEdit = () => {
