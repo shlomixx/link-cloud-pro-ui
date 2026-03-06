@@ -88,27 +88,29 @@ export const CompactView: React.FC<BaseLinkCardProps> = ({
             </div>
           )}
           
-          {/* Use figure/figcaption for proper semantic structure */}
-          <figure className="flex flex-col items-center justify-center gap-2 m-0">
-            <div className="relative flex justify-center items-center">
-              <div className="rounded-xl flex items-center justify-center" style={{ width: `${iconContainerSize}px`, height: `${iconContainerSize}px`}}>
-                <img
-                  src={getFaviconUrl(link.url || link.defaultUrl || '')}
-                  alt=""
-                  className="rounded-lg object-contain"
-                  loading="lazy"
-                  decoding="async"
-                  style={{ width: `${iconSize}px`, height: `${iconSize}px`}}
-                  onError={handleFaviconError}
-                />
+          {/* Card inner wrapper - bypasses react-beautiful-dnd transform block */}
+          <div className="card-inner flex flex-col items-center justify-center gap-2 w-full rounded-xl p-3">
+            <figure className="flex flex-col items-center justify-center gap-2 m-0">
+              <div className="relative flex justify-center items-center">
+                <div className="rounded-xl flex items-center justify-center" style={{ width: `${iconContainerSize}px`, height: `${iconContainerSize}px`}}>
+                  <img
+                    src={getFaviconUrl(link.url || link.defaultUrl || '')}
+                    alt=""
+                    className="rounded-lg object-contain"
+                    loading="lazy"
+                    decoding="async"
+                    style={{ width: `${iconSize}px`, height: `${iconSize}px`}}
+                    onError={handleFaviconError}
+                  />
+                </div>
               </div>
-            </div>
-            <figcaption className="w-full text-center">
-              <span className="text-foreground/90 text-base font-medium leading-tight text-center max-w-full truncate inline-block">
-                {link.name}
-              </span>
-            </figcaption>
-          </figure>
+              <figcaption className="w-full text-center">
+                <span className="text-foreground/90 text-base font-medium leading-tight text-center max-w-full truncate inline-block">
+                  {link.name}
+                </span>
+              </figcaption>
+            </figure>
+          </div>
         </div>
       </ContextMenuTrigger>
       <LinkCardContextMenu
